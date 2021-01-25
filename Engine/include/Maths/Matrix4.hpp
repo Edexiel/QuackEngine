@@ -21,6 +21,7 @@ struct Matrix4
   static Matrix4 RotateX(float angle);
   static Matrix4 RotateY(float angle);
   static Matrix4 RotateZ(float angle);
+  static Matrix4 Rotation(const Vector3 &rotation)
   static Matrix4 frustum(float left, float right, float bottom, float top, float znear, float zfar);
   static Matrix4 Perspective(float fov, float aspectRatio, float znear, float zfar);
   static Matrix4 OrthoMatrix(float left, float right, float bottom, float top, float near, float far);
@@ -80,17 +81,54 @@ inline Matrix4 Matrix4::RotateX(float angle)
   return
     {
       1, 0, 0, 0,
+      0, c, s, 0,
       0, -s, c, 0,
       0, 0, 0, 1
     };
 }
 inline Matrix4 Matrix4::RotateY(float angle)
 {
+  float c, s;
+  c = cosf(angle);
+  s = sinf(angle);
 
+  return
+    {
+      c, 0, -s, 0,
+      0, 1, 0, 0,
+      s, 0, c, 0,
+      0, 0, 0, 1
+    };
 }
 inline Matrix4 Matrix4::RotateZ(float angle)
 {
+  return
+    {
+      c, s, 0, 0,
+      -s, c, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    };
+}
 
+inline Matrix4 Matrix4::Rotation(const Vec3 &rotation)
+{
+  return RotateY(rotation.y) * RotateX(rotation.x) * RotateZ(rotation.z);
+}
+
+inline Matrix4 Matrix4::CreateAxisRotationMatrix(const float angle, const Vector3 &axis)
+{
+  float tsin, tcos;
+  tsin = sinf(angle);
+  tcos = cosf(angle);
+
+  return
+    {
+      (axis.x * axis.x + (1 - tcos) + tcos), axis.x * axis.y * (1 - tcos) + axis.z * tsin, axis.x * axis.z * (1 - tcos) - axis.y * tsin, 0,
+      axis.x * axis.y * (1 - tcos) - axis.z * tsin, axis.y * axis.y + (1 - tcos) + tcos, axis.y * axis.z * (1 - tcos) + axis.x * tsin, 0,
+      axis.x * axis.z * (1 - tcos) + axis.y * tsin, axis.y * axis.z + (1 - tcos) - axis.x * tsin, axis.z * axis.z * (1 - tcos) + tcos, 0,
+      0, 0, 0, 1
+    };
 }
 
 inline Matrix4 Matrix4::frustum(float left, float right, float bottom, float top, float znear, float zfar)
