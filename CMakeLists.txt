@@ -53,8 +53,8 @@ add_subdirectory(Engine)
 #Editor
 add_subdirectory(Editor)
 
-add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE glad glfw assimp)
+#add_executable(${PROJECT_NAME} main.cpp)
+target_link_libraries(Engine PUBLIC glad glfw assimp)
 
 #Installer
 include(InstallRequiredSystemLibraries)
