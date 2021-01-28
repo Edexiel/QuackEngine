@@ -5,6 +5,8 @@
 #ifndef QUACKENGINE_VECTOR2_HPP
 #define QUACKENGINE_VECTOR2_HPP
 
+#include <cmath>
+
 struct Vector2
 {
   union

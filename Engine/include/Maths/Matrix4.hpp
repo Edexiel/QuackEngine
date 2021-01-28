@@ -9,22 +9,27 @@ struct Matrix4
 {
   union
   {
-    Vec4 v[4];
+    Vector4 v[4];
     float e[16];
-    //float aa[4][4];
   };
 
   static Matrix4 Identity();
   static Matrix4 Scale(float s);
-  static Matrix4 Scale(Vec3 v);
-  static Matrix4 Translate(Vec3 v);
+  static Matrix4 Scale(Vector3 v);
+  static Matrix4 Translate(Vector3 v);
   static Matrix4 RotateX(float angle);
   static Matrix4 RotateY(float angle);
   static Matrix4 RotateZ(float angle);
-  static Matrix4 Rotation(const Vector3 &rotation)
+  static Matrix4 Rotation(const Vector3 &rotation);
+  static Matrix4 AxisRotation(const float angle, const Vector3 &axis);
   static Matrix4 frustum(float left, float right, float bottom, float top, float znear, float zfar);
   static Matrix4 Perspective(float fov, float aspectRatio, float znear, float zfar);
   static Matrix4 OrthoMatrix(float left, float right, float bottom, float top, float near, float far);
+  static Matrix4 Transpose(const Matrix4& mat);
+  static float Determinant(const Matrix4& mat);
+  static Matrix4 Adjugate(const Matrix4 &mat);
+  static Matrix4 Invert(const Matrix4 &mat);
+
 };
 
 inline Matrix4 Matrix4::Identity()
@@ -50,7 +55,7 @@ inline Matrix4 Matrix4::Scale(float s)
     };
 }
 
-inline Matrix4 Matrix4::Scale(Vec3 v)
+inline Matrix4 Matrix4::Scale(Vector3 v)
 {
   return
     {
@@ -61,7 +66,7 @@ inline Matrix4 Matrix4::Scale(Vec3 v)
     };
 }
 
-inline Matrix4 Matrix4::Translate(Vec3 v)
+inline Matrix4 Matrix4::Translate(Vector3 v)
 {
   return
     {
@@ -102,6 +107,10 @@ inline Matrix4 Matrix4::RotateY(float angle)
 }
 inline Matrix4 Matrix4::RotateZ(float angle)
 {
+    float c, s;
+    c = cosf(angle);
+    s = sinf(angle);
+
   return
     {
       c, s, 0, 0,
@@ -111,12 +120,12 @@ inline Matrix4 Matrix4::RotateZ(float angle)
     };
 }
 
-inline Matrix4 Matrix4::Rotation(const Vec3 &rotation)
+inline Matrix4 Matrix4::Rotation(const Vector3 &rotation)
 {
   return RotateY(rotation.y) * RotateX(rotation.x) * RotateZ(rotation.z);
 }
 
-inline Matrix4 Matrix4::CreateAxisRotationMatrix(const float angle, const Vector3 &axis)
+inline Matrix4 Matrix4::AxisRotation(const float angle, const Vector3 &axis)
 {
   float tsin, tcos;
   tsin = sinf(angle);
@@ -165,6 +174,32 @@ inline Matrix4 Matrix4::OrthoMatrix(float left, float right, float bottom, float
       0.f, 0.f, -2.f / (far - near), 0.f,
       -((right + left) / (right - left)), -((top + bottom) / (top - bottom)), -((far + near) / (far - near)), 1.f
     };
+}
+
+inline Matrix4 Matrix4::Transpose(const Matrix4& m)
+{
+  return {
+    m.v[0].e[0], m.v[1].e[0], m.v[2].e[0], m.v[3].e[0],
+    m.v[0].e[1], m.v[1].e[1], m.v[2].e[1], m.v[3].e[1],
+    m.v[0].e[2], m.v[1].e[2], m.v[2].e[2], m.v[3].e[2],
+    m.v[0].e[3], m.v[1].e[3], m.v[2].e[3], m.v[3].e[3],
+  };
+}
+
+float Determinant(const Matrix4& mat)
+{
+    return mat.v[0].e[0] * ( mat.v[1].e[1] * mat.v[2].e[2] * mat.v[3].e[3] - mat.v[1].e[1] * mat.v[2].e[3] * mat.v[3].e[2] - mat.v[1].e[2] * mat.v[2].e[1] * mat.v[3].e[3] + mat.v[1].e[2] * mat.v[2].e[3] * mat.v[3].e[1] + mat.v[1].e[3] * mat.v[2].e[1] * mat.v[3].e[2] - mat.v[1].e[3] * mat.v[2].e[2] * mat.v[3].e[1])
+          -mat.v[0].e[1] * ( mat.v[1].e[0] * mat.v[2].e[2] * mat.v[3].e[3] - mat.v[1].e[0] * mat.v[2].e[3] * mat.v[3].e[2] - mat.v[1].e[2] * mat.v[2].e[0] * mat.v[3].e[3] + mat.v[1].e[2] * mat.v[2].e[3] * mat.v[3].e[0] + mat.v[1].e[3] * mat.v[2].e[0] * mat.v[3].e[2] - mat.v[1].e[3] * mat.v[2].e[2] * mat.v[3].e[0])
+          +mat.v[0].e[2] * ( mat.v[1].e[0] * mat.v[2].e[1] * mat.v[3].e[3] - mat.v[1].e[0] * mat.v[2].e[3] * mat.v[3].e[1] - mat.v[1].e[1] * mat.v[2].e[0] * mat.v[3].e[3] + mat.v[1].e[1] * mat.v[2].e[3] * mat.v[3].e[0] + mat.v[1].e[3] * mat.v[2].e[0] * mat.v[3].e[1] - mat.v[1].e[3] * mat.v[2].e[1] * mat.v[3].e[0])
+          -mat.v[0].e[3] * ( mat.v[1].e[0] * mat.v[2].e[1] * mat.v[3].e[2] - mat.v[1].e[0] * mat.v[2].e[2] * mat.v[3].e[1] - mat.v[1].e[1] * mat.v[2].e[0] * mat.v[3].e[3] + mat.v[1].e[1] * mat.v[2].e[2] * mat.v[3].e[0] + mat.v[1].e[2] * mat.v[2].e[0] * mat.v[3].e[1] - mat.v[1].e[2] * mat.v[2].e[2] * mat.v[3].e[0]);
+}
+inline Matrix4 Matrix4::Adjugate(const Matrix4 &mat)
+{
+
+}
+inline Matrix4 Matrix4::Invert(const Matrix4 &mat)
+{
+
 }
 
 
