@@ -5,6 +5,7 @@
 #include "Vector4.hpp"
 #include "Matrix4.hpp"
 #include <cmath>
+#include "string"
 
 struct Quaternion
 {
@@ -18,17 +19,7 @@ struct Quaternion
           float z;
       };
 
-      struct
-      {
-          float a;
-          float b;
-          float c;
-          float d;
-      };
-      Vector4 v;
-
       float e[4];
-
   };
   
 
@@ -39,11 +30,12 @@ struct Quaternion
 
 
 
-  float GetMagnitude();
-  Quaternion GetConjugate();
+  float GetMagnitude() const;
+  Quaternion GetConjugate() const;
+  Quaternion GetInverse() const;
   void Normalize();
-  Quaternion Normalized();
-  Matrix4 QuaternionToMatrix();
+  Quaternion Normalized() const;
+  Matrix4 QuaternionToMatrix() const;
 
   static float DotProduct(const Quaternion& quat1, const Quaternion& quat2);
   static Quaternion Slerp(const Quaternion& quat1, const Quaternion& quat2, const float& completion);
@@ -52,32 +44,34 @@ struct Quaternion
 
   Vector3 XYZVector() const;
 
+  std::string ToString() const;
+
   ~Quaternion() = default;
 };
 
 Quaternion operator+(const Quaternion& q1, const Quaternion& q2)
 {
-    return {q1.a + q2.a, q1.b + q2.b, q1.c + q2.c, q1.d + q2.d};
+    return {q1.w + q2.w, q1.x + q2.x, q1.y + q2.y, q1.z + q2.z};
 }
 
 Quaternion operator-(const Quaternion& q1, const Quaternion& q2)
 {
-    return {q1.a - q2.a, q1.b - q2.b, q1.c - q2.c, q1.d - q2.d};
+    return {q1.w - q2.w, q1.x - q2.x, q1.y - q2.y, q1.z - q2.z};
 }
 Quaternion operator*(const Quaternion& q1, const Quaternion& q2)
 {
-    return
-            {
-                    q1.a * q2.a - q1.b * q2.b - q1.c * q2.c - q1.d * q2.d,
-                    q1.a * q2.b + q1.b * q2.a + q1.c * q2.d - q1.d * q2.c,
-                    q1.a * q2.c + q1.c * q2.a + q1.b * q2.d - q1.d * q2.b,
-                    q1.a * q2.d + q1.d * q2.a + q1.b * q2.c - q1.c * q2.b
-            };
+    return {(q1.w * q2.w) - Vector3::DotProduct(q1.XYZVector(), q2.XYZVector()), (q2.XYZVector() * q1.w) + (q1.XYZVector() * q2.w) + Vector3::CrossProduct(q1.XYZVector(), q2.XYZVector())};
 }
 
 Quaternion operator*(const Quaternion& q, const float& scalar)
 {
     return {q.w * scalar, {q.x * scalar, q.y * scalar, q.z * scalar}};
+}
+
+Quaternion operator/(const Quaternion& quat, const float& scalar)
+{
+    Quaternion result(quat.w / scalar, quat.x / scalar, quat.y / scalar, quat.z / scalar);
+    return result;
 }
 
 Vector3 operator*(const Quaternion& q, const Vector3& v)
@@ -98,19 +92,19 @@ Quaternion::Quaternion(const float& _w, const Vector3& _axis) : x{ _axis.x }, y{
 
 Quaternion::Quaternion(const Vector3& Axe, const float& angle)
 {
-    w = cos(angle / 2);
+    w = cosf(angle / 2);
 
-    x = sin(angle / 2) * Axe.x;
-    y = sin(angle / 2) * Axe.y;
-    z = sin(angle / 2) * Axe.z;
+    x = sinf(angle / 2) * Axe.x;
+    y = sinf(angle / 2) * Axe.y;
+    z = sinf(angle / 2) * Axe.z;
 }
 
 
-float Quaternion::GetMagnitude()
+float Quaternion::GetMagnitude() const
 {
   return sqrtf(w * w + x * x + y * y + z * z);
 }
-Quaternion Quaternion::GetConjugate()
+Quaternion Quaternion::GetConjugate() const
 {
   return {w, -x, -y, -z};
 }
@@ -126,14 +120,14 @@ void Quaternion::Normalize()
 
 }
 
-Quaternion Quaternion::Normalized()
+Quaternion Quaternion::Normalized() const
 {
     float size = GetMagnitude();
 
-    return{w  /= size, x  /= size, y  /= size,z /= size};
+    return{w / size, x  / size, y  / size,z / size};
 }
 
-Matrix4 Quaternion::QuaternionToMatrix()
+Matrix4 Quaternion::QuaternionToMatrix() const
 {
     Matrix4 result;
 
@@ -205,6 +199,16 @@ Quaternion Quaternion::Nlerp(const Quaternion& q1, const Quaternion& q2, float t
 Vector3 Quaternion::XYZVector() const
 {
     return { x, y, z };
+}
+
+std::string Quaternion::ToString() const
+{
+    return "w = " + std::to_string(w) + ", x = " + std::to_string(x) + ", y = " + std::to_string(y) + ", z = " + std::to_string(z);
+}
+
+Quaternion Quaternion::GetInverse() const
+{
+    return *this / (w * w + x * x + y * y + z * z);
 }
 
 #endif

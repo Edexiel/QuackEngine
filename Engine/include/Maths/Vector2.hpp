@@ -35,17 +35,17 @@ struct Vector2
   std::string ToString();
 };
 
-Vector2 operator+(Vector2 v, Vector2 v2)
+Vector2 operator+(const Vector2& v, const Vector2& v2)
 {
     return { v.x + v2.x, v.y + v2.y };
 }
 
-Vector2 operator-(Vector2 v, Vector2 v2)
+Vector2 operator-(const Vector2& v, const Vector2& v2)
 {
     return { v.x - v2.x, v.y - v2.y };
 }
 
-Vector2 operator*(Vector2 v, float f)
+Vector2 operator*(const Vector2& v, const float& f)
 {
     return { v.x * f, v.y * f };
 }

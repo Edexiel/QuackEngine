@@ -30,8 +30,8 @@ struct Vector3
 
 
 
-  float Length();
-  float SqrLength();
+  float Length() const;
+  float SqrLength() const;
 
 
   //Normalize the vector and return it;
@@ -46,27 +46,27 @@ struct Vector3
   std::string ToString();
  };
 
-Vector3 operator+(Vector3 v1, Vector3 v2)
+Vector3 operator+(const Vector3& v1,const Vector3& v2)
 {
     return { v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
 }
 
-Vector3 operator-(Vector3 v1, Vector3 v2)
+Vector3 operator-(const Vector3& v1, const Vector3& v2)
 {
     return { v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
 }
 
-Vector3 operator*(Vector3 v, float f)
+Vector3 operator*(const Vector3& v, const float& f)
 {
     return { v.x * f, v.y * f, v.z * f };
 }
 
-inline float Vector3::Length()
+inline float Vector3::Length() const
 {
     return sqrtf(x * x + y * y + z * z);
 }
 
-inline float Vector3::SqrLength()
+inline float Vector3::SqrLength() const
 {
     return x * x + y * y + z * z;
 }
@@ -86,7 +86,6 @@ inline Vector3 Vector3::Normalize()
     return *this;
 }
 
-// Return the vector normalized
 inline Vector3 Vector3::Normalized()
 {
     float length = Length();
