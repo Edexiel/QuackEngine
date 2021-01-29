@@ -1,16 +1,14 @@
-//
-// Created by a.figueiredo on 25/01/2021.
-//
-
 #ifndef QUACKENGINE_MATRIX4_HPP
 #define QUACKENGINE_MATRIX4_HPP
+
+#include "string.h"
 
 struct Matrix4
 {
   union
   {
     Vector4 v[4];
-    float e[16];
+    float e[16] {0};
   };
 
   static Matrix4 Identity();
@@ -22,15 +20,47 @@ struct Matrix4
   static Matrix4 RotateZ(float angle);
   static Matrix4 Rotation(const Vector3 &rotation);
   static Matrix4 AxisRotation(const float angle, const Vector3 &axis);
-  static Matrix4 frustum(float left, float right, float bottom, float top, float znear, float zfar);
-  static Matrix4 Perspective(float fov, float aspectRatio, float znear, float zfar);
-  static Matrix4 OrthoMatrix(float left, float right, float bottom, float top, float near, float far);
-  static Matrix4 Transpose(const Matrix4& mat);
-  static float Determinant(const Matrix4& mat);
-  static Matrix4 Adjugate(const Matrix4 &mat);
-  static Matrix4 Invert(const Matrix4 &mat);
+  static Matrix4 Perspective(int width, int height, float near, float far, float fov);
+  static Matrix4 OrthoMatrix(int width, int height, float near, float far);
 
+  Matrix4 GetTranspose();
+
+  std::string ToString();
 };
+
+inline Matrix4 operator*(const Matrix4& a, const Matrix4& b)
+{
+    Matrix4 result;
+
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
+            for (int k = 0; k < 4; k++)
+                result.e[i + j * 4] += a.e[i + k * 4] * b.e[k + j * 4];
+
+    return result;
+}
+
+inline Matrix4& operator*=(Matrix4& a, const Matrix4& b) { a = a * b; return a; }
+
+inline Matrix4 operator*(const Matrix4& m, const float& f)
+{
+    Matrix4 result;
+
+    for (unsigned int i = 0 ; i < 16 ; i++)
+        result.e[i] = m.e[i] * f;
+
+    return result;
+}
+
+inline Matrix4 operator+(const Matrix4& m1, const Matrix4& m2)
+{
+    Matrix4 result;
+
+    for (unsigned i = 0; i < 16 ; i++)
+        result.e[i] = m1.e[i] + m2.e[i];
+
+    return result;
+}
 
 inline Matrix4 Matrix4::Identity()
 {
@@ -70,54 +100,48 @@ inline Matrix4 Matrix4::Translate(Vector3 v)
 {
   return
     {
-      1.f, 0.f, 0.f, v.x,
-      0.f, 1.f, 0.f, v.y,
-      0.f, 0.f, 1.f, v.z,
-      0.f, 0.f, 0.f, 1.f
+      1.f, 0.f, 0.f, 0,
+      0.f, 1.f, 0.f, 0,
+      0.f, 0.f, 1.f, 0,
+      v.x, v.y, v.z, 1.f
     };
 }
 
 inline Matrix4 Matrix4::RotateX(float angle)
 {
-  float c, s;
-  c = cosf(angle);
-  s = sinf(angle);
+    Matrix4 rotX;
+    rotX.e[0] = 1;
+    rotX.e[5] = cos(angle);
+    rotX.e[9] = -sin(angle);
+    rotX.e[6] = sin(angle);
+    rotX.e[10] = cos(angle);
+    rotX.e[15] = 1;
 
-  return
-    {
-      1, 0, 0, 0,
-      0, c, s, 0,
-      0, -s, c, 0,
-      0, 0, 0, 1
-    };
+    return rotX;
 }
 inline Matrix4 Matrix4::RotateY(float angle)
 {
-  float c, s;
-  c = cosf(angle);
-  s = sinf(angle);
+    Matrix4 rotY;
+    rotY.e[0] = cos(angle);
+    rotY.e[8] = sin(angle);
+    rotY.e[5] = 1;
+    rotY.e[2] = -sin(angle);
+    rotY.e[10] = cos(angle);
+    rotY.e[15] = 1;
 
-  return
-    {
-      c, 0, -s, 0,
-      0, 1, 0, 0,
-      s, 0, c, 0,
-      0, 0, 0, 1
-    };
+    return rotY;
 }
 inline Matrix4 Matrix4::RotateZ(float angle)
 {
-    float c, s;
-    c = cosf(angle);
-    s = sinf(angle);
+    Matrix4 rotZ;
+    rotZ.e[0] = cos(angle);
+    rotZ.e[4] = -sin(angle);
+    rotZ.e[1] = sin(angle);
+    rotZ.e[5] = cos(angle);
+    rotZ.e[10] = 1;
+    rotZ.e[15] = 1;
 
-  return
-    {
-      c, s, 0, 0,
-      -s, c, 0, 0,
-      0, 0, 1, 0,
-      0, 0, 0, 1
-    };
+    return rotZ;
 }
 
 inline Matrix4 Matrix4::Rotation(const Vector3 &rotation)
@@ -127,92 +151,93 @@ inline Matrix4 Matrix4::Rotation(const Vector3 &rotation)
 
 inline Matrix4 Matrix4::AxisRotation(const float angle, const Vector3 &axis)
 {
-  float tsin, tcos;
-  tsin = sinf(angle);
-  tcos = cosf(angle);
+    Matrix4 first;
 
-  return
-    {
-      (axis.x * axis.x + (1 - tcos) + tcos), axis.x * axis.y * (1 - tcos) + axis.z * tsin, axis.x * axis.z * (1 - tcos) - axis.y * tsin, 0,
-      axis.x * axis.y * (1 - tcos) - axis.z * tsin, axis.y * axis.y + (1 - tcos) + tcos, axis.y * axis.z * (1 - tcos) + axis.x * tsin, 0,
-      axis.x * axis.z * (1 - tcos) + axis.y * tsin, axis.y * axis.z + (1 - tcos) - axis.x * tsin, axis.z * axis.z * (1 - tcos) + tcos, 0,
-      0, 0, 0, 1
-    };
+    first.e[0]  = axis.x * axis.x;
+    first.e[1]  = axis.y * axis.x;
+    first.e[2]  = axis.z * axis.x;
+
+    first.e[4]  = axis.x * axis.y;
+    first.e[5]  = axis.y * axis.y;
+    first.e[6]  = axis.z * axis.y;
+
+    first.e[8]  = axis.x * axis.z;
+    first.e[9]  = axis.y * axis.z;
+    first.e[10] = axis.z * axis.z;
+
+    first.e[15] = 1;
+
+    first = first * (1 - cos(angle));
+
+    Matrix4 second = Identity() * cos(angle);
+
+    Matrix4 third;
+
+    third.e[1] = axis.z;
+    third.e[2] = -axis.y;
+    third.e[4] = -axis.z;
+    third.e[6] = axis.x;
+    third.e[8] = axis.y;
+    third.e[9] = -axis.x;
+
+    third = third * sin(angle);
+
+    return first + second + third;
 }
 
-inline Matrix4 Matrix4::frustum(float left, float right, float bottom, float top, float znear, float zfar)
+inline Matrix4 Matrix4::Perspective(int width, int height, float near, float far, float fov)
 {
-  float nn, rl, tb, fn;
-  nn = 2.0f * znear;
-  rl = right - left;
-  tb = top - bottom;
-  fn = zfar - znear;
+    Matrix4 projection;
+    float yMax = tanf(fov * M_PI / 360);
+    float xMax = yMax * ((float)width / height);
 
-  return
-    {
-      nn / rl, 0.f, 0.f, 0.f,
-      0.f, nn / tb, 0.f, 0.f,
-      (right + left) / rl, (top + bottom) / tb, -(zfar + znear) / fn, -1.0,
-      0, 0, -(nn * zfar) / fn, 0.f
-    };
+    projection.e[0] = 1 / xMax;
+
+    projection.e[5] = 1 / yMax;
+
+    projection.e[10] = - (float)(near + far) / (far - near);
+    projection.e[11] = - 1;
+
+    projection.e[14] = - (float)(2 * far * near) / (far - near);
+
+    return projection;
 }
 
-inline Matrix4 Matrix4::Perspective(float fov, float aspectRatio, float znear, float zfar)
+inline Matrix4 Matrix4::OrthoMatrix(int width, int height, float near, float far)
 {
-  float ymax, xmax;
-  ymax = znear * tanf(fov * (float)(float)M_PI / 360.0f);
-  xmax = ymax * aspectRatio;
-  return frustum(-xmax, xmax, -ymax, ymax, znear, zfar);
+    Matrix4 ortho;
+
+    ortho.e[0]  = (float)height / width ;
+    ortho.e[5]  = 1;
+    ortho.e[10] = -2 / (far - near);
+
+    ortho.e[12] = 0;
+    ortho.e[13] = 0;
+    ortho.e[14] = - (far + near) / (far - near);
+    ortho.e[15] = 1;
+
+    return ortho;
 }
 
-inline Matrix4 Matrix4::OrthoMatrix(float left, float right, float bottom, float top, float near, float far)
-{
-  return
-    {
-      2.f / (right - left), 0.f, 0.f, 0.f,
-      0.f, 2.f / (top - bottom), 0.f, 0.f,
-      0.f, 0.f, -2.f / (far - near), 0.f,
-      -((right + left) / (right - left)), -((top + bottom) / (top - bottom)), -((far + near) / (far - near)), 1.f
-    };
-}
-
-inline Matrix4 Matrix4::Transpose(const Matrix4& m)
+inline Matrix4 Matrix4::GetTranspose()
 {
   return {
-    m.v[0].e[0], m.v[1].e[0], m.v[2].e[0], m.v[3].e[0],
-    m.v[0].e[1], m.v[1].e[1], m.v[2].e[1], m.v[3].e[1],
-    m.v[0].e[2], m.v[1].e[2], m.v[2].e[2], m.v[3].e[2],
-    m.v[0].e[3], m.v[1].e[3], m.v[2].e[3], m.v[3].e[3],
+    v[0].e[0], v[1].e[0], v[2].e[0], v[3].e[0],
+    v[0].e[1], v[1].e[1], v[2].e[1], v[3].e[1],
+    v[0].e[2], v[1].e[2], v[2].e[2], v[3].e[2],
+    v[0].e[3], v[1].e[3], v[2].e[3], v[3].e[3],
   };
 }
 
-float Determinant(const Matrix4& mat)
-{
-    return mat.v[0].e[0] * ( mat.v[1].e[1] * mat.v[2].e[2] * mat.v[3].e[3] - mat.v[1].e[1] * mat.v[2].e[3] * mat.v[3].e[2] - mat.v[1].e[2] * mat.v[2].e[1] * mat.v[3].e[3] + mat.v[1].e[2] * mat.v[2].e[3] * mat.v[3].e[1] + mat.v[1].e[3] * mat.v[2].e[1] * mat.v[3].e[2] - mat.v[1].e[3] * mat.v[2].e[2] * mat.v[3].e[1])
-          -mat.v[0].e[1] * ( mat.v[1].e[0] * mat.v[2].e[2] * mat.v[3].e[3] - mat.v[1].e[0] * mat.v[2].e[3] * mat.v[3].e[2] - mat.v[1].e[2] * mat.v[2].e[0] * mat.v[3].e[3] + mat.v[1].e[2] * mat.v[2].e[3] * mat.v[3].e[0] + mat.v[1].e[3] * mat.v[2].e[0] * mat.v[3].e[2] - mat.v[1].e[3] * mat.v[2].e[2] * mat.v[3].e[0])
-          +mat.v[0].e[2] * ( mat.v[1].e[0] * mat.v[2].e[1] * mat.v[3].e[3] - mat.v[1].e[0] * mat.v[2].e[3] * mat.v[3].e[1] - mat.v[1].e[1] * mat.v[2].e[0] * mat.v[3].e[3] + mat.v[1].e[1] * mat.v[2].e[3] * mat.v[3].e[0] + mat.v[1].e[3] * mat.v[2].e[0] * mat.v[3].e[1] - mat.v[1].e[3] * mat.v[2].e[1] * mat.v[3].e[0])
-          -mat.v[0].e[3] * ( mat.v[1].e[0] * mat.v[2].e[1] * mat.v[3].e[2] - mat.v[1].e[0] * mat.v[2].e[2] * mat.v[3].e[1] - mat.v[1].e[1] * mat.v[2].e[0] * mat.v[3].e[3] + mat.v[1].e[1] * mat.v[2].e[2] * mat.v[3].e[0] + mat.v[1].e[2] * mat.v[2].e[0] * mat.v[3].e[1] - mat.v[1].e[2] * mat.v[2].e[2] * mat.v[3].e[0]);
-}
-inline Matrix4 Matrix4::Adjugate(const Matrix4 &mat)
+
+std::string Matrix4::ToString()
 {
 
-}
-inline Matrix4 Matrix4::Invert(const Matrix4 &mat)
-{
-
-}
-
-
-inline Matrix4 operator*(const Matrix4& a, const Matrix4& b)
-{
-  Matrix4 res = {};
-  for (int c = 0; c < 4; ++c)
-    for (int r = 0; r < 4; ++r)
-      for (int k = 0; k < 4; ++k)
-        res.v[r].e[c] += a.v[r].e[k] * b.v[k].e[c];
-  return res;
+    return std::to_string(e[0]) + ", " + std::to_string(e[4]) + ", " + std::to_string(e[8]) + ", "+ std::to_string( e[12]) + "\n"
+           +std::to_string(e[1]) + ", " + std::to_string(e[5]) + ", " + std::to_string(e[9]) + ", "+ std::to_string( e[13])+ "\n"
+           +std::to_string(e[2]) + ", " + std::to_string(e[6]) + ", " + std::to_string(e[10]) + ", "+ std::to_string( e[14])+ "\n"
+           +std::to_string(e[3]) + ", " + std::to_string(e[7]) + ", " + std::to_string(e[11]) + ", "+ std::to_string( e[15])+ "\n";
 }
 
-inline Matrix4& operator*=(Matrix4& a, const Matrix4& b) { a = a * b; return a; }
 
 #endif // QUACKENGINE_MATRIX4_HPP

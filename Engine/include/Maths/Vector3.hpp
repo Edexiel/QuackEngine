@@ -28,6 +28,8 @@ struct Vector3
     float e[3];
   };
 
+
+
   float Length();
   float SqrLength();
 
@@ -43,6 +45,21 @@ struct Vector3
 
   std::string ToString();
  };
+
+Vector3 operator+(Vector3 v1, Vector3 v2)
+{
+    return { v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
+}
+
+Vector3 operator-(Vector3 v1, Vector3 v2)
+{
+    return { v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
+}
+
+Vector3 operator*(Vector3 v, float f)
+{
+    return { v.x * f, v.y * f, v.z * f };
+}
 
 inline float Vector3::Length()
 {
@@ -92,22 +109,6 @@ inline Vector3 Vector3::CrossProduct(Vector3 v1, Vector3 v2)
 inline std::string Vector3::ToString()
 {
     return "x = " + std::to_string(x) + ", y = " + std::to_string(y) + ", z = " + std::to_string(z);
-}
-
-
-Vector3 operator+(Vector3 v1, Vector3 v2)
-{
-  return { v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
-}
-
-Vector3 operator-(Vector3 v1, Vector3 v2)
-{
-  return { v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
-}
-
-Vector3 operator*(Vector3 v, float f)
-{
-  return { v.x * f, v.y * f, v.z * f };
 }
 
 #endif // QUACKENGINE_VECTOR3_HPP

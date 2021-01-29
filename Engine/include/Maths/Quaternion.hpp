@@ -55,6 +55,40 @@ struct Quaternion
   ~Quaternion() = default;
 };
 
+Quaternion operator+(const Quaternion& q1, const Quaternion& q2)
+{
+    return {q1.a + q2.a, q1.b + q2.b, q1.c + q2.c, q1.d + q2.d};
+}
+
+Quaternion operator-(const Quaternion& q1, const Quaternion& q2)
+{
+    return {q1.a - q2.a, q1.b - q2.b, q1.c - q2.c, q1.d - q2.d};
+}
+Quaternion operator*(const Quaternion& q1, const Quaternion& q2)
+{
+    return
+            {
+                    q1.a * q2.a - q1.b * q2.b - q1.c * q2.c - q1.d * q2.d,
+                    q1.a * q2.b + q1.b * q2.a + q1.c * q2.d - q1.d * q2.c,
+                    q1.a * q2.c + q1.c * q2.a + q1.b * q2.d - q1.d * q2.b,
+                    q1.a * q2.d + q1.d * q2.a + q1.b * q2.c - q1.c * q2.b
+            };
+}
+
+Quaternion operator*(const Quaternion& q, const float& scalar)
+{
+    return {q.w * scalar, {q.x * scalar, q.y * scalar, q.z * scalar}};
+}
+
+Vector3 operator*(const Quaternion& q, const Vector3& v)
+{
+    return {(v * (2 * (q.w * q.w) - 1)) + (q.XYZVector() * Vector3::DotProduct(v, q.XYZVector()) * 2) + (Vector3::CrossProduct(q.XYZVector(), v) * q.w * 2)};
+}
+
+bool operator==(const Quaternion& quat1, const Quaternion& quat2)
+{
+    return (quat1.x == quat2.x && quat1.y == quat2.y && quat1.z == quat2.z && quat1.w == quat2.w);
+}
 
 Quaternion::Quaternion(){}
 
@@ -150,7 +184,7 @@ Quaternion Quaternion::Slerp(const Quaternion& quat1, const Quaternion& quat2, c
     float omega = acosf(dot);
     float sin = sinf(omega);
 
-    if (sin == 0 || isnan(sin)) // Both Quaternion are equal
+    if (sin == 0 || std::isnan(sin)) // Both Quaternion are equal
     {
         return quat1;
     }
@@ -173,33 +207,4 @@ Vector3 Quaternion::XYZVector() const
     return { x, y, z };
 }
 
-Quaternion operator+(const Quaternion& q1, const Quaternion& q2)
-{
-    return {q1.a + q2.a, q1.b + q2.b, q1.c + q2.c, q1.d + q2.d};
-}
-
-Quaternion operator-(const Quaternion& q1, const Quaternion& q2)
-{
-  return {q1.a - q2.a, q1.b - q2.b, q1.c - q2.c, q1.d - q2.d};
-}
-Quaternion operator*(const Quaternion& q1, const Quaternion& q2)
-{
-  return
-    {
-      q1.a * q2.a - q1.b * q2.b - q1.c * q2.c - q1.d * q2.d,
-      q1.a * q2.b + q1.b * q2.a + q1.c * q2.d - q1.d * q2.c,
-      q1.a * q2.c + q1.c * q2.a + q1.b * q2.d - q1.d * q2.b,
-      q1.a * q2.d + q1.d * q2.a + q1.b * q2.c - q1.c * q2.b
-    };
-}
-
-Quaternion operator*(const Quaternion& q, const float& scalar)
-{
-    return {q.w * scalar, {q.x * scalar, q.y * scalar, q.z * scalar}};
-}
-
-Vector3 operator*(const Quaternion& q, const Vector3& v)
-{
-    return {(v * (2 * (q.w * q.w) - 1)) + (q.XYZVector() * Vector3::DotProduct(v, q.XYZVector()) * 2) + (Vector3::CrossProduct(q.XYZVector(), v) * q.w * 2)};
-}
 #endif
