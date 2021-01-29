@@ -40,8 +40,8 @@ struct Vector3
   // Return the vector normalized
   Vector3 Normalized();
 
-  static float DotProduct(Vector3 v1, Vector3 v2);
-  static Vector3 CrossProduct(Vector3 v1, Vector3 v2);
+  static float DotProduct(const Vector3& v1, const Vector3& v2);
+  static Vector3 CrossProduct(const Vector3& v1, const Vector3& v2);
 
   std::string ToString();
  };
@@ -95,12 +95,12 @@ inline Vector3 Vector3::Normalized()
         return *this;
 }
 
-inline float Vector3::DotProduct(Vector3 v1, Vector3 v2)
+inline float Vector3::DotProduct(const Vector3& v1, const Vector3& v2)
 {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-inline Vector3 Vector3::CrossProduct(Vector3 v1, Vector3 v2)
+inline Vector3 Vector3::CrossProduct(const Vector3& v1, const Vector3& v2)
 {
     return {(v1.y * v2.z) - (v1.z * v2.y), (v1.z * v2.x) - (v1.x * v2.z), (v1.x * v2.y) - (v1.y * v2.x)};
 }

@@ -33,7 +33,7 @@ struct Vector4
   Vector3 Homogenized() const;
   std::string ToString() const;
 
-  static float DotProduct(Vector4 v1, Vector4 v2);
+  static float DotProduct(const Vector4& v1, const Vector4& v2);
 };
 
 inline Vector4 operator+(const Vector4& v1, const Vector4& v2)
@@ -79,7 +79,7 @@ inline Vector3 Vector4::Homogenized() const
 
 
 
-inline float DotProduct(Vector4 v1, Vector4 v2)
+inline float DotProduct(const Vector4& v1, const Vector4& v2)
 {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
 }

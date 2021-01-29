@@ -19,7 +19,7 @@ struct Quaternion
           float z;
       };
 
-      float e[4];
+      float e[4] {0};
   };
   
 
@@ -30,17 +30,17 @@ struct Quaternion
 
 
 
-  float GetMagnitude() const;
-  Quaternion GetConjugate() const;
-  Quaternion GetInverse() const;
-  void Normalize();
-  Quaternion Normalized() const;
-  Matrix4 QuaternionToMatrix() const;
+  float       GetMagnitude() const;
+  Quaternion  GetConjugate() const;
+  Quaternion  GetInverse() const;
+  void        Normalize();
+  Quaternion  Normalized() const;
+  Matrix4     QuaternionToMatrix() const;
 
-  static float DotProduct(const Quaternion& quat1, const Quaternion& quat2);
-  static Quaternion Slerp(const Quaternion& quat1, const Quaternion& quat2, const float& completion);
-  static Quaternion Lerp(const Quaternion& q1, const Quaternion& q2, float t);
-  static Quaternion Nlerp(const Quaternion& q1, const Quaternion& q2, float t);
+  static float DotProduct (const Quaternion& q1, const Quaternion& q2);
+  static Quaternion Slerp (const Quaternion& q1, const Quaternion& q2, const float& completion);
+  static Quaternion Lerp  (const Quaternion& q1, const Quaternion& q2, const float& t);
+  static Quaternion Nlerp (const Quaternion& q1, const Quaternion& q2, const float& t);
 
   Vector3 XYZVector() const;
 
@@ -68,7 +68,7 @@ Quaternion operator*(const Quaternion& q, const float& scalar)
     return {q.w * scalar, {q.x * scalar, q.y * scalar, q.z * scalar}};
 }
 
-Quaternion operator/(const Quaternion& quat, const float& scalar)
+Quaternion operator/(const Quaternion& q, const float& scalar)
 {
     Quaternion result(quat.w / scalar, quat.x / scalar, quat.y / scalar, quat.z / scalar);
     return result;
@@ -79,9 +79,9 @@ Vector3 operator*(const Quaternion& q, const Vector3& v)
     return {(v * (2 * (q.w * q.w) - 1)) + (q.XYZVector() * Vector3::DotProduct(v, q.XYZVector()) * 2) + (Vector3::CrossProduct(q.XYZVector(), v) * q.w * 2)};
 }
 
-bool operator==(const Quaternion& quat1, const Quaternion& quat2)
+bool operator==(const Quaternion& q1, const Quaternion& q2)
 {
-    return (quat1.x == quat2.x && quat1.y == quat2.y && quat1.z == quat2.z && quat1.w == quat2.w);
+    return (q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == quat2.w);
 }
 
 Quaternion::Quaternion(){}
@@ -153,21 +153,21 @@ float Quaternion::DotProduct(const Quaternion& q1, const Quaternion& q2)
     return q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
 }
 
-Quaternion Quaternion::Slerp(const Quaternion& quat1, const Quaternion& quat2, const float& completion)
+Quaternion Quaternion::Slerp(const Quaternion& q1, const Quaternion& q2, const float& completion)
 {
-    if (quat1 == quat2 || completion <= 0.f)
+    if (q1 == q2 || completion <= 0.f)
     {
-        return quat1;
+        return q1;
     }
     else if (completion >= 1.0f)
     {
-        return quat2;
+        return q2;
     }
 
 
-    float dot = DotProduct(quat1, quat2);
+    float dot = DotProduct(q1, q2);
 
-    Quaternion newQ1 = quat1;
+    Quaternion newQ1 = q1;
 
     if (dot < 0.0f)
     {
@@ -180,18 +180,18 @@ Quaternion Quaternion::Slerp(const Quaternion& quat1, const Quaternion& quat2, c
 
     if (sin == 0 || std::isnan(sin)) // Both Quaternion are equal
     {
-        return quat1;
+        return q1;
     }
 
 
     return newQ1 * (sinf((1.0f - completion) * omega) / sin) + quat2 * (sinf(completion * omega) / sin);
 }
 
-Quaternion Quaternion::Lerp(const Quaternion& q1, const Quaternion& q2, float t)
+Quaternion Quaternion::Lerp(const Quaternion& q1, const Quaternion& q2, const float& t)
 {
     return q1 * (1 - t) + q2 * t;
 }
-Quaternion Quaternion::Nlerp(const Quaternion& q1, const Quaternion& q2, float t)
+Quaternion Quaternion::Nlerp(const Quaternion& q1, const Quaternion& q2, const float& t)
 {
     return Lerp(q1, q2, t).Normalized();
 }

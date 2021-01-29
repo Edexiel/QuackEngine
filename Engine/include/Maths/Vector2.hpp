@@ -30,7 +30,7 @@ struct Vector2
   // Return the vector normalized
   Vector2 Normalized();
 
-  static float DotProduct(Vector2 v1, Vector2 v2);
+  static float DotProduct(const Vector2& v1, const Vector2& v2);
 
   std::string ToString();
 };
@@ -83,7 +83,7 @@ Vector2 Vector2::Normalized()
         return *this;
 }
 
-float Vector2::DotProduct(Vector2 v1, Vector2 v2)
+float Vector2::DotProduct(const Vector2& v1, const Vector2& v2)
 {
     return v1.x * v2.x + v1.y * v2.y;
 }

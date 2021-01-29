@@ -20,8 +20,8 @@ struct Matrix4
   static Matrix4 RotateZ(const float& angle);
   static Matrix4 Rotation(const Vector3 &rotation);
   static Matrix4 AxisRotation(const float angle, const Vector3 &axis);
-  static Matrix4 Perspective(int width, int height, float near, float far, float fov);
-  static Matrix4 OrthoMatrix(int width, int height, float near, float far);
+  static Matrix4 Perspective(const int& width, const int& height, const float& near, const float& far, const float& fov);
+  static Matrix4 OrthoMatrix(const int& width, const int& height, const float& near, const float& far);
 
   Matrix4 GetTranspose() const;
 
@@ -190,7 +190,7 @@ inline Matrix4 Matrix4::AxisRotation(const float angle, const Vector3 &axis)
     return first + second + third;
 }
 
-inline Matrix4 Matrix4::Perspective(int width, int height, float near, float far, float fov)
+inline Matrix4 Matrix4::Perspective(const int& width, const int& height, const float& near, const float& far, const float& fov)
 {
     Matrix4 projection;
     float yMax = tanf(fov * M_PI / 360);
@@ -208,7 +208,7 @@ inline Matrix4 Matrix4::Perspective(int width, int height, float near, float far
     return projection;
 }
 
-inline Matrix4 Matrix4::OrthoMatrix(int width, int height, float near, float far)
+inline Matrix4 Matrix4::OrthoMatrix(const int& width, const int& height, const float& near, const float& far)
 {
     Matrix4 ortho;
 
