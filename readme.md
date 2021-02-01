@@ -1,6 +1,6 @@
-#Quack engine
+# Quack engine
 
-##Dependencies
+## Dependencies
 
 - Make
 - Cmake
@@ -17,14 +17,14 @@ git clone --recurse-submodules -j8
 ```shell
 mkdir cmake-build-debug
 ```
-###Configure project
+### Configure project
 
 ```shell
 cd cmake-build-debug
 cmake ..
 ```
 
-###Build
+### Build
 ```shell
 cmake --build .
 ```
