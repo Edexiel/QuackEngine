@@ -19,7 +19,7 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(${external_lib}/glfw)
-add_definitions(-DGLFW_INCLUDE_NONE)
+target_compile_definitions(glfw PRIVATE -DGLFW_INCLUDE_NONE)
 
 #IMGUI
 set(IMGUI_FOLDER "${external_lib}/imgui")
@@ -41,20 +41,35 @@ target_include_directories(stb INTERFACE ${external_lib}/stb)
 
 #assimp
 set(ASSIMP_BUILD_TESTS OFF)
-set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF)
-set(ASSIMP_NO_EXPORT ON)
-set(ASSIMP_BUILD_GLTF_IMPORTER ON)
-set(ASSIMP_BUILD_FBX_IMPORTER ON)
+set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
+#set(ASSIMP_NO_EXPORT OFF)
+set(ASSIMP_BUILD_GLTF_IMPORTER ON CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_FBX_IMPORTER ON CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_ASSBIN_EXPORTER ON CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_ASSXML_EXPORTER ON CACHE BOOL "" FORCE)
+set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(${external_lib}/assimp)
 
+#flatbuffer
+set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(FLATBUFFERS_MAX_PARSING_DEPTH 16)
+add_subdirectory(${external_lib}/flatbuffers ${CMAKE_CURRENT_BINARY_DIR}/flatbuffers-build EXCLUDE_FROM_ALL)
+##target_compile_definitions(flatbuffers PRIVATE -Wno-dev)
+
+#reactphysics3d
+add_subdirectory(${external_lib}/reactphysics3d)
 
 #Engine
 add_subdirectory(Engine)
+target_link_libraries(Engine PUBLIC glad glfw assimp ReactPhysics3D flatbuffers)
+
 #Editor
 add_subdirectory(Editor)
+#target_link_libraries(Editor PUBLIC glad glfw )
+
 
 #add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(Engine PUBLIC glad glfw assimp)
 
 #Installer
 include(InstallRequiredSystemLibraries)
