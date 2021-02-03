@@ -6,6 +6,7 @@
     <mapping directory="$PROJECT_DIR$/Vendor/flatbuffers" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/glfw" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/imgui" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Vendor/reactphysics3d" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/stb" vcs="Git" />
   </component>
 </project>

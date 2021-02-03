@@ -2,12 +2,16 @@
 
 ## Dependencies
 
-- Make
 - Cmake
 
 ## Clone with
-git clone --recurse-submodules -j8
-
+```shell
+git clone --recurse-submodules -j8 git@gitlab.com:quack-engine/engine.git  
+```
+## Update submodules
+```shell
+git submodule update --init --recursive
+```
 ## Build process with cmake (auto)
 
 ### Use CLion
