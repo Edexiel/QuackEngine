@@ -19,7 +19,6 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(${external_lib}/glfw)
-target_compile_definitions(glfw PRIVATE -DGLFW_INCLUDE_NONE)
 
 #IMGUI
 set(IMGUI_FOLDER "${external_lib}/imgui")
@@ -59,13 +58,21 @@ add_subdirectory(${external_lib}/flatbuffers ${CMAKE_CURRENT_BINARY_DIR}/flatbuf
 #reactphysics3d
 add_subdirectory(${external_lib}/reactphysics3d)
 
-#Engine
-add_subdirectory(Engine)
 
 #Editor
-add_subdirectory(Editor)
-#target_link_libraries(Editor PUBLIC glad glfw )
+project(Engine VERSION 0.1.0 LANGUAGES CXX C)
+add_library(Editor Editor/src/main.cpp)
+target_include_directories (Editor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(Editor PUBLIC glad glfw )
 
+#Engine
+project(Engine VERSION 0.1.0 LANGUAGES CXX C)
+add_executable(Engine Engine/src/main.cpp)
+target_include_directories (Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Engine/include)
+target_link_libraries(Engine PUBLIC glad glfw assimp flatbuffers)
+
+
+#if()
 
 #add_executable(${PROJECT_NAME} main.cpp)
 
