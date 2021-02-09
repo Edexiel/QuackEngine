@@ -62,12 +62,21 @@ add_subdirectory(${external_lib}/reactphysics3d)
 #Editor
 project(Engine VERSION 0.1.0 LANGUAGES CXX C)
 add_library(Editor Editor/src/main.cpp)
-target_include_directories (Editor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories (Editor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+        {CMAKE_CURRENT_SOURCE_DIR}/include/Resources
+        {CMAKE_CURRENT_SOURCE_DIR}/include/Renderer)
 target_link_libraries(Editor PUBLIC glad glfw )
 
 #Engine
 project(Engine VERSION 0.1.0 LANGUAGES CXX C)
-add_executable(Engine Engine/src/main.cpp)
+
+file(GLOB SOURCE_FILES
+        Engine/src/Resources/ResourcesManager.cpp
+        Engine/src/Renderer/Model.cpp
+        Engine/src/Renderer/Shader.cpp
+        Engine/src/Renderer/Texture.cpp)
+
+add_executable(Engine Engine/src/main.cpp ${SOURCE_FILES})
 target_include_directories (Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Engine/include)
 target_link_libraries(Engine PUBLIC glad glfw assimp flatbuffers)
 
