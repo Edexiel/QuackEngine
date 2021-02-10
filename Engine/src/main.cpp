@@ -66,10 +66,15 @@ int main ()
     //Model m3 = RS.LoadModel("o");
 
     Texture t1 = RS.LoadTexture("../Asset/DirtCube.jpg");
+    Texture t2 = RS.LoadTexture("../Asset/DirtCube.jpg");
+
 
     //std::cout << m1.id << std::endl;
     //std::cout << m2.id << std::endl;
     //std::cout << m3.id << std::endl;
+
+    std::cout << t1.id << std::endl;
+    std::cout << t2.id << std::endl;
   }
 
   while (!glfwWindowShouldClose(window))

@@ -16,14 +16,15 @@ namespace Resources
         const char* vertexPath;
         const char* fragmentPath;
 
-        unsigned int bindShaderVertex;
-        unsigned int bindShaderFragment;
+        unsigned int shaderID;
+
+
 
     public:
-        ShaderLoader(const unsigned int& _bindShaderVertex, const unsigned int& _bindShaderFragment, const char* _vertexPath, const char* _fragmentPath);
+        ShaderLoader(unsigned int _shaderID, const char* _vertexPath, const char* _fragmentPath);
         ~ShaderLoader(){};
 
-        void ReadFile();
+        static void ReadFile(ShaderLoader& shaderLoader);
         unsigned int Apply();
     };
 }

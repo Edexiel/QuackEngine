@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "../include/Resources/TextureLoader.hpp"
+#include "../include/Resources/ShaderLoader.hpp"
 
 #include <sys/stat.h>
 
@@ -95,5 +96,15 @@ Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const ch
     }
 
     // Charge new Shader
-    return Shader(0);
+
+    Shader* shader = new Shader();
+
+    ShaderLoader shaderLoader(shader->id, vertexShader, fragmentShader);
+
+    ShaderLoader::ReadFile(shaderLoader);
+    shaderLoader.Apply();
+
+    listShader.push_back(ReferenceShader{vertexShader, fragmentShader, shader});
+
+    return *shader;
 }
