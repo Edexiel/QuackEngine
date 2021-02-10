@@ -3,7 +3,13 @@
 #include "../include/Renderer/Texture.hpp"
 #include "../include/Renderer/Shader.hpp"
 
+#include "glad/glad.h"
+
 #include <iostream>
+
+#include "../include/Resources/TextureLoader.hpp"
+
+#include <sys/stat.h>
 
 using namespace Resources;
 using namespace Renderer;
@@ -37,14 +43,28 @@ Texture ResourcesManager::LoadTexture(const char* path)
 
     if (listTexture.find(path) != listTexture.end())
     {
-        std::cout << "Model { " << path << " } exist" << std::endl;
         return Texture(listTexture.find(path)->second->id);
+    }
+
+    // return null Texture if the file doesn't exist
+    if (!( access( path, F_OK ) != -1 ))
+    {
+        std::cout << "File : " << path << " doesn't exist" << std::endl;
+        return Texture();
     }
 
     // Create a new Texture
 
-    std::cout << "Model { " << path << " } doesn't exist" << std::endl;
-    Texture* texture = new Texture(1);
+    Texture* texture = new Texture();
+    glGenTextures(1, &texture->id);
+
+    // Multitreadable part
+    {
+        TextureLoader loader(texture->id, path);
+        loader.ReadFile();
+        loader.Apply();
+    }
+
     listTexture.insert(std::make_pair(path, texture));
 
     return *texture;
@@ -52,13 +72,25 @@ Texture ResourcesManager::LoadTexture(const char* path)
 
 Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const char* fragmentShader)
 {
+  // Check if the file exist
+  if (!( access(vertexShader, F_OK ) != -1 ))
+  {
+    std::cout << "File : " << vertexShader << " doesn't exist" << std::endl;
+    return Shader();
+  }
+  if (!( access(fragmentShader, F_OK ) != -1 ))
+  {
+    std::cout << "File : " << fragmentShader << " doesn't exist" << std::endl;
+    return Shader();
+  }
+
     // find if the Shader already exist
 
     for (unsigned int i = 0; i < listShader.size(); i++)
     {
         if (listShader[i].fragmentShader == fragmentShader && listShader[i].vertexShader == vertexShader)
         {
-            return {1};
+            return *listShader[i].shader;
         }
     }
 

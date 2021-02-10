@@ -2,11 +2,5 @@
 
 using namespace Renderer;
 
-Texture::Texture(const int& _id)
+Texture::Texture(const unsigned int& _id)
     : id {_id} {}
-
-Texture::Texture(const char* path)
-{
-
-}
-

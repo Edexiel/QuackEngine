@@ -3,14 +3,15 @@
 
 namespace Renderer
 {
+    typedef unsigned int Gluint;
+
     struct Texture
     {
-        int id;
+        Gluint id;
 
         Texture(){};
-        Texture(const int& _id);
-        Texture(const char* path);
-        ~Texture();    
+        Texture(const unsigned& _id);
+        ~Texture(){};
     };
 }
 
