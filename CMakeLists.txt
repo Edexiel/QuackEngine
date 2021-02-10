@@ -67,7 +67,7 @@ add_subdirectory(Engine)
 
 #if(debug)
 #{
-target_link_libraries(Engine PUBLIC Editor)
+target_link_libraries(Editor PUBLIC Engine)
 #}
 
 #add_executable(${PROJECT_NAME} main.cpp)
