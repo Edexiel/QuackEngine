@@ -22,8 +22,8 @@ int main ()
     return -1;
   }
 
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
   glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
   // Create window
@@ -51,10 +51,6 @@ int main ()
   glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
 
-  // Create and compile our GLSL program from the shaders
-
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LESS);
 
   // Enable blending
   glEnable(GL_BLEND);

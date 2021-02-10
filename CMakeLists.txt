@@ -75,7 +75,8 @@ file(GLOB SOURCE_FILES
         Engine/src/Renderer/Model.cpp
         Engine/src/Renderer/Shader.cpp
         Engine/src/Renderer/Texture.cpp
-        Engine/src/Resources/TextureLoader.cpp)
+        Engine/src/Resources/TextureLoader.cpp
+        Engine/src/Resources/ShaderLoader.cpp)
 
 add_executable(Engine Engine/src/main.cpp ${SOURCE_FILES})
 target_include_directories (Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Engine/include)
