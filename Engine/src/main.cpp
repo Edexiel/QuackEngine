@@ -3,9 +3,8 @@
 //
 
 //#include "glad/glad.h"
-//#include "assimp/importerdesc.h"
 
-int main ()
+int main(void)
 {
   return 0;
 }
