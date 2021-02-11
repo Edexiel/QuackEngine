@@ -24,13 +24,13 @@ Model ResourcesManager::LoadModel(const char* path)
     if (it != listModel.end())
     {
         std::cout << "Model { " << path << " } exist" << std::endl;
-        return Model(it->second->id);
+        return *(it->second);
     }
 
     // Create a new Model
 
     std::cout << "Model { " << path << " } doesn't exist" << std::endl;
-    Model* model = new Model(1);
+    Model* model = new Model();
     listModel.insert(std::make_pair(path, model));
 
     return *model;
@@ -62,7 +62,7 @@ Texture ResourcesManager::LoadTexture(const char* path)
     // Multitreadable part
     {
         TextureLoader loader(texture->id, path);
-        loader.ReadFile();
+        TextureLoader::ReadFile(loader);
         loader.Apply();
     }
 

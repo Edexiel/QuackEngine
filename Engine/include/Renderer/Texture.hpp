@@ -7,7 +7,7 @@ namespace Renderer
 
     struct Texture
     {
-        Gluint id;
+        Gluint id {0};
 
         Texture(){};
         Texture(const unsigned& _id);

@@ -3,12 +3,16 @@
 
 #include <string>
 
+namespace Renderer
+{
+  struct Texture;
+}
+
 namespace Resources
 {
-
     class TextureLoader
     {
-    private:
+    public:
 
         const char* filePath;
         unsigned int bindTexture;
@@ -18,11 +22,10 @@ namespace Resources
         int width, height, nrChannels;
         bool antiAliasing;
 
-    public:
-        TextureLoader(const unsigned int& _bindTexture, const char* _path, bool _antiAliasing = false);
+        TextureLoader(const Renderer::Texture& _bindTexture, const char* _path, bool _antiAliasing = false);
         ~TextureLoader(){};
 
-        void ReadFile();
+        static void ReadFile(TextureLoader& textureLoader);
         unsigned int Apply();
     };
 }

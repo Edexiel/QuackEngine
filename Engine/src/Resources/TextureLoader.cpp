@@ -1,4 +1,5 @@
 #include "../include/Resources/TextureLoader.hpp"
+#include "../include//Renderer/Texture.hpp"
 
 #include <iostream>
 
@@ -9,13 +10,12 @@
 
 using namespace Resources;
 
-TextureLoader::TextureLoader(const unsigned int& _bindTexture, const char* _filePath, bool _antiAliasing) : bindTexture{_bindTexture}, filePath{_filePath}, antiAliasing {_antiAliasing} {}
+TextureLoader::TextureLoader(const Texture& texture, const char* _filePath, bool _antiAliasing) : bindTexture{texture.id}, filePath{_filePath}, antiAliasing {_antiAliasing} {}
 
-void TextureLoader::ReadFile()
+void TextureLoader::ReadFile(TextureLoader& textureLoader)
 {
-    int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true);
-    data = stbi_load(filePath, &width, &height, &nrChannels, 0);
+    textureLoader.data = stbi_load(textureLoader.filePath, &textureLoader.width, &textureLoader.height, &textureLoader.nrChannels, 0);
 }
 
 unsigned int TextureLoader::Apply()

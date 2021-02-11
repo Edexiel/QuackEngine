@@ -47,9 +47,9 @@ int main ()
     return -1;
   }
 
-  GLuint VAO;
-  glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
+  //GLuint VAO;
+  //glGenVertexArrays(1, &VAO);
+  //glBindVertexArray(VAO);
 
 
   // Enable blending

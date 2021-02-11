@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project(QuackEngine VERSION 0.1.0 LANGUAGES CXX C)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 #find_package(OpenGL REQUIRED)
@@ -73,10 +73,12 @@ project(Engine VERSION 0.1.0 LANGUAGES CXX C)
 file(GLOB SOURCE_FILES
         Engine/src/Resources/ResourcesManager.cpp
         Engine/src/Renderer/Model.cpp
+        Engine/src/Renderer/Mesh.cpp
         Engine/src/Renderer/Shader.cpp
         Engine/src/Renderer/Texture.cpp
         Engine/src/Resources/TextureLoader.cpp
-        Engine/src/Resources/ShaderLoader.cpp)
+        Engine/src/Resources/ShaderLoader.cpp
+        Engine/src/Resources/ModelLoader.cpp)
 
 add_executable(Engine Engine/src/main.cpp ${SOURCE_FILES})
 target_include_directories (Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Engine/include)

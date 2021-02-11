@@ -1,17 +1,16 @@
 #ifndef _MODEL_
 #define _MODEL_
 
-#include <string>
+#include <vector>
 
 namespace Renderer
 {
+
+  struct Mesh;
+
     struct Model
     {
-        int id;
-
-        Model(){};
-        Model(const int& _id);
-        ~Model(){};
+        std::vector<Mesh> meshList;
     };
 }
 
