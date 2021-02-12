@@ -1,7 +1,7 @@
 #ifndef QUACKENGINE_MATRIX4_HPP
 #define QUACKENGINE_MATRIX4_HPP
 
-#include "string.h"
+#include <string>
 namespace Maths
 {
   struct Matrix4

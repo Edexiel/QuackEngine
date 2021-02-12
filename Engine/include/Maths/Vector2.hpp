@@ -6,6 +6,7 @@
 #define QUACKENGINE_VECTOR2_HPP
 
 #include <cmath>
+#include <string>
 
 namespace Maths
 {
