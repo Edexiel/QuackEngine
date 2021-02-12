@@ -3,14 +3,13 @@
 
 #include <vector>
 
+#include "../include/Renderer/Mesh.hpp"
+
 namespace Renderer
 {
-
-    struct Mesh;
-
     struct Model
     {
-        std::vector<Mesh*> meshList;
+        std::vector<Mesh> meshList;
     };
 }
 

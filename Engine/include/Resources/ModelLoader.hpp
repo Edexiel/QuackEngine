@@ -6,17 +6,25 @@
 
 namespace Resources
 {
+
+    /*struct Vertex
+    {
+        positions;
+        normals;
+        uvs;
+    };*/
+
     class ModelLoader
     {
     private:
 
     std::string path;
 
+    //std::vector<std::vector<Vertex>> ToLoadMesh;
+
     public:
         ModelLoader() {};
         ~ModelLoader(){};
-
-
 
         static void ReadFile(ModelLoader& modelLoader);
     };
