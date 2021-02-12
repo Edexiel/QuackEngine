@@ -7,34 +7,37 @@
 
 #include <cmath>
 
-struct Vector2
+namespace Maths
 {
-  union
+  struct Vector2
   {
-    struct
+    union
     {
-      float x;
-      float y;
+      struct
+      {
+        float x;
+        float y;
+      };
+
+      float e[2];
     };
 
-    float e[2];
+    float Length();
+
+    float SqrLength();
+
+    // Normalize the vector and return it;
+    Vector2 Normalize();
+
+    // Return the vector normalized
+    Vector2 Normalized();
+
+    static float DotProduct(const Vector2& v1, const Vector2& v2);
+
+    std::string ToString();
   };
-
-  float Length();
-
-  float SqrLength();
-
-  //Normalize the vector and return it;
-  Vector2 Normalize();
-
-  // Return the vector normalized
-  Vector2 Normalized();
-
-  static float DotProduct(const Vector2& v1, const Vector2& v2);
-
-  std::string ToString();
-};
-
+}
+using namespace Maths;
 Vector2 operator+(const Vector2& v, const Vector2& v2)
 {
     return { v.x + v2.x, v.y + v2.y };
