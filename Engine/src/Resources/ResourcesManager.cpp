@@ -1,14 +1,15 @@
 #include "Resources/ResourcesManager.hpp"
 #include "Renderer/Model.hpp"
-#include "../include/Renderer/Texture.hpp"
-#include "../include/Renderer/Shader.hpp"
+#include "Renderer/Texture.hpp"
+#include "Renderer/Shader.hpp"
 
 #include "glad/gl.h"
 
 #include <iostream>
 
-#include "../include/Resources/TextureLoader.hpp"
-#include "../include/Resources/ShaderLoader.hpp"
+#include "Resources/TextureLoader.hpp"
+#include "Resources/ShaderLoader.hpp"
+#include "Resources/ModelLoader.hpp"
 
 #include <sys/stat.h>
 
@@ -23,14 +24,22 @@ Model ResourcesManager::LoadModel(const char* path)
 
     if (it != listModel.end())
     {
-        std::cout << "Model { " << path << " } exist" << std::endl;
         return *(it->second);
     }
 
-    // Create a new Model
+  // return null Texture if the file doesn't exist
+    if (!( access( path, F_OK ) != -1 ))
+    {
+        std::cout << "File : " << path << " doesn't exist" << std::endl;
+        return Model();
+    }
 
-    std::cout << "Model { " << path << " } doesn't exist" << std::endl;
+    // Create a new Model
     Model* model = new Model();
+
+    ModelLoader modelLoader(*model, path);
+    ModelLoader::ReadFile(modelLoader);
+
     listModel.insert(std::make_pair(path, model));
 
     return *model;

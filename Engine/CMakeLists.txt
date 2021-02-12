@@ -16,9 +16,9 @@ add_executable(${PROJECT_NAME}
 
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/Maths
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/Resources
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/Renderer
+        #${CMAKE_CURRENT_SOURCE_DIR}/include/Maths
+        #${CMAKE_CURRENT_SOURCE_DIR}/include/Resources
+        #${CMAKE_CURRENT_SOURCE_DIR}/include/Renderer
         )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE "GLFW_INCLUDE_NONE")

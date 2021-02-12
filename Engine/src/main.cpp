@@ -23,7 +23,7 @@ int main(void)
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   /* Create a windowed mode window and its OpenGL context */
-  window = glfwCreateWindow(1280, 720, "Hello World", NULL, NULL);
+  window = glfwCreateWindow(1280, 720, "Fenaitre", NULL, NULL);
   if (!window)
   {
     glfwTerminate();
@@ -59,6 +59,7 @@ int main(void)
     Texture t1 = RS.LoadTexture("../Asset/DirtCube.jpg");
     Texture t2 = RS.LoadTexture("../Asset/DirtCube.jpg");
 
+    Model m1 = RS.LoadModel("../../Asset/DragonEye.fbx");
 
     //std::cout << m1.id << std::endl;
     //std::cout << m2.id << std::endl;

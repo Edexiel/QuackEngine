@@ -4,16 +4,20 @@
 #include <vector>
 #include <string>
 
-#include "Vector3.hpp"
+#include "Maths/Vector3.hpp"
+
+namespace Renderer
+{
+    class Model;
+}
 
 namespace Resources
 {
-
     struct Vertex
     {
-        Vector3 positions;
-        Vector3 normals;
-        Vector3 uvs;
+        Maths::Vector3 positions;
+        Maths::Vector3 normals;
+        Maths::Vector3 uvs;
     };
 
     class ModelLoader
@@ -25,7 +29,7 @@ namespace Resources
     std::vector<std::vector<Vertex>> ToLoadMesh;
 
     public:
-        ModelLoader() {};
+        ModelLoader(const Renderer::Model& model, const char* _path);
         ~ModelLoader(){};
 
         static void ReadFile(ModelLoader& modelLoader);
