@@ -1,9 +1,9 @@
-#include "../include/Resources/ResourcesManager.hpp"
-#include "../include/Renderer/Model.hpp"
+#include "Resources/ResourcesManager.hpp"
+#include "Renderer/Model.hpp"
 #include "../include/Renderer/Texture.hpp"
 #include "../include/Renderer/Shader.hpp"
 
-#include "glad/glad.h"
+#include "glad/gl.h"
 
 #include <iostream>
 

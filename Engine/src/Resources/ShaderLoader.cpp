@@ -1,6 +1,6 @@
-#include "../include/Resources/ShaderLoader.hpp"
+#include "Resources/ShaderLoader.hpp"
 
-#include "glad/glad.h"
+#include "glad/gl.h"
 
 #include <fstream>
 #include <sstream>

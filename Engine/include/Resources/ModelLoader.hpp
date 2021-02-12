@@ -4,15 +4,17 @@
 #include <vector>
 #include <string>
 
+#include "Vector3.hpp"
+
 namespace Resources
 {
 
-    /*struct Vertex
+    struct Vertex
     {
-        positions;
-        normals;
-        uvs;
-    };*/
+        Vector3 positions;
+        Vector3 normals;
+        Vector3 uvs;
+    };
 
     class ModelLoader
     {
@@ -20,7 +22,7 @@ namespace Resources
 
     std::string path;
 
-    //std::vector<std::vector<Vertex>> ToLoadMesh;
+    std::vector<std::vector<Vertex>> ToLoadMesh;
 
     public:
         ModelLoader() {};

@@ -1,12 +1,12 @@
-#include "../include/Resources/TextureLoader.hpp"
-#include "../include//Renderer/Texture.hpp"
+#include "Resources/TextureLoader.hpp"
+#include "Renderer/Texture.hpp"
 
 #include <iostream>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../Vendor/stb/stb_image.h"
 
-#include "glad/glad.h"
+#include "glad/gl.h"
 
 using namespace Resources;
 using namespace Renderer;

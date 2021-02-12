@@ -1,5 +1,4 @@
-#include "../include/Resources/ModelLoader.hpp"
-#include "../include/Renderer/Mesh.hpp"
+#include "Resources/ModelLoader.hpp"
 
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
@@ -31,11 +30,18 @@ void ModelLoader::ReadFile(ModelLoader& modelLoader)
 
     for (unsigned int i = 0; i < scene->mNumMeshes ; i++)
     {
+        std::vector<Vertex> newMesh;
+
         for (unsigned int e = 0 ; e < (*scene->mMeshes + i)->mNumVertices ; e++)
         {
-            (*scene->mMeshes + i)->mVertices;
-            (*scene->mMeshes + i)->mNormals;
-            (*scene->mMeshes + i)->mTextureCoords;
+            Vector3 position {(*scene->mMeshes + i)->mVertices->x, (*scene->mMeshes + i)->mVertices->y, (*scene->mMeshes + i)->mVertices->z};
+            Vector3 normal {(*scene->mMeshes + i)->mNormals->x, (*scene->mMeshes + i)->mNormals->y, (*scene->mMeshes + i)->mNormals->z};
+            Vector3 uv {0,0};//{(*scene->mMeshes + i)->mTextureCoords, (*scene->mMeshes + i)->mTextureCoords };
+
+            std::cout << position.ToString() << std::endl;
+
+            newMesh.push_back({position, normal, uv});
         }
+        modelLoader.ToLoadMesh.push_back(newMesh);
     }
 }
