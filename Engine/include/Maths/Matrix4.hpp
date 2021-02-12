@@ -56,7 +56,7 @@ inline Matrix4 operator+(const Matrix4& m1, const Matrix4& m2)
 {
     Matrix4 result;
 
-    for (unsigned i = 0; i < 16 ; i++)
+    for (unsigned int i = 0; i < 16 ; i++)
         result.e[i] = m1.e[i] + m2.e[i];
 
     return result;

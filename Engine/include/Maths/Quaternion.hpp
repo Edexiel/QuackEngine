@@ -70,7 +70,7 @@ Quaternion operator*(const Quaternion& q, const float& scalar)
 
 Quaternion operator/(const Quaternion& q, const float& scalar)
 {
-    Quaternion result(quat.w / scalar, quat.x / scalar, quat.y / scalar, quat.z / scalar);
+    Quaternion result(q.w / scalar, q.x / scalar, q.y / scalar, q.z / scalar);
     return result;
 }
 
@@ -81,7 +81,7 @@ Vector3 operator*(const Quaternion& q, const Vector3& v)
 
 bool operator==(const Quaternion& q1, const Quaternion& q2)
 {
-    return (q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == quat2.w);
+    return (q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w);
 }
 
 Quaternion::Quaternion(){}
@@ -184,7 +184,7 @@ Quaternion Quaternion::Slerp(const Quaternion& q1, const Quaternion& q2, const f
     }
 
 
-    return newQ1 * (sinf((1.0f - completion) * omega) / sin) + quat2 * (sinf(completion * omega) / sin);
+    return newQ1 * (sinf((1.0f - completion) * omega) / sin) + q2 * (sinf(completion * omega) / sin);
 }
 
 Quaternion Quaternion::Lerp(const Quaternion& q1, const Quaternion& q2, const float& t)
