@@ -1,23 +1,29 @@
 cmake_minimum_required(VERSION 3.17)
 project(QuackEngine VERSION 0.1.0 LANGUAGES CXX C)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
-#find_package(OpenGL REQUIRED)
-#OpenGL::GL
+find_package(OpenGL REQUIRED)
+
 
 set(external_lib "Vendor")
 
 #GLAD
 set(GLAD_FOLDER "${external_lib}/glad")
-add_library(glad ${GLAD_FOLDER}/include/glad/glad.h ${GLAD_FOLDER}/src/glad.c)
+add_library(glad ${GLAD_FOLDER}/include/glad/gl.h ${GLAD_FOLDER}/src/gl.c)
 target_include_directories(glad PUBLIC ${GLAD_FOLDER}/include/)
 
 #GLFW
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build the GLFW documentation" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "Build the GLFW test programs" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Build the GLFW example programs" FORCE)
+#set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+set(GLFW_INSTALL OFF CACHE BOOL "Generate installation target" FORCE)
+if(WIN32)
+    set(GLFW_USE_HYBRID_HPG ON CACHE BOOL "" FORCE)
+endif()
+
 add_subdirectory(${external_lib}/glfw)
 
 #IMGUI
@@ -51,43 +57,25 @@ set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(${external_lib}/assimp)
 
 #flatbuffer
-set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(FLATBUFFERS_MAX_PARSING_DEPTH 16)
-add_subdirectory(${external_lib}/flatbuffers ${CMAKE_CURRENT_BINARY_DIR}/flatbuffers-build EXCLUDE_FROM_ALL)
+#set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+#set(FLATBUFFERS_MAX_PARSING_DEPTH 16)
+#add_subdirectory(${external_lib}/flatbuffers ${CMAKE_CURRENT_BINARY_DIR}/flatbuffers-build EXCLUDE_FROM_ALL)
+
 
 #reactphysics3d
 add_subdirectory(${external_lib}/reactphysics3d)
 
 
 #Editor
-project(Engine VERSION 0.1.0 LANGUAGES CXX C)
-add_library(Editor Editor/src/main.cpp)
-target_include_directories (Editor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-        {CMAKE_CURRENT_SOURCE_DIR}/include/Resources
-        {CMAKE_CURRENT_SOURCE_DIR}/include/Renderer)
-target_link_libraries(Editor PUBLIC glad glfw )
+add_subdirectory(Editor)
 
 #Engine
-project(Engine VERSION 0.1.0 LANGUAGES CXX C)
+add_subdirectory(Engine)
 
-file(GLOB SOURCE_FILES
-        Engine/src/Resources/ResourcesManager.cpp
-        Engine/src/Renderer/Model.cpp
-        Engine/src/Renderer/Mesh.cpp
-        Engine/src/Renderer/Shader.cpp
-        Engine/src/Renderer/Texture.cpp
-        Engine/src/Resources/TextureLoader.cpp
-        Engine/src/Resources/ShaderLoader.cpp
-        Engine/src/Resources/ModelLoader.cpp)
-
-add_executable(Engine Engine/src/main.cpp ${SOURCE_FILES})
-target_include_directories (Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Engine/include)
-target_link_libraries(Engine PUBLIC glad glfw assimp flatbuffers)
-
-
-#if()
-
-#add_executable(${PROJECT_NAME} main.cpp)
+#if(debug)
+#{
+#target_link_libraries(Editor PUBLIC Engine)
+#}
 
 #Installer
 include(InstallRequiredSystemLibraries)
