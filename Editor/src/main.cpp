@@ -4,7 +4,13 @@
 
 
 #include "glad/gl.h"
-#include <GLFW/glfw3.h>
+#include "GLFW/glfw3.h"
+
+#include "imgui.h"
+//#include "imgui_internal.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
+
 #include <cstdio>
 
 void debugGLCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
@@ -60,10 +66,47 @@ int main(void)
     glDebugMessageControl(GL_DONT_CARE, GL_DEBUG_TYPE_OTHER, GL_DONT_CARE, 0, nullptr, GL_FALSE);
   }*/
 
+  // Init ImGui
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImGuiIO& io = ImGui::GetIO(); (void)io;
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+  //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+  io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+  //io.ConfigViewportsNoAutoMerge = true;
+  //io.ConfigViewportsNoTaskBarIcon = true;
+
+  //ImGui style
+  ImGui::StyleColorsDark();
+  //ImGui::StyleColorsClassic();
+
+  ImGuiStyle& style = ImGui::GetStyle();
+  if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+  {
+    style.WindowRounding = 0.0f;
+    style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+  }
+
+  ImGui_ImplGlfw_InitForOpenGL(window, true);
+  ImGui_ImplOpenGL3_Init("#version 460");
+
+  bool show_demo_window = true;
+  ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
   /* Loop until the user closes the window */
   while (!glfwWindowShouldClose(window))
   {
     /* Render here */
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    if (show_demo_window)
+      ImGui::ShowDemoWindow(&show_demo_window);
+
+    ImGui::Render();
+
     glClear(GL_COLOR_BUFFER_BIT);
 
     /* Swap front and back buffers */
