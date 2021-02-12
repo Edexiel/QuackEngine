@@ -45,36 +45,35 @@ namespace Maths
     std::string ToString();
   };
 }
-using namespace Maths;
 
-Vector3 operator+(const Vector3& v1,const Vector3& v2)
+Maths::Vector3 operator+(const Maths::Vector3& v1,const Maths::Vector3& v2)
 {
     return { v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
 }
 
-Vector3 operator-(const Vector3& v1, const Vector3& v2)
+Maths::Vector3 operator-(const Maths::Vector3& v1, const Maths::Vector3& v2)
 {
     return { v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
 }
 
-Vector3 operator*(const Vector3& v, const float& f)
+Maths::Vector3 operator*(const Maths::Vector3& v, const float& f)
 {
     return { v.x * f, v.y * f, v.z * f };
 }
 
-inline float Vector3::Length() const
+inline float Maths::Vector3::Length() const
 {
     return sqrtf(x * x + y * y + z * z);
 }
 
-inline float Vector3::SqrLength() const
+inline float Maths::Vector3::SqrLength() const
 {
     return x * x + y * y + z * z;
 }
 
 
 
-inline Vector3 Vector3::Normalize()
+inline Maths::Vector3 Maths::Vector3::Normalize()
 {
     float length = Length();
     if (length > 0)
@@ -87,7 +86,7 @@ inline Vector3 Vector3::Normalize()
     return *this;
 }
 
-inline Vector3 Vector3::Normalized()
+inline Maths::Vector3 Maths::Vector3::Normalized()
 {
     float length = Length();
     if (length > 0)
@@ -96,17 +95,17 @@ inline Vector3 Vector3::Normalized()
         return *this;
 }
 
-inline float Vector3::DotProduct(const Vector3& v1, const Vector3& v2)
+inline float Maths::Vector3::DotProduct(const Maths::Vector3& v1, const Maths::Vector3& v2)
 {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-inline Vector3 Vector3::CrossProduct(const Vector3& v1, const Vector3& v2)
+inline Maths::Vector3 Maths::Vector3::CrossProduct(const Maths::Vector3& v1, const Maths::Vector3& v2)
 {
     return {(v1.y * v2.z) - (v1.z * v2.y), (v1.z * v2.x) - (v1.x * v2.z), (v1.x * v2.y) - (v1.y * v2.x)};
 }
 
-inline std::string Vector3::ToString()
+inline std::string Maths::Vector3::ToString()
 {
     return "x = " + std::to_string(x) + ", y = " + std::to_string(y) + ", z = " + std::to_string(z);
 }
