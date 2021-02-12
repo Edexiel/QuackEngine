@@ -28,7 +28,7 @@ namespace Resources
     private:
         std::unordered_map<std::string, Renderer::Model*   >  listModel;
         std::unordered_map<std::string, Renderer::Texture* >  listTexture;
-        std::vector<ReferenceShader >              listShader;
+        std::vector<ReferenceShader >                         listShader;
 
     public: 
         ResourcesManager()   {};

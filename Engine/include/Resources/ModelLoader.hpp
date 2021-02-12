@@ -2,6 +2,7 @@
 #define _MODEL_LOADER_
 
 #include <vector>
+#include <string>
 
 namespace Resources
 {

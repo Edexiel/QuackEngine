@@ -9,6 +9,7 @@
 #include "glad/glad.h"
 
 using namespace Resources;
+using namespace Renderer;
 
 TextureLoader::TextureLoader(const Texture& texture, const char* _filePath, bool _antiAliasing) : bindTexture{texture.id}, filePath{_filePath}, antiAliasing {_antiAliasing} {}
 

@@ -6,11 +6,11 @@
 namespace Renderer
 {
 
-  struct Mesh;
+    struct Mesh;
 
     struct Model
     {
-        std::vector<Mesh> meshList;
+        std::vector<Mesh*> meshList;
     };
 }
 
