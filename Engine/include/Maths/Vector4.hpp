@@ -8,33 +8,36 @@
 #include <cmath>
 #include <string>
 #include "Vector3.hpp"
-
-struct Vector4
+namespace Maths
 {
-  union
+  struct Vector4
   {
-    struct
+    union
     {
-      float x, y, z, w;
+      struct
+      {
+        float x, y, z, w;
+      };
+
+      struct
+      {
+        float r, g, b, a;
+      };
+      float e[4];
+      Vector3 xyz;
     };
 
-    struct
-    {
-      float r, g, b, a;
-    };
-    float e[4];
-    Vector3 xyz;
+    float Length() const;
+    float SqrLength() const;
+
+    Vector4 Homogenize();
+    Vector3 Homogenized() const;
+    std::string ToString() const;
+
+    static float DotProduct(const Vector4& v1, const Vector4& v2);
   };
-
-  float Length() const;
-  float SqrLength() const;
-
-  Vector4 Homogenize();
-  Vector3 Homogenized() const;
-  std::string ToString() const;
-
-  static float DotProduct(const Vector4& v1, const Vector4& v2);
-};
+}
+using namespace Maths;
 
 inline Vector4 operator+(const Vector4& v1, const Vector4& v2)
 {
