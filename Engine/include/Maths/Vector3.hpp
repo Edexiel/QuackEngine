@@ -8,43 +8,44 @@
 #include <cmath>
 #include <string>
 
-struct Vector3
+namespace Maths
 {
-  union
+  struct Vector3
   {
-    struct
+    union
     {
-      float x;
-      float y;
-      float z;
+      struct
+      {
+        float x;
+        float y;
+        float z;
+      };
+
+      struct
+      {
+        float r;
+        float g;
+        float b;
+      };
+      float e[3];
     };
 
-    struct
-    {
-      float r;
-      float g;
-      float b;
-    };
-    float e[3];
+    float Length() const;
+    float SqrLength() const;
+
+    // Normalize the vector and return it;
+    Vector3 Normalize();
+
+    // Return the vector normalized
+    Vector3 Normalized();
+
+    static float DotProduct(const Vector3& v1, const Vector3& v2);
+    static Vector3 CrossProduct(const Vector3& v1, const Vector3& v2);
+
+    std::string ToString();
   };
-
-
-
-  float Length() const;
-  float SqrLength() const;
-
-
-  //Normalize the vector and return it;
-  Vector3 Normalize();
-
-  // Return the vector normalized
-  Vector3 Normalized();
-
-  static float DotProduct(const Vector3& v1, const Vector3& v2);
-  static Vector3 CrossProduct(const Vector3& v1, const Vector3& v2);
-
-  std::string ToString();
- };
+}
+using namespace Maths;
 
 Vector3 operator+(const Vector3& v1,const Vector3& v2)
 {

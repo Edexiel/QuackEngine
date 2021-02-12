@@ -5,49 +5,60 @@
 #include "Vector4.hpp"
 #include "Matrix4.hpp"
 #include <cmath>
-#include "string"
+#include <string>
 
-struct Quaternion
+namespace Maths
 {
-  union
+  struct Quaternion
   {
+    union
+    {
       struct
       {
-          float w;
-          float x;
-          float y;
-          float z;
+        float w;
+        float x;
+        float y;
+        float z;
       };
 
-      float e[4] {0};
+      float e[4]{ 0 };
+    };
+
+    Quaternion();
+    Quaternion(const float& _w,
+               const float& _x,
+               const float& _y,
+               const float& _z);
+    Quaternion(const float& _w, const Vector3& _axis);
+    Quaternion(const Vector3& Axe, const float& angle);
+
+    float GetMagnitude() const;
+    Quaternion GetConjugate() const;
+    Quaternion GetInverse() const;
+    void Normalize();
+    Quaternion Normalized() const;
+    Matrix4 QuaternionToMatrix() const;
+
+    static float DotProduct(const Quaternion& q1, const Quaternion& q2);
+    static Quaternion Slerp(const Quaternion& q1,
+                            const Quaternion& q2,
+                            const float& completion);
+    static Quaternion Lerp(const Quaternion& q1,
+                           const Quaternion& q2,
+                           const float& t);
+    static Quaternion Nlerp(const Quaternion& q1,
+                            const Quaternion& q2,
+                            const float& t);
+
+    Vector3 XYZVector() const;
+
+    std::string ToString() const;
+
+    ~Quaternion() = default;
   };
-  
+}
 
-  Quaternion();
-  Quaternion(const float& _w, const float& _x, const float& _y, const float& _z);
-  Quaternion(const float& _w, const Vector3& _axis);
-  Quaternion(const Vector3& Axe, const float& angle);
-
-
-
-  float       GetMagnitude() const;
-  Quaternion  GetConjugate() const;
-  Quaternion  GetInverse() const;
-  void        Normalize();
-  Quaternion  Normalized() const;
-  Matrix4     QuaternionToMatrix() const;
-
-  static float DotProduct (const Quaternion& q1, const Quaternion& q2);
-  static Quaternion Slerp (const Quaternion& q1, const Quaternion& q2, const float& completion);
-  static Quaternion Lerp  (const Quaternion& q1, const Quaternion& q2, const float& t);
-  static Quaternion Nlerp (const Quaternion& q1, const Quaternion& q2, const float& t);
-
-  Vector3 XYZVector() const;
-
-  std::string ToString() const;
-
-  ~Quaternion() = default;
-};
+using namespace Maths;
 
 Quaternion operator+(const Quaternion& q1, const Quaternion& q2)
 {

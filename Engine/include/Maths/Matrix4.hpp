@@ -1,32 +1,43 @@
 #ifndef QUACKENGINE_MATRIX4_HPP
 #define QUACKENGINE_MATRIX4_HPP
 
-#include "string.h"
-
-struct Matrix4
+#include <string>
+namespace Maths
 {
-  union
+  struct Matrix4
   {
-    Vector4 v[4];
-    float e[16] {0};
+    union
+    {
+      Vector4 v[4];
+      float e[16]{ 0 };
+    };
+
+    static Matrix4 Identity();
+    static Matrix4 Scale(const float& s);
+    static Matrix4 Scale(const Vector3& v);
+    static Matrix4 Translate(const Vector3& v);
+    static Matrix4 RotateX(const float& angle);
+    static Matrix4 RotateY(const float& angle);
+    static Matrix4 RotateZ(const float& angle);
+    static Matrix4 Rotation(const Vector3& rotation);
+    static Matrix4 AxisRotation(const float angle, const Vector3& axis);
+    static Matrix4 Perspective(const int& width,
+                               const int& height,
+                               const float& near,
+                               const float& far,
+                               const float& fov);
+    static Matrix4 OrthoMatrix(const int& width,
+                               const int& height,
+                               const float& near,
+                               const float& far);
+
+    Matrix4 GetTranspose() const;
+
+    std::string ToString() const;
   };
+}
 
-  static Matrix4 Identity();
-  static Matrix4 Scale(const float& s);
-  static Matrix4 Scale(const Vector3& v);
-  static Matrix4 Translate(const Vector3& v);
-  static Matrix4 RotateX(const float& angle);
-  static Matrix4 RotateY(const float& angle);
-  static Matrix4 RotateZ(const float& angle);
-  static Matrix4 Rotation(const Vector3 &rotation);
-  static Matrix4 AxisRotation(const float angle, const Vector3 &axis);
-  static Matrix4 Perspective(const int& width, const int& height, const float& near, const float& far, const float& fov);
-  static Matrix4 OrthoMatrix(const int& width, const int& height, const float& near, const float& far);
-
-  Matrix4 GetTranspose() const;
-
-  std::string ToString() const;
-};
+using namespace Maths;
 
 inline Matrix4 operator*(const Matrix4& a, const Matrix4& b)
 {
