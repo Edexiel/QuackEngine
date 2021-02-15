@@ -5,6 +5,12 @@
 #include <string>
 #include <unordered_map>
 
+#include "Thread/ThreadPool.hpp"
+
+#include "Resources/Loaders/ModelLoader.hpp"
+#include "Resources/Loaders/ShaderLoader.hpp"
+#include "Resources/Loaders/TextureLoader.hpp"
+
 
 namespace Renderer
 {
@@ -30,6 +36,13 @@ namespace Resources
         std::unordered_map<std::string, Renderer::Texture* >  listTexture;
         std::vector<ReferenceShader >                         listShader;
 
+        Thread::TaskSystem taskSystem;
+        Thread::ThreadPool threadPool;
+
+        std::vector<Loaders::ModelLoader*> listModelLoader;
+        std::vector<Loaders::ShaderLoader*> listShaderLoader;
+        std::vector<Loaders::TextureLoader*> listTextureLoader;
+
     public: 
         ResourcesManager()   {};
         ~ResourcesManager()  {};
@@ -37,6 +50,8 @@ namespace Resources
         Renderer::Model   LoadModel     (const char* path);
         Renderer::Texture LoadTexture   (const char* path);
         Renderer::Shader  LoadShader    (const char* vertexShader, const char* fragmentShader);
+
+        void ReadFiles();
 
     };
 }

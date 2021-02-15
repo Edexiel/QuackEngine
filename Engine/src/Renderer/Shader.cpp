@@ -2,5 +2,5 @@
 
 using namespace Renderer;
 
-Shader::Shader(const int& _id)
-    : id {_id} {}
+Shader::Shader(const unsigned int& _ID)
+    : ID {_ID} {}

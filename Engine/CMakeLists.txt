@@ -4,14 +4,16 @@ project(Engine VERSION 0.1.0 LANGUAGES CXX C)
 
 add_executable(${PROJECT_NAME}
         src/main.cpp
+        src/Thread/TaskSystem.cpp
+        src/Thread/ThreadPool.cpp
         src/Resources/ResourcesManager.cpp
         src/Renderer/Model.cpp
         src/Renderer/Mesh.cpp
         src/Renderer/Shader.cpp
         src/Renderer/Texture.cpp
-        src/Resources/TextureLoader.cpp
-        src/Resources/ShaderLoader.cpp
-        src/Resources/ModelLoader.cpp
+        src/Resources/Loaders/TextureLoader.cpp
+        src/Resources/Loaders/ShaderLoader.cpp
+        src/Resources/Loaders/ModelLoader.cpp
         )
 
 

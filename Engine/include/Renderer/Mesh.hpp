@@ -7,7 +7,8 @@ namespace Renderer
 {
     struct Mesh
     {
-        Gluint ID;
+        Gluint buffer;
+        unsigned int size;
     };
 }
 

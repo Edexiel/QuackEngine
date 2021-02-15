@@ -1,22 +1,23 @@
-#include "Resources/TextureLoader.hpp"
+#include "Resources/Loaders/TextureLoader.hpp"
 #include "Renderer/Texture.hpp"
 
 #include <iostream>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "../../Vendor/stb/stb_image.h"
+#include "../../../../Vendor/stb/stb_image.h"
 
 #include "glad/gl.h"
 
 using namespace Resources;
+using namespace Loaders;
 using namespace Renderer;
 
-TextureLoader::TextureLoader(const Texture& texture, const char* _filePath, bool _antiAliasing) : bindTexture{texture.id}, filePath{_filePath}, antiAliasing {_antiAliasing} {}
+TextureLoader::TextureLoader(const Texture* texture, const char* _filePath, bool _antiAliasing) : bindTexture{texture->ID}, filePath{_filePath}, antiAliasing {_antiAliasing} {}
 
-void TextureLoader::ReadFile(TextureLoader& textureLoader)
+void TextureLoader::ReadFile(TextureLoader* textureLoader)
 {
     stbi_set_flip_vertically_on_load(true);
-    textureLoader.data = stbi_load(textureLoader.filePath, &textureLoader.width, &textureLoader.height, &textureLoader.nrChannels, 0);
+    textureLoader->data = stbi_load(textureLoader->filePath, &textureLoader->width, &textureLoader->height, &textureLoader->nrChannels, 0);
 }
 
 unsigned int TextureLoader::Apply()

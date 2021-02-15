@@ -5,10 +5,10 @@ namespace Renderer
 {
     struct Shader
     {
-        int id;
+        unsigned int ID;
 
         Shader(){};
-        Shader(const int& _id);
+        Shader(const unsigned int& _ID);
         ~Shader(){};
 
     };

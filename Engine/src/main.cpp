@@ -56,17 +56,19 @@ int main(void)
     //Model m2 = RS.LoadModel("T");
     //Model m3 = RS.LoadModel("o");
 
-    Texture t1 = RS.LoadTexture("../Asset/DirtCube.jpg");
-    Texture t2 = RS.LoadTexture("../Asset/DirtCube.jpg");
+    Texture t1 = RS.LoadTexture("../../Asset/Texture.png");
+    Texture t2 = RS.LoadTexture("../../Asset/Texture.png");
 
-    Model m1 = RS.LoadModel("../../Asset/DragonEye.fbx");
+    Model m1 = RS.LoadModel("../../Asset/eyeball.fbx");
 
     //std::cout << m1.id << std::endl;
     //std::cout << m2.id << std::endl;
     //std::cout << m3.id << std::endl;
 
-    std::cout << t1.id << std::endl;
-    std::cout << t2.id << std::endl;
+    RS.ReadFiles();
+
+    std::cout << "Texture 1 ID : " << t1.ID << std::endl;
+    std::cout << "Texture 2 ID : " << t2.ID << std::endl;
   }
 
   /* Loop until the user closes the window */

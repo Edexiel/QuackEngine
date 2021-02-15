@@ -1,4 +1,6 @@
-#include "Resources/ShaderLoader.hpp"
+#include "Resources/Loaders/shaderLoader.hpp"
+
+#include "Renderer/Shader.hpp"
 
 #include "glad/gl.h"
 
@@ -7,41 +9,42 @@
 #include <vector>
 
 using namespace Resources;
+using namespace Loaders;
 
-ShaderLoader::ShaderLoader(unsigned int _shaderID, const char* _vertexPath, const char* _fragmentPath) : shaderID{_shaderID}, vertexPath{_vertexPath}, fragmentPath{_fragmentPath} {}
+ShaderLoader::ShaderLoader(const Renderer::Shader* shader, const char* _vertexPath, const char* _fragmentPath) : shaderID{shader->ID}, vertexPath{_vertexPath}, fragmentPath{_fragmentPath} {}
 
-void ShaderLoader::ReadFile(ShaderLoader& shaderLoader)
+void ShaderLoader::ReadFile(ShaderLoader* shaderLoader)
 {
     // Read the Vertex Shader code from the file
     //std::string VertexShaderCode;
-    std::ifstream VertexShaderStream(shaderLoader.vertexPath, std::ios::in);
+    std::ifstream VertexShaderStream(shaderLoader->vertexPath, std::ios::in);
     if (VertexShaderStream.is_open())
     {
         std::stringstream sstr;
         sstr << VertexShaderStream.rdbuf();
-        shaderLoader.VertexShaderCode = sstr.str();
+        shaderLoader->VertexShaderCode = sstr.str();
         VertexShaderStream.close();
     }
     else
     {
-        printf("Impossible to open %s.\n", shaderLoader.vertexPath);
+        printf("Impossible to open %s.\n", shaderLoader->vertexPath);
         getchar();
         return;
     }
 
     // Read the Fragment Shader code from the file
     //std::string FragmentShaderCode;
-    std::ifstream FragmentShaderStream(shaderLoader.fragmentPath, std::ios::in);
+    std::ifstream FragmentShaderStream(shaderLoader->fragmentPath, std::ios::in);
     if (FragmentShaderStream.is_open())
     {
         std::stringstream sstr;
         sstr << FragmentShaderStream.rdbuf();
-        shaderLoader.FragmentShaderCode = sstr.str();
+        shaderLoader->FragmentShaderCode = sstr.str();
         FragmentShaderStream.close();
     }
     else
     {
-        printf("Impossible to open %s.\n", shaderLoader.fragmentPath);
+        printf("Impossible to open %s.\n", shaderLoader->fragmentPath);
         getchar();
         return;
     }
@@ -87,7 +90,7 @@ unsigned int ShaderLoader::Apply()
     }
 
     // Link the program
-    shaderID = glCreateProgram();
+    //shaderID = glCreateProgram();
     glAttachShader(shaderID, VertexShaderID);
     glAttachShader(shaderID, FragmentShaderID);
     glLinkProgram(shaderID);
