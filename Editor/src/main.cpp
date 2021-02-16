@@ -13,10 +13,24 @@
 
 #include <cstdio>
 
+
 void debugGLCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
   printf("OpenGL error = %s\n", message);
 }
+
+/*static void HelpMarker(const char* desc)
+{
+  ImGui::TextDisabled("(?)");
+  if (ImGui::IsItemHovered())
+  {
+    ImGui::BeginTooltip();
+    ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+    ImGui::TextUnformatted(desc);
+    ImGui::PopTextWrapPos();
+    ImGui::EndTooltip();
+  }
+}*/
 
 int main(void)
 {
@@ -73,7 +87,7 @@ int main(void)
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
   //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-  io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+  //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
   //io.ConfigViewportsNoAutoMerge = true;
   //io.ConfigViewportsNoTaskBarIcon = true;
 
@@ -91,31 +105,132 @@ int main(void)
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 460");
 
-  bool show_demo_window = true;
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-  /* Loop until the user closes the window */
+  //Windows
+  bool window_scene=true;
+  bool window_viewport = true;
+  bool window_properties=true;
+  bool window_explorer=true;
+  bool window_log = true;
+
   while (!glfwWindowShouldClose(window))
   {
-    /* Render here */
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+    /* Poll for and process events */
+    glfwPollEvents();
 
-    if (show_demo_window)
-      ImGui::ShowDemoWindow(&show_demo_window);
+    //imgui
+    {
+      ImGui_ImplOpenGL3_NewFrame();
+      ImGui_ImplGlfw_NewFrame();
+      ImGui::NewFrame();
 
-    ImGui::Render();
+      //DockSpace
+      {
+//        ImGuiWindowFlags window_flags=0;
+//          window_flags |= ImGuiWindowFlags_Popup ;
 
-    glClear(GL_COLOR_BUFFER_BIT);
+        ImGuiID dockspace_id = ImGui::GetID("DockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
+
+        //Menu bar
+        {
+          if(ImGui::BeginMainMenuBar())
+          {
+            if(ImGui::BeginMenu("Files"))
+            {
+              if (ImGui::MenuItem("New scene")) {}
+              if (ImGui::MenuItem("Save scene")) {}
+
+              ImGui::Separator();
+              if (ImGui::MenuItem("Import object")) {}
+
+              ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Edit"))
+            {
+              if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+              if (ImGui::MenuItem("Redo", "CTRL+Y")) {}  // Disabled item
+              ImGui::Separator();
+              if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+              if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+              if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+              ImGui::EndMenu();
+            }
+
+            if(ImGui::BeginMenu("Windows"))
+            {
+              if (ImGui::MenuItem("Viewport",NULL,window_viewport)) {window_viewport=!window_viewport;}
+              if (ImGui::MenuItem("Logs",NULL,window_log)) {window_log=!window_log;}
+              ImGui::EndMenu();
+            }
+          }
+          ImGui::EndMainMenuBar();
+        }
+        ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+      }
+
+      //ImGui::ShowDemoWindow();
+
+      //Scene
+      {
+        ImGui::Begin("Scene",&window_scene);
+        //ImGui::
+        ImGui::End();
+      }
+
+      //ViewPort
+      if(window_viewport){
+        ImGui::Begin("Viewport");
+        ImGui::Text("Hello from another window!");
+        ImGui::End();
+      }
+
+      //Properties
+      if(window_properties){
+        ImGui::Begin("Properties",&window_properties);
+        ImGui::End();
+      }
+
+      //File Explorer
+      if(window_explorer){
+        ImGui::Begin("Explorer",&window_explorer);
+        ImGui::End();
+      }
+
+      //Logs
+      if(window_log){
+        ImGui::Begin("Logs",&window_log);
+        ImGui::End();
+      }
+      ImGui::Render();
+
+      int display_w, display_h;
+      glfwGetFramebufferSize(window, &display_w, &display_h);
+      glViewport(0, 0, display_w, display_h);
+      glClearColor(0.5f,0.5f,0.5f,0.5f);
+      glClear(GL_COLOR_BUFFER_BIT);
+      ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+
+//      if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+//        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+//        ImGui::UpdatePlatformWindows();
+//        ImGui::RenderPlatformWindowsDefault();
+//        glfwMakeContextCurrent(backup_current_context);
+//      }
+    }
 
     /* Swap front and back buffers */
     glfwSwapBuffers(window);
-
-    /* Poll for and process events */
-    glfwPollEvents();
   }
 
+  // Cleanup
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
+  glfwDestroyWindow(window);
   glfwTerminate();
   return 0;
 }
