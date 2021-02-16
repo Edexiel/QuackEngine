@@ -58,8 +58,10 @@ int main(void)
 
     Texture t1 = RS.LoadTexture("../../Asset/Texture.png");
     Texture t2 = RS.LoadTexture("../../Asset/Texture.png");
+    Texture t3 = RS.LoadTexture("../../Asset/Texture2.png");
 
-    Model m1 = RS.LoadModel("../../Asset/eyeball.fbx");
+    Model m1 = RS.LoadModel("../../Asset/DragonEye.fbx");
+    Model m2 = RS.LoadModel("../../Asset/DragonEye2.fbx");
 
     //std::cout << m1.id << std::endl;
     //std::cout << m2.id << std::endl;
@@ -69,6 +71,9 @@ int main(void)
 
     std::cout << "Texture 1 ID : " << t1.ID << std::endl;
     std::cout << "Texture 2 ID : " << t2.ID << std::endl;
+    std::cout << "Texture 3 ID : " << t3.ID << std::endl;
+
+    std::cout << "Model1 nb Mesh : " << m1.meshList.size() << std::endl;
   }
 
   /* Loop until the user closes the window */

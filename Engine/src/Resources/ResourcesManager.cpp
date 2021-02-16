@@ -7,10 +7,6 @@
 
 #include <iostream>
 
-#include "Resources/Loaders/ModelLoader.hpp"
-#include "Resources/Loaders/ShaderLoader.hpp"
-#include "Resources/Loaders/TextureLoader.hpp"
-
 #include <sys/stat.h>
 
 using namespace Resources;
@@ -39,11 +35,7 @@ Model ResourcesManager::LoadModel(const char* path)
 
     Loaders::ModelLoader* modelLoader = new Loaders::ModelLoader(model, path);
     listModelLoader.push_back(modelLoader);
-    //ModelLoader::ReadFile(&modelLoader);
-
     taskSystem.AddTask(std::make_shared<Thread::Task<Loaders::ModelLoader*>>(Loaders::ModelLoader::ReadFile, modelLoader));
-
-    //threadPool.Run(&taskSystem);
 
     listModel.insert(std::make_pair(path, model));
 
@@ -73,13 +65,10 @@ Texture ResourcesManager::LoadTexture(const char* path)
     Texture* texture = new Texture();
     glGenTextures(1, &texture->ID);
 
-    // Multithreadable part
-    {
-        Loaders::TextureLoader* textureLoader = new Loaders::TextureLoader(texture, path);
-        //Loaders::TextureLoader::ReadFile(loader);
-        taskSystem.AddTask(std::make_shared<Thread::Task<Loaders::TextureLoader*>>(Loaders::TextureLoader::ReadFile, textureLoader));
 
-    }
+    Loaders::TextureLoader* textureLoader = new Loaders::TextureLoader(texture, path);
+    taskSystem.AddTask(std::make_shared<Thread::Task<Loaders::TextureLoader*>>(Loaders::TextureLoader::ReadFile, textureLoader));
+
 
     listTexture.insert(std::make_pair(path, texture));
 
@@ -118,8 +107,6 @@ Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const ch
 
     Loaders::ShaderLoader* shaderLoader = new Loaders::ShaderLoader(shader, vertexShader, fragmentShader);
     taskSystem.AddTask(std::make_shared<Thread::Task<Loaders::ShaderLoader*>>(Loaders::ShaderLoader::ReadFile, shaderLoader));
-    //Loaders::ShaderLoader::ReadFile(shaderLoader);
-
 
     listShader.push_back(ReferenceShader{vertexShader, fragmentShader, shader});
 
