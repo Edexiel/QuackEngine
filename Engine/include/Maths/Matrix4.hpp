@@ -1,36 +1,47 @@
 #ifndef QUACKENGINE_MATRIX4_HPP
 #define QUACKENGINE_MATRIX4_HPP
 
-#include "string.h"
+#include "Vector4.hpp"
 
-struct Matrix4
+#include <string>
+namespace Maths
 {
-  union
+  struct Matrix4
   {
-    Vector4 v[4];
-    float e[16] {0};
+    union
+    {
+      Vector4 v[4];
+      float e[16]{ 0 };
+    };
+
+    static Matrix4 Identity();
+    static Matrix4 Scale(const float& s);
+    static Matrix4 Scale(const Vector3& v);
+    static Matrix4 Translate(const Vector3& v);
+    static Matrix4 RotateX(const float& angle);
+    static Matrix4 RotateY(const float& angle);
+    static Matrix4 RotateZ(const float& angle);
+    static Matrix4 Rotation(const Vector3& rotation);
+    static Matrix4 AxisRotation(const float angle, const Vector3& axis);
+    static Matrix4 Perspective(const int& width,
+                               const int& height,
+                               const float& near,
+                               const float& far,
+                               const float& fov);
+    static Matrix4 OrthoMatrix(const int& width,
+                               const int& height,
+                               const float& near,
+                               const float& far);
+
+    Matrix4 GetTranspose() const;
+
+    std::string ToString() const;
   };
+}
 
-  static Matrix4 Identity();
-  static Matrix4 Scale(const float& s);
-  static Matrix4 Scale(const Vector3& v);
-  static Matrix4 Translate(const Vector3& v);
-  static Matrix4 RotateX(const float& angle);
-  static Matrix4 RotateY(const float& angle);
-  static Matrix4 RotateZ(const float& angle);
-  static Matrix4 Rotation(const Vector3 &rotation);
-  static Matrix4 AxisRotation(const float angle, const Vector3 &axis);
-  static Matrix4 Perspective(const int& width, const int& height, const float& near, const float& far, const float& fov);
-  static Matrix4 OrthoMatrix(const int& width, const int& height, const float& near, const float& far);
-
-  Matrix4 GetTranspose() const;
-
-  std::string ToString() const;
-};
-
-inline Matrix4 operator*(const Matrix4& a, const Matrix4& b)
+inline Maths::Matrix4 operator*(const Maths::Matrix4& a, const Maths::Matrix4& b)
 {
-    Matrix4 result;
+    Maths::Matrix4 result;
 
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
@@ -40,11 +51,11 @@ inline Matrix4 operator*(const Matrix4& a, const Matrix4& b)
     return result;
 }
 
-inline Matrix4& operator*=(Matrix4& a, const Matrix4& b) { a = a * b; return a; }
+inline Maths::Matrix4& operator*=(Maths::Matrix4& a, const Maths::Matrix4& b) { a = a * b; return a; }
 
-inline Matrix4 operator*(const Matrix4& m, const float& f)
+inline Maths::Matrix4 operator*(const Maths::Matrix4& m, const float& f)
 {
-    Matrix4 result;
+    Maths::Matrix4 result;
 
     for (unsigned int i = 0 ; i < 16 ; i++)
         result.e[i] = m.e[i] * f;
@@ -52,19 +63,19 @@ inline Matrix4 operator*(const Matrix4& m, const float& f)
     return result;
 }
 
-inline Matrix4 operator+(const Matrix4& m1, const Matrix4& m2)
+inline Maths::Matrix4 operator+(const Maths::Matrix4& m1, const Maths::Matrix4& m2)
 {
-    Matrix4 result;
+    Maths::Matrix4 result;
 
-    for (unsigned i = 0; i < 16 ; i++)
+    for (unsigned int i = 0; i < 16 ; i++)
         result.e[i] = m1.e[i] + m2.e[i];
 
     return result;
 }
 
-inline Matrix4 Matrix4::Identity()
+inline Maths::Matrix4 Maths::Matrix4::Identity()
 {
-    Matrix4 mat;
+    Maths::Matrix4 mat;
 
     mat.e[0] = 1;
     mat.e[5] = 1;
@@ -75,9 +86,9 @@ inline Matrix4 Matrix4::Identity()
 }
 
 
-inline Matrix4 Matrix4::Scale(const float& s)
+inline Maths::Matrix4 Maths::Matrix4::Scale(const float& s)
 {
-    Matrix4 mat;
+    Maths::Matrix4 mat;
     mat.e[0] = s;
     mat.e[5] = s;
     mat.e[10] = s;
@@ -86,9 +97,9 @@ inline Matrix4 Matrix4::Scale(const float& s)
     return mat;
 }
 
-inline Matrix4 Matrix4::Scale(const Vector3& v)
+inline Maths::Matrix4 Maths::Matrix4::Scale(const Maths::Vector3& v)
 {
-    Matrix4 mat;
+    Maths::Matrix4 mat;
     mat.e[0] = v.x;
     mat.e[5] = v.y;
     mat.e[10] = v.z;
@@ -97,9 +108,9 @@ inline Matrix4 Matrix4::Scale(const Vector3& v)
     return mat;
 }
 
-inline Matrix4 Matrix4::Translate(const Vector3& v)
+inline Maths::Matrix4 Maths::Matrix4::Translate(const Maths::Vector3& v)
 {
-    Matrix4 mat;
+    Maths::Matrix4 mat;
     mat.e[12] = v.x;
     mat.e[13] = v.y;
     mat.e[14] = v.z;
@@ -112,9 +123,9 @@ inline Matrix4 Matrix4::Translate(const Vector3& v)
     return mat;
 }
 
-inline Matrix4 Matrix4::RotateX(const float& angle)
+inline Maths::Matrix4 Maths::Matrix4::RotateX(const float& angle)
 {
-    Matrix4 rotX;
+    Maths::Matrix4 rotX;
     rotX.e[0] = 1;
     rotX.e[5] = cosf(angle);
     rotX.e[9] = -sinf(angle);
@@ -124,9 +135,9 @@ inline Matrix4 Matrix4::RotateX(const float& angle)
 
     return rotX;
 }
-inline Matrix4 Matrix4::RotateY(const float& angle)
+inline Maths::Matrix4 Maths::Matrix4::RotateY(const float& angle)
 {
-    Matrix4 rotY;
+    Maths::Matrix4 rotY;
     rotY.e[0] = cosf(angle);
     rotY.e[8] = sinf(angle);
     rotY.e[5] = 1;
@@ -136,9 +147,9 @@ inline Matrix4 Matrix4::RotateY(const float& angle)
 
     return rotY;
 }
-inline Matrix4 Matrix4::RotateZ(const float& angle)
+inline Maths::Matrix4 Maths::Matrix4::RotateZ(const float& angle)
 {
-    Matrix4 rotZ;
+    Maths::Matrix4 rotZ;
     rotZ.e[0] = cosf(angle);
     rotZ.e[4] = -sinf(angle);
     rotZ.e[1] = sinf(angle);
@@ -149,14 +160,14 @@ inline Matrix4 Matrix4::RotateZ(const float& angle)
     return rotZ;
 }
 
-inline Matrix4 Matrix4::Rotation(const Vector3 &rotation)
+inline Maths::Matrix4 Maths::Matrix4::Rotation(const Vector3 &rotation)
 {
   return RotateY(rotation.y) * RotateX(rotation.x) * RotateZ(rotation.z);
 }
 
-inline Matrix4 Matrix4::AxisRotation(const float angle, const Vector3 &axis)
+inline Maths::Matrix4 Maths::Matrix4::AxisRotation(const float angle, const Vector3 &axis)
 {
-    Matrix4 first;
+    Maths::Matrix4 first;
 
     first.e[0]  = axis.x * axis.x;
     first.e[1]  = axis.y * axis.x;
@@ -174,9 +185,9 @@ inline Matrix4 Matrix4::AxisRotation(const float angle, const Vector3 &axis)
 
     first = first * (1 - cosf(angle));
 
-    Matrix4 second = Identity() * cosf(angle);
+    Maths::Matrix4 second = Identity() * cosf(angle);
 
-    Matrix4 third;
+    Maths::Matrix4 third;
 
     third.e[1] = axis.z;
     third.e[2] = -axis.y;
@@ -190,9 +201,9 @@ inline Matrix4 Matrix4::AxisRotation(const float angle, const Vector3 &axis)
     return first + second + third;
 }
 
-inline Matrix4 Matrix4::Perspective(const int& width, const int& height, const float& near, const float& far, const float& fov)
+inline Maths::Matrix4 Maths::Matrix4::Perspective(const int& width, const int& height, const float& near, const float& far, const float& fov)
 {
-    Matrix4 projection;
+    Maths::Matrix4 projection;
     float yMax = tanf(fov * M_PI / 360);
     float xMax = yMax * ((float)width / height);
 
@@ -208,9 +219,9 @@ inline Matrix4 Matrix4::Perspective(const int& width, const int& height, const f
     return projection;
 }
 
-inline Matrix4 Matrix4::OrthoMatrix(const int& width, const int& height, const float& near, const float& far)
+inline Maths::Matrix4 Maths::Matrix4::OrthoMatrix(const int& width, const int& height, const float& near, const float& far)
 {
-    Matrix4 ortho;
+    Maths::Matrix4 ortho;
 
     ortho.e[0]  = (float)height / width ;
     ortho.e[5]  = 1;
@@ -224,7 +235,7 @@ inline Matrix4 Matrix4::OrthoMatrix(const int& width, const int& height, const f
     return ortho;
 }
 
-inline Matrix4 Matrix4::GetTranspose() const
+inline Maths::Matrix4 Maths::Matrix4::GetTranspose() const
 {
   return {
     v[0].e[0], v[1].e[0], v[2].e[0], v[3].e[0],
@@ -235,7 +246,7 @@ inline Matrix4 Matrix4::GetTranspose() const
 }
 
 
-std::string Matrix4::ToString() const
+std::string Maths::Matrix4::ToString() const
 {
 
     return std::to_string(e[0]) + ", " + std::to_string(e[4]) + ", " + std::to_string(e[8]) + ", "+ std::to_string( e[12]) + "\n"
