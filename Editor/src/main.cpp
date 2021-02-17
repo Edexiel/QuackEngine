@@ -7,7 +7,6 @@
 #include "GLFW/glfw3.h"
 
 #include "imgui.h"
-//#include "imgui_internal.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
@@ -116,6 +115,7 @@ int main(void)
 
   while (!glfwWindowShouldClose(window))
   {
+
     /* Poll for and process events */
     glfwPollEvents();
 
@@ -179,6 +179,8 @@ int main(void)
         //ImGui::
         ImGui::End();
       }
+
+
 
       //ViewPort
       if(window_viewport){
