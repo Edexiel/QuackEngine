@@ -130,8 +130,10 @@ int main(void)
 //        ImGuiWindowFlags window_flags=0;
 //          window_flags |= ImGuiWindowFlags_Popup ;
 
-        ImGuiID dockspace_id = ImGui::GetID("DockSpace");
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
+        //ImGuiID dockspace_id = ImGui::GetID("DockSpace");
+        //ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
+        ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+
 
         //Menu bar
         {
@@ -168,10 +170,9 @@ int main(void)
           }
           ImGui::EndMainMenuBar();
         }
-        ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
       }
 
-      //ImGui::ShowDemoWindow();
+      ImGui::ShowDemoWindow();
 
       //Scene
       {
@@ -210,18 +211,18 @@ int main(void)
 
       int display_w, display_h;
       glfwGetFramebufferSize(window, &display_w, &display_h);
-      glViewport(0, 0, display_w, display_h);
-      glClearColor(0.5f,0.5f,0.5f,0.5f);
-      glClear(GL_COLOR_BUFFER_BIT);
+      //glViewport(0, 0, display_w, display_h);
+      //glClearColor(1.f,0.f,0.f,0.f);
+      //glClear(GL_COLOR_BUFFER_BIT);
       ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 
-//      if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-//        GLFWwindow* backup_current_context = glfwGetCurrentContext();
-//        ImGui::UpdatePlatformWindows();
-//        ImGui::RenderPlatformWindowsDefault();
-//        glfwMakeContextCurrent(backup_current_context);
-//      }
+      if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        glfwMakeContextCurrent(backup_current_context);
+      }
     }
 
     /* Swap front and back buffers */
