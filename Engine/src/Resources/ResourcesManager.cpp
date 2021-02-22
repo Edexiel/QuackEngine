@@ -32,13 +32,15 @@ Model ResourcesManager::LoadModel(const char* path)
 
     // Create a new Model
     Model* model = new Model();
-
     Loaders::ModelLoader* modelLoader = new Loaders::ModelLoader(model, path);
-    //listModelLoader.push_back(modelLoader);
+
+    // Direct Read in Main Thread
     Loaders::ModelLoader::ReadFile(modelLoader);
     modelLoader->Apply();
 
-    taskSystem.AddTask(std::make_shared<Thread::Task<Loaders::ModelLoader*>>(Loaders::ModelLoader::ReadFile, modelLoader));
+    // To Uncomment when Multhithread doable
+    //listModelLoader.push_back(modelLoader);
+    //taskSystem.AddTask(std::make_shared<Thread::Task<Loaders::ModelLoader*>>(Loaders::ModelLoader::ReadFile, modelLoader));
 
     listModel.insert(std::make_pair(path, model));
 
@@ -51,6 +53,7 @@ Texture ResourcesManager::LoadTexture(const char* path)
 
     std::unordered_map< std::string, Renderer::Texture* >::iterator it = listTexture.find(path);
 
+    // Check if the texture already exist
     if (listTexture.find(path) != listTexture.end())
     {
         return Texture(listTexture.find(path)->second->ID);
@@ -70,7 +73,6 @@ Texture ResourcesManager::LoadTexture(const char* path)
 
     Loaders::TextureLoader* textureLoader = new Loaders::TextureLoader(texture, path);
     taskSystem.AddTask(std::make_shared<Thread::Task<Loaders::TextureLoader*>>(Loaders::TextureLoader::ReadFile, textureLoader));
-
 
     listTexture.insert(std::make_pair(path, texture));
 
@@ -118,7 +120,9 @@ Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const ch
 
 void ResourcesManager::ReadFiles()
 {
-    threadPool.Run(&taskSystem);
+    threadPool.Run(&taskSystem); // Read all files
+
+    // Apply the files in OpenGL
     for (unsigned int i = 0 ; i < listModelLoader.size(); i++)
     {
         listModelLoader[i]->Apply();

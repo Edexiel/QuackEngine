@@ -18,12 +18,8 @@ ModelLoader::ModelLoader(Renderer::Model* _model, const char* _path) : model{_mo
 
 void ModelLoader::ReadFile(ModelLoader* modelLoader)
 {
-      // Create an instance of the Importer class
     Assimp::Importer importer;
 
-    // And have it read the given file with some example postprocessing
-    // Usually - if speed is not the most important aspect for you - you'll
-    // probably to request more postprocessing than we do in this example.
     const aiScene* scene = importer.ReadFile(modelLoader->path,
         aiProcess_CalcTangentSpace       |
         aiProcess_Triangulate            |
