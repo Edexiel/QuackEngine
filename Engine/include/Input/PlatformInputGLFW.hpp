@@ -7,8 +7,10 @@ namespace Input
 {
   class PlatformInputGLFW : public PlatformInput
   {
-    bool keys[(unsigned int)Key::KEY_COUNT]{ false };
     void OnKeyEvent(int key, int scancode, int action, int mods);
+    void OnMouseButtonCallback(int button, int action, int mods);
+    void OnCursorPositionCallback(double xpos, double ypos);
+    void OnScrollCallback(double xoffset, double yoffset);
 
   public:
     PlatformInputGLFW(GLFWwindow* window);

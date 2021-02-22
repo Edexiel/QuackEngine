@@ -13,16 +13,27 @@ namespace Input
   private:
     PlatformInput& platformInput;
 
-    std::map<std::string, std::function<void()>> eventFuncs;
+    std::map<std::string, std::vector<std::function<void()>>> eventFuncs;
     std::map<std::string, std::vector<Key>> eventKeys;
+    std::map<std::string, std::vector<MouseButton>> eventMouseButtons;
+    std::map<std::string, Action> eventAction;
 
-    void OnKeyEvent(bool pressed, Key key);
+    void OnKeyEvent(Action action, Key key);
+    void OnMouseButtonEvent(Action action, MouseButton button);
 
   public:
     InputManager(PlatformInput& platformInput);
     ~InputManager() = default;
 
-    void BindEvent(std::string event, Key key);
-    void RegisterEvent(std::string event, std::function<void()> func);
+    void BindEvent(std::string event, Key key, Action Action);
+    void BindEvent(std::string event, MouseButton key, Action Action);
+    template<typename C, typename F>
+    void RegisterEvent(std::string event, C& classObject, F&& function);
   };
+
+  template<typename C, typename F>
+  inline void InputManager::RegisterEvent(std::string event, C& classObject, F&& function)
+  {
+      eventFuncs[event].push_back(std::bind(function, classObject));
+  }
 }

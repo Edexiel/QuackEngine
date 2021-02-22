@@ -14,11 +14,47 @@ PlatformInputGLFW::PlatformInputGLFW(GLFWwindow* window)
 			manager->OnKeyEvent(key, scancode, action, mods);
 		}
 	);
+	glfwSetCursorPosCallback(window,
+		[](GLFWwindow* window, double xpos, double ypos)
+		{
+			PlatformInputGLFW* manager = static_cast<PlatformInputGLFW*>(glfwGetWindowUserPointer(window));
+			manager->OnCursorPositionCallback(xpos, ypos);
+		}
+	);
+	glfwSetMouseButtonCallback(window,
+		[](GLFWwindow* window, int button, int action, int mods)
+		{
+			PlatformInputGLFW* manager = static_cast<PlatformInputGLFW*>(glfwGetWindowUserPointer(window));
+			manager->OnMouseButtonCallback(button, action, mods);
+		}
+	);
+	glfwSetScrollCallback(window,
+		[](GLFWwindow* window, double xoffset, double yoffset)
+		{
+			PlatformInputGLFW* manager = static_cast<PlatformInputGLFW*>(glfwGetWindowUserPointer(window));
+			manager->OnScrollCallback(xoffset, yoffset);
+		}
+	);
 }
 void PlatformInputGLFW::OnKeyEvent(int key, int scancode, int action, int mods)
 {
-	keys[key] = (action == GLFW_PRESS);
-
 	if(keyEvent)
-		keyEvent(keys[key], (Key)key);
+		keyEvent((Action)action, (Key)key);
+}
+
+
+void PlatformInputGLFW::OnMouseButtonCallback(int button, int action, int mods)
+{
+	if (MouseButtonEvent)
+		MouseButtonEvent((Action)action,(MouseButton) button);
+}
+
+void PlatformInputGLFW::OnCursorPositionCallback(double xpos, double ypos)
+{
+	//std::cout << "x = " << xpos << " y = " << ypos << std::endl;
+}
+
+void PlatformInputGLFW::OnScrollCallback(double xoffset, double yoffset)
+{
+	std::cout << "xoffset = " << xoffset << " yoffset = " << yoffset << std::endl;
 }
