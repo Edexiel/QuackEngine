@@ -35,20 +35,20 @@ void ModelLoader::ReadFile(ModelLoader* modelLoader)
         return;
     }
 
-    std::cout << "Object : " << modelLoader->path << " found" << std::endl;
-    std::cout << "Nb Model : " << scene->mNumMeshes << " found" << std::endl;
+    //std::cout << "Object : " << modelLoader->path << " found" << std::endl;
+    //std::cout << "Nb Model : " << scene->mNumMeshes << " found" << std::endl;
 
     modelLoader->model->meshList.resize(scene->mNumMeshes);
 
     for (unsigned int i = 0; i < scene->mNumMeshes ; i++)
     {
-        std::cout << "Pointer [" << i << "] = " << (scene->mMeshes[i]) << std::endl;
-        std::cout << "nbVertice : " << (scene->mMeshes[i])->mNumVertices << std::endl;
+        //std::cout << "Pointer [" << i << "] = " << (scene->mMeshes[i]) << std::endl;
+        //std::cout << "nbVertice : " << (scene->mMeshes[i])->mNumVertices << std::endl;
 
         std::vector<float> Points(0.f);
         Points.resize(scene->mMeshes[i]->mNumVertices * 8);
 
-        std::cout << "Size List = " << Points.size() / 8 << std::endl;
+        //std::cout << "Size List = " << Points.size() / 8 << std::endl;
 
         unsigned int count = 0;
 
@@ -91,6 +91,6 @@ void ModelLoader::Apply()
         glBindBuffer(GL_ARRAY_BUFFER, model->meshList[i].buffer);
         glBufferData(GL_ARRAY_BUFFER, listMeshToLoad[i].size() * sizeof (GLfloat), listMeshToLoad[i].data(), GL_STATIC_DRAW); // Give our vertices to OpenGL.
 
-        std::cout << "Buffer = " << model->meshList[i].buffer << std::endl;
+        //std::cout << "Buffer = " << model->meshList[i].buffer << std::endl;
     }
 }

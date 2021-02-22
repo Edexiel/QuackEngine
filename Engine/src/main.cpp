@@ -60,10 +60,10 @@ int main(void)
     Texture t2 = RS.LoadTexture("../../Asset/Texture.png");
 
     Model m1 = RS.LoadModel("../../Asset/eyeball.fbx");
+    Model m2 = RS.LoadModel("../../Asset/eyeball.fbx");
 
-    //std::cout << m1.id << std::endl;
-    //std::cout << m2.id << std::endl;
-    //std::cout << m3.id << std::endl;
+    std::cout << m1.meshList.size() << std::endl;
+    std::cout << m2.meshList.size() << std::endl;
 
     RS.ReadFiles();
 
