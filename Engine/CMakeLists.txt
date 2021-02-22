@@ -6,4 +6,4 @@ add_library(${PROJECT_NAME} src/main.cpp)
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Engine/include)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp flatbuffers)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp)
