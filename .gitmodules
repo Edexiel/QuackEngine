@@ -13,3 +13,9 @@
 [submodule "Vendor/reactphysics3d"]
 	path = Vendor/reactphysics3d
 	url = git@github.com:DanielChappuis/reactphysics3d.git
+[submodule "Vendor/imgui"]
+	path = Vendor/imgui
+	url = git@gitlab.com:quack-engine/imgui.git
+[submodule "Vendor/stb"]
+	path = Vendor/stb
+	url = git@gitlab.com:quack-engine/stb.git
