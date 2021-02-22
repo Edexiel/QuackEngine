@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __INPUTMANAGER_HPP__
+#define __INPUTMANAGER_HPP__
+
 
 #include <map>
 #include <iostream>
@@ -14,12 +16,16 @@ namespace Input
     PlatformInput& platformInput;
 
     std::map<std::string, std::vector<std::function<void()>>> eventFuncs;
+
     std::map<std::string, std::vector<Key>> eventKeys;
     std::map<std::string, std::vector<MouseButton>> eventMouseButtons;
     std::map<std::string, Action> eventAction;
 
+    
+
     void OnKeyEvent(Action action, Key key);
     void OnMouseButtonEvent(Action action, MouseButton button);
+    void OnUpdateMousePositionEvent(const double xPos,const double yPos);
 
   public:
     InputManager(PlatformInput& platformInput);
@@ -29,6 +35,8 @@ namespace Input
     void BindEvent(std::string event, MouseButton key, Action Action);
     template<typename C, typename F>
     void RegisterEvent(std::string event, C& classObject, F&& function);
+
+    MousePosition mousePosition;
   };
 
   template<typename C, typename F>
@@ -37,3 +45,5 @@ namespace Input
       eventFuncs[event].push_back(std::bind(function, classObject));
   }
 }
+
+#endif

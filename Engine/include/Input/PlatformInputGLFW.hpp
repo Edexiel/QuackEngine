@@ -1,6 +1,7 @@
-#pragma once
+#ifndef __PLATFORMINPUTGLFW_HPP__
+#define __PLATFORMINPUTGLFW_HPP__
 
-#include "PlatformInput.hpp"
+#include "Input/PlatformInput.hpp"
 
 struct GLFWwindow;
 namespace Input
@@ -17,3 +18,5 @@ namespace Input
     ~PlatformInputGLFW() = default;
   };
 }
+
+#endif

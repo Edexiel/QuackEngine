@@ -1,4 +1,4 @@
-#include "PlatformInputGLFW.hpp"
+#include "Input/PlatformInputGLFW.hpp"
 #include "GLFW/glfw3.h"
 #include <iostream>
 
@@ -51,7 +51,8 @@ void PlatformInputGLFW::OnMouseButtonCallback(int button, int action, int mods)
 
 void PlatformInputGLFW::OnCursorPositionCallback(double xpos, double ypos)
 {
-	//std::cout << "x = " << xpos << " y = " << ypos << std::endl;
+	if (UpdateMousePosition)
+		UpdateMousePosition(xpos, ypos);
 }
 
 void PlatformInputGLFW::OnScrollCallback(double xoffset, double yoffset)

@@ -9,6 +9,9 @@
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "Input/InputManager.hpp"
+#include "Input/PlatformInputGLFW.hpp"
+
 
 #include <cstdio>
 
@@ -30,6 +33,14 @@ void debugGLCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLs
     ImGui::EndTooltip();
   }
 }*/
+
+struct hero
+{
+  void bonsoir()
+  {
+    printf("Bien le bonsoir!\n");
+  }
+};
 
 int main(void)
 {
@@ -112,6 +123,13 @@ int main(void)
   bool window_properties=true;
   bool window_explorer=true;
   bool window_log = true;
+//input manager
+  Input::PlatformInputGLFW platformInput(window);
+  Input::InputManager input(platformInput);
+//struct random
+  hero _hero;
+  input.BindEvent("Bonsoir", Input::Key::KEY_Q, Input::Action::PRESS);
+  input.RegisterEvent("Bonsoir", _hero, &hero::bonsoir);
 
   while (!glfwWindowShouldClose(window))
   {

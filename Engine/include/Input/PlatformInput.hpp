@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __PLATFORMINPUT_HPP__
+#define __PLATFORMINPUT_HPP__
+
 
 #include <functional>
 namespace Input
@@ -152,6 +154,11 @@ namespace Input
         KEY_MENU = 348,
         KEY_COUNT
     };
+    struct MousePosition
+    {
+        double x, y = 0;
+        double prevX, prevY = 0;
+    };
 
     class PlatformInput
     {
@@ -159,5 +166,8 @@ namespace Input
         virtual ~PlatformInput() = default;
         std::function<void(Action, Key)> keyEvent;
         std::function<void(Action, MouseButton)> MouseButtonEvent;
+        std::function<void(const double x, const double y)> UpdateMousePosition;
     };
 }
+
+#endif

@@ -1,4 +1,4 @@
-#include "InputManager.hpp"
+#include "Input/InputManager.hpp"
 
 using namespace Input;
 
@@ -7,6 +7,7 @@ InputManager::InputManager(PlatformInput& platformInput)
 {
 	platformInput.keyEvent = std::bind(&InputManager::OnKeyEvent, std::ref(*this), std::placeholders::_1, std::placeholders::_2);
 	platformInput.MouseButtonEvent = std::bind(&InputManager::OnMouseButtonEvent, std::ref(*this), std::placeholders::_1, std::placeholders::_2);
+	platformInput.UpdateMousePosition = std::bind(&InputManager::OnUpdateMousePositionEvent, std::ref(*this), std::placeholders::_1, std::placeholders::_2);
 }
 
 
@@ -38,6 +39,15 @@ void Input::InputManager::OnMouseButtonEvent(Action action, MouseButton button)
 				}
 		}
 	}
+}
+
+void Input::InputManager::OnUpdateMousePositionEvent(const double xPos, const double yPos)
+{
+	mousePosition.prevX = mousePosition.x;
+	mousePosition.prevY = mousePosition.y;
+
+	mousePosition.x = xPos;
+	mousePosition.y = yPos;
 }
 
 void InputManager::BindEvent(std::string event, Key key, Action Action)
