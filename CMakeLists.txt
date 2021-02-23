@@ -16,7 +16,7 @@ if(LINUX)
     # linux stuff here
 elseif(WIN32)
     message(STATUS ">>> Not Linux ${CMAKE_SYSTEM}")
-    # stuff that should happen not on Win32
+    # stuff that should happen on Win32
 else()
     message(FATAL_ERROR ">>> Not supported platform ${CMAKE_SYSTEM}")
 endif()
