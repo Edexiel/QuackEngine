@@ -1,10 +1,12 @@
-#include "Renderer/Texture.h"
+#include "Renderer/Texture.hpp"
 #include "glad/gl.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-using namespace Shader;
+using namespace Renderer;
+
+Texture::Texture(const unsigned int& ID): _ID{ID} {}
 
 Texture::Texture(const char *filename, bool antiAliasing)
 {
@@ -63,12 +65,11 @@ unsigned int Texture::LoadTexture(const char *filename, bool antiAliasing) //, i
 
   return nbTexture;
 }
-
-void Texture::freeTexture(unsigned int &texture)
+void Texture::FreeTexture(unsigned int &texture)
 {
   glDeleteTextures(1, &texture);
 }
 Texture::~Texture()
 {
-  freeTexture(_ID);
+  FreeTexture(_ID);
 }

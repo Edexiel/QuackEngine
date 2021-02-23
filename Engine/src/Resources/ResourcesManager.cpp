@@ -6,6 +6,7 @@
 #include "glad/gl.h"
 
 #include <iostream>
+#include <fstream>
 
 #include <sys/stat.h>
 
@@ -24,11 +25,13 @@ Model ResourcesManager::LoadModel(const char* path)
     }
 
   // return null Texture if the file doesn't exist
-    if (!( access( path, F_OK ) != -1 ))
-    {
-        std::cout << "File : " << path << " doesn't exist" << std::endl;
-        return Model();
-    }
+
+  std::ifstream file(path);
+  if ( !file )
+  {
+    std::cerr << "File : " << path << " doesn't exist\n";
+    return Model();
+  }
 
     // Create a new Model
     Model* model = new Model();
@@ -56,20 +59,21 @@ Texture ResourcesManager::LoadTexture(const char* path)
     // Check if the texture already exist
     if (listTexture.find(path) != listTexture.end())
     {
-        return Texture(listTexture.find(path)->second->ID);
+        return Texture(listTexture.find(path)->second->_ID);
     }
 
     // return null Texture if the file doesn't exist
-    if (!( access( path, F_OK ) != -1 ))
+  std::ifstream file(path);
+    if ( !file )
     {
-        std::cout << "File : " << path << " doesn't exist" << std::endl;
-        return Texture();
+      std::cerr << "File : " << path << " doesn't exist\n";
+      return Texture();
     }
 
     // Create a new Texture
 
     Texture* texture = new Texture();
-    glGenTextures(1, &texture->ID);
+    glGenTextures(1, &texture->_ID);
 
     Loaders::TextureLoader* textureLoader = new Loaders::TextureLoader(texture, path);
     taskSystem.AddTask(std::make_shared<Thread::Task<Loaders::TextureLoader*>>(Loaders::TextureLoader::ReadFile, textureLoader));
@@ -82,14 +86,16 @@ Texture ResourcesManager::LoadTexture(const char* path)
 Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const char* fragmentShader)
 {
   // Check if the file exist
-  if (!( access(vertexShader, F_OK ) != -1 ))
+  std::ifstream file(vertexShader);
+  if ( !file )
   {
-    std::cout << "File : " << vertexShader << " doesn't exist" << std::endl;
+    std::cerr << "File : " << vertexShader << " doesn't exist\n";
     return Shader();
   }
-  if (!( access(fragmentShader, F_OK ) != -1 ))
+  std::ifstream file2(fragmentShader);
+  if ( !file2 )
   {
-    std::cout << "File : " << fragmentShader << " doesn't exist" << std::endl;
+    std::cerr << "File : " << fragmentShader << " doesn't exist\n";
     return Shader();
   }
 

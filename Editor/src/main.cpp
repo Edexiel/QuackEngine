@@ -11,7 +11,7 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "Input/InputManager.hpp"
 #include "Input/PlatformInputGLFW.hpp"
-#include "Renderer/Texture.h"
+#include "Renderer/Texture.hpp"
 
 
 #include <cstdio>
@@ -120,7 +120,7 @@ int main(void)
   Input::PlatformInputGLFW platformInput(window);
   Input::InputManager input(platformInput);
 
-  Shader::Texture texture("../../../DirtCube.jpg");
+  Renderer::Texture texture("../../../DirtCube.jpg");
 
   while (!glfwWindowShouldClose(window))
   {
