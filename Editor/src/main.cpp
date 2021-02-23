@@ -11,6 +11,7 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "Input/InputManager.hpp"
 #include "Input/PlatformInputGLFW.hpp"
+#include "Renderer/Texture.h"
 
 
 #include <cstdio>
@@ -33,14 +34,6 @@ void debugGLCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLs
     ImGui::EndTooltip();
   }
 }*/
-
-struct hero
-{
-  void bonsoir()
-  {
-    printf("Bien le bonsoir!\n");
-  }
-};
 
 int main(void)
 {
@@ -126,10 +119,8 @@ int main(void)
 //input manager
   Input::PlatformInputGLFW platformInput(window);
   Input::InputManager input(platformInput);
-//struct random
-  hero _hero;
-  input.BindEvent("Bonsoir", Input::Key::KEY_Q, Input::Action::PRESS);
-  input.RegisterEvent("Bonsoir", _hero, &hero::bonsoir);
+
+  Shader::Texture texture("../../../DirtCube.jpg");
 
   while (!glfwWindowShouldClose(window))
   {
