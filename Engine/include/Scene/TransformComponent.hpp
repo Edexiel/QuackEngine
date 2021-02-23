@@ -1,0 +1,11 @@
+//
+// Created by g.nisi on 2/23/21.
+//
+
+#ifndef QUACKENGINE_TRANSFORMCOMPONENT_HPP
+#define QUACKENGINE_TRANSFORMCOMPONENT_HPP
+class TransformComponent
+{
+
+};
+#endif // QUACKENGINE_TRANSFORMCOMPONENT_HPP

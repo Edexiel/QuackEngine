@@ -5,7 +5,9 @@
 #ifndef QUACKENGINE_ENTITY_HPP
 #define QUACKENGINE_ENTITY_HPP
 
-class Entity
-{};
+struct Entity
+{
+  int id;
+};
 
 #endif // QUACKENGINE_ENTITY_HPP
