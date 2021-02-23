@@ -8,9 +8,10 @@ namespace Shader
 {
   class Texture
   {
+    unsigned int _ID;
+    std::string _name{""};
   public:
-    unsigned int nbTexture;
-    std::string name {""};
+
     bool loaded{false};
     Texture() = default;
     Texture(const char *filename, bool antiAliasing = false);

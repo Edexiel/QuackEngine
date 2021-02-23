@@ -8,9 +8,9 @@ using namespace Shader;
 
 Texture::Texture(const char *filename, bool antiAliasing)
 {
-  nbTexture = LoadTexture(filename, antiAliasing);
+  _ID = LoadTexture(filename, antiAliasing);
   loaded = true;
-  name = filename;
+  _name = filename;
 }
 
 unsigned int Texture::LoadTexture(const char *filename, bool antiAliasing) //, int width, int height)
@@ -70,5 +70,5 @@ void Texture::freeTexture(unsigned int &texture)
 }
 Texture::~Texture()
 {
-  freeTexture(nbTexture);
+  freeTexture(_ID);
 }
