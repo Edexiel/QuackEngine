@@ -3,12 +3,21 @@
 #include "Renderer/Texture.hpp"
 #include "Renderer/Shader.hpp"
 
+
 #include "glad/gl.h"
 
 #include <iostream>
-#include <fstream>
 
-#include <sys/stat.h>
+#define F_OK 0
+
+#ifdef WIN32
+# include <io.h>
+# define access(path,mode) _access(path,mode)
+#endif
+#ifdef LINUX
+# include <unistd.h>
+#endif
+
 
 using namespace Resources;
 using namespace Renderer;
@@ -25,13 +34,11 @@ Model ResourcesManager::LoadModel(const char* path)
     }
 
   // return null Texture if the file doesn't exist
-
-  std::ifstream file(path);
-  if ( !file )
-  {
-    std::cerr << "File : " << path << " doesn't exist\n";
-    return Model();
-  }
+    if ((access(path, F_OK) != -1) == -1)
+    {
+        std::cout << "File : " << path << " doesn't exist" << std::endl;
+        return Model();
+    }
 
     // Create a new Model
     Model* model = new Model();
@@ -63,11 +70,10 @@ Texture ResourcesManager::LoadTexture(const char* path)
     }
 
     // return null Texture if the file doesn't exist
-  std::ifstream file(path);
-    if ( !file )
+    if (!( access( path, F_OK ) != -1 ))
     {
-      std::cerr << "File : " << path << " doesn't exist\n";
-      return Texture();
+        std::cout << "File : " << path << " doesn't exist" << std::endl;
+        return Texture();
     }
 
     // Create a new Texture
@@ -86,16 +92,14 @@ Texture ResourcesManager::LoadTexture(const char* path)
 Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const char* fragmentShader)
 {
   // Check if the file exist
-  std::ifstream file(vertexShader);
-  if ( !file )
+  if (!( access(vertexShader, F_OK ) != -1 ))
   {
-    std::cerr << "File : " << vertexShader << " doesn't exist\n";
+    std::cout << "File : " << vertexShader << " doesn't exist" << std::endl;
     return Shader();
   }
-  std::ifstream file2(fragmentShader);
-  if ( !file2 )
+  if (!( access(fragmentShader, F_OK ) != -1 ))
   {
-    std::cerr << "File : " << fragmentShader << " doesn't exist\n";
+    std::cout << "File : " << fragmentShader << " doesn't exist" << std::endl;
     return Shader();
   }
 

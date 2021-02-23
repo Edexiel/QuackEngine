@@ -11,11 +11,12 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "Input/InputManager.hpp"
 #include "Input/PlatformInputGLFW.hpp"
+#include "Resources/ResourcesManager.hpp"
+
 #include "Renderer/Texture.hpp"
-
-
+#include "Renderer/Model.hpp"
+#include "Renderer/Shader.hpp"
 #include <cstdio>
-
 
 void debugGLCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
@@ -116,17 +117,27 @@ int main(void)
   bool window_properties=true;
   bool window_explorer=true;
   bool window_log = true;
+
 //input manager
   Input::PlatformInputGLFW platformInput(window);
   Input::InputManager input(platformInput);
 
-  Renderer::Texture texture("../../../DirtCube.jpg");
+//ResourcesManager
+  Resources::ResourcesManager resourcesManager;
+
+  Renderer::Texture texture = resourcesManager.LoadTexture("../../../DirtCube.jpg");
+  Renderer::Shader  shader  = resourcesManager.LoadShader("../../../BasicVertexShader.vs","../../../BasicFragmentShader.fs");
+
+  resourcesManager.ReadFiles();
+
+
 
   while (!glfwWindowShouldClose(window))
   {
 
     /* Poll for and process events */
     glfwPollEvents();
+    //resourcesManager
 
     //imgui
     {
