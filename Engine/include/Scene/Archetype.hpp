@@ -5,6 +5,7 @@
 #ifndef QUACKENGINE_ARCHETYPE_HPP
 #define QUACKENGINE_ARCHETYPE_HPP
 
+template<typename ...Args>
 struct Archetype
 {
 

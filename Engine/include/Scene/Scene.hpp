@@ -9,11 +9,13 @@ class Scene
 {
 
 public:
-  void update(float DeltaTime);
-  void fixedUpdate(float FixedDeltaTime);
-  void draw();
-  void load();
-  void imDraw();
+    void createEntity();
+    void removeEntity();
+    void update(float DeltaTime);
+    void fixedUpdate(float FixedDeltaTime);s
+    void draw();
+    void load();
+    void imDraw();
 };
 
 #endif // QUACKENGINE_SCENE_HPP

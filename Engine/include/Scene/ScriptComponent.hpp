@@ -6,6 +6,7 @@
 #define QUACKENGINE_SCRIPTCOMPONENT_HPP
 
 #include "Component.hpp"
+
 class ScriptComponent : public Component  {
 
 };

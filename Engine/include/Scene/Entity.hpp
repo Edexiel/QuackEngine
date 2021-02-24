@@ -1,27 +1,26 @@
 #ifndef QUACKENGINE_ENTITY_HPP
 #define QUACKENGINE_ENTITY_HPP
 
-#include <vector>
 #include <string>
+
+#define EntityId unsigned int
 
 class Entity {
 private:
-    static unsigned int _idCount;
+    static EntityId _idCount;
     unsigned int _id;
     std::string _name;
 
 public:
-    Entity(unsigned int id, const std::string &name);
+    Entity(const std::string &name);
     ~Entity();
 
-//    template<typename T>
-//    std::vector<T> getComponents();
-    unsigned int getId() const;
+    EntityId getId() const;
     const std::string &getName() const;
 };
 unsigned int Entity::_idCount = 0;
 
-Entity::Entity(unsigned int id, const std::string &name) : _name(name)
+Entity::Entity(const std::string &name) : _name(name)
 {
     _id = _idCount++;
 }
