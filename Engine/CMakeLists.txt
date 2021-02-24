@@ -6,6 +6,8 @@ add_library(${PROJECT_NAME}
         src/main.cpp
         src/Input/InputManager.cpp
         src/Input/PlatformInputGLFW.cpp
+        src/Renderer/Texture.cpp
+        src/Input/PlatformInputGLFW.cpp
         src/Thread/TaskSystem.cpp
         src/Thread/ThreadPool.cpp
         src/Resources/ResourcesManager.cpp
@@ -20,6 +22,4 @@ add_library(${PROJECT_NAME}
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE "GLFW_INCLUDE_NONE")
-
-target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp stb)
