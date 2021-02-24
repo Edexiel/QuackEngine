@@ -46,17 +46,17 @@ namespace Maths
   };
 }
 
-Maths::Vector3 operator+(const Maths::Vector3& v1,const Maths::Vector3& v2)
+inline Maths::Vector3 operator+(const Maths::Vector3& v1,const Maths::Vector3& v2)
 {
     return { v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
 }
 
-Maths::Vector3 operator-(const Maths::Vector3& v1, const Maths::Vector3& v2)
+inline Maths::Vector3 operator-(const Maths::Vector3& v1, const Maths::Vector3& v2)
 {
     return { v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
 }
 
-Maths::Vector3 operator*(const Maths::Vector3& v, const float& f)
+inline Maths::Vector3 operator*(const Maths::Vector3& v, const float& f)
 {
     return { v.x * f, v.y * f, v.z * f };
 }
