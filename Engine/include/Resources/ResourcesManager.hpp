@@ -44,8 +44,8 @@ namespace Resources
         std::vector<Loaders::TextureLoader*> listTextureLoader;
 
     public: 
-        ResourcesManager()   {};
-        ~ResourcesManager()  {};
+        ResourcesManager() = default;
+        ~ResourcesManager() = default;
 
         Renderer::Model   LoadModel     (const char* path);
         Renderer::Texture LoadTexture   (const char* path);
