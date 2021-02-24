@@ -12,11 +12,8 @@ public:
   void update(float DeltaTime);
   void fixedUpdate(float FixedDeltaTime);
   void draw();
+  void load();
   void imDraw();
-private:
-  void Serialize();
-  void UnSerialize(stuff);
-
 };
 
 #endif // QUACKENGINE_SCENE_HPP

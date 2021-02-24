@@ -19,7 +19,11 @@ add_library(${PROJECT_NAME} STATIC
         src/Resources/Loaders/TextureLoader.cpp
         src/Resources/Loaders/ShaderLoader.cpp
         src/Resources/Loaders/ModelLoader.cpp
-        )
+        src/Scene/TransformComponent.cpp
+        src/Scene/Archetype.cpp
+        src/Scene/RendererComponent.cpp
+        src/Scene/PhysicsComponent.cpp
+        src/Scene/ScriptComponent.cpp)
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

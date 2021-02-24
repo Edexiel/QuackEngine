@@ -1,20 +1,10 @@
 //
 // Created by g.nisi on 2/23/21.
 //
-
 #ifndef QUACKENGINE_COMPONENT_HPP
 #define QUACKENGINE_COMPONENT_HPP
 
 #include "Scene/Entity.hpp"
-#include <Maths/Quaternion.hpp>
-#include <Maths/Vector3.hpp>
-
-struct Transform
-{
-  Maths::Vector3 position;
-  Maths::Vector3 scale;
-  Maths::Quaternion rotation;
-};
 
 enum class Type
 {
@@ -25,6 +15,8 @@ enum class Type
 class Component
 {
   Entity entity;
+
+  virtual void update()=0;
 };
 
 #endif // QUACKENGINE_COMPONENT_HPP
