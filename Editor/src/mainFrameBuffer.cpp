@@ -121,7 +121,7 @@ int main()
   glEnableVertexAttribArray(1);
   // texture coord attribute
   glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-  glEnableVertexAttribArray(2);;
+  glEnableVertexAttribArray(2);
 
   // vertexShader
   unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
