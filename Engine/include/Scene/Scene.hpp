@@ -12,7 +12,7 @@ public:
     void createEntity();
     void removeEntity();
     void update(float DeltaTime);
-    void fixedUpdate(float FixedDeltaTime);s
+    void fixedUpdate(float FixedDeltaTime);
     void draw();
     void load();
     void imDraw();
