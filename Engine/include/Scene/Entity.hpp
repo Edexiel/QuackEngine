@@ -7,36 +7,28 @@
 
 class Entity {
 private:
-    static EntityId _idCount;
-    unsigned int _id;
-    std::string _name;
+  static EntityId _idCount;
+  unsigned int _id;
+  std::string _name;
 
 public:
-    Entity(const std::string &name);
-    ~Entity();
+  Entity() = default;
+  Entity(const std::string &name);
+  ~Entity();
 
-    EntityId getId() const;
-    const std::string &getName() const;
+  EntityId getId() const;
+  const std::string &getName() const;
 };
 unsigned int Entity::_idCount = 0;
 
-Entity::Entity(const std::string &name) : _name(name)
-{
-    _id = _idCount++;
-}
+Entity::Entity(const std::string &name) : _name(name) { _id = _idCount++; }
 
 Entity::~Entity() {
-    //delete all components associated ?
-    //add itselt to garbage for recycling
+  // delete all components associated ?
+  // add itselt to garbage for recycling
 }
-inline unsigned int Entity::getId() const {
-    return _id;
-}
+inline unsigned int Entity::getId() const { return _id; }
 
-inline const std::string &Entity::getName() const {
-    return _name;
-}
-
-
+inline const std::string &Entity::getName() const { return _name; }
 
 #endif // QUACKENGINE_ENTITY_HPP
