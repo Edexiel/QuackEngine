@@ -1,49 +1,93 @@
-#include "Renderer/OpenGLInterface.hpp"
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
-
 #include <iostream>
 
+#include "Renderer/OpenGLInterface.hpp"
+#include "Renderer/Shader.hpp"
+
 using namespace Renderer;
-OpenGLInterface::OpenGLInterface(GLFWwindow* window)
+
+OpenGLInterface::OpenGLInterface()
 {
-  if (!window)
-  {
-    glfwTerminate();
-    return;
-  }
-  /* Make the window's context current */
-  glfwMakeContextCurrent(window);
-
-  /* load Glad OpenGL */
-  int version = gladLoadGL(glfwGetProcAddress);
-//printf("OpenGL version : %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
-
-  if (version == 0)
-  {
-    printf("Failed to initialize OpenGL context");
-    glfwTerminate();
-    return;
-  }
+  gladLoadGL(glfwGetProcAddress);
 
   printf("GL_VENDOR = %s\n",   glGetString(GL_VENDOR));
   printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
   printf("GL_VERSION = %s\n",  glGetString(GL_VERSION));
-}
-GLFWwindow* OpenGLInterface::InitWindow(const char* windowName, const unsigned int& width, const unsigned int& height)
-{
-  if (!glfwInit())
-    return nullptr;
 
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-  glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  impl = new OpenGLInterfaceImp();
+  impl->_program = Shader::CreateProgramShader(
+    R"GLSL(
+                          #version 330 core
+                          layout (location = 0) in vec3 aPos;
 
-  return glfwCreateWindow(width, height, windowName, NULL, NULL);
+
+                          void main()
+                          {
+                            gl_Position = vec4(aPos, 1.0);
+                          }
+                   )GLSL",
+    R"GLSL(
+                     #version 330 core
+                     out vec4 FragColor;
+
+                     void main()
+                     {
+                      FragColor = vec4(1, 0, 0, 1);
+                     }
+                     )GLSL");
+
+  glGenVertexArrays(1, &impl->_vao);
+  glGenBuffers(1, &impl->_vbo);
+  glGenBuffers(1, &impl->_ebo);
+  glBindVertexArray(impl->_vao);
+
 }
-void OpenGLInterface::Update(GLFWwindow* window)
+OpenGLInterface::~OpenGLInterface()
 {
-  glfwPollEvents();
-  glfwSwapBuffers(window);
+  delete impl;
+}
+void OpenGLInterface::SetProjectionMatrix(const Maths::Matrix4& projectionMatrix)
+{
+  impl->_projectionMatrix = projectionMatrix;
+}
+void OpenGLInterface::SetViewMatrix(const Maths::Matrix4& viewMatrix)
+{
+  impl->_viewMatrix = viewMatrix;
+}
+void OpenGLInterface::SetModelMatrix(const Maths::Matrix4& modelMatrix)
+{
+  impl->_modelMatrix = modelMatrix;
+}
+
+//template<int N>
+void OpenGLInterface::SetVertices(const float* vertices, const unsigned int& size)
+{
+  glBindBuffer(GL_ARRAY_BUFFER, impl->_vbo);
+  glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(0);
+}
+void OpenGLInterface::SetIndices(const unsigned int* indices, const unsigned int& size)
+{
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, impl->_ebo);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
+}
+void OpenGLInterface::NewFrame()
+{
+  glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  glUseProgram(impl->_program);
+  glBindVertexArray(impl->_vao);
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+
+
+void OpenGLInterface::Delete()
+{
+  glDeleteVertexArrays(1, &impl->_vao);
+  glDeleteBuffers(1, &impl->_vbo);
+  glDeleteProgram(impl->_program);
 }
