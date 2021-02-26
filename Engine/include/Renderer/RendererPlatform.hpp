@@ -1,5 +1,5 @@
-#ifndef QUACKENGINE_OPENGLINTERFACE_HPP
-#define QUACKENGINE_OPENGLINTERFACE_HPP
+#ifndef QUACKENGINE_RENDERERPLATFORM_HPP
+#define QUACKENGINE_RENDERERPLATFORM_HPP
 
 #include "Maths/Matrix4.hpp"
 
@@ -8,17 +8,18 @@ namespace Renderer
 {
 struct OpenGLInterfaceImp
 {
-  unsigned int _vao, _vbo, _ebo, _program;
-  Maths::Matrix4 _projectionMatrix, _viewMatrix, _modelMatrix;
+  unsigned int  _program;
+  unsigned int _vao, _vbo, _ebo;
+  unsigned int _projectionLocation, _viewLocation, _modelLocation;
 };
-class OpenGLInterface
+class RendererPlatform
 {
 private:
 
 public:
   OpenGLInterfaceImp* impl;
-  OpenGLInterface();
-  ~OpenGLInterface();
+  RendererPlatform();
+  ~RendererPlatform();
 
   void SetProjectionMatrix(const Maths::Matrix4& projectionMatrix);
   void SetViewMatrix(const Maths::Matrix4& viewMatrix);
@@ -32,4 +33,4 @@ public:
 };
 }
 
-#endif // QUACKENGINE_OPENGLINTERFACE_HPP
+#endif // QUACKENGINE_RENDERERPLATFORM_HPP

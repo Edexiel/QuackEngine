@@ -16,7 +16,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/Mesh.cpp
         src/Renderer/Shader.cpp
         src/Renderer/Texture.cpp
-        src/Renderer/OpenGLInterface.cpp
+        src/Renderer/RendererPlatform.cpp
         src/Resources/Loaders/TextureLoader.cpp
         src/Resources/Loaders/ShaderLoader.cpp
         src/Resources/Loaders/ModelLoader.cpp

@@ -2,12 +2,12 @@
 #include "GLFW/glfw3.h"
 #include <iostream>
 
-#include "Renderer/OpenGLInterface.hpp"
+#include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shader.hpp"
 
 using namespace Renderer;
 
-OpenGLInterface::OpenGLInterface()
+RendererPlatform::RendererPlatform()
 {
   gladLoadGL(glfwGetProcAddress);
 
@@ -21,10 +21,9 @@ OpenGLInterface::OpenGLInterface()
                           #version 330 core
                           layout (location = 0) in vec3 aPos;
 
-
                           void main()
                           {
-                            gl_Position = vec4(aPos, 1.0);
+                            gl_Position = projection vec4(aPos, 1.0);
                           }
                    )GLSL",
     R"GLSL(
@@ -37,43 +36,48 @@ OpenGLInterface::OpenGLInterface()
                      }
                      )GLSL");
 
+
+//  impl->_projectionLocation = glGetUniformLocation(impl->_program, "projection");
+//  impl->_viewLocation       = glGetUniformLocation(impl->_program, "view");
+//  impl->_modelLocation      = glGetUniformLocation(impl->_program, "model");
+
   glGenVertexArrays(1, &impl->_vao);
   glGenBuffers(1, &impl->_vbo);
   glGenBuffers(1, &impl->_ebo);
   glBindVertexArray(impl->_vao);
 
 }
-OpenGLInterface::~OpenGLInterface()
+RendererPlatform::~RendererPlatform()
 {
   delete impl;
 }
-void OpenGLInterface::SetProjectionMatrix(const Maths::Matrix4& projectionMatrix)
+void RendererPlatform::SetProjectionMatrix(const Maths::Matrix4& projectionMatrix)
 {
-  impl->_projectionMatrix = projectionMatrix;
+//  glUniform4fv(impl->_projectionLocation, 1, projectionMatrix.e);
 }
-void OpenGLInterface::SetViewMatrix(const Maths::Matrix4& viewMatrix)
+void RendererPlatform::SetViewMatrix(const Maths::Matrix4& viewMatrix)
 {
-  impl->_viewMatrix = viewMatrix;
+//  glUniform4fv(impl->_viewLocation, 1, viewMatrix.e);
 }
-void OpenGLInterface::SetModelMatrix(const Maths::Matrix4& modelMatrix)
+void RendererPlatform::SetModelMatrix(const Maths::Matrix4& modelMatrix)
 {
-  impl->_modelMatrix = modelMatrix;
+//  glUniform4fv(impl->_modelLocation, 1, modelMatrix.e);
 }
 
 //template<int N>
-void OpenGLInterface::SetVertices(const float* vertices, const unsigned int& size)
+void RendererPlatform::SetVertices(const float* vertices, const unsigned int& size)
 {
   glBindBuffer(GL_ARRAY_BUFFER, impl->_vbo);
   glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 }
-void OpenGLInterface::SetIndices(const unsigned int* indices, const unsigned int& size)
+void RendererPlatform::SetIndices(const unsigned int* indices, const unsigned int& size)
 {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, impl->_ebo);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
 }
-void OpenGLInterface::NewFrame()
+void RendererPlatform::NewFrame()
 {
   glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
@@ -85,7 +89,7 @@ void OpenGLInterface::NewFrame()
 
 
 
-void OpenGLInterface::Delete()
+void RendererPlatform::Delete()
 {
   glDeleteVertexArrays(1, &impl->_vao);
   glDeleteBuffers(1, &impl->_vbo);

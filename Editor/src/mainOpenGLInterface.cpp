@@ -1,5 +1,6 @@
 #include "GLFW/glfw3.h"
-#include "Renderer/OpenGLInterface.hpp"
+#include "Renderer/RendererPlatform.hpp"
+#include "Maths/Matrix4.hpp"
 
 int main()
 {
@@ -14,7 +15,7 @@ int main()
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   /* Create a windowed mode window and its OpenGL context */
-  window = glfwCreateWindow(1280, 720, "OpenGLInterface", NULL, NULL);
+  window = glfwCreateWindow(1280, 720, "RendererPlatform", NULL, NULL);
   if (!window)
   {
     glfwTerminate();
@@ -22,14 +23,15 @@ int main()
   }
   glfwMakeContextCurrent(window);
 
-  Renderer::OpenGLInterface interface;
+  Renderer::RendererPlatform interface;
+  interface.SetProjectionMatrix(Maths::Matrix4::OrthoMatrix(1280.f, 720.f, 10.f, 100.f));
 
   float vertices[] = {
     // positions         // texture coords (note that we changed them to 2.0f!)
-    0.5f,  0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    -0.5f, -0.5f, 0.0f,
-    -0.5f,  0.5f, 0.0f
+    0.5f,  0.5f, 1.0f,
+    0.5f, -0.5f, 1.0f,
+    -0.5f, -0.5f, 1.0f,
+    -0.5f,  0.5f, 1.0f
   };
   unsigned int indices[] = {
     0, 1, 3, // first triangle
