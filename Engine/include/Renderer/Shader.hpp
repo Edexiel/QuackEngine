@@ -7,10 +7,12 @@ namespace Renderer
     {
         unsigned int ID;
 
-        Shader(){};
+        Shader() = default;
         Shader(const unsigned int& _ID);
-        ~Shader(){};
+        Shader(const char* vertexShaderSource, const char* fragmentShaderSource);
+        ~Shader() = default;
 
+        static unsigned int CreateProgramShader(const char* vertexShaderSource, const char* fragmentShaderSource);
     };
 }
 

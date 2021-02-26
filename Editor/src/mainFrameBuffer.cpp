@@ -150,7 +150,6 @@ int main()
   glAttachShader(shaderProgramfb, fragmentShaderfb);
   glLinkProgram(shaderProgramfb);
 
-
   while (!glfwWindowShouldClose(window))
   {
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.GetID());
