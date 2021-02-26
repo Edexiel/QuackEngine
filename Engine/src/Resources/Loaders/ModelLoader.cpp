@@ -87,6 +87,6 @@ void ModelLoader::Apply()
         glBindBuffer(GL_ARRAY_BUFFER, model->meshList[i].buffer);
         glBufferData(GL_ARRAY_BUFFER, listMeshToLoad[i].size() * sizeof (GLfloat), listMeshToLoad[i].data(), GL_STATIC_DRAW); // Give our vertices to OpenGL.
 
-        //std::cout << "Buffer = " << model->meshList[i].buffer << std::endl;
+        std::cout << "Buffer = " << model->meshList[i].buffer << std::endl;
     }
 }

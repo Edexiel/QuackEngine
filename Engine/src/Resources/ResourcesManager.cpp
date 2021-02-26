@@ -3,11 +3,21 @@
 #include "Renderer/Texture.hpp"
 #include "Renderer/Shader.hpp"
 
+
 #include "glad/gl.h"
 
 #include <iostream>
 
-#include <sys/stat.h>
+#define F_OK 0
+
+#ifdef WIN32
+# include <io.h>
+# define access(path,mode) _access(path,mode)
+#endif
+#ifdef LINUX
+# include <unistd.h>
+#endif
+
 
 using namespace Resources;
 using namespace Renderer;
@@ -24,7 +34,7 @@ Model ResourcesManager::LoadModel(const char* path)
     }
 
   // return null Texture if the file doesn't exist
-    if (!( access( path, F_OK ) != -1 ))
+    if ((access(path, F_OK) != -1) == -1)
     {
         std::cout << "File : " << path << " doesn't exist" << std::endl;
         return Model();
@@ -56,7 +66,7 @@ Texture ResourcesManager::LoadTexture(const char* path)
     // Check if the texture already exist
     if (listTexture.find(path) != listTexture.end())
     {
-        return Texture(listTexture.find(path)->second->ID);
+        return Texture(listTexture.find(path)->second->_ID);
     }
 
     // return null Texture if the file doesn't exist
@@ -69,7 +79,7 @@ Texture ResourcesManager::LoadTexture(const char* path)
     // Create a new Texture
 
     Texture* texture = new Texture();
-    glGenTextures(1, &texture->ID);
+    glGenTextures(1, &texture->_ID);
 
     Loaders::TextureLoader* textureLoader = new Loaders::TextureLoader(texture, path);
     taskSystem.AddTask(std::make_shared<Thread::Task<Loaders::TextureLoader*>>(Loaders::TextureLoader::ReadFile, textureLoader));
