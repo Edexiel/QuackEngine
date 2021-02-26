@@ -16,6 +16,8 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/Mesh.cpp
         src/Renderer/Shader.cpp
         src/Renderer/Texture.cpp
+        src/Renderer/Framebuffer.cpp
+        src/Renderer/OpenGLInterface.cpp
         src/Resources/Loaders/TextureLoader.cpp
         src/Resources/Loaders/ShaderLoader.cpp
         src/Resources/Loaders/ModelLoader.cpp
@@ -27,4 +29,4 @@ add_library(${PROJECT_NAME} STATIC
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp stb)

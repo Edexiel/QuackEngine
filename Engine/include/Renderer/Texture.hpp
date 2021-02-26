@@ -1,18 +1,20 @@
-#ifndef _TEXTURE_
-#define _TEXTURE_
+#ifndef QUACKENGINE_TEXTURE_HPP
+#define QUACKENGINE_TEXTURE_HPP
+
+#include <string>
 
 namespace Renderer
 {
-    typedef unsigned int Gluint;
+class Texture
+{
+private:
+  std::string _name{""};
+public:
+  unsigned int _ID{0};
 
-    struct Texture
-    {
-        unsigned int ID {0};
-
-        Texture(){};
-        Texture(const unsigned int& _ID);
-        ~Texture(){};
-    };
+  Texture() = default;
+  Texture(const unsigned int& ID);
+};
 }
 
-#endif //_TEXTURE_
+#endif // QUACKENGINE_TEXTURE_HPP
