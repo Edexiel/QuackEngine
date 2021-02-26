@@ -14,9 +14,11 @@ endif()
 if(LINUX)
     message(STATUS ">>> Linux ${CMAKE_SYSTEM}")
     # linux stuff here
+    add_definitions(-DLINUX)
 elseif(WIN32)
+    add_definitions(-DWIN32)
     message(STATUS ">>> Not Linux ${CMAKE_SYSTEM}")
-    # stuff that should happen not on Win32
+    # stuff that should happen on Win32
 else()
     message(FATAL_ERROR ">>> Not supported platform ${CMAKE_SYSTEM}")
 endif()
@@ -62,6 +64,9 @@ add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE ${external_lib}/stb)
 
 #assimp
+set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
