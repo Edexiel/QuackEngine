@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.17)
 
-project(Engine VERSION 0.1.0 LANGUAGES CXX C)
+project(Runner VERSION 0.1.0 LANGUAGES CXX C)
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
