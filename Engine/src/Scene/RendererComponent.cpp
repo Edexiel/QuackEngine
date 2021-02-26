@@ -2,4 +2,4 @@
 // Created by g.nisi on 2/24/21.
 //
 
-#include "RendererComponent.hpp"
+#include "Scene/RendererComponent.hpp"
