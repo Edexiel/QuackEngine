@@ -1,7 +1,7 @@
 #ifndef QUACKENGINE_TRANSFORMCOMPONENT_HPP
 #define QUACKENGINE_TRANSFORMCOMPONENT_HPP
 
-#include "Scene/Component.hpp"
+#include "Scene/Components/Component.hpp"
 #include <Maths/Quaternion.hpp>
 #include <Maths/Vector3.hpp>
 

@@ -2,8 +2,8 @@
 // Created by g.nisi on 03/02/2021.
 //
 
-#include "GLFW/glfw3.h"
 #include "glad/gl.h"
+#include "GLFW/glfw3.h"
 
 #include "Input/InputManager.hpp"
 #include "Input/PlatformInputGLFW.hpp"
