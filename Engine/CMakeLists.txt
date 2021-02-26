@@ -20,7 +20,7 @@ add_library(${PROJECT_NAME}
         src/Resources/Loaders/TextureLoader.cpp
         src/Resources/Loaders/ShaderLoader.cpp
         src/Resources/Loaders/ModelLoader.cpp
-        src/Renderer/Framebuffer.cpp include/Renderer/OpenGLInterface.hpp src/Renderer/OpenGLInterface.cpp)
+        src/Renderer/Framebuffer.cpp)
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
