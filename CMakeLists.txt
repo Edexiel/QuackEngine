@@ -14,7 +14,9 @@ endif()
 if(LINUX)
     message(STATUS ">>> Linux ${CMAKE_SYSTEM}")
     # linux stuff here
+    add_definitions(-DLINUX)
 elseif(WIN32)
+    add_definitions(-DWIN32)
     message(STATUS ">>> Not Linux ${CMAKE_SYSTEM}")
     # stuff that should happen not on Win32
 else()
