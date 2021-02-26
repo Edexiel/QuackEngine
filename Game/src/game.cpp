@@ -1,19 +1,22 @@
-//
-// Created by g.nisi on 2/26/21.
-//
+#include <stdio.h>
 
 #include "game.hpp"
 
-void
-Init()
-{}
+void Game::Init() {
+    printf("Init");
+}
 
-void
-Update(float DeltaTime)
-{}
+void Game::Update(float DeltaTime) {
+    printf("Update");
+}
 
-void
-FixedUpdate(float FixedDeltaTime)
-{}
+void Game::FixedUpdate(float FixedDeltaTime) {}
 
-void
+void Game::Render() {
+    printf("Render");
+
+}
+
+void Game::Destroy() {
+    printf("Destroy");
+}
