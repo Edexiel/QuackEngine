@@ -1,0 +1,4 @@
+Le runner doit contenir une initialisation a glfw, (le gestionaire d'input
+et le ressource manager : pas sur pour ceux la encore, le choix est libre en vrai)
+
+Le Runner va initializer une classe game et faire appel a son Update() FixedUpdate() et Render()
