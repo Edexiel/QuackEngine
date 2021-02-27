@@ -1,7 +1,9 @@
 #ifndef QUACKENGINE_MATRIX4_HPP
 #define QUACKENGINE_MATRIX4_HPP
 
-#include "Vector4.hpp"
+#include "Maths/Vector4.hpp"
+
+#define M_PI 3.14
 
 #include <string>
 namespace Maths
@@ -35,7 +37,7 @@ namespace Maths
 
     Matrix4 GetTranspose() const;
 
-    std::string ToString() const;
+    //std::string ToString() const;
   };
 }
 
@@ -246,14 +248,14 @@ inline Maths::Matrix4 Maths::Matrix4::GetTranspose() const
 }
 
 
-std::string Maths::Matrix4::ToString() const
-{
-
-    return std::to_string(e[0]) + ", " + std::to_string(e[4]) + ", " + std::to_string(e[8]) + ", "+ std::to_string( e[12]) + "\n"
-           +std::to_string(e[1]) + ", " + std::to_string(e[5]) + ", " + std::to_string(e[9]) + ", "+ std::to_string( e[13])+ "\n"
-           +std::to_string(e[2]) + ", " + std::to_string(e[6]) + ", " + std::to_string(e[10]) + ", "+ std::to_string( e[14])+ "\n"
-           +std::to_string(e[3]) + ", " + std::to_string(e[7]) + ", " + std::to_string(e[11]) + ", "+ std::to_string( e[15])+ "\n";
-}
+//std::string Maths::Matrix4::ToString() const
+//{
+//
+//    return std::to_string(e[0]) + ", " + std::to_string(e[4]) + ", " + std::to_string(e[8]) + ", "+ std::to_string( e[12]) + "\n"
+//           +std::to_string(e[1]) + ", " + std::to_string(e[5]) + ", " + std::to_string(e[9]) + ", "+ std::to_string( e[13])+ "\n"
+//           +std::to_string(e[2]) + ", " + std::to_string(e[6]) + ", " + std::to_string(e[10]) + ", "+ std::to_string( e[14])+ "\n"
+//           +std::to_string(e[3]) + ", " + std::to_string(e[7]) + ", " + std::to_string(e[11]) + ", "+ std::to_string( e[15])+ "\n";
+//}
 
 
 #endif // QUACKENGINE_MATRIX4_HPP

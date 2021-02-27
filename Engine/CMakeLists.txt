@@ -21,10 +21,10 @@ add_library(${PROJECT_NAME} STATIC
         src/Resources/Loaders/ModelLoader.cpp
         src/Scene/Archetype.cpp
         src/Scene/Components/Component.cpp
-        src/Scene/Components/TransformComponent.cpp
-        src/Scene/Components/RendererComponent.cpp
-        src/Scene/Components/PhysicsComponent.cpp
-        src/Scene/Components/ScriptComponent.cpp)
+        src/Scene/Components/Transform.cpp
+        src/Scene/Components/Renderer.cpp
+        src/Scene/Components/Physics.cpp
+        src/Scene/Components/Script.cpp)
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
