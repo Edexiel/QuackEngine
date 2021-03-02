@@ -20,10 +20,13 @@ RendererPlatform::RendererPlatform()
     R"GLSL(
                           #version 330 core
                           layout (location = 0) in vec3 aPos;
+                          uniform mat4 projection;
+                          uniform mat4 view;
+                          uniform mat4 model;
 
                           void main()
                           {
-                            gl_Position = projection vec4(aPos, 1.0);
+                            gl_Position = view * projection * model * vec4(aPos, 1.0);
                           }
                    )GLSL",
     R"GLSL(
@@ -37,9 +40,10 @@ RendererPlatform::RendererPlatform()
                      )GLSL");
 
 
-//  impl->_projectionLocation = glGetUniformLocation(impl->_program, "projection");
-//  impl->_viewLocation       = glGetUniformLocation(impl->_program, "view");
-//  impl->_modelLocation      = glGetUniformLocation(impl->_program, "model");
+  glUseProgram(impl->_program);
+  impl->_projectionLocation = glGetUniformLocation(impl->_program, "projection");
+  impl->_viewLocation       = glGetUniformLocation(impl->_program, "view");
+  impl->_modelLocation      = glGetUniformLocation(impl->_program, "model");
 
   glGenVertexArrays(1, &impl->_vao);
   glGenBuffers(1, &impl->_vbo);
@@ -53,15 +57,15 @@ RendererPlatform::~RendererPlatform()
 }
 void RendererPlatform::SetProjectionMatrix(const Maths::Matrix4& projectionMatrix)
 {
-//  glUniform4fv(impl->_projectionLocation, 1, projectionMatrix.e);
+  glUniformMatrix4fv(impl->_projectionLocation, 1, GL_FALSE, projectionMatrix.e);
 }
 void RendererPlatform::SetViewMatrix(const Maths::Matrix4& viewMatrix)
 {
-//  glUniform4fv(impl->_viewLocation, 1, viewMatrix.e);
+  glUniformMatrix4fv(impl->_viewLocation, 1, GL_FALSE, viewMatrix.e);
 }
 void RendererPlatform::SetModelMatrix(const Maths::Matrix4& modelMatrix)
 {
-//  glUniform4fv(impl->_modelLocation, 1, modelMatrix.e);
+  glUniformMatrix4fv(impl->_modelLocation, 1, GL_FALSE, modelMatrix.e);
 }
 
 //template<int N>
