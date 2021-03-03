@@ -1,8 +1,8 @@
-#include <iostream>
 #include "GLFW/glfw3.h"
+
 #include "Renderer/RendererPlatform.hpp"
+#include "Renderer/Texture.hpp"
 #include "Maths/Matrix4.hpp"
-#include "Maths/Quaternion.hpp"
 
 int main()
 {
@@ -26,49 +26,64 @@ int main()
   glfwMakeContextCurrent(window);
 
   Renderer::RendererPlatform interface;
-  interface.SetProjectionMatrix(Maths::Matrix4::Perspective(1280.f, 720.f, -1.f, 100.f, 3.14f/2.f));
-  interface.SetViewMatrix(Maths::Matrix4::OrthoMatrix(1280.f, 720.f, -1.f, 100.f));
-  interface.SetModelMatrix(Maths::Matrix4::Identity());
-
-  float vertices[] = {
-    //Face
-    0.5f,  0.5f, 1.0f,
-    0.5f, -0.5f, 1.0f,
-    -0.5f, -0.5f, 1.0f,
-    -0.5f,  0.5f, 1.0f
-  };
-  unsigned int indices[] = {
-    0, 1, 3, // first triangle
-    1, 2, 3  // second triangle
+  interface.SetProjectionMatrix(
+      Maths::Matrix4::OrthoMatrix(1280.f, 720.f, -1.f, 100.f)*
+                   Maths::Matrix4::Perspective(1280.f, 720.f, -1.f, 100.f, 3.14f/2.f)
+                   );
+  interface.SetViewMatrix(Maths::Matrix4::Identity());
+  interface.SetModelMatrix(Maths::Matrix4::Translate({0,0,1}));
+  float triangle[] = {
+      // positions          // texture coords
+      0.0f,  1.0f, 0.0f,    0.5f, 1.0f,
+      1.0f,  0.0f, 0.0f,    1.0f, 0.5f,
+      -1.0f, 0.0f, 0.0f,    0.0f, 0.5f
   };
 
-  Maths::Quaternion q{7,4,5,1};
-  std::cout << q;
+  float quad[] = {
+      // positions          // texture coords
+      0.5f,  0.5f, 0.0f,    1.0f, 1.0f, // top right
+      0.5f, -0.5f, 0.0f,    1.0f, 0.0f, // bottom right
+     -0.5f, -0.5f, 0.0f,    0.0f, 0.0f, // bottom left
+     -0.5f,  0.5f, 0.0f,    0.0f, 1.0f  // top left
+    };
+  float framebufferQuad[] = {
+      // positions          // texture coords
+      1.0f,  1.0f, 0.0f,    1.0f, 1.0f, // top right
+      1.0f, -1.0f, 0.0f,    1.0f, 0.0f, // bottom right
+      -1.0f, -1.0f, 0.0f,    0.0f, 0.0f, // bottom left
+      -1.0f,  1.0f, 0.0f,    0.0f, 1.0f  // top left
+  };
 
-  interface.SetIndices(indices, sizeof(indices));
 
-  float alpha = 1.f;
-  float increment = 0.01f;
+  unsigned int triangleIndices[] = {0, 1 ,2};
+
+  unsigned int quadIndices[] = {
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
+      };
+
+  unsigned int framebufferID = interface.CreateMesh(framebufferQuad, sizeof(framebufferQuad), quadIndices, sizeof(quadIndices));
+  unsigned int quadID = interface.CreateMesh(quad, sizeof(quad), quadIndices, sizeof(quadIndices));
+  unsigned int triangleID = interface.CreateMesh(triangle, sizeof(triangle), triangleIndices, sizeof(triangleIndices));
+
+
+  //Texture
+  const unsigned int texture = Renderer::Texture::LoadTexture("../../../Sonic.png");
+
   while (!glfwWindowShouldClose(window))
   {
-    alpha += increment;
-
-    if(alpha <= 1 || alpha >= 5)
-      increment = -increment;
-
-    float vertices[] = {
-        //Face
-        0.5f,  0.5f, alpha,
-        0.5f, -0.5f, alpha,
-        -0.5f, -0.5f, alpha,
-        -0.5f,  0.5f, alpha
-    };
-    interface.SetVertices(vertices, sizeof(vertices));
     interface.NewFrame();
+    interface.SetModelMatrix(Maths::Matrix4::Identity());
+    interface.DrawMesh(framebufferID);
+
+    interface.BindTexture(texture);
+    interface.SetModelMatrix(Maths::Matrix4::Translate({-2,0,1}));
+    interface.DrawMesh(quadID);
+    interface.SetModelMatrix(Maths::Matrix4::Translate({2,0,1}));
+    interface.DrawMesh(triangleID);
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
-
 
   interface.Delete();
   glfwTerminate();

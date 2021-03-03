@@ -7,8 +7,12 @@ namespace Renderer
 {
     struct Mesh
     {
-        Gluint buffer;
-        unsigned int size;
+      Mesh() = default;
+      Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbVertices): _vao{vao},_vbo{vbo},_ebo{ebo},_nbVertices{nbVertices}{}
+      Gluint buffer;
+      unsigned int size;
+
+      unsigned int _vao, _vbo, _ebo, _nbVertices;
     };
 }
 
