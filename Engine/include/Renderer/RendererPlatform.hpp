@@ -7,29 +7,36 @@
 
 namespace Renderer
 {
-struct RendererImp {
-  unsigned int  _program;
-  std::vector<Mesh> _meshes;
-  unsigned int _projectionLocation, _viewLocation, _modelLocation;
+struct Vertex
+{
+  float position[3];
+  float normal[3];
+  float uv[2];
 };
 
 class RendererPlatform
 {
 private:
+  unsigned int _shaderProgram;
+  std::vector<Mesh> _meshes;
+  unsigned int _projectionLocation, _viewLocation, _modelLocation;
 
 public:
-  RendererImp impl;
   RendererPlatform();
   ~RendererPlatform() = default;
 
   void SetProjectionMatrix(const Maths::Matrix4& projectionMatrix);
   void SetViewMatrix(const Maths::Matrix4& viewMatrix);
   void SetModelMatrix(const Maths::Matrix4& modelMatrix);
-  unsigned int CreateMesh(const float* vertices, const unsigned int& verticesSize, const unsigned int* indices, const unsigned int indicesSize);
+  unsigned int CreateMesh(const Vertex* vertices, unsigned int verticesSize, const unsigned int* indices, unsigned int indicesSize);
+  unsigned int CreateVertices(const float* vertices, unsigned int verticesSize);
   void BindTexture(const unsigned int& texture);
-  void NewFrame();
+  void ClearColor(const Maths::Vector4& color);
+  void Clear();
 
   void DrawMesh(const unsigned int& mesh);
+  void DrawVertices(unsigned int vertices, unsigned int nbVertices);
+  void UseProgram();
 
   void Delete();
 };

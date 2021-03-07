@@ -6,11 +6,7 @@
 #include "Renderer/Shader.hpp"
 
 using namespace Renderer;
-struct Vertex
-{
-  float position[3];
-  float uv[2];
-};
+
 
 RendererPlatform::RendererPlatform()
 {
@@ -20,11 +16,13 @@ RendererPlatform::RendererPlatform()
   printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
   printf("GL_VERSION = %s\n",  glGetString(GL_VERSION));
 
-    impl._program = Shader::CreateProgramShader(
+    _shaderProgram = Shader::CreateProgramShader(
     R"GLSL(
                           #version 330 core
                           layout (location = 0) in vec3 aPos;
-                          layout (location = 1) in vec2 aTexCoord;
+                          layout (location = 1) in vec3 aNormal;
+                          layout (location = 2) in vec2 aTexCoord;
+
                           uniform mat4 projection;
                           uniform mat4 view;
                           uniform mat4 model;
@@ -46,31 +44,32 @@ RendererPlatform::RendererPlatform()
 
                      void main()
                      {
-                      FragColor = texture(ourTexture, TexCoord);
+                      FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+                      //FragColor = texture(ourTexture, TexCoord);
                      }
                      )GLSL");
 
 
-  glUseProgram(impl._program);
-  impl._projectionLocation = glGetUniformLocation(impl._program, "projection");
-  impl._viewLocation       = glGetUniformLocation(impl._program, "view");
-  impl._modelLocation      = glGetUniformLocation(impl._program, "model");
+  glUseProgram(_shaderProgram);
+  _projectionLocation = glGetUniformLocation(_shaderProgram, "projection");
+  _viewLocation       = glGetUniformLocation(_shaderProgram, "view");
+  _modelLocation      = glGetUniformLocation(_shaderProgram, "model");
 }
 void RendererPlatform::SetProjectionMatrix(const Maths::Matrix4& projectionMatrix)
 {
-  glUniformMatrix4fv(impl._projectionLocation, 1, GL_FALSE, projectionMatrix.e);
+  glUniformMatrix4fv(_projectionLocation, 1, GL_FALSE, projectionMatrix.e);
 }
 void RendererPlatform::SetViewMatrix(const Maths::Matrix4& viewMatrix)
 {
 
-  glUniformMatrix4fv(impl._viewLocation, 1, GL_FALSE, viewMatrix.e);
+  glUniformMatrix4fv(_viewLocation, 1, GL_FALSE, viewMatrix.e);
 }
 void RendererPlatform::SetModelMatrix(const Maths::Matrix4& modelMatrix)
 {
-  glUniformMatrix4fv(impl._modelLocation, 1, GL_FALSE, modelMatrix.e);
+  glUniformMatrix4fv(_modelLocation, 1, GL_FALSE, modelMatrix.e);
 }
 
-unsigned int RendererPlatform::CreateMesh(const float* vertices, const unsigned int& verticesSize, const unsigned int* indices, const unsigned int indicesSize)
+unsigned int RendererPlatform::CreateMesh(const Vertex* vertices, unsigned int verticesSize, const unsigned int* indices, unsigned int indicesSize)
 {
   unsigned int vao, vbo;
 
@@ -82,38 +81,30 @@ unsigned int RendererPlatform::CreateMesh(const float* vertices, const unsigned 
   glBufferData(GL_ARRAY_BUFFER, verticesSize, vertices, GL_STATIC_DRAW);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, position));
   glEnableVertexAttribArray(0);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, uv));
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, normal));
   glEnableVertexAttribArray(1);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, uv));
+  glEnableVertexAttribArray(2);
 
   unsigned int ebo;
   glGenBuffers(1, &ebo);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, indices, GL_STATIC_DRAW);
 
-  impl._meshes.push_back(Mesh(vao, vbo, ebo, indicesSize / sizeof(unsigned int)));
-  return impl._meshes.size() - 1;
+  _meshes.push_back(Mesh(vao, vbo, ebo, indicesSize / sizeof(unsigned int)));
+  return _meshes.size() - 1;
 }
-
-void RendererPlatform::NewFrame()
-{
-  glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT);
-}
-
-
 
 void RendererPlatform::Delete()
 {
-  if(!impl._meshes.empty())
+  if(!_meshes.empty())
   {
-    for(Mesh mesh : impl._meshes)
+    for(Mesh mesh : _meshes)
     {
-      glDeleteVertexArrays(1, &mesh._vao);
-      glDeleteBuffers(1, &mesh._vbo);
-      glDeleteBuffers(1, &mesh._ebo);
+        mesh.Delete();
     }
   }
-  glDeleteProgram(impl._program);
+  glDeleteProgram(_shaderProgram);
 }
 void RendererPlatform::BindTexture(const unsigned int &texture)
 {
@@ -121,9 +112,45 @@ void RendererPlatform::BindTexture(const unsigned int &texture)
 }
 void RendererPlatform::DrawMesh(const unsigned int &MeshID)
 {
-  if(impl._meshes.empty() || impl._meshes.size() - 1 < MeshID)
+  if(_meshes.empty() || _meshes.size() - 1 < MeshID)
     return;
-  glUseProgram(impl._program);
-  glBindVertexArray(impl._meshes[MeshID]._vao);
-  glDrawElements(GL_TRIANGLES, impl._meshes[MeshID]._nbVertices, GL_UNSIGNED_INT, 0);
+  glBindVertexArray(_meshes[MeshID]._vao);
+  glDrawElements(GL_TRIANGLES, _meshes[MeshID]._nbVertices, GL_UNSIGNED_INT, 0);
+}
+void RendererPlatform::UseProgram()
+{
+  glUseProgram(_shaderProgram);
+}
+void RendererPlatform::ClearColor(const Maths::Vector4 &color)
+{
+  glClearColor(color.r, color.g, color.b, color.a);
+}
+void RendererPlatform::Clear()
+{
+  glClear(GL_COLOR_BUFFER_BIT);
+}
+unsigned int RendererPlatform::CreateVertices(const float *vertices, unsigned int verticesSize)
+{
+  unsigned int vao, vbo;
+
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
+
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, verticesSize, vertices, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, position));
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, normal));
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, uv));
+  glEnableVertexAttribArray(2);
+
+  return vao;
+}
+void RendererPlatform::DrawVertices(unsigned int vertices, unsigned int nbVertices)
+{
+  glBindVertexArray(vertices);
+
+  glDrawArrays(GL_TRIANGLES, 0, nbVertices);
 }

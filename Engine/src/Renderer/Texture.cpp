@@ -4,8 +4,8 @@
 #include "glad/gl.h"
 
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+/*#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"*/
 
 using namespace Renderer;
 
@@ -17,6 +17,7 @@ unsigned int Texture::GetID() const
 }
 unsigned int Texture::LoadTexture(const char* filepath)
 {
+  /*
   GLuint IDTexture;
 
   glGenTextures(1, &IDTexture);
@@ -47,7 +48,7 @@ unsigned int Texture::LoadTexture(const char* filepath)
     std::cout << "can't open image : " << filepath << std::endl;
   }
 
-  stbi_image_free(data);
+  stbi_image_free(data);*/
 
-  return IDTexture;
+  return -1;
 }
