@@ -1,12 +1,8 @@
-//
-// Created by a.figueiredo on 25/01/2021.
-//
-
 #ifndef QUACKENGINE_VECTOR3_HPP
 #define QUACKENGINE_VECTOR3_HPP
 
+#include <iostream>
 #include <cmath>
-#include <string>
 
 namespace Maths
 {
@@ -42,38 +38,28 @@ namespace Maths
     static float DotProduct(const Vector3& v1, const Vector3& v2);
     static Vector3 CrossProduct(const Vector3& v1, const Vector3& v2);
 
-    std::string ToString();
+    Vector3 operator+(const Vector3& v2) const;
+    Vector3 operator-(const Vector3& v2) const;
+    Vector3 operator*(const float& f) const;
+
+    friend std::ostream& operator<<(std::ostream &os, Vector3 v);
   };
-}
 
-inline Maths::Vector3 operator+(const Maths::Vector3& v1,const Maths::Vector3& v2)
-{
-    return { v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
-}
 
-inline Maths::Vector3 operator-(const Maths::Vector3& v1, const Maths::Vector3& v2)
-{
-    return { v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
-}
 
-inline Maths::Vector3 operator*(const Maths::Vector3& v, const float& f)
-{
-    return { v.x * f, v.y * f, v.z * f };
-}
-
-inline float Maths::Vector3::Length() const
+inline float Vector3::Length() const
 {
     return sqrtf(x * x + y * y + z * z);
 }
 
-inline float Maths::Vector3::SqrLength() const
+inline float Vector3::SqrLength() const
 {
     return x * x + y * y + z * z;
 }
 
 
 
-inline Maths::Vector3 Maths::Vector3::Normalize()
+inline Vector3 Vector3::Normalize()
 {
     float length = Length();
     if (length > 0)
@@ -86,7 +72,7 @@ inline Maths::Vector3 Maths::Vector3::Normalize()
     return *this;
 }
 
-inline Maths::Vector3 Maths::Vector3::Normalized()
+inline Vector3 Vector3::Normalized()
 {
     float length = Length();
     if (length > 0)
@@ -95,19 +81,35 @@ inline Maths::Vector3 Maths::Vector3::Normalized()
         return *this;
 }
 
-inline float Maths::Vector3::DotProduct(const Maths::Vector3& v1, const Maths::Vector3& v2)
+inline float Vector3::DotProduct(const Vector3& v1, const Vector3& v2)
 {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-inline Maths::Vector3 Maths::Vector3::CrossProduct(const Maths::Vector3& v1, const Maths::Vector3& v2)
+inline Vector3 Vector3::CrossProduct(const Vector3& v1, const Vector3& v2)
 {
     return {(v1.y * v2.z) - (v1.z * v2.y), (v1.z * v2.x) - (v1.x * v2.z), (v1.x * v2.y) - (v1.y * v2.x)};
 }
 
-inline std::string Maths::Vector3::ToString()
+inline Vector3 Vector3::operator+(const Vector3& v2) const
 {
-    return "x = " + std::to_string(x) + ", y = " + std::to_string(y) + ", z = " + std::to_string(z);
+  return { this->x + v2.x, this->y + v2.y, this->z + v2.z };
 }
 
+inline Vector3 Vector3::operator-(const Vector3& v2) const
+{
+  return { this->x - v2.x, this->y - v2.y, this->z - v2.z };
+}
+
+inline Vector3 Vector3::operator*(const float& f) const
+{
+  return { this->x * f, this->y * f, this->z * f };
+}
+/*
+std::ostream& operator<<(std::ostream &os, Vector3 v)
+{
+  os << "x = " << v.x << "y = " << v.y << "z = " << v.z << std::endl;
+  return os;
+}*/
+}
 #endif // QUACKENGINE_VECTOR3_HPP
