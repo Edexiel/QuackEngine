@@ -5,13 +5,27 @@
 #ifndef QUACKENGINE_GAME_HPP
 #define QUACKENGINE_GAME_HPP
 
-class Game {
+#include "Renderer/Framebuffer.hpp"
+#include "Maths/Vector2.hpp"
+#include "Input/InputManager.hpp"
+
+
+class Game
+{
+private:
+    Renderer::Framebuffer screenFB;
+    Input::InputManager input;
+
 public:
-  void Init();
-  void Update(float DeltaTime);
-  void FixedUpdate(float FixedDeltaTime);
-  void Render();
-  void Destroy();
+    void Init();
+    void UpdateInput();
+    void Update(float deltaTime);
+    void FixedUpdate(float fixedDeltaTime);
+    void Render();
+    void Destroy();
+
+    Renderer::Framebuffer &GetFramebuffer();
+    void ResizeFramebuffer(Maths::Vector2 &size);
 };
 
 #endif // QUACKENGINE_GAME_HPP

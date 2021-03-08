@@ -9,7 +9,7 @@
 namespace Debug
 {
 
-    enum LogLevel {L_RELEASE, L_ERROR, L_WARNING, L_INFO, L_DEBUG};
+    enum class LogLevel {L_RELEASE, L_ERROR, L_WARNING, L_INFO, L_DEBUG};
 
     class Log
     {
