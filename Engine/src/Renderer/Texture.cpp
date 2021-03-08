@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-#include "../include/Renderer/Texture.hpp"
-
-using namespace Renderer;
-
-Texture::Texture(const unsigned int& _ID)
-    : ID {_ID} {}
-=======
 #include <iostream>
 
 #include "Renderer/Texture.hpp"
@@ -60,4 +52,3 @@ unsigned int Texture::LoadTexture(const char* filepath)
 
   return -1;
 }
->>>>>>> d540025ad1119fcb334a5860e83b83ff476ceaa7

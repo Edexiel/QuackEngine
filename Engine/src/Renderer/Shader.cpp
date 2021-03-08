@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-#include "../include/Renderer/Shader.hpp"
-
-using namespace Renderer;
-
-Shader::Shader(const unsigned int& _ID)
-    : ID {_ID} {}
-=======
 #include "Renderer/Shader.hpp"
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
@@ -60,4 +52,3 @@ void Shader::Use()
 {
   glUseProgram(ID);
 }
->>>>>>> d540025ad1119fcb334a5860e83b83ff476ceaa7

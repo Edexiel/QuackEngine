@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-#include "Resources/Loaders/shaderLoader.hpp"
-=======
 #include "Resources/Loaders/ShaderLoader.hpp"
->>>>>>> d540025ad1119fcb334a5860e83b83ff476ceaa7
 
 #include "Renderer/Shader.hpp"
 
