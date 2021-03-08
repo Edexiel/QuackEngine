@@ -14,6 +14,8 @@ public:
 
   Texture() = default;
   Texture(const unsigned int& ID);
+  unsigned int GetID() const;
+  static unsigned int LoadTexture(const char* filepath);
 };
 }
 

@@ -22,7 +22,6 @@ namespace Resources
         {
         private:
             std::string path;
-            std::vector<std::vector<float>> listMeshToLoad;
 
             Renderer::Model* model;
 
@@ -33,6 +32,7 @@ namespace Resources
             static void ReadFile(ModelLoader* modelLoader);
             void Apply();
 
+            std::vector<std::vector<float>> listMeshToLoad;
         };
     }
 }
