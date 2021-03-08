@@ -1,4 +1,4 @@
-#include "../include/Renderer/Shader.hpp"
+#include "Renderer/Shader.hpp"
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
 
@@ -47,4 +47,8 @@ unsigned int Shader::CreateProgramShader(const char* vertexShaderSource, const c
   glDeleteShader(fragmentShader);
 
   return programShader;
+}
+void Shader::Use()
+{
+  glUseProgram(ID);
 }

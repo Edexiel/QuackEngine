@@ -41,20 +41,20 @@ Model ResourcesManager::LoadModel(const char* path)
     }
 
     // Create a new Model
-    Model* model = new Model();
-    Loaders::ModelLoader* modelLoader = new Loaders::ModelLoader(model, path);
+    Model model;
+    Loaders::ModelLoader modelLoader (&model, path);
 
     // Direct Read in Main Thread
-    Loaders::ModelLoader::ReadFile(modelLoader);
-    modelLoader->Apply();
+    Loaders::ModelLoader::ReadFile(&modelLoader);
+    modelLoader.Apply();
 
     // To Uncomment when Multhithread doable
     //listModelLoader.push_back(modelLoader);
     //taskSystem.AddTask(std::make_shared<Thread::Task<Loaders::ModelLoader*>>(Loaders::ModelLoader::ReadFile, modelLoader));
 
-    listModel.insert(std::make_pair(path, model));
+//    listModel.insert(std::make_pair(path, model));
 
-    return *model;
+    return Model();
 }
 
 Texture ResourcesManager::LoadTexture(const char* path)
