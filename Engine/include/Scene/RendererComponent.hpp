@@ -1,0 +1,14 @@
+//
+// Created by g.nisi on 2/24/21.
+//
+
+#ifndef QUACKENGINE_RENDERERCOMPONENT_HPP
+#define QUACKENGINE_RENDERERCOMPONENT_HPP
+
+
+class RendererComponent {
+
+};
+
+
+#endif //QUACKENGINE_RENDERERCOMPONENT_HPP

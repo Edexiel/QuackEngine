@@ -1,11 +1,27 @@
 cmake_minimum_required(VERSION 3.17)
 project(QuackEngine VERSION 0.1.0 LANGUAGES CXX C)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 find_package(OpenGL REQUIRED)
 
+#Platform Specific
+if(UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+endif()
+
+if(LINUX)
+    message(STATUS ">>> Linux ${CMAKE_SYSTEM}")
+    # linux stuff here
+    add_definitions(-DLINUX)
+elseif(WIN32)
+    add_definitions(-DWIN32)
+    message(STATUS ">>> Not Linux ${CMAKE_SYSTEM}")
+    # stuff that should happen on Win32
+else()
+    message(FATAL_ERROR ">>> Not supported platform ${CMAKE_SYSTEM}")
+endif()
 
 set(external_lib "Vendor")
 
@@ -27,24 +43,30 @@ endif()
 add_subdirectory(${external_lib}/glfw)
 
 #IMGUI
+set(IMGUI_IMPL_OPENGL_LOADER_GLAD2 TRUE)
+
 set(IMGUI_FOLDER "${external_lib}/imgui")
-set(IMGUI_SOURCES
+add_library(imgui INTERFACE)
+target_sources(imgui INTERFACE
         "${IMGUI_FOLDER}/imgui.cpp"
         "${IMGUI_FOLDER}/imgui_demo.cpp"
         "${IMGUI_FOLDER}/imgui_draw.cpp"
         "${IMGUI_FOLDER}/imgui_widgets.cpp"
+        "${IMGUI_FOLDER}/imgui_tables.cpp"
         "${IMGUI_FOLDER}/backends/imgui_impl_glfw.cpp"
         "${IMGUI_FOLDER}/backends/imgui_impl_opengl3.cpp"
         )
-add_library(imgui INTERFACE)
-target_sources(imgui INTERFACE ${IMGUI_SOURCES})
 target_include_directories(imgui INTERFACE ${IMGUI_FOLDER})
+target_link_libraries(imgui INTERFACE glfw glad)
 
 #STB
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE ${external_lib}/stb)
 
 #assimp
+set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
@@ -71,6 +93,8 @@ add_subdirectory(Editor)
 
 #Engine
 add_subdirectory(Engine)
+
+target_include_directories(Editor PRIVATE Engine/include)
 
 #if(debug)
 #{
