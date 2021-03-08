@@ -55,7 +55,7 @@ int main()
   Renderer::Model model;
   Resources::Loaders::ModelLoader ml(&model,"../../../fbx/Dragon_Baked_Actions_fbx_7.4_binary.fbx");
   Resources::Loaders::ModelLoader::ReadFile(&ml);
-  unsigned int vao = interface.CreateVertices(ml.listMeshToLoad[2].data(), sizeof(float) * ml.listMeshToLoad[2].size());
+  unsigned int vao = interface.CreateVertices(ml.listMeshToLoad[0].data(), sizeof(float) * ml.listMeshToLoad[0].size());
 
   //indices classic
   unsigned int triangleIndices[] = {0, 1 ,2};
@@ -73,15 +73,16 @@ int main()
   Renderer::Framebuffer framebuffer(width, height);
   while (!glfwWindowShouldClose(window))
   {
-    interface.ClearColor({0.2f,0.2f,0.2f,1.f});
-    interface.Clear();
-    interface.UseProgram();
-    interface.SetModelMatrix(Maths::Matrix4::Translate({0,0,1}));
-//    interface.DrawMesh(quadID);
-    interface.DrawMesh(triangleID);
-    interface.SetModelMatrix(Maths::Matrix4::Translate({0,0,1}));
-    interface.DrawVertices(vao, size);
-
+    {
+      interface.ClearColor({0.2f, 0.2f, 0.2f, 1.f});
+      interface.Clear();
+      interface.UseProgram();
+      interface.SetModelMatrix(Maths::Matrix4::Translate({0, 0, 1}));
+      //    interface.DrawMesh(quadID);
+      interface.DrawMesh(triangleID);
+      //    interface.SetModelMatrix(Maths::Matrix4::Translate({0,0,1}));
+      //    interface.DrawVertices(vao, size);
+    }
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
