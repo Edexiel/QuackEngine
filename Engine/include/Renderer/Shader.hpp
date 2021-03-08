@@ -13,6 +13,7 @@ namespace Renderer
         ~Shader() = default;
 
         static unsigned int CreateProgramShader(const char* vertexShaderSource, const char* fragmentShaderSource);
+        void Use();
     };
 }
 
