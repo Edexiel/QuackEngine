@@ -4,7 +4,11 @@
 #include <iostream>
 
 #define STB_IMAGE_IMPLEMENTATION
+<<<<<<< HEAD
 #include "../../../../Vendor/stb/stb_image.h"
+=======
+#include "stb_image.h"
+>>>>>>> d540025ad1119fcb334a5860e83b83ff476ceaa7
 
 #include "glad/gl.h"
 
@@ -12,7 +16,11 @@ using namespace Resources;
 using namespace Loaders;
 using namespace Renderer;
 
+<<<<<<< HEAD
 TextureLoader::TextureLoader(const Texture* texture, const char* _filePath, bool _antiAliasing) : bindTexture{texture->ID}, filePath{_filePath}, antiAliasing {_antiAliasing} {}
+=======
+TextureLoader::TextureLoader(const Texture* texture, const char* _filePath, bool _antiAliasing) : bindTexture{texture->_ID}, filePath{_filePath}, antiAliasing {_antiAliasing} {}
+>>>>>>> d540025ad1119fcb334a5860e83b83ff476ceaa7
 
 void TextureLoader::ReadFile(TextureLoader* textureLoader)
 {

@@ -68,9 +68,15 @@ int main(void)
 
     RS.ReadFiles();
 
+<<<<<<< HEAD
     std::cout << "Texture 1 ID : " << t1.ID << std::endl;
     std::cout << "Texture 2 ID : " << t2.ID << std::endl;
     std::cout << "Texture 3 ID : " << t3.ID << std::endl;
+=======
+    std::cout << "Texture 1 ID : " << t1._ID << std::endl;
+    std::cout << "Texture 2 ID : " << t2._ID << std::endl;
+    std::cout << "Texture 3 ID : " << t3._ID << std::endl;
+>>>>>>> d540025ad1119fcb334a5860e83b83ff476ceaa7
 
     std::cout << "Model1 nb Mesh : " << m1.meshList.size() << std::endl;
   }
