@@ -1,11 +1,48 @@
 #include "GLFW/glfw3.h"
 
 #include "Renderer/RendererPlatform.hpp"
+#include "Renderer/Shader.hpp"
 #include "Renderer/Framebuffer.hpp"
-#include "Renderer/Model.hpp"
-#include "Maths/Matrix4.hpp"
-#include "Resources/ResourcesManager.hpp"
-#include "Resources/Loaders/ModelLoader.hpp"
+#include "Renderer/Vertex.hpp"
+using namespace Renderer;
+const char* vertexShader =
+    {
+                      R"GLSL(
+                      #version 330 core
+                      layout (location = 0) in vec3 aPos;
+                      layout (location = 1) in vec3 aNormal;
+                      layout (location = 2) in vec2 aTexCoord;
+
+                      uniform mat4 projection;
+                      uniform mat4 view;
+                      uniform mat4 model;
+
+                      out vec2 TexCoord;
+
+                      void main()
+                      {
+                      gl_Position = projection * view * model * vec4(aPos, 1.0);
+                      TexCoord = aTexCoord;
+                     }
+                     )GLSL"
+    };
+
+const char* fragmentShader =
+    {
+                     R"GLSL(
+                     #version 330 core
+                     out vec4 FragColor;
+                     in vec2 TexCoord;
+
+                     uniform sampler2D ourTexture;
+
+                     void main()
+                     {
+                      FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+                      //FragColor = texture(ourTexture, TexCoord);
+                     }
+                     )GLSL"
+    };
 
 int main()
 {
@@ -30,17 +67,8 @@ int main()
 
   //Create RendererPlatform
   Renderer::RendererPlatform interface;
-  interface.SetProjectionMatrix(
-      Maths::Matrix4::OrthoMatrix(width, height, -1.f, 100.f)*
-                   Maths::Matrix4::Perspective(width, height, -1.f, 100.f, 3.14f/2.f)
-                   );
-  interface.SetViewMatrix(Maths::Matrix4::Identity());
-  Renderer::Vertex triangle[] = {
-      // positions          // texture coords
-      {{0.0f,  1.0f, 0.0f}, {0,0,1}, {0.5f, 1.0f} },
-      {{1.0f,  0.0f, 0.0f},{0,0,1}, {1.0f, 0.5f}},
-      {{-1.0f, 0.0f, 0.0f}, {0,0,1}, {0.0f, 0.5f}}
-  };
+  // Shader
+
 
   const Renderer::Vertex quad[] = {
       // positions          // texture coords
@@ -50,45 +78,35 @@ int main()
       {{-0.5f,  0.5f, 0.0f}, {0,0,1}, {0.0f, 1.0f}}  // top left
     };
 
-//ASSIMP
-  Resources::ResourcesManager rm;
-  Renderer::Model model;
-  Resources::Loaders::ModelLoader ml(&model,"../../../fbx/Dragon_Baked_Actions_fbx_7.4_binary.fbx");
-  Resources::Loaders::ModelLoader::ReadFile(&ml);
-  unsigned int vao = interface.CreateVertices(ml.listMeshToLoad[0].data(), sizeof(float) * ml.listMeshToLoad[0].size());
-
-  //indices classic
-  unsigned int triangleIndices[] = {0, 1 ,2};
   unsigned int quadIndices[] = {
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
       };
-
-  unsigned int quadID = interface.CreateMesh(quad, sizeof(quad), quadIndices, sizeof(quadIndices));
-  unsigned int triangleID = interface.CreateMesh(triangle, sizeof(triangle), triangleIndices, sizeof(triangleIndices));
-
-  unsigned int size = sizeof(ml.listMeshToLoad[0].data()) / sizeof(float) * ml.listMeshToLoad[0].size();
-
+//Mesh
+  Renderer::Mesh quadMesh = Renderer::RendererPlatform::CreateMesh(quad, sizeof(quad), quadIndices, sizeof(quadIndices));
+//shader
+  Shader shader(Renderer::RendererPlatform::CreateProgramShader(vertexShader,fragmentShader));
+  RendererPlatform::UseShader(shader.ID);
+  RendererPlatform::SetMatrix4(shader.ID, "projection", Maths::Matrix4::Perspective(width,height,-1.f,100.f,3.14f/2.f));
+  RendererPlatform::SetMatrix4(shader.ID, "view", Maths::Matrix4::Identity());
+  RendererPlatform::SetMatrix4(shader.ID, "model", Maths::Matrix4::Translate({0,0,1}));
   //Framebuffer
-  Renderer::Framebuffer framebuffer(width, height);
+  Renderer::Framebuffer framebuffer = Renderer::RendererPlatform::CreateFramebuffer(width, height);
   while (!glfwWindowShouldClose(window))
   {
     {
       interface.ClearColor({0.2f, 0.2f, 0.2f, 1.f});
       interface.Clear();
-      interface.UseProgram();
-      interface.SetModelMatrix(Maths::Matrix4::Translate({0, 0, 1}));
-      //    interface.DrawMesh(quadID);
-      interface.DrawMesh(triangleID);
-      //    interface.SetModelMatrix(Maths::Matrix4::Translate({0,0,1}));
-      //    interface.DrawVertices(vao, size);
+      Renderer::RendererPlatform::UseShader(shader.ID);
+      Renderer::RendererPlatform::DrawMesh(quadMesh);
     }
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
 
-  framebuffer.Delete();
-  interface.Delete();
+  Renderer::RendererPlatform::DeleteMesh(quadMesh);
+  Renderer::RendererPlatform::DeleteShader(shader.ID);
+
   glfwTerminate();
   return 0;
 }

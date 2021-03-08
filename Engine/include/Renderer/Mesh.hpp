@@ -5,6 +5,7 @@ typedef unsigned int Gluint;
 
 namespace Renderer
 {
+  struct Vertex;
     class Mesh
     {
     public:
@@ -14,9 +15,6 @@ namespace Renderer
       unsigned int size;
 
       unsigned int _vao, _vbo, _ebo, _nbVertices;
-
-      void Delete();
-      void Bonsoir();
     };
 }
 
