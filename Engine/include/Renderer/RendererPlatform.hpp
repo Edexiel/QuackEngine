@@ -18,13 +18,12 @@ public:
   ~RendererPlatform() = default;
 
   unsigned int CreateVertices(const float* vertices, unsigned int verticesSize);
-  void BindTexture(const unsigned int& texture);
   void ClearColor(const Maths::Vector4& color);
   void Clear();
 
   static Mesh CreateMesh(const Vertex* vertices, unsigned int verticesSize, const unsigned int* indices, unsigned int indicesSize);
-  static void DrawMesh(const Mesh& mesh);
-  static void DeleteMesh(Mesh& mesh);
+  static void DrawMesh(unsigned int vao, unsigned int nbVertices);
+  static void DeleteMesh(unsigned int vao, unsigned int vbo, unsigned int ebo);
 
   static unsigned int CreateProgramShader(const char* vertexShaderSource, const char* fragmentShaderSource);
   static void UseShader(unsigned int shaderProgram);
@@ -33,8 +32,9 @@ public:
 
   static Framebuffer CreateFramebuffer(unsigned int width, unsigned int height);
   static void BindFramebuffer(unsigned int ID);
+  static void DeleteFramebuffer(unsigned int fbo, unsigned int rbo, unsigned int texture);
 
-  static void DeleteBuffer(unsigned int buffer);
+  static void BindTexture(unsigned int texture);
   static void DeleteTexture(unsigned int texture);
 
   void DrawVertices(unsigned int vertices, unsigned int nbVertices);

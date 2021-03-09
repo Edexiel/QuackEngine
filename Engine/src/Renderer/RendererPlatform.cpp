@@ -18,7 +18,7 @@ RendererPlatform::RendererPlatform()
   printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
   printf("GL_VERSION = %s\n",  glGetString(GL_VERSION));
 }
-void RendererPlatform::BindTexture(const unsigned int &texture)
+void RendererPlatform::BindTexture(unsigned int texture)
 {
   glBindTexture(GL_TEXTURE_2D, texture);
 }
@@ -78,16 +78,16 @@ Mesh RendererPlatform::CreateMesh(const Vertex *vertices, unsigned int verticesS
 
   return Mesh(vao, vbo, ebo, indicesSize / sizeof(unsigned int));
 }
-void RendererPlatform::DrawMesh(const Mesh& mesh)
+void RendererPlatform::DrawMesh(unsigned int vao, unsigned int nbVertices)
 {
-  glBindVertexArray(mesh._vao);
-  glDrawElements(GL_TRIANGLES, mesh._nbVertices, GL_UNSIGNED_INT, 0);
+  glBindVertexArray(vao);
+  glDrawElements(GL_TRIANGLES, nbVertices, GL_UNSIGNED_INT, 0);
 }
-void RendererPlatform::DeleteMesh(Mesh &mesh)
+void RendererPlatform::DeleteMesh(unsigned int vao, unsigned int vbo, unsigned int ebo)
 {
-  glDeleteVertexArrays (1, &mesh._vao);
-  glDeleteBuffers      (1, &mesh._vbo);
-  glDeleteBuffers      (1, &mesh._ebo);
+  glDeleteVertexArrays (1, &vao);
+  glDeleteBuffers      (1, &vbo);
+  glDeleteBuffers      (1, &ebo);
 }
 void RendererPlatform::UseShader(unsigned int shaderProgram)
 {
@@ -147,18 +147,21 @@ Framebuffer RendererPlatform::CreateFramebuffer(unsigned int width,
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-  return Framebuffer(ID, texture, rbo, width, height);
+  return Framebuffer(ID, rbo, texture, width, height);
 }
 void RendererPlatform::BindFramebuffer(unsigned int ID)
 {
   glBindFramebuffer(GL_FRAMEBUFFER, ID);
 }
 
-void RendererPlatform::DeleteBuffer(unsigned int buffer)
-{
-  glDeleteBuffers(1, &buffer);
-}
 void RendererPlatform::DeleteTexture(unsigned int texture)
 {
+  glDeleteTextures(1, &texture);
+}
+void RendererPlatform::DeleteFramebuffer(unsigned int fbo, unsigned int rbo,
+                                         unsigned int texture)
+{
+  glDeleteBuffers(1, &fbo);
+  glDeleteRenderbuffers(1, &rbo);
   glDeleteTextures(1, &texture);
 }

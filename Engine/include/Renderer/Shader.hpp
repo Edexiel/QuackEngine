@@ -12,7 +12,7 @@ namespace Renderer
         Shader() = default;
         Shader(const unsigned int& _ID);
         Shader(const char* vertexShaderSource, const char* fragmentShaderSource);
-        ~Shader() = default;
+        ~Shader();
     };
 }
 

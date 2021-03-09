@@ -24,8 +24,5 @@ unsigned int Framebuffer::GetRbo() const
 }
 Framebuffer::~Framebuffer()
 {
-  RendererPlatform::DeleteBuffer(_ID);
-  RendererPlatform::DeleteBuffer(_rbo);
-  RendererPlatform::DeleteTexture(_texture);
-
+  RendererPlatform::DeleteFramebuffer(_ID, _rbo, _texture);
 }

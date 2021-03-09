@@ -9,3 +9,7 @@ using namespace Renderer;
 Shader::Shader(const unsigned int& _ID) : ID {_ID} {}
 Shader::Shader(const char* vertexShaderSource, const char* fragmentShaderSource):
 ID{RendererPlatform::CreateProgramShader(vertexShaderSource, fragmentShaderSource)}{}
+Shader::~Shader()
+{
+  RendererPlatform::DeleteShader(ID);
+}
