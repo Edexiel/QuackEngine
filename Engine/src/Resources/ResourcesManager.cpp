@@ -1,9 +1,4 @@
 #include "Resources/ResourcesManager.hpp"
-#include "Renderer/Model.hpp"
-#include "Renderer/Texture.hpp"
-#include "Renderer/Shader.hpp"
-
-#include "glad/gl.h"
 
 #include <iostream>
 
@@ -25,47 +20,37 @@ Model ResourcesManager::LoadModel(const char* path)
 {
     // Check if the Model already exist
 
-    std::unordered_map< std::string, Model* >::iterator it = listModel.find(path);
+    std::unordered_map< std::string, Model>::iterator it = mapModel.find(path);
 
-    if (it != listModel.end())
+    if (it != mapModel.end())
     {
-        return *(it->second);
+        return (it->second);
     }
 
   // return null Texture if the file doesn't exist
-    if ((access(path, F_OK) != -1) == -1)
+    if (!( access( path, F_OK ) != -1 ))
     {
         std::cout << "File : " << path << " doesn't exist" << std::endl;
         return Model();
     }
 
     // Create a new Model
-    Model model;
-    Loaders::ModelLoader modelLoader (&model, path);
+    Model model = Model::LoadModel(path);
+    mapModel.insert({path, model});
 
-    // Direct Read in Main Thread
-    Loaders::ModelLoader::ReadFile(&modelLoader);
-    modelLoader.Apply();
-
-    // To Uncomment when Multhithread doable
-    //listModelLoader.push_back(modelLoader);
-    //taskSystem.AddTask(std::make_shared<Thread::Task<Loaders::ModelLoader*>>(Loaders::ModelLoader::ReadFile, modelLoader));
-
-//    listModel.insert(std::make_pair(path, model));
-
-    return Model();
+    return model;
 }
 
 Texture ResourcesManager::LoadTexture(const char* path)
 {
     // Check if the Texture already exist
 
-    std::unordered_map< std::string, Renderer::Texture* >::iterator it = listTexture.find(path);
+    std::unordered_map< std::string, Renderer::Texture>::iterator it = mapTexture.find(path);
 
     // Check if the texture already exist
-    if (listTexture.find(path) != listTexture.end())
+    if (mapTexture.find(path) != mapTexture.end())
     {
-        return Texture(listTexture.find(path)->second->_ID);
+        return Texture(mapTexture.find(path)->second._ID);
     }
 
     // return null Texture if the file doesn't exist
@@ -77,15 +62,10 @@ Texture ResourcesManager::LoadTexture(const char* path)
 
     // Create a new Texture
 
-    Texture* texture = new Texture();
-    glGenTextures(1, &texture->_ID);
+    Texture texture = Texture::LoadTexture(path);
+    mapTexture.insert({path, texture});
 
-    Loaders::TextureLoader* textureLoader = new Loaders::TextureLoader(texture, path);
-    taskSystem.AddTask(std::make_shared<Thread::Task<Loaders::TextureLoader*>>(Loaders::TextureLoader::ReadFile, textureLoader));
-
-    listTexture.insert(std::make_pair(path, texture));
-
-    return *texture;
+    return texture;
 }
 
 Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const char* fragmentShader)
@@ -108,43 +88,15 @@ Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const ch
     {
         if (listShader[i].fragmentShader == fragmentShader && listShader[i].vertexShader == vertexShader)
         {
-            return *listShader[i].shader;
+            return listShader[i].shader;
         }
     }
 
     // Charge new Shader
 
-    Shader* shader = new Shader();
-
-    shader->ID = glCreateProgram();
-
-    Loaders::ShaderLoader* shaderLoader = new Loaders::ShaderLoader(shader, vertexShader, fragmentShader);
-    taskSystem.AddTask(std::make_shared<Thread::Task<Loaders::ShaderLoader*>>(Loaders::ShaderLoader::ReadFile, shaderLoader));
-
+    Shader shader = Shader::CreateProgramShader(vertexShader, fragmentShader);
     listShader.push_back(ReferenceShader{vertexShader, fragmentShader, shader});
 
-    return *shader;
+    return shader;
 }
 
-
-void ResourcesManager::ReadFiles()
-{
-    threadPool.Run(&taskSystem); // Read all files
-
-    // Apply the files in OpenGL
-    for (unsigned int i = 0 ; i < listModelLoader.size(); i++)
-    {
-        listModelLoader[i]->Apply();
-        delete listModelLoader[i];
-    }
-    for (unsigned int i = 0 ; i < listShaderLoader.size(); i++)
-    {
-        listShaderLoader[i]->Apply();
-        delete listShaderLoader[i];
-    }
-    for (unsigned int i = 0 ; i < listTextureLoader.size(); i++)
-    {
-        listShaderLoader[i]->Apply();
-        delete listTextureLoader[i];
-    }
-}

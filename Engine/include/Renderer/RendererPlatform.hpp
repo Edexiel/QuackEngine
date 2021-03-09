@@ -35,6 +35,7 @@ public:
   void Clear();
 
   void DrawMesh(const unsigned int& mesh);
+  void DrawMesh(const Mesh &mesh);
   void DrawVertices(unsigned int vertices, unsigned int nbVertices);
   void UseProgram();
 

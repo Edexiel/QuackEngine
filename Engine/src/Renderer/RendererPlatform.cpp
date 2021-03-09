@@ -91,7 +91,7 @@ unsigned int RendererPlatform::CreateMesh(const Vertex* vertices, unsigned int v
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, indices, GL_STATIC_DRAW);
 
-  _meshes.push_back(Mesh(vao, vbo, ebo, indicesSize / sizeof(unsigned int)));
+  _meshes.push_back(Mesh(vao, vbo, ebo, indicesSize / sizeof(unsigned int), 0));
   return _meshes.size() - 1;
 }
 
@@ -117,6 +117,23 @@ void RendererPlatform::DrawMesh(const unsigned int &MeshID)
   glBindVertexArray(_meshes[MeshID]._vao);
   glDrawElements(GL_TRIANGLES, _meshes[MeshID]._nbVertices, GL_UNSIGNED_INT, 0);
 }
+
+void RendererPlatform::DrawMesh(const Mesh &mesh)
+{
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, position));
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, normal));
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, uv));
+  glEnableVertexAttribArray(2);
+
+  glBindBuffer(GL_ARRAY_BUFFER, mesh._vbo);
+  glBindVertexArray(mesh._vao);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh._ebo);
+
+  glDrawElements(GL_TRIANGLES, mesh._nbIndices, GL_UNSIGNED_INT, (const void*)0);
+}
+
 void RendererPlatform::UseProgram()
 {
   glUseProgram(_shaderProgram);
@@ -150,7 +167,13 @@ unsigned int RendererPlatform::CreateVertices(const float *vertices, unsigned in
 }
 void RendererPlatform::DrawVertices(unsigned int vertices, unsigned int nbVertices)
 {
-  glBindVertexArray(vertices);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, position));
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, normal));
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, uv));
+  glEnableVertexAttribArray(2);
 
+  glBindVertexArray(vertices);
   glDrawArrays(GL_TRIANGLES, 0, nbVertices);
 }

@@ -10,6 +10,9 @@ namespace Renderer
     struct Model
     {
         std::vector<Mesh> meshList;
+
+        static Model LoadModel(const char* path);
+
     };
 }
 
