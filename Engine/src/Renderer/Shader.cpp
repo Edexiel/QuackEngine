@@ -10,3 +10,11 @@ Shader::~Shader()
 {
   RendererPlatform::DeleteShader(ID);
 }
+void Shader::Use()
+{
+  RendererPlatform::UseShader(ID);
+}
+void Shader::SetMatrix4(const char *name, Maths::Matrix4 mat)
+{
+  RendererPlatform::SetMatrix4(ID, name, mat);
+}

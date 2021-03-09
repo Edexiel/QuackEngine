@@ -1,4 +1,3 @@
-#include "glad/gl.h"
 #include "Renderer/Framebuffer.hpp"
 #include "Renderer/RendererPlatform.hpp"
 
@@ -25,4 +24,12 @@ unsigned int Framebuffer::GetRbo() const
 Framebuffer::~Framebuffer()
 {
   RendererPlatform::DeleteFramebuffer(_ID, _rbo, _texture);
+}
+void Framebuffer::Bind()
+{
+  RendererPlatform::BindFramebuffer(_ID);
+}
+void Framebuffer::BindTexture()
+{
+  RendererPlatform::BindTexture(_texture);
 }

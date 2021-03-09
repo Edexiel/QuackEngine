@@ -13,12 +13,11 @@ class Framebuffer;
 class RendererPlatform
 {
 public:
-  RendererPlatform();
-  ~RendererPlatform() = default;
 
-  unsigned int CreateVertices(const float* vertices, unsigned int verticesSize);
-  void ClearColor(const Maths::Vector4& color);
-  void Clear();
+  static int LoadGL();
+  static void ClearColor(const Maths::Vector4& color);
+  static void Clear();
+  static unsigned int CreateVertices(const float* vertices, unsigned int verticesSize);//TO DO: delete this function
 
   static Mesh CreateMesh(const Vertex* vertices, unsigned int verticesSize, const unsigned int* indices, unsigned int indicesSize);
   static void DrawMesh(unsigned int vao, unsigned int nbVertices);
@@ -33,8 +32,11 @@ public:
   static void BindFramebuffer(unsigned int ID);
   static void DeleteFramebuffer(unsigned int fbo, unsigned int rbo, unsigned int texture);
 
+  static unsigned int CreateTexture();
   static void BindTexture(unsigned int texture);
   static void DeleteTexture(unsigned int texture);
+  static void SetTextureImage2D(unsigned char *image, unsigned int nrChannels,unsigned int width, unsigned int height);
+  static void TextureParameter();
 
   void DrawVertices(unsigned int vertices, unsigned int nbVertices);
 };

@@ -1,22 +1,21 @@
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
-#include <iostream>
 
 #include "Renderer/RendererPlatform.hpp"
-#include "Renderer/Shader.hpp"
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Framebuffer.hpp"
 
 using namespace Renderer;
 
-
-RendererPlatform::RendererPlatform()
+int RendererPlatform::LoadGL()
 {
-  gladLoadGL(glfwGetProcAddress);
+  int version = gladLoadGL(glfwGetProcAddress);
 
   printf("GL_VENDOR = %s\n",   glGetString(GL_VENDOR));
   printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
   printf("GL_VERSION = %s\n",  glGetString(GL_VERSION));
+
+  return version;
 }
 void RendererPlatform::BindTexture(unsigned int texture)
 {
@@ -164,4 +163,28 @@ void RendererPlatform::DeleteFramebuffer(unsigned int fbo, unsigned int rbo,
   glDeleteBuffers(1, &fbo);
   glDeleteRenderbuffers(1, &rbo);
   glDeleteTextures(1, &texture);
+}
+void RendererPlatform::TextureParameter()
+{
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+unsigned int RendererPlatform::CreateTexture()
+{
+  unsigned int IDTexture;
+
+  glGenTextures(1, &IDTexture);
+  glBindTexture(GL_TEXTURE_2D, IDTexture);
+  return IDTexture;
+}
+void RendererPlatform::SetTextureImage2D(unsigned char *image, unsigned int nrChannels,unsigned int width, unsigned int height)
+{
+  if (nrChannels == 4)
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+  else
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+  glGenerateMipmap(GL_TEXTURE_2D);
 }

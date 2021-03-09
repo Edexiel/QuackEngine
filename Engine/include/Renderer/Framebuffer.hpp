@@ -22,6 +22,9 @@ public:
   unsigned int GetID() const;
   unsigned int GetTexture() const;
   unsigned int GetRbo() const;
+
+  void Bind();
+  void BindTexture();
 };
 }
 #endif // QUACKENGINE_FRAMEBUFFER_HPP
