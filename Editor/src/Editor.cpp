@@ -21,38 +21,7 @@ Editor::~Editor()
 
 int Editor::Init()
 {
-    if (!glfwInit())
-        return -1;
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    /* Create a windowed mode window and its OpenGL context */
-    //todo: get size from config ini
-    window = glfwCreateWindow(1280, 720, "QuackEngine", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
-
-    glfwMakeContextCurrent(window);
-
-    //todo: use interface
-    int version = gladLoadGL(glfwGetProcAddress);
-
-    if (version == 0)
-    {
-        printf("Failed to initialize OpenGL context");
-        glfwTerminate();
-        return -1;
-    }
-
-    printf("GL_VENDOR = %s\n", glGetString(GL_VENDOR));
-    printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
-    printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
 
 }
 
