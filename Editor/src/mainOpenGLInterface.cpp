@@ -4,6 +4,7 @@
 #include "Renderer/Shader.hpp"
 #include "Renderer/Framebuffer.hpp"
 #include "Renderer/Vertex.hpp"
+
 using namespace Renderer;
 const char* vertexShader =
     {

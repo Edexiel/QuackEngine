@@ -3,7 +3,6 @@
 
 #include "Maths/Matrix4.hpp"
 #include "Renderer/Mesh.hpp"
-
 #include <vector>
 
 namespace Renderer
