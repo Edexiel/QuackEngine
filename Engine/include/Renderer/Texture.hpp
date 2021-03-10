@@ -14,8 +14,10 @@ public:
 
   Texture() = default;
   Texture(const unsigned int& ID);
+  ~Texture();
   unsigned int GetID() const;
   static unsigned int LoadTexture(const char* filepath);
+  void Bind();
 };
 }
 
