@@ -111,14 +111,24 @@ int main()
         {{-0.5f, -0.5f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
         {{-0.5f, 0.5f, 0.0f}, {0, 0, 1}, {0.0f, 1.0f}}   // top left
     };
+    const Renderer::Vertex triangle[] = {
+        // positions          // texture coords
+        {{0.0f, 1.0f, 0.0f}, {0, 0, 1}, {1.0f, 1.0f}},   // top right
+        {{1.0f, -1.0f, 0.0f}, {0, 0, 1}, {1.0f, 0.0f}},  // bottom right
+        {{-1.0f, -1.0f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
+    };
 
     unsigned int quadIndices[] = {
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
     };
+    unsigned int triangleIndices[] = {0,2,3};
+
     // Mesh
     Renderer::Mesh quadMesh = Renderer::RendererPlatform::CreateMesh(
         quad, sizeof(quad), quadIndices, sizeof(quadIndices));
+    Renderer::Mesh triangleMesh = Renderer::RendererPlatform::CreateMesh(
+        triangle, sizeof(triangle), triangleIndices, sizeof(triangleIndices));
     // shader
     Shader shader(Renderer::RendererPlatform::CreateProgramShader(
         vertexShader, fragmentShader));
@@ -129,7 +139,6 @@ int main()
         Maths::Matrix4::Perspective(width, height, -1.f, 100.f, 3.14f / 2.f)
         );
     shader.SetMatrix4("view", Maths::Matrix4::Identity());
-    shader.SetMatrix4("model", Maths::Matrix4::Translate({0, 0, 1}));
     // Shader fb
     Shader shaderFb(Renderer::RendererPlatform::CreateProgramShader(
         vertexShaderFb, fragmentShaderFb));
@@ -146,9 +155,11 @@ int main()
         framebuffer.Bind();
         RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
         RendererPlatform::Clear();
-        shaderFb.Use();
-        texture.Bind();
+        shader.Use();
+        shader.SetMatrix4("model", Maths::Matrix4::Translate({-1, 0, 1}));
         quadMesh.Draw();
+        shader.SetMatrix4("model", Maths::Matrix4::Translate({1, 0, 1}));
+        triangleMesh.Draw();
         RendererPlatform::BindFramebuffer(0);
       }
 

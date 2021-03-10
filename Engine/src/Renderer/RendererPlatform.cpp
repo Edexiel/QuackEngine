@@ -21,7 +21,7 @@ void RendererPlatform::BindTexture(unsigned int texture)
 {
   glBindTexture(GL_TEXTURE_2D, texture);
 }
-void RendererPlatform::ClearColor(const Maths::Vector4 &color)
+void RendererPlatform::ClearColor(const Maths::Vector4<float> &color)
 {
   glClearColor(color.r, color.g, color.b, color.a);
 }

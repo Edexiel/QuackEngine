@@ -6,62 +6,65 @@
 
 namespace Maths
 {
+template<typename T>
   struct Vector3
   {
     union
     {
       struct
       {
-        float x;
-        float y;
-        float z;
+        T x;
+        T y;
+        T z;
       };
 
       struct
       {
-        float r;
-        float g;
-        float b;
+        T r;
+        T g;
+        T b;
       };
-      float e[3];
+      T e[3];
     };
 
-    float Length() const;
-    float SqrLength() const;
+    T Length() const;
+    T SqrLength() const;
 
-    // Normalize the vector and return it;
-    Vector3 Normalize();
+    Vector3<T>& Normalize();
+    Vector3<T> GetNormalized() const;
+    static void Normalized(Vector3<T>& v);
 
-    // Return the vector normalized
-    Vector3 Normalized();
+    static T DotProduct(const Vector3<T>& v1, const Vector3<T>& v2);
+    static Vector3<T> CrossProduct(const Vector3<T>& v1, const Vector3<T>& v2);
 
-    static float DotProduct(const Vector3& v1, const Vector3& v2);
-    static Vector3 CrossProduct(const Vector3& v1, const Vector3& v2);
+    Vector3<T> operator+(const Vector3<T>& v2) const;
+    Vector3<T> operator-(const Vector3<T>& v2) const;
+    Vector3<T> operator*(const T& f) const;
 
-    Vector3 operator+(const Vector3& v2) const;
-    Vector3 operator-(const Vector3& v2) const;
-    Vector3 operator*(const float& f) const;
-
-    friend std::ostream& operator<<(std::ostream &os, Vector3 v);
+    friend std::ostream& operator<<(std::ostream &os, Vector3<T> v);
   };
 
+  typedef Vector3<float> Vector3f;
+  typedef Vector3<double> Vector3d;
+  typedef Vector3<int> Vector3i;
+  typedef Vector3<unsigned char> Color3;
 
-
-inline float Vector3::Length() const
+  template<typename T>
+inline T Vector3<T>::Length() const
 {
     return sqrtf(x * x + y * y + z * z);
 }
 
-inline float Vector3::SqrLength() const
+template<typename T>
+inline T Vector3<T>::SqrLength() const
 {
     return x * x + y * y + z * z;
 }
 
-
-
-inline Vector3 Vector3::Normalize()
+template<typename T>
+inline Vector3<T>& Vector3<T>::Normalize()
 {
-    float length = Length();
+    T length = Length();
     if (length > 0)
     {
         x /= length;
@@ -72,44 +75,54 @@ inline Vector3 Vector3::Normalize()
     return *this;
 }
 
-inline Vector3 Vector3::Normalized()
+template<typename T>
+inline Vector3<T> Vector3<T>::GetNormalized() const
 {
-    float length = Length();
+    T length = Length();
     if (length > 0)
         return { x / length, y / length, z / length };
     else
         return *this;
 }
 
-inline float Vector3::DotProduct(const Vector3& v1, const Vector3& v2)
+template<typename T>
+void Vector3<T>::Normalized(Vector3<T>& v)
+{
+  T length = v.Length();
+
+  v.x /= length;
+  v.y /= length;
+  v.z /= length;
+}
+
+template<typename T>
+inline T Vector3<T>::DotProduct(const Vector3<T>& v1, const Vector3<T>& v2)
 {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-inline Vector3 Vector3::CrossProduct(const Vector3& v1, const Vector3& v2)
+template<typename T>
+inline Vector3<T> Vector3<T>::CrossProduct(const Vector3<T>& v1, const Vector3<T>& v2)
 {
     return {(v1.y * v2.z) - (v1.z * v2.y), (v1.z * v2.x) - (v1.x * v2.z), (v1.x * v2.y) - (v1.y * v2.x)};
 }
 
-inline Vector3 Vector3::operator+(const Vector3& v2) const
+template<typename T>
+inline Vector3<T> Vector3<T>::operator+(const Vector3<T>& v2) const
 {
   return { this->x + v2.x, this->y + v2.y, this->z + v2.z };
 }
 
-inline Vector3 Vector3::operator-(const Vector3& v2) const
+template<typename T>
+inline Vector3<T> Vector3<T>::operator-(const Vector3<T>& v2) const
 {
   return { this->x - v2.x, this->y - v2.y, this->z - v2.z };
 }
 
-inline Vector3 Vector3::operator*(const float& f) const
+template<typename T>
+inline Vector3<T> Vector3<T>::operator*(const T& f) const
 {
   return { this->x * f, this->y * f, this->z * f };
 }
-/*
-std::ostream& operator<<(std::ostream &os, Vector3 v)
-{
-  os << "x = " << v.x << "y = " << v.y << "z = " << v.z << std::endl;
-  return os;
-}*/
 }
 #endif // QUACKENGINE_VECTOR3_HPP
