@@ -1,5 +1,7 @@
 #include "Resources/ResourcesManager.hpp"
 
+#include "Renderer/RendererPlatform.hpp"
+
 #include <iostream>
 
 #define F_OK 0
@@ -50,7 +52,7 @@ Texture ResourcesManager::LoadTexture(const char* path)
     // Check if the texture already exist
     if (mapTexture.find(path) != mapTexture.end())
     {
-        return Texture(mapTexture.find(path)->second._ID);
+        return Texture(mapTexture.find(path)->second.GetID());
     }
 
     // return null Texture if the file doesn't exist
@@ -94,7 +96,7 @@ Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const ch
 
     // Charge new Shader
 
-    Shader shader = Shader::CreateProgramShader(vertexShader, fragmentShader);
+    Shader shader = Shader::LoadShader(vertexShader, fragmentShader);
     listShader.push_back(ReferenceShader{vertexShader, fragmentShader, shader});
 
     return shader;

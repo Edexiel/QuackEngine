@@ -13,6 +13,8 @@ namespace Renderer
 
         static Model LoadModel(const char* path);
 
+        void Draw();
+
     };
 }
 

@@ -4,6 +4,8 @@
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
 
+#include "Renderer/RendererPlatform.hpp"
+
 #include "glad/gl.h"
 
 #include <iostream>
@@ -36,6 +38,7 @@ Model Model::LoadModel(const char *path)
   {
     std::vector<float> vertices;
     std::vector<unsigned int> indices;
+
     vertices.resize(scene->mMeshes[i]->mNumVertices * 8);
 
     // Load indices
@@ -62,6 +65,8 @@ Model Model::LoadModel(const char *path)
       vertices[count + 4] = (scene->mMeshes[i]->mNormals[e]).y;
       vertices[count + 5] = (scene->mMeshes[i]->mNormals[e]).z;
 
+      //scene->mMeshes[i]->mTextureCoords[0][e].x;
+
       if (scene->mMeshes[i]->HasTextureCoords(e))
       {
         vertices[count + 6] = (scene->mMeshes[i]->mTextureCoords[e])->x;
@@ -74,6 +79,9 @@ Model Model::LoadModel(const char *path)
       }
       count += 8;
     }
+
+    // Put loaded data in buffers
+    //model.meshList.push_back(Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size()));
 
     unsigned int vao, vbo, ebo, nbVertices, nbIndices;
 
@@ -94,7 +102,17 @@ Model Model::LoadModel(const char *path)
     nbIndices = indices.size();
 
     model.meshList[i] = Mesh(vao, vbo, ebo, nbVertices, nbIndices);
+
   }
 
+
   return model;
+}
+
+void Model::Draw()
+{
+  for (unsigned int i = 0 ; i < meshList.size() ; i++)
+  {
+    meshList[i].Draw();
+  }
 }

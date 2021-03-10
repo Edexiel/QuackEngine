@@ -1,54 +1,46 @@
 #include <iostream>
-
 #include "Renderer/Texture.hpp"
-#include "glad/gl.h"
+#include "Renderer/RendererPlatform.hpp"
 
-
-/*#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"*/
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 using namespace Renderer;
 
 Texture::Texture(const unsigned int& ID): _ID{ID} {}
 
+Texture::~Texture()
+{
+  //RendererPlatform::DeleteTexture(_ID);
+}
+
 unsigned int Texture::GetID() const
 {
   return _ID;
 }
-unsigned int Texture::LoadTexture(const char* filepath)
+
+Texture Texture::LoadTexture(const char* filepath)
 {
-  /*
-  GLuint IDTexture;
-
-  glGenTextures(1, &IDTexture);
-  glBindTexture(GL_TEXTURE_2D, IDTexture);
-
-  // set the texture wrapping/filtering options (on the currently bound texture object)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  // load and generate the texture
+  Texture texture(RendererPlatform::CreateTexture());
+  RendererPlatform::TextureParameter();
 
   int width, height, nrChannels;
   stbi_set_flip_vertically_on_load(true);
   unsigned char *data = stbi_load(filepath, &width, &height, &nrChannels, 0);
   if (data)
   {
-    if (nrChannels == 4)
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    else
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
+    RendererPlatform::SetTextureImage2D(data, nrChannels, width, height);
   }
   else
   {
     std::cout << "can't open image : " << filepath << std::endl;
   }
+  stbi_image_free(data);
 
-  stbi_image_free(data);*/
+  return texture;
+}
 
-  return -1;
+void Texture::Bind()
+{
+  RendererPlatform::BindTexture(_ID);
 }
