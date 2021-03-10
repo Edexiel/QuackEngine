@@ -1,11 +1,13 @@
-#include<glad/gl.h>
 #include "Renderer/Mesh.hpp"
+#include "Renderer/RendererPlatform.hpp"
+
 
 using namespace Renderer;
-
-void Mesh::Delete()
+Mesh::~Mesh()
 {
-  glDeleteVertexArrays(1, &_vao);
-  glDeleteBuffers(1, &_vbo);
-  glDeleteBuffers(1, &_ebo);
+  RendererPlatform::DeleteMesh(_vao,_vbo, _ebo);
+}
+void Mesh::Draw()
+{
+  RendererPlatform::DrawMesh(_vao, _nbVertices);
 }
