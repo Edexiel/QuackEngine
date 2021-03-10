@@ -6,6 +6,7 @@
 #define QUACKENGINE_ENGINE_HPP
 
 #include <GLFW/glfw3.h>
+#include <exception>
 
 enum GLProfile
 {
@@ -13,8 +14,6 @@ enum GLProfile
     CORE = GLFW_OPENGL_CORE_PROFILE,
     COMPAT = GLFW_OPENGL_COMPAT_PROFILE
 };
-
-
 struct Gl
 {
     int major;
@@ -22,7 +21,6 @@ struct Gl
     bool debug;
     GLProfile profile;
 };
-
 struct Window
 {
     enum class Mode
@@ -43,20 +41,43 @@ struct EngineSettings
     Window window;
 };
 
+struct GLFW_Initialization_error : public std::exception
+{
+    const char *what() const noexcept override
+    {
+        return "GLFW was not correctly initialized, aborting";
+    }
+};
+
+struct GLFW_Window_Initialization_error : public std::exception
+{
+    const char *what() const noexcept override
+    {
+        return "GLFW's window was not correctly initialized, aborting";
+    }
+};
+
+struct GLFW_Window_Initialization_error : public std::exception
+{
+    const char *what() const noexcept override
+    {
+        return "GLFW's window was not correctly initialized, aborting";
+    }
+};
+
 class Engine
 {
 private:
     bool _init = false;
-    GLFWwindow *_window= nullptr;
+    GLFWwindow *_window = nullptr;
 public:
     GLFWwindow *getWindow() const;
 public:
     bool isInit() const;
 public:
-    Engine() = default;
+    Engine() = delete;
+    Engine(const EngineSettings &settings);
     ~Engine() = default;
-
-    int init(EngineSettings &settings);
 };
 
 

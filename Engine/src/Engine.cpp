@@ -6,10 +6,20 @@
 #include <cstdio>
 #include "Engine.hpp"
 
-int Engine::init(EngineSettings &settings)
+
+
+/**
+ * Engine initialisation
+ * We take the EngineSettings struct and -try to- initialize a screen context
+ * @param settings
+ * @return <0 init failed
+ */
+Engine::Engine(const EngineSettings& settings)
 {
+
     if (!glfwInit())
-        return -1;
+        throw GLFW_Initialization_error();
+
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.gl.major);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, settings.gl.minor);
@@ -18,11 +28,19 @@ int Engine::init(EngineSettings &settings)
 
     GLFWmonitor *monitor;
 
+    /**
+     * Screen mode selection, can be
+     * WINDOWED
+     * FULLSCREEN
+     * WINDOWED FULLSCREEN
+     *
+     * If there are multiple monitors, we can select it and execute the screen mode in that screen
+     */
     switch (settings.window.mode)
     {
         case Window::Mode::WINDOWED:
         {
-            monitor = NULL;
+            monitor = nullptr;
             break;
         }
 
@@ -45,18 +63,18 @@ int Engine::init(EngineSettings &settings)
         {
             //todo: stuff
             //flemme, je verrais plus tard
-            monitor = NULL;
+            monitor = nullptr;
             break;
         }
     }
 
     _window = glfwCreateWindow(settings.window.size[0],
                                settings.window.size[1],
-                               settings.window.title, monitor, NULL);
+                               settings.window.title, monitor, nullptr);
     if (!_window)
     {
         glfwTerminate();
-        return -1;
+        throw GLFW_Window_Initialization_error();
     }
 
     glfwMakeContextCurrent(_window);
@@ -76,14 +94,25 @@ int Engine::init(EngineSettings &settings)
     printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
 
     _init = true;
+
+    return 0;
 }
 
+/**
+ * Is the Engine initialized
+ * @return
+ */
 bool Engine::isInit() const
 {
     return _init;
 }
 
+/**
+ * Return a GLFWwindow
+ * @return
+ */
 GLFWwindow *Engine::getWindow() const
 {
     return _window;
 }
+

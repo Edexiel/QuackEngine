@@ -5,20 +5,22 @@
 
 #include "Widgets/Widget.hpp"
 #include "GLFW/glfw3.h"
-
+#include <memory>
 
 class Editor
 {
 private:
-    GLFWwindow *window;
+    GLFWwindow *window= nullptr;
 
-    std::vector<Widget> _widgets;
+    std::vector<std::unique_ptr<Widget>> _widgets;
 public:
-    Editor();
-    ~Editor();
+    Editor() = default;
+    ~Editor() = default;
 
-    int Init();
-    void InitImGUI();
+    int initWidgets();
+    void initImGUI();
+    void update();
+    void draw();
 };
 
 

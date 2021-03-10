@@ -8,7 +8,11 @@
 
 class Widget
 {
-
+private:
+    int position[2];
+public:
+    virtual void draw() = 0;
+    virtual void update() = 0;
 };
 
 

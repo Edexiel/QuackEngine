@@ -6,26 +6,27 @@
 
 #include "Editor.hpp"
 
+#include "Widgets/ExplorerWidget.hpp"
+#include "Widgets/LogWidget.hpp"
+#include "Widgets/PropertiesWidget.hpp"
+#include "Widgets/SceneWidget.hpp"
+#include "Widgets/ViewportWidget.hpp"
+
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui.h"
 
-Editor::Editor()
+//todo : init from config.ini
+int Editor::initWidgets()
 {
+    _widgets.emplace_back(new ExplorerWidget());
+    _widgets.emplace_back(new LogWidget());
+    _widgets.emplace_back(new PropertiesWidget());
+    _widgets.emplace_back(new SceneWidget());
+    _widgets.emplace_back(new ViewportWidget());
 }
 
-Editor::~Editor()
-{
-
-}
-
-int Editor::Init()
-{
-
-
-}
-
-void Editor::InitImGUI()
+void Editor::initImGUI()
 {
     // Init ImGui
     IMGUI_CHECKVERSION();
@@ -54,4 +55,20 @@ void Editor::InitImGUI()
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 460");
+}
+
+void Editor::update()
+{
+    for (const auto &widget : _widgets)
+    {
+        widget->update();
+    }
+}
+
+void Editor::draw()
+{
+    for (const auto &widget : _widgets)
+    {
+        widget->draw();
+    }
 }
