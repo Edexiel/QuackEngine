@@ -45,7 +45,7 @@ namespace Maths
     Matrix4 operator*(const Matrix4& m);
     Matrix4& operator*=(const Matrix4& m);
     Matrix4 operator*(float f);
-    Vector4f operator*(const Vector4f& v);
+    Vector4f operator*(const Vector4f& v) const;
     Matrix4 operator+(const Matrix4& m2);
   };
 
@@ -265,7 +265,8 @@ inline Matrix4 Matrix4::operator*(float f)
   return result;
 }
 
-Vector4f Matrix4::operator*(const Vector4f& v)
+/*
+Vector4f Matrix4::operator*(const Vector4f& v) const
 {
   Vector4f result;
 
@@ -276,6 +277,7 @@ Vector4f Matrix4::operator*(const Vector4f& v)
 
   return result;
 }
+*/
 inline Matrix4 Matrix4::operator+(const Matrix4& m2)
 {
   Matrix4 result;

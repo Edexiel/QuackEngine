@@ -19,6 +19,7 @@ struct Vector2
 
     T e[2]{0};
   };
+  Vector2<T>() = default;
   Vector2<T>(T _x, T _y);
   T Length() const;
   T SqrLength() const;
