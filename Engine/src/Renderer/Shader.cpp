@@ -60,5 +60,8 @@ Shader Shader::LoadShader(const char* vertexPath, const char* fragmentPath)
         return {0};
     }
 
+    std::cout << VertexShaderCode << std::endl;
+
+    return RendererPlatform::CreateShader(VertexShaderCode.c_str(), FragmentShaderCode.c_str());
 
 }
