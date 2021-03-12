@@ -17,9 +17,6 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/Shader.cpp
         src/Renderer/Texture.cpp
         src/Renderer/RendererPlatform.cpp
-        src/Resources/Loaders/TextureLoader.cpp
-        src/Resources/Loaders/ShaderLoader.cpp
-        src/Resources/Loaders/ModelLoader.cpp
         src/Renderer/Framebuffer.cpp
         src/Scene/TransformComponent.cpp
         src/Scene/Archetype.cpp
