@@ -78,6 +78,7 @@ Mesh RendererPlatform::CreateMesh(const float *vertices, unsigned int verticesSi
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
+  VerticesReading();
 
   return Mesh(vao, vbo, ebo, verticesSize, indicesSize);
 }
@@ -88,7 +89,6 @@ void RendererPlatform::DrawMesh(unsigned int vao, unsigned int vbo, unsigned int
 
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-
 
   glDrawElements(GL_TRIANGLES, nbIndices, GL_UNSIGNED_INT, (const void*)0);
 

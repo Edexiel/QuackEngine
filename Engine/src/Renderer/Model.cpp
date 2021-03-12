@@ -81,27 +81,7 @@ Model Model::LoadModel(const char *path)
     }
 
     // Put loaded data in buffers
-    //model.meshList.push_back(Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size()));
-
-    unsigned int vao, vbo, ebo, nbVertices, nbIndices;
-
-    // Put loaded data in buffers
-
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-
-    glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
-
-    nbVertices = vertices.size();
-    nbIndices = indices.size();
-
-    model.meshList[i] = Mesh(vao, vbo, ebo, nbVertices, nbIndices);
+    model.meshList[i] = Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
 
   }
 
