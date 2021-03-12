@@ -35,6 +35,11 @@ namespace Maths
                                const float& near,
                                const float& far);
 
+    static Matrix4 ViewportMatrix(const int& x,
+                                  const int& y,
+                                  const int &width,
+                                  const int &height);
+
     Matrix4 GetTranspose() const;
 
     Matrix4 operator*(const Matrix4& m);
@@ -193,7 +198,7 @@ inline Matrix4 Matrix4::OrthoMatrix(const int& width, const int& height, const f
 {
     Matrix4 ortho;
 
-    ortho.e[0]  = (float)height / width ;
+    ortho.e[0]  = (float)height / width;
     ortho.e[5]  = 1;
     ortho.e[10] = -2 / (far - near);
 
@@ -203,6 +208,23 @@ inline Matrix4 Matrix4::OrthoMatrix(const int& width, const int& height, const f
     ortho.e[15] = 1;
 
     return ortho;
+}
+
+inline Matrix4 Matrix4::ViewportMatrix(const int& x, const int& y, const int &width, const int &height)
+{
+    Matrix4 view;
+
+    view.e[0] = (float)width/2;
+    view.e[5] = (float)height/2;
+
+    view.e[12] = x + (float)width/2;
+    view.e[13] = y + (float)height/2;
+
+    view.e[10] = 1;
+
+    view.e[15] = 1;
+
+    return view;
 }
 
 inline Matrix4 Matrix4::GetTranspose() const

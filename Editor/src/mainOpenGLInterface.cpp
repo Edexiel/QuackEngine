@@ -1,10 +1,13 @@
 #include "GLFW/glfw3.h"
+#include "glad/gl.h"
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/Framebuffer.hpp"
 #include "Renderer/Texture.hpp"
 #include "Renderer/Vertex.hpp"
+#include "Renderer/Mesh.hpp"
+#include "Resources/ResourcesManager.hpp"
 
 using namespace Renderer;
 const char* vertexShader =
@@ -40,7 +43,7 @@ const char* fragmentShader =
 
                      void main()
                      {
-                      FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+                      FragColor = vec4(1,0,0,1);// texture(ourTexture, TexCoord);
                      }
                      )GLSL"
     };
@@ -118,19 +121,20 @@ int main()
         {{-1.0f, -1.0f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
     };
 
+    const Renderer::Vertex quad2[] = {
+        // positions          // texture coords
+        {{0.5f, 0.8f, 0.0f}, {0, 0, 1}, {1.0f, 1.0f}},   // top right
+        {{0.9f, -0.4f, 0.0f}, {0, 0, 1}, {1.0f, 0.0f}},  // bottom right
+        {{-0.75f, -0.6f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
+        {{-0.5f, 0.58f, 0.0f}, {0, 0, 1}, {0.0f, 1.0f}}   // top left
+    };
+
     unsigned int quadIndices[] = {
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
     };
-    unsigned int triangleIndices[] = {0,2,3};
-
-    // Mesh
-    Renderer::Mesh quadMesh = Renderer::RendererPlatform::CreateMesh(
-        quad, sizeof(quad), quadIndices, sizeof(quadIndices));
-    Renderer::Mesh triangleMesh = Renderer::RendererPlatform::CreateMesh(
-        triangle, sizeof(triangle), triangleIndices, sizeof(triangleIndices));
     // shader
-    Shader shader(Renderer::RendererPlatform::CreateProgramShader(
+    Shader shader(Renderer::RendererPlatform::CreateShader(
         vertexShader, fragmentShader));
     RendererPlatform::UseShader(shader.ID);
     shader.SetMatrix4
@@ -140,26 +144,53 @@ int main()
         );
     shader.SetMatrix4("view", Maths::Matrix4::Identity());
     // Shader fb
-    Shader shaderFb(Renderer::RendererPlatform::CreateProgramShader(
+    Shader shaderFb(Renderer::RendererPlatform::CreateShader(
         vertexShaderFb, fragmentShaderFb));
     // Framebuffer
     Renderer::Framebuffer framebuffer =
         Renderer::RendererPlatform::CreateFramebuffer(width, height);
 
+    std::cout << framebuffer.GetTexture() << std::endl;
+
+    Resources::ResourcesManager rm;
+
+    Renderer::Mesh quadMesh = Renderer::RendererPlatform::CreateMesh(
+        quad, sizeof(quad) / sizeof (float ), quadIndices, sizeof(quadIndices) / sizeof(unsigned int));
+
+
 //    Texture
-    Texture texture (Texture::LoadTexture("../../../DirtCube.jpg"));
+    Model model =  Model::LoadModel("../../../fbx/Dragon_Baked_Actions_fbx_7.4_binary.fbx");
+    Texture texture = rm.LoadTexture("../../../DirtCube.jpg");
+
+
+    float count = 0;
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
     while (!glfwWindowShouldClose(window))
     {
+      count += 0.001f;
+
       // framebuffer
       {
         framebuffer.Bind();
         RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
         RendererPlatform::Clear();
+        shaderFb.Use();
+        texture.Bind();
+
+        RendererPlatform::VerticesReading();
+        //quadMesh.Draw();
+
         shader.Use();
-        shader.SetMatrix4("model", Maths::Matrix4::Translate({-1, 0, 1}));
-        quadMesh.Draw();
-        shader.SetMatrix4("model", Maths::Matrix4::Translate({1, 0, 1}));
-        triangleMesh.Draw();
+        shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * M_PI/180));
+        shader.SetMatrix4("view", Maths::Matrix4::Identity());
+        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,-10,150}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-90 * M_PI / 180));
+
+        texture.Bind();
+        model.Draw();
+
         RendererPlatform::BindFramebuffer(0);
       }
 
