@@ -87,6 +87,10 @@ add_subdirectory(${external_lib}/assimp)
 #reactphysics3d
 add_subdirectory(${external_lib}/reactphysics3d)
 
+#gtest
+#todo: create variable test
+add_subdirectory(${external_lib}/googletest)
+add_subdirectory(Test)
 
 #Editor
 add_subdirectory(Editor)
