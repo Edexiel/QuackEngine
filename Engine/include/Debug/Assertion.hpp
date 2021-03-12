@@ -6,88 +6,68 @@
 #include <chrono>
 #include <iomanip>
 
+#ifdef WIN32
+# include <io.h>
+#define __FILENAME__ (strrchr(__FILE__,'\\')+1)
+#endif
+#ifdef LINUX
+#define __FILENAME__ (strrchr(__FILE__,'/')+1)
+#endif
+
+//#ifdef DEVELOPPEMENT
+  #define Assert_Release(check, message) (Debug::Assert(check, message, __FILENAME__, __func__, __LINE__, Debug::AssertLevel::A_RELEASE))
+  #define Assert_Fatal_Error(check, message) (Debug::Assert(check, message, __FILENAME__, __func__, __LINE__, Debug::AssertLevel::A_FATAL_ERROR))
+  #define Assert_Error(check, message) (Debug::Assert(check, message, __FILENAME__, __func__, __LINE__, Debug::AssertLevel::A_ERROR))
+  #define Assert_Warning(check, message) (Debug::Assert(check, message, __FILENAME__, __func__, __LINE__, Debug::AssertLevel::A_WARNING))
+//#endif
+#ifdef RELEASE
+  #define Assert_Release(check, message) (check)
+  #define Assert_Fatal_Error(check, message) (check)
+  #define Assert_Error(check, message) (check)
+  #define Assert_Warning(check, message) (check)
+#endif
+
 namespace Debug
 {
 
-    enum AssertionLevel {A_FATAL_ERROR, // The program will stop immediately if the error is true
-                        A_ERROR,        // The program will stop when the function DisplayAssertion is called if the error is true
-                        A_WARNING       // Don't stop the program
-                        };              // The exit code is in Ascii
+enum class AssertLevel {    A_RELEASE,
+                            A_FATAL_ERROR, // The program will stop immediately if the error is true
+                            A_ERROR,        // The program will stop when the function DisplayAssertion is called if the error is true
+                            A_WARNING       // Don't stop the program
+};
 
-    class Assertion
-    {
-    public:
+static AssertLevel assertLevel = AssertLevel::A_WARNING;
 
-        static bool shouldExit;
-        static AssertionLevel AssertionLevel;
-        static std::vector<Assertion> AssertionList;
+bool Assert(bool check, const char* message, const char* file, const char* function, unsigned int line, AssertLevel assertLvl = AssertLevel::A_WARNING)
+{
 
-        Assertion(bool check, int line, std::string file, const std::string& message, enum AssertionLevel assertionLvl = AssertionLevel::A_WARNING)
-        {
-            if (!check)
-                return;
+  if (!check)
+    return false;
 
-            time_t time = std::time(nullptr);
-            tm localTime = *std::localtime(&time);
-            std::ostringstream oss;
-            oss << std::put_time(&localTime, "%H:%M:%S");
+  if (assertLvl > assertLevel)
+    return false;
 
-            AssertionMessage = oss.str();
-            AssertionMessage += " in file \"" + file + "\" l:" + std::to_string(line) + " " + AssertionLevelToString(assertionLvl) + " : " + message + "\n";
+  std::string assertMessage;
 
-            if (assertionLvl == A_FATAL_ERROR)
-            {
-                std::cout << AssertionMessage << std::endl;
-                exit(70658465);
-            }
-            else if (assertionLvl == A_ERROR)
-            {
-                shouldExit = true;
-            }
-            
-            AssertionList.push_back(*this);
-        }
+  /* Get the Current Time */
+  time_t time = std::time(nullptr);
+  tm localTime = *std::localtime(&time);
+  std::ostringstream oss;
+  oss << std::put_time(&localTime, "%H:%M:%S");
 
-        static void DisplayAssertion()
-        {
-            for (unsigned int i = 0; i < AssertionList.size(); i++)
-            {
-                std::cout << AssertionList[i].AssertionMessage;
-            }
-            AssertionList.clear();
-            if (shouldExit)
-                exit(69827982);
-        }
+  /* Get file info */
+  std::string location = std::string(" ") + file + " : " + function + "() l[" + std::to_string(line) + "] : ";
 
-    private:
-        std::string AssertionMessage;
 
-        Assertion()
-        {
-            AssertionList.push_back(*this);
-        }
-
-        void DisplayMessage()
-        {
-            AssertionMessage += "\n";
-            fprintf(stderr, "%s", AssertionMessage.c_str());
-            fflush(stderr);
-        }
-
-        std::string AssertionLevelToString(enum AssertionLevel AssertionLV)
-        {
-            switch (AssertionLV)
-            {
-                case A_FATAL_ERROR:   return  "FATAL_ERROR";
-                case A_ERROR:         return  "ERROR";
-                default:               return  "WARNING";
-            }
-            return "";
-        }
-    };
+  switch (assertLvl)
+  {
+  case AssertLevel::A_RELEASE:      assertMessage = oss.str() + " RELEASE : "     + location + message    + "\n"; fprintf(stderr,"%s", assertMessage.c_str()); fflush(stderr); exit(70658465); return true;
+  case AssertLevel::A_FATAL_ERROR:  assertMessage = oss.str() + " FATAL_ERROR : " + location + message    + "\n"; fprintf(stderr,"%s", assertMessage.c_str()); fflush(stderr); exit(70658465); return true;
+  case AssertLevel::A_ERROR:        assertMessage = oss.str() + " ERROR : "       + location + message    + "\n"; fprintf(stderr,"%s", assertMessage.c_str()); fflush(stderr); exit(70658465); return true;
+  default:                          assertMessage = oss.str() + " WARNING : "     + location + message    + "\n"; fprintf(stderr,"%s", assertMessage.c_str()); fflush(stderr); return true;
+  }
+  return false;
 }
-
-std::vector<Debug::Assertion>   Debug::Assertion::AssertionList   = std::vector<Debug::Assertion>();
-bool                            Debug::Assertion::shouldExit      = false;
+}
 
 #endif // _ASSERTION_H_
