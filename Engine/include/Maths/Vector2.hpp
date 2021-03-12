@@ -29,6 +29,12 @@ struct Vector2
 
   static T DotProduct(const Vector2<T>& v1, const Vector2<T>& v2);
 
+  static Vector2<T> Up();
+  static Vector2<T> Down();
+  static Vector2<T> Right();
+  static Vector2<T> Left();
+  static Vector2<T> Zero();
+
   Vector2<T> operator+(const Vector2<T>& v2) const;
   Vector2<T> operator-(const Vector2<T>& v2) const;
   Vector2<T> operator*(const T& f)    const;
@@ -86,6 +92,36 @@ template<typename T>
 inline T Vector2<T>::DotProduct(const Vector2<T>& v1, const Vector2<T>& v2)
 {
   return v1.x * v2.x + v1.y * v2.y;
+}
+
+template<typename T>
+Vector2<T> Vector2<T>::Up()
+{
+  return{0,1};
+}
+
+template<typename T>
+Vector2<T> Vector2<T>::Down()
+{
+  return{0,-1};
+}
+
+template<typename T>
+Vector2<T> Vector2<T>::Right()
+{
+  return{1,0};
+}
+
+template<typename T>
+Vector2<T> Vector2<T>::Left()
+{
+  return{-1, 0};
+}
+
+template<typename T>
+Vector2<T> Vector2<T>::Zero()
+{
+  return{0, 0};
 }
 
 template<typename T>

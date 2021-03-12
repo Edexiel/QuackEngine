@@ -33,6 +33,9 @@ template<typename T>
 
     static T DotProduct(const Vector4<T>& v1, const Vector4<T>& v2);
 
+    static Vector4<T> Zero();
+    static Vector4<T> One();
+
     Vector4<T> operator+(const Vector4<T>& v2) const;
     Vector4<T> operator-(const Vector4<T>& v2) const;
     Vector4<T> operator*(const T& f) const;
@@ -92,6 +95,18 @@ template<typename T>
 inline T Vector4<T>::DotProduct(const Vector4<T>& v1, const Vector4<T>& v2)
 {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
+}
+
+template<typename T>
+Vector4<T> Vector4<T>::Zero()
+{
+  return {0, 0, 0, 0};
+}
+
+template<typename T>
+Vector4<T> Vector4<T>::One()
+{
+  return {1, 1, 1, 1};
 }
 
 template<typename T>

@@ -37,11 +37,18 @@ template<typename T>
     static T DotProduct(const Vector3<T>& v1, const Vector3<T>& v2);
     static Vector3<T> CrossProduct(const Vector3<T>& v1, const Vector3<T>& v2);
 
+    static Vector3<T> Up();
+    static Vector3<T> Down();
+    static Vector3<T> Right();
+    static Vector3<T> Left();
+    static Vector3<T> Forward();
+    static Vector3<T> Backward();
+
+    static Vector3<T> Zero();
+
     Vector3<T> operator+(const Vector3<T>& v2) const;
     Vector3<T> operator-(const Vector3<T>& v2) const;
     Vector3<T> operator*(const T& f) const;
-
-    friend std::ostream& operator<<(std::ostream &os, Vector3<T> v);
   };
 
   typedef Vector3<float> Vector3f;
@@ -105,6 +112,48 @@ template<typename T>
 inline Vector3<T> Vector3<T>::CrossProduct(const Vector3<T>& v1, const Vector3<T>& v2)
 {
     return {(v1.y * v2.z) - (v1.z * v2.y), (v1.z * v2.x) - (v1.x * v2.z), (v1.x * v2.y) - (v1.y * v2.x)};
+}
+
+template<typename T>
+Vector3<T> Vector3<T>::Up()
+{
+  return{0,1,0};
+}
+
+template<typename T>
+Vector3<T> Vector3<T>::Down()
+{
+  return{0,-1,0};
+}
+
+template<typename T>
+Vector3<T> Vector3<T>::Right()
+{
+  return{1,0,0};
+}
+
+template<typename T>
+Vector3<T> Vector3<T>::Left()
+{
+  return{-1, 0, 0};
+}
+
+template<typename T>
+Vector3<T> Vector3<T>::Forward()
+{
+  return{0, 0, 1};
+}
+
+template<typename T>
+Vector3<T> Vector3<T>::Backward()
+{
+  return{0, 0, -1};
+}
+
+template<typename T>
+Vector3<T> Vector3<T>::Zero()
+{
+  return{0, 0, 0};
 }
 
 template<typename T>
