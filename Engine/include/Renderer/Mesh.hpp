@@ -13,15 +13,14 @@ namespace Renderer
       unsigned int _vbo;
       unsigned int _ebo;
       unsigned int _nbVertices;
+      unsigned int _nbIndices;
     public:
       Mesh() = default;
-      Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbVertices): _vao{vao},_vbo{vbo},_ebo{ebo},_nbVertices{nbVertices}{}
+      Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbVertices, unsigned int nbIndices)
+            : _vao{vao},_vbo{vbo}, _ebo{ebo}, _nbVertices{nbVertices}, _nbIndices{nbIndices} {}
       ~Mesh();
 
       void Draw();
-      Gluint buffer;
-      unsigned int size;
-
     };
 }
 
