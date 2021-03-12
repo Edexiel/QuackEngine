@@ -7,9 +7,9 @@ namespace Renderer
 {
 struct Vertex
 {
-  Maths::Vector3 position;
-  Maths::Vector3 normal;
-  Maths::Vector2 uv;
+  Maths::Vector3f position;
+  Maths::Vector3f normal;
+  Maths::Vector2f uv;
 };
 }
 

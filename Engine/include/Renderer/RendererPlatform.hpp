@@ -17,7 +17,7 @@ class RendererPlatform
 public:
 
   static int LoadGL();
-  static void ClearColor(const Maths::Vector4& color);
+  static void ClearColor(const Maths::Vector4f& color);
   static void Clear();
 
   static Mesh CreateMesh(const Vertex* vertices, unsigned int verticesSize, const unsigned int* indices, unsigned int indicesSize);
