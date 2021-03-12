@@ -7,38 +7,38 @@
 
 class TransformComponent : public Component {
 private:
-  Maths::Vector3 _position;
-  Maths::Vector3 _scale;
+  Maths::Vector3f _position;
+  Maths::Vector3f _scale;
   Maths::Quaternion _rotation;
 
 public:
   TransformComponent();
 
-  TransformComponent(const Maths::Vector3 &position,
-                     const Maths::Vector3 &scale,
+  TransformComponent(const Maths::Vector3f &position,
+                     const Maths::Vector3f &scale,
                      const Maths::Quaternion &rotation);
 
-  const Maths::Vector3 &getPosition() const;
+  const Maths::Vector3f &getPosition() const;
   const Maths::Quaternion &getRotation() const;
-  const Maths::Vector3 &getScale() const;
+  const Maths::Vector3f &getScale() const;
 
-  void setPosition(const Maths::Vector3 &position);
+  void setPosition(const Maths::Vector3f &position);
   void setRotation(const Maths::Quaternion &rotation);
-  void setScale(const Maths::Vector3 &scale);
+  void setScale(const Maths::Vector3f &scale);
 };
 
 TransformComponent::TransformComponent() {}
 
-TransformComponent::TransformComponent(const Maths::Vector3 &position,
-                                       const Maths::Vector3 &scale,
+TransformComponent::TransformComponent(const Maths::Vector3f &position,
+                                       const Maths::Vector3f &scale,
                                        const Maths::Quaternion &rotation)
     : _position(position), _scale(scale), _rotation(rotation) {}
 
-inline const Maths::Vector3 &TransformComponent::getPosition() const {
+inline const Maths::Vector3f &TransformComponent::getPosition() const {
   return _position;
 }
 
-inline const Maths::Vector3 &TransformComponent::getScale() const {
+inline const Maths::Vector3f &TransformComponent::getScale() const {
   return _scale;
 }
 
@@ -46,11 +46,11 @@ inline const Maths::Quaternion &TransformComponent::getRotation() const {
   return _rotation;
 }
 
-inline void TransformComponent::setPosition(const Maths::Vector3 &position) {
+inline void TransformComponent::setPosition(const Maths::Vector3f &position) {
   TransformComponent::_position = position;
 }
 
-inline void TransformComponent::setScale(const Maths::Vector3 &scale) {
+inline void TransformComponent::setScale(const Maths::Vector3f &scale) {
   TransformComponent::_scale = scale;
 }
 
