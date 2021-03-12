@@ -12,8 +12,8 @@ namespace Maths
   {
     union
     {
-      Vector4f v[4];
       float e[16]{ 0 };
+      Vector4f v[4];
     };
 
     static Matrix4 Identity();
@@ -44,7 +44,8 @@ namespace Maths
 
     Matrix4 operator*(const Matrix4& m);
     Matrix4& operator*=(const Matrix4& m);
-    Matrix4 operator*(const float& f);
+    Matrix4 operator*(float f);
+    Vector4f operator*(const Vector4f& v);
     Matrix4 operator+(const Matrix4& m2);
   };
 
@@ -254,7 +255,7 @@ inline Matrix4& Matrix4::operator*=(const Matrix4& m)
   return result;
 }
 
-inline Matrix4 Matrix4::operator*(const float& f)
+inline Matrix4 Matrix4::operator*(float f)
 {
   Matrix4 result;
 
@@ -264,6 +265,17 @@ inline Matrix4 Matrix4::operator*(const float& f)
   return result;
 }
 
+Vector4f Matrix4::operator*(const Vector4f& v)
+{
+  Vector4f result;
+
+  result.x = v.x * e[0] + v.y * e[1] + v.z * e[2] + v.w * e[3];
+  result.y = v.x * e[4] + v.y * e[5] + v.z * e[6] + v.w * e[7];
+  result.z = v.x * e[8] + v.y * e[9] + v.z * e[10] + v.w * e[11];
+  result.w = v.x * e[12] + v.y * e[13] + v.z * e[14] + v.w * e[15];
+
+  return result;
+}
 inline Matrix4 Matrix4::operator+(const Matrix4& m2)
 {
   Matrix4 result;

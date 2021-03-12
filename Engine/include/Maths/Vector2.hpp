@@ -19,7 +19,7 @@ struct Vector2
 
     T e[2]{0};
   };
-
+  Vector2<T>(T _x, T _y);
   T Length() const;
   T SqrLength() const;
 
@@ -43,6 +43,9 @@ struct Vector2
 typedef Vector2<double> Vector2d;
 typedef Vector2<float> Vector2f;
 typedef Vector2<int> Vector2i;
+
+template<typename T>
+Vector2<T>::Vector2(T _x, T _y): x{_x},y{_y}{}
 
 template<typename T>
 inline T Vector2<T>::Length() const

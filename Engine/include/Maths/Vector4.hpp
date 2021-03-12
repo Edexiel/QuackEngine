@@ -24,6 +24,10 @@ template<typename T>
       Vector3<T> xyz;
     };
 
+    Vector4() = default;
+    Vector4(T _x, T _y, T _z, T _w);
+    Vector4(Vector3<T> v, T _w);
+
     T Length() const;
     T SqrLength() const;
 
@@ -46,6 +50,11 @@ template<typename T>
   typedef Vector4<double> Vector4d;
   typedef Vector4<int> Vector4i;
 
+template<typename T>
+inline Vector4<T>::Vector4(T _x, T _y, T _z, T _w):x{_x}, y{_y}, z{_z}, w{_w}{}
+
+template<typename T>
+inline Vector4<T>::Vector4(Vector3<T> v, T _w):x{v.x}, y{v.y}, z{v.z}, w{_w}{}
 template<typename T>
 inline T Vector4<T>::Length() const
 {

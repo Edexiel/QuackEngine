@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cmath>
+#include "Maths/Vector2.hpp"
 
 namespace Maths
 {
@@ -26,6 +27,10 @@ template<typename T>
       };
       T e[3];
     };
+
+    Vector3<T>() = default;
+    Vector3<T>(T _x, T _y, T _z);
+    Vector3<T>(Vector2<T> v, T _z);
 
     T Length() const;
     T SqrLength() const;
@@ -56,7 +61,13 @@ template<typename T>
   typedef Vector3<int> Vector3i;
   typedef Vector3<unsigned char> Color3;
 
-  template<typename T>
+template<typename T>
+Vector3<T>::Vector3(T _x, T _y, T _z):x{_x},y{_y},z{_z}{}
+
+template<typename T>
+Vector3<T>::Vector3(Vector2<T> v, T _z):x{v.x},y{v.y},z{_z}{}
+
+template<typename T>
 inline T Vector3<T>::Length() const
 {
     return sqrtf(x * x + y * y + z * z);
