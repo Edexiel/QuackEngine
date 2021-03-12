@@ -11,6 +11,7 @@ class Framebuffer;
 class Shader;
 class Mesh;
 class Texture;
+class Light;
 
 class RendererPlatform
 {
@@ -42,6 +43,9 @@ public:
   static void SetTextureImage2D(unsigned char *image, unsigned int nrChannels, unsigned int width, unsigned int height);
   static void TextureParameter();
 
+  // Light
+
+  static void SetLight(const unsigned int shaderID, const unsigned int index, const Light& light);
 
   void DrawVertices(unsigned int vertices, unsigned int nbVertices);
 };

@@ -7,6 +7,7 @@
 #include "Renderer/Texture.hpp"
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Mesh.hpp"
+#include "Renderer/Light.hpp"
 #include "Resources/ResourcesManager.hpp"
 
 using namespace Renderer;
@@ -55,6 +56,8 @@ const char* vertexShaderFb =
                       layout (location = 0) in vec3 aPos;
                       layout (location = 1) in vec3 aNormal;
                       layout (location = 2) in vec2 aTexCoord;
+
+                      uniform mat4 projection;
 
                       out vec2 TexCoord;
 
@@ -109,10 +112,10 @@ int main()
 
     const Renderer::Vertex quad[] = {
         // positions          // texture coords
-        {{0.5f, 0.5f, 0.0f}, {0, 0, 1}, {1.0f, 1.0f}},   // top right
-        {{0.5f, -0.5f, 0.0f}, {0, 0, 1}, {1.0f, 0.0f}},  // bottom right
-        {{-0.5f, -0.5f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
-        {{-0.5f, 0.5f, 0.0f}, {0, 0, 1}, {0.0f, 1.0f}}   // top left
+        {{1.0f, 1.0f, 0.0f}, {0, 0, 1}, {1.0f, 1.0f}},   // top right
+        {{1.0f, -1.0f, 0.0f}, {0, 0, 1}, {1.0f, 0.0f}},  // bottom right
+        {{-1.0f, -1.0f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
+        {{-1.0f, 1.0f, 0.0f}, {0, 0, 1}, {0.0f, 1.0f}}   // top left
     };
     const Renderer::Vertex triangle[] = {
         // positions          // texture coords
@@ -162,9 +165,20 @@ int main()
         quad, sizeof(quad) / sizeof (float ), quadIndices, sizeof(quadIndices) / sizeof(unsigned int));
 
 
+
 //    Texture
     Model model =  Model::LoadModel("../../../Dragon_Baked_Actions_fbx_7.4_binary.fbx");
-    Texture texture = rm.LoadTexture("../../../DirtCube.jpg");
+    Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
+
+    Renderer::Light light;
+
+    light.model = Maths::Matrix4::Translate({0,10, 150});
+    light.ambient = {0.3f, 0.3f, 0.3f};
+    light.diffuse = {0.7f, 0.7f, 0.7f};
+    light.specular = {1.0f, 1.0f, 1.0f};
+    light.constant = 1.0f;
+    light.linear = 0.014f;
+    light.quadratic = 0.007f;
 
 
     float count = 0;
@@ -174,7 +188,7 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
-      count += 0.001f;
+      count += 0.01f;
 
       // framebuffer
       {
@@ -192,6 +206,8 @@ int main()
         shader.SetMatrix4("view", Maths::Matrix4::Identity());
         shader.SetMatrix4("model", Maths::Matrix4::Translate({0,-10,150}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-90 * M_PI / 180));
 
+        RendererPlatform::SetLight(shader.ID, 0, light);
+
         texture.Bind();
         model.Draw();
 
@@ -201,6 +217,7 @@ int main()
       RendererPlatform::ClearColor({0.2f, 0.2f, 0.2f, 1.f});
       RendererPlatform::Clear();
       shaderFb.Use();
+      shaderFb.SetMatrix4("projection", Maths::Matrix4::OrthoMatrix(width, height, -1, 1));
       framebuffer.BindTexture();
       quadMesh.Draw();
       glfwSwapBuffers(window);
