@@ -12,19 +12,19 @@ namespace Maths
   {
     union
     {
-      Vector4 v[4];
+      Vector4f v[4];
       float e[16]{ 0 };
     };
 
     static Matrix4 Identity();
     static Matrix4 Scale(const float& s);
-    static Matrix4 Scale(const Vector3& v);
-    static Matrix4 Translate(const Vector3& v);
+    static Matrix4 Scale(const Vector3f& v);
+    static Matrix4 Translate(const Vector3f& v);
     static Matrix4 RotateX(const float& angle);
     static Matrix4 RotateY(const float& angle);
     static Matrix4 RotateZ(const float& angle);
-    static Matrix4 Rotation(const Vector3& rotation);
-    static Matrix4 AxisRotation(const float angle, const Vector3& axis);
+    static Matrix4 Rotation(const Vector3f& rotation);
+    static Matrix4 AxisRotation(const float angle, const Vector3f& axis);
     static Matrix4 Perspective(const int& width,
                                const int& height,
                                const float& near,
@@ -34,6 +34,11 @@ namespace Maths
                                const int& height,
                                const float& near,
                                const float& far);
+
+    static Matrix4 ViewportMatrix(const int& x,
+                                  const int& y,
+                                  const int &width,
+                                  const int &height);
 
     Matrix4 GetTranspose() const;
 
@@ -67,7 +72,7 @@ inline Matrix4 Matrix4::Scale(const float& s)
     return mat;
 }
 
-inline Matrix4 Matrix4::Scale(const Maths::Vector3& v)
+inline Matrix4 Matrix4::Scale(const Maths::Vector3f& v)
 {
     Matrix4 mat;
     mat.e[0] = v.x;
@@ -78,7 +83,7 @@ inline Matrix4 Matrix4::Scale(const Maths::Vector3& v)
     return mat;
 }
 
-inline Matrix4 Matrix4::Translate(const Maths::Vector3& v)
+inline Matrix4 Matrix4::Translate(const Maths::Vector3f& v)
 {
     Matrix4 mat;
     mat.e[12] = v.x;
@@ -130,12 +135,12 @@ inline Matrix4 Matrix4::RotateZ(const float& angle)
     return rotZ;
 }
 
-inline Matrix4 Matrix4::Rotation(const Vector3 &rotation)
+inline Matrix4 Matrix4::Rotation(const Vector3f &rotation)
 {
   return RotateY(rotation.y) * RotateX(rotation.x) * RotateZ(rotation.z);
 }
 
-inline Matrix4 Matrix4::AxisRotation(const float angle, const Vector3 &axis)
+inline Matrix4 Matrix4::AxisRotation(const float angle, const Vector3f &axis)
 {
     Matrix4 first;
 
@@ -193,7 +198,7 @@ inline Matrix4 Matrix4::OrthoMatrix(const int& width, const int& height, const f
 {
     Matrix4 ortho;
 
-    ortho.e[0]  = (float)height / width ;
+    ortho.e[0]  = (float)height / width;
     ortho.e[5]  = 1;
     ortho.e[10] = -2 / (far - near);
 
@@ -203,6 +208,23 @@ inline Matrix4 Matrix4::OrthoMatrix(const int& width, const int& height, const f
     ortho.e[15] = 1;
 
     return ortho;
+}
+
+inline Matrix4 Matrix4::ViewportMatrix(const int& x, const int& y, const int &width, const int &height)
+{
+    Matrix4 view;
+
+    view.e[0] = (float)width/2;
+    view.e[5] = (float)height/2;
+
+    view.e[12] = x + (float)width/2;
+    view.e[13] = y + (float)height/2;
+
+    view.e[10] = 1;
+
+    view.e[15] = 1;
+
+    return view;
 }
 
 inline Matrix4 Matrix4::GetTranspose() const

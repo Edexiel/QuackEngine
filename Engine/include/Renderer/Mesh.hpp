@@ -5,18 +5,22 @@ typedef unsigned int Gluint;
 
 namespace Renderer
 {
+  struct Vertex;
     class Mesh
     {
+    private:
+      unsigned int _vao;
+      unsigned int _vbo;
+      unsigned int _ebo;
+      unsigned int _nbVertices;
+      unsigned int _nbIndices;
     public:
       Mesh() = default;
-      Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbVertices): _vao{vao},_vbo{vbo},_ebo{ebo},_nbVertices{nbVertices}{}
-      Gluint buffer;
-      unsigned int size;
+      Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbVertices, unsigned int nbIndices)
+            : _vao{vao},_vbo{vbo}, _ebo{ebo}, _nbVertices{nbVertices}, _nbIndices{nbIndices} {}
+      ~Mesh();
 
-      unsigned int _vao, _vbo, _ebo, _nbVertices;
-
-      void Delete();
-      void Bonsoir();
+      void Draw();
     };
 }
 
