@@ -51,19 +51,18 @@ namespace Debug
       std::ostringstream oss;
       oss << std::put_time(&localTime, "%H:%M:%S");
 
-      /* Get file info */
-      std::string location = std::string(" ") + file + " : " + function + "() l[" + std::to_string(line) + "] : ";
-
+      char* levelString;
 
       switch (logLvl)
       {
-      case LogLevel::L_RELEASE:   logMessage = oss.str() + " RELEASE : "  + location + message    + "\n"; printf( "%s", logMessage.c_str()); return;
-      case LogLevel::L_ERROR:     logMessage = oss.str() + " ERROR : "    + location + message    + "\n"; printf( "%s", logMessage.c_str()); return;
-      case LogLevel::L_WARNING:   logMessage = oss.str() + " WARNING : "  + location + message    + "\n"; printf( "%s", logMessage.c_str()); return;
-      case LogLevel::L_INFO:      logMessage = oss.str() + " INFO : "     + location + message    + "\n"; printf( "%s", logMessage.c_str()); return;
-      default:                    logMessage = oss.str() + " DEBUG : "    + location + message    + "\n"; printf( "%s", logMessage.c_str()); return;
+      case LogLevel::L_RELEASE:   levelString = "RELEASE"; break;
+      case LogLevel::L_ERROR:     levelString = "ERROR";   break;
+      case LogLevel::L_WARNING:   levelString = "WARNING"; break;
+      case LogLevel::L_INFO:      levelString = "INFO";    break;
+      default:                    levelString = "DEBUG";   break;
 
       }
+      printf("%s %s : %s : %s() l[%s] : %s\n", oss.str().c_str(), levelString, file, function, std::to_string(line).c_str(), message);
     }
 }
 #endif // _LOG_H

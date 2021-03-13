@@ -30,44 +30,47 @@
 namespace Debug
 {
 
-enum class AssertLevel {    A_RELEASE,
+  enum class AssertLevel {  A_RELEASE,
                             A_FATAL_ERROR, // The program will stop immediately if the error is true
                             A_ERROR,        // The program will stop when the function DisplayAssertion is called if the error is true
                             A_WARNING       // Don't stop the program
-};
+                         };
 
-static AssertLevel assertLevel = AssertLevel::A_WARNING;
+  static AssertLevel assertLevel = AssertLevel::A_WARNING;
 
-bool Assert(bool check, const char* message, const char* file, const char* function, unsigned int line, AssertLevel assertLvl = AssertLevel::A_WARNING)
-{
-
-  if (!check)
-    return false;
-
-  if (assertLvl > assertLevel)
-    return false;
-
-  std::string assertMessage;
-
-  /* Get the Current Time */
-  time_t time = std::time(nullptr);
-  tm localTime = *std::localtime(&time);
-  std::ostringstream oss;
-  oss << std::put_time(&localTime, "%H:%M:%S");
-
-  /* Get file info */
-  std::string location = std::string(" ") + file + " : " + function + "() l[" + std::to_string(line) + "] : ";
-
-
-  switch (assertLvl)
+  bool Assert(bool check, const char* message, const char* file, const char* function, unsigned int line, AssertLevel assertLvl = AssertLevel::A_WARNING)
   {
-  case AssertLevel::A_RELEASE:      assertMessage = oss.str() + " RELEASE : "     + location + message    + "\n"; fprintf(stderr,"%s", assertMessage.c_str()); fflush(stderr); exit(70658465); return true;
-  case AssertLevel::A_FATAL_ERROR:  assertMessage = oss.str() + " FATAL_ERROR : " + location + message    + "\n"; fprintf(stderr,"%s", assertMessage.c_str()); fflush(stderr); exit(70658465); return true;
-  case AssertLevel::A_ERROR:        assertMessage = oss.str() + " ERROR : "       + location + message    + "\n"; fprintf(stderr,"%s", assertMessage.c_str()); fflush(stderr); exit(70658465); return true;
-  default:                          assertMessage = oss.str() + " WARNING : "     + location + message    + "\n"; fprintf(stderr,"%s", assertMessage.c_str()); fflush(stderr); return true;
+
+    if (!check)
+      return false;
+
+    if (assertLvl > assertLevel)
+      return false;
+
+    /* Get the Current Time */
+    time_t time = std::time(nullptr);
+    tm localTime = *std::localtime(&time);
+    std::ostringstream oss;
+    oss << std::put_time(&localTime, "%H:%M:%S");
+
+    char* levelString;
+
+    switch (assertLvl)
+    {
+    case AssertLevel::A_RELEASE:      levelString = "RELEASE";      break;
+    case AssertLevel::A_FATAL_ERROR:  levelString = "FATAL_ERROR";  break;
+    case AssertLevel::A_ERROR:        levelString = "ERROR";        break;
+    default:                          levelString = "WARNING";      break;
+
+    }
+    printf("%s %s : %s : %s() l[%s] : %s\n", oss.str().c_str(), levelString, file, function, std::to_string(line).c_str(), message);
+
+    if (assertLvl > AssertLevel::A_WARNING)
+    {
+      exit(5);
+    }
+    return true;
   }
-  return false;
-}
 }
 
 #endif // _ASSERTION_H_
