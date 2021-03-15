@@ -133,9 +133,15 @@ int main()
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
     };
+
+    Resources::ResourcesManager rm;
+
     // shader
-    Shader shader(Renderer::RendererPlatform::CreateShader(
-        vertexShader, fragmentShader));
+
+    Shader shader = rm.LoadShader("../../../vertex.vs", "../../../fragment.fs");
+
+    //Shader shader(Renderer::RendererPlatform::CreateShader(
+    //    vertexShader, fragmentShader));
     RendererPlatform::UseShader(shader.ID);
     shader.SetMatrix4
         (
@@ -150,9 +156,7 @@ int main()
     Renderer::Framebuffer framebuffer =
         Renderer::RendererPlatform::CreateFramebuffer(width, height);
 
-    std::cout << framebuffer.GetTexture() << std::endl;
 
-    Resources::ResourcesManager rm;
 
     Renderer::Mesh quadMesh = Renderer::RendererPlatform::CreateMesh(
         quad, sizeof(quad) / sizeof (float ), quadIndices, sizeof(quadIndices) / sizeof(unsigned int));
