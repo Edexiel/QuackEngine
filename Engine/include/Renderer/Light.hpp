@@ -25,6 +25,7 @@ namespace Renderer
         float quadratic             {0.0f};
         
         float spotAngle             {0.0f}; // angle of the spot
+        float outerSpotAngle        {0.0f}; // angle of the spot
 
         Maths::Vector3f GetDirection() const;
         Maths::Vector3f GetPosition () const;

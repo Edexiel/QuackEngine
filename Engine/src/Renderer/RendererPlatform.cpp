@@ -241,16 +241,17 @@ void RendererPlatform::SetTextureImage2D(unsigned char *image, unsigned int nrCh
 
 void RendererPlatform::SetLight(const unsigned int shaderID, const unsigned int index, const Light& light)
 {
-    std::string set         = "lights[" + std::to_string(index);
-    std::string position    = "].position";
-    std::string direction   = "].direction";
-    std::string ambient     = "].ambient";
-    std::string diffuse     = "].diffuse";
-    std::string specular    = "].specular";
-    std::string spotAngle   = "].spotAngle";
-    std::string constant    = "].constant";
-    std::string linear      = "].linear";
-    std::string quadratic    = "].quadratic";
+    std::string set             = "lights[" + std::to_string(index);
+    std::string position        = "].position";
+    std::string direction       = "].direction";
+    std::string ambient         = "].ambient";
+    std::string diffuse         = "].diffuse";
+    std::string specular        = "].specular";
+    std::string spotAngle       = "].spotAngle";
+    std::string outerSpotAngle  = "].outerSpotAngle";
+    std::string constant        = "].constant";
+    std::string linear          = "].linear";
+    std::string quadratic       = "].quadratic";
 
     Maths::Vector3f positionVect = light.GetPosition();
     Maths::Vector3f directionVect = light.GetDirection();
@@ -273,6 +274,9 @@ void RendererPlatform::SetLight(const unsigned int shaderID, const unsigned int 
 
     location = glGetUniformLocation(shaderID, (set + spotAngle).c_str());
     glUniform1f(location, light.spotAngle);
+
+    location = glGetUniformLocation(shaderID, (set + outerSpotAngle).c_str());
+    glUniform1f(location, light.outerSpotAngle);
 
     location = glGetUniformLocation(shaderID, (set + constant).c_str());
     glUniform1f(location, light.constant);

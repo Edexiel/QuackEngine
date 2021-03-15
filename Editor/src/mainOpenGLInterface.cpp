@@ -141,7 +141,7 @@ int main()
 
     // shader
 
-    Shader shader = rm.LoadShader("../../../vertex.vs", "../../../fragment.fs");
+    Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
     //Shader shader(Renderer::RendererPlatform::CreateShader(
     //    vertexShader, fragmentShader));
@@ -167,18 +167,21 @@ int main()
 
 
 //    Texture
-    Model model =  Model::LoadModel("../../../Dragon_Baked_Actions_fbx_7.4_binary.fbx");
-    Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
+    Model model =  Model::LoadModel("../../../cottage_fbx.fbx");
+    Texture texture = rm.LoadTexture("../../../DirtCube.jpg");
 
     Renderer::Light light;
 
-    light.model = Maths::Matrix4::Translate({0,10, 150});
-    light.ambient = {0.3f, 0.3f, 0.3f};
+    light.model = Maths::Matrix4::Translate({0,0, 0});
+    light.ambient = {0.0f, 0.1f, 0.0f};
     light.diffuse = {0.7f, 0.7f, 0.7f};
     light.specular = {1.0f, 1.0f, 1.0f};
     light.constant = 1.0f;
-    light.linear = 0.014f;
-    light.quadratic = 0.007f;
+    light.linear = 0.0014f;
+    light.quadratic = 0.000007f;
+
+    light.outerSpotAngle = 10.5;
+    light.spotAngle = 8.5;
 
 
     float count = 0;
@@ -192,10 +195,19 @@ int main()
 
       // framebuffer
       {
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE))
+        {
+          glfwSetWindowShouldClose(window, 1);
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_R))
+        {
+          shader = Shader::LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+        }
+
         framebuffer.Bind();
         RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
         RendererPlatform::Clear();
-        shaderFb.Use();
         texture.Bind();
 
         RendererPlatform::VerticesReading();
@@ -203,8 +215,8 @@ int main()
 
         shader.Use();
         shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * M_PI/180));
-        shader.SetMatrix4("view", Maths::Matrix4::Identity());
-        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,-10,150}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-90 * M_PI / 180));
+        shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
+        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-90 * M_PI / 180) * Maths::Matrix4::Scale({2,2,1}));
 
         RendererPlatform::SetLight(shader.ID, 0, light);
 
