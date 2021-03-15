@@ -19,7 +19,8 @@ struct Vector2
 
     T e[2]{0};
   };
-
+  Vector2<T>() = default;
+  Vector2<T>(T _x, T _y);
   T Length() const;
   T SqrLength() const;
 
@@ -43,6 +44,9 @@ struct Vector2
 typedef Vector2<double> Vector2d;
 typedef Vector2<float> Vector2f;
 typedef Vector2<int> Vector2i;
+
+template<typename T>
+Vector2<T>::Vector2(T _x, T _y): x{_x},y{_y}{}
 
 template<typename T>
 inline T Vector2<T>::Length() const
@@ -95,31 +99,31 @@ inline T Vector2<T>::DotProduct(const Vector2<T>& v1, const Vector2<T>& v2)
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Up()
+inline Vector2<T> Vector2<T>::Up()
 {
   return{0,1};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Down()
+inline Vector2<T> Vector2<T>::Down()
 {
   return{0,-1};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Right()
+inline Vector2<T> Vector2<T>::Right()
 {
   return{1,0};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Left()
+inline Vector2<T> Vector2<T>::Left()
 {
   return{-1, 0};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Zero()
+inline Vector2<T> Vector2<T>::Zero()
 {
   return{0, 0};
 }
