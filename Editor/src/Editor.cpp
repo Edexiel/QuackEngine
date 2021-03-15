@@ -17,7 +17,7 @@
 #include "imgui.h"
 
 //todo : init from config.ini
-int Editor::initWidgets()
+void Editor::initWidgets()
 {
     _widgets.emplace_back(new ExplorerWidget());
     _widgets.emplace_back(new LogWidget());

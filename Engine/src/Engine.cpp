@@ -12,7 +12,6 @@
  * Engine initialisation
  * We take the EngineSettings struct and -try to- initialize a screen context
  * @param settings
- * @return <0 init failed
  */
 Engine::Engine(const EngineSettings& settings)
 {
@@ -21,10 +20,10 @@ Engine::Engine(const EngineSettings& settings)
         throw GLFW_Initialization_error();
 
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.gl.major);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, settings.gl.minor);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, settings.gl.debug);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, settings.gl.profile);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, settings.debug);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWmonitor *monitor;
 
@@ -36,22 +35,22 @@ Engine::Engine(const EngineSettings& settings)
      *
      * If there are multiple monitors, we can select it and execute the screen mode in that screen
      */
-    switch (settings.window.mode)
+    switch (settings.mode)
     {
-        case Window::Mode::WINDOWED:
+        case WindowMode::WINDOWED:
         {
             monitor = nullptr;
             break;
         }
 
-        case Window::Mode::FULLSCREEN:
+        case WindowMode::FULLSCREEN:
         {
             int count;
             GLFWmonitor **monitors = glfwGetMonitors(&count);
 
-            if (settings.window.monitor < count)
+            if (settings.monitor < count)
             {
-                monitor = monitors[settings.window.monitor];
+                monitor = monitors[settings.monitor];
                 break;
             }
 
@@ -59,7 +58,7 @@ Engine::Engine(const EngineSettings& settings)
             break;
         }
 
-        case Window::Mode::WINDOWED_FULLSCREEN:
+        case WindowMode::WINDOWED_FULLSCREEN:
         {
             //todo: stuff
             //flemme, je verrais plus tard
@@ -68,9 +67,9 @@ Engine::Engine(const EngineSettings& settings)
         }
     }
 
-    _window = glfwCreateWindow(settings.window.size[0],
-                               settings.window.size[1],
-                               settings.window.title, monitor, nullptr);
+    _window = glfwCreateWindow(settings.windowSize[0],
+                               settings.windowSize[1],
+                               settings.windowTitle, monitor, nullptr);
     if (!_window)
     {
         glfwTerminate();
@@ -84,28 +83,15 @@ Engine::Engine(const EngineSettings& settings)
 
     if (version == 0)
     {
-        printf("Failed to initialize OpenGL context");
         glfwTerminate();
-        return -1;
+        throw OpenGL_Initialization_error();
     }
 
     printf("GL_VENDOR = %s\n", glGetString(GL_VENDOR));
     printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
     printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
-
-    _init = true;
-
-    return 0;
 }
 
-/**
- * Is the Engine initialized
- * @return
- */
-bool Engine::isInit() const
-{
-    return _init;
-}
 
 /**
  * Return a GLFWwindow
@@ -115,4 +101,3 @@ GLFWwindow *Engine::getWindow() const
 {
     return _window;
 }
-

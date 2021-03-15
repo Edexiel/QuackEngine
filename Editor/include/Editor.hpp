@@ -17,7 +17,7 @@ public:
     Editor() = default;
     ~Editor() = default;
 
-    int initWidgets();
+    void initWidgets();
     void initImGUI();
     void update();
     void draw();
