@@ -213,10 +213,12 @@ int main()
         RendererPlatform::VerticesReading();
         //quadMesh.Draw();
 
+        light.model = Maths::Matrix4::Translate({0, sin(count), 0});
+
         shader.Use();
         shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * M_PI/180));
         shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
-        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-90 * M_PI / 180) * Maths::Matrix4::Scale({2,2,1}));
+        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,5}) * Maths::Matrix4::RotateY(0) * Maths::Matrix4::RotateX(-90 * M_PI / 180) * Maths::Matrix4::Scale({2,2,1}));
 
         RendererPlatform::SetLight(shader.ID, 0, light);
 

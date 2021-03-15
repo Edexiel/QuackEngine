@@ -62,8 +62,6 @@ vec3 GetColorAfterSpotLight(Light light, vec3 position, vec3 normal)
   float attenuation = 1.0f / (light.constant + light.linear * length + 
     		    light.quadratic * (length * length));
 
-  attenuation = 1;
-
   float theta     = degrees(acos(dot(normalize((light.position - position)), normalize(-light.direction))));
   float epsilon   = light.spotAngle - light.outerSpotAngle;
   float intensity = clamp((theta - light.outerSpotAngle) / epsilon, 0.0, 1.0); 
@@ -85,6 +83,39 @@ vec3 GetColorAfterSpotLight(Light light, vec3 position, vec3 normal)
   vec3 specular = light.specular * spec;
 
   vec3 reflected = ambient + (diffuse + specular) * intensity;
+  reflected *= attenuation;
+
+  return reflected;
+
+}
+
+vec3 GetColorAfterPointLight(Light light, vec3 position, vec3 normal)
+{
+  float length = length(light.position - position);
+  float attenuation = 1.0f / (light.constant + light.linear * length + 
+    		    light.quadratic * (length * length));
+
+  float theta     = degrees(acos(dot(normalize((light.position - position)), normalize(-light.direction))));
+  float epsilon   = light.spotAngle - light.outerSpotAngle;
+  float intensity = clamp((theta - light.outerSpotAngle) / epsilon, 0.0, 1.0); 
+  
+    //ambient
+  vec3 ambient = light.ambient;
+
+    //diffuse
+  vec3 lightDir = normalize(light.position - position);
+  float lightNor = max(dot(lightDir, normal), 0.0);
+  vec3 diffuse = light.diffuse * lightNor;
+
+  //specular Blinn - Phong
+
+  vec3 viewDir    = normalize(cameraPosition - position);
+  vec3 halfwayDir = normalize(lightDir + viewDir);
+
+  float spec = pow(max(dot(normal, halfwayDir), 0.0), 128);//shininess);
+  vec3 specular = light.specular * spec;
+
+  vec3 reflected = ambient + (diffuse + specular);
   reflected *= attenuation;
 
   return reflected;
@@ -139,7 +170,7 @@ vec3 GetColorAfterLight(Light light, vec3 position, vec3 normal)
 
 void main()
 {
-    vec3 fragmentColor = GetColorAfterSpotLight(lights[0], vec3(Position), normalize(vec3(Normal)));
+    vec3 fragmentColor = GetColorAfterPointLight(lights[0], vec3(Position), normalize(vec3(Normal)));
 
     //for (int i = 1 ; i < nbLights && i < NB_MAX_LIGHT ; i++)
     //{
