@@ -62,10 +62,10 @@ template<typename T>
   typedef Vector3<unsigned char> Color3;
 
 template<typename T>
-Vector3<T>::Vector3(T _x, T _y, T _z):x{_x},y{_y},z{_z}{}
+inline Vector3<T>::Vector3(T _x, T _y, T _z):x{_x},y{_y},z{_z}{}
 
 template<typename T>
-Vector3<T>::Vector3(Vector2<T> v, T _z):x{v.x},y{v.y},z{_z}{}
+inline Vector3<T>::Vector3(Vector2<T> v, T _z):x{v.x},y{v.y},z{_z}{}
 
 template<typename T>
 inline T Vector3<T>::Length() const
@@ -126,43 +126,43 @@ inline Vector3<T> Vector3<T>::CrossProduct(const Vector3<T>& v1, const Vector3<T
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Up()
+inline Vector3<T> Vector3<T>::Up()
 {
   return{0,1,0};
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Down()
+inline Vector3<T> Vector3<T>::Down()
 {
   return{0,-1,0};
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Right()
+inline Vector3<T> Vector3<T>::Right()
 {
   return{1,0,0};
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Left()
+inline Vector3<T> Vector3<T>::Left()
 {
   return{-1, 0, 0};
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Forward()
+inline Vector3<T> Vector3<T>::Forward()
 {
   return{0, 0, 1};
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Backward()
+inline Vector3<T> Vector3<T>::Backward()
 {
   return{0, 0, -1};
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Zero()
+inline Vector3<T> Vector3<T>::Zero()
 {
   return{0, 0, 0};
 }

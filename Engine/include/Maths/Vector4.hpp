@@ -107,13 +107,13 @@ inline T Vector4<T>::DotProduct(const Vector4<T>& v1, const Vector4<T>& v2)
 }
 
 template<typename T>
-Vector4<T> Vector4<T>::Zero()
+inline Vector4<T> Vector4<T>::Zero()
 {
   return {0, 0, 0, 0};
 }
 
 template<typename T>
-Vector4<T> Vector4<T>::One()
+inline Vector4<T> Vector4<T>::One()
 {
   return {1, 1, 1, 1};
 }

@@ -99,31 +99,31 @@ inline T Vector2<T>::DotProduct(const Vector2<T>& v1, const Vector2<T>& v2)
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Up()
+inline Vector2<T> Vector2<T>::Up()
 {
   return{0,1};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Down()
+inline Vector2<T> Vector2<T>::Down()
 {
   return{0,-1};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Right()
+inline Vector2<T> Vector2<T>::Right()
 {
   return{1,0};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Left()
+inline Vector2<T> Vector2<T>::Left()
 {
   return{-1, 0};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Zero()
+inline Vector2<T> Vector2<T>::Zero()
 {
   return{0, 0};
 }
