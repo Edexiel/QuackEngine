@@ -39,7 +39,7 @@ TEST(Vector2, MultiplicationByFloat)
     EXPECT_EQ(res.e[i], goodRes.e[i]);
 }
 
-TEST(Vector2, CrossProduct)
+TEST(Vector2, DotProduct)
 {
   Vector2f v1{2.0f, 4.0f};
   Vector2f v2{1.0f, 3.0f};
@@ -76,7 +76,7 @@ TEST(Vector2, Normalize)
 {
   Vector2f v1{5.0f, 5.0f};
   Vector2f v2{5.0f, 5.0f};
-  v2 = Vector2f::Normalized(v2);
+  Vector2f::Normalized(v2);
 
   Vector2f res = v1.GetNormalized();
   v1.Normalize();
