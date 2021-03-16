@@ -2,81 +2,67 @@
 #define _LOG_H
 
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <chrono>
 #include <iomanip>
 
+
+#ifdef WIN32
+# include <io.h>
+  #define __FILENAME__ (strrchr(__FILE__,'\\')+1)
+#endif
+#ifdef LINUX
+  #define __FILENAME__ (strrchr(__FILE__,'/')+1)
+#endif
+
+//#ifdef DEVELOPPEMENT
+    #define Log_Release(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LogLevel::L_RELEASE))
+    #define Log_Error(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LogLevel::L_ERROR))
+    #define Log_Warning(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LogLevel::L_WARNING))
+    #define Log_Info(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LogLevel::L_INFO))
+    #define Log_Debug(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LogLevel::L_DEBUG))
+//#endif
+#ifdef RELEASE
+    #define Log_Release(message) (message)
+    #define Log_Error(message) (message)
+    #define Log_Warning(message) (message)
+    #define Log_Info(message) (message)
+    #define Log_Debug(message) (message)
+#endif
+
 namespace Debug
 {
 
-    enum LogLevel {L_RELEASE, L_ERROR, L_WARNING, L_INFO, L_DEBUG};
+    enum class LogLevel {L_RELEASE, L_ERROR, L_WARNING, L_INFO, L_DEBUG};
 
-    class Log
+    static LogLevel logLevel = LogLevel::L_DEBUG;
+    void Log(const char* message, const char* file, const char* function, unsigned int line, LogLevel logLvl = LogLevel::L_DEBUG)
     {
-    public:
 
-        static LogLevel logLevel;
-        static std::vector<Log> logList;
+      if (logLvl > logLevel)
+        return;
 
-        Log(const std::string& message, LogLevel logLvl = L_DEBUG)
-        {
-            if (logLvl > logLevel)
-                return;
+      std::string logMessage;
 
-            /* Get the Current Time */
-            time_t time = std::time(nullptr);
-            tm localTime = *std::localtime(&time);
-            std::ostringstream oss;
-            oss << std::put_time(&localTime, "%H:%M:%S");
+      /* Get the Current Time */
+      time_t time = std::time(nullptr);
+      tm localTime = *std::localtime(&time);
+      std::ostringstream oss;
+      oss << std::put_time(&localTime, "%H:%M:%S");
 
-            logMessage = oss.str();
-            logMessage += " " + LogLevelToString(logLvl) + " : " + message + "\n";
+      char* levelString;
 
-            
-            logList.push_back(*this);
-        }
+      switch (logLvl)
+      {
+      case LogLevel::L_RELEASE:   levelString = "RELEASE"; break;
+      case LogLevel::L_ERROR:     levelString = "ERROR";   break;
+      case LogLevel::L_WARNING:   levelString = "WARNING"; break;
+      case LogLevel::L_INFO:      levelString = "INFO";    break;
+      default:                    levelString = "DEBUG";   break;
 
-        static void DisplayLog()
-        {
-            for (unsigned int i = 0; i < logList.size(); i++)
-            {
-                std::cout << logList[i].logMessage;
-            }
-            logList.clear();
-        }
-
-    private:
-        std::string logMessage;
-
-        Log()
-        {
-            logList.push_back(*this);
-        }
-
-        void DisplayMessage()
-        {
-            logMessage += "\n";
-            fprintf(stderr, "%s", logMessage.c_str());
-            fflush(stderr);
-        }
-
-        std::string LogLevelToString(LogLevel logLV)
-        {
-            switch (logLV)
-            {
-                case L_RELEASE:   return  "RELEASE";
-                case L_ERROR:     return  "ERROR";
-                case L_WARNING:   return  "WARNING";
-                case L_INFO:      return  "INFO";
-                default:        return    "DEBUG";
-                
-            }
-            return "";
-        }
-    };
+      }
+      printf("%s %s : %s : %s() l[%s] : %s\n", oss.str().c_str(), levelString, file, function, std::to_string(line).c_str(), message);
+    }
 }
-
-Debug::LogLevel         Debug::Log::logLevel = Debug::LogLevel::L_DEBUG;
-std::vector<Debug::Log> Debug::Log::logList  = std::vector<Debug::Log>();
-
 #endif // _LOG_H
