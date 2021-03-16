@@ -1,67 +1,5 @@
-#version 330 core
-out vec4 FragColor;
-  
-in vec3 Position;
-in vec2 TexCoord;
-in vec3 Normal;
-
-in vec3 cameraPosition;
-
-
-struct DirectionalLight
-{
-  vec3 direction;
-
-  vec3 ambient;
-  vec3 diffuse;
-  vec3 specular;
-};
-
-struct PointLight
-{
-  vec3 position;
-
-  vec3 ambient;
-  vec3 diffuse;
-  vec3 specular;
-
-  float constant;
-  float linear;
-  float quadratic;
-};
-
-struct SpotLight
-{
-  vec3 position;
-  vec3 direction;
-
-  vec3 ambient;
-  vec3 diffuse;
-  vec3 specular;
-  
-  float constant;
-  float linear;
-  float quadratic;
-  
-  float spotAngle;
-  float outerSpotAngle;
-};
-
-#define NB_MAX_DIRECTIONAL_LIGHT 1
-uniform DirectionalLight directionalLights[NB_MAX_DIRECTIONAL_LIGHT];
-
-#define NB_MAX_POINT_LIGHT 2
-uniform PointLight pointLights[NB_MAX_POINT_LIGHT];
-
-#define NB_MAX_SPOT_LIGHT 2
-uniform SpotLight spotLights[NB_MAX_SPOT_LIGHT];
-
-
-uniform sampler2D ourTexture;
-
 vec3 GetColorAfterDirectionalLight(DirectionalLight light, vec3 position, vec3 normal)
-{
-    
+{    
   //ambient
   vec3 ambient = light.ambient;
 
@@ -142,24 +80,4 @@ vec3 GetColorAfterPointLight(PointLight light, vec3 position, vec3 normal)
   reflected *= attenuation;
 
   return reflected;
-}
-
-void main()
-{
-    vec3 fragmentColor = vec3(0,0,0);
-
-    fragmentColor += GetColorAfterPointLight(pointLights[0], vec3(Position), normalize(vec3(Normal)));
-    //fragmentColor += GetColorAfterPointLight(pointLights[1], vec3(Position), normalize(vec3(Normal)));
-    //fragmentColor += GetColorAfterPointLight(pointLights[2], vec3(Position), normalize(vec3(Normal)));
-    //fragmentColor += GetColorAfterPointLight(pointLights[3], vec3(Position), normalize(vec3(Normal)));
-
-
-    //fragmentColor += GetColorAfterDirectionalLight(directionalLights[0], vec3(Position), normalize(vec3(Normal)));
-
-    //for (int i = 1 ; i < nbLights && i < NB_MAX_LIGHT ; i++)
-    //{
-    //  fragmentColor += GetColorAfterDirectionnalLight(lights[i], vec3(Position), normalize(vec3(Normal)));
-    //}
-
-    FragColor = texture(ourTexture, TexCoord) * vec4(fragmentColor, 1.f);
 }

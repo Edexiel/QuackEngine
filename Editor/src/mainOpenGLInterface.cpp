@@ -57,13 +57,13 @@ const char* vertexShaderFb =
                       layout (location = 1) in vec3 aNormal;
                       layout (location = 2) in vec2 aTexCoord;
 
-                      uniform mat4 projection;
+                      uniform mat4 view;
 
                       out vec2 TexCoord;
 
                       void main()
                       {
-                      gl_Position = vec4(aPos, 1.0);
+                      gl_Position = view * vec4(aPos, 1.0);
                       TexCoord = aTexCoord;
                      }
                      )GLSL"
@@ -141,7 +141,11 @@ int main()
 
     // shader
 
+    ShaderConstructData shd = {1,0,0};
+
     Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+
+    shader = Shader::LoadShader(shd);
 
     //Shader shader(Renderer::RendererPlatform::CreateShader(
     //    vertexShader, fragmentShader));
@@ -167,8 +171,9 @@ int main()
 
 
 //    Texture
-    Model model =  Model::LoadModel("../../../cottage_fbx.fbx");
-    Texture texture = rm.LoadTexture("../../../DirtCube.jpg");
+    Model model =  Model::LoadModel("../../../eyeball.fbx");
+    Texture texture = rm.LoadTexture("../../../Eye_D.jpg");
+    Texture textureDiffuse = rm.LoadTexture("../../../Eye_D.jpg");
 
     Renderer::Light light;
 
@@ -212,15 +217,15 @@ int main()
 
         RendererPlatform::VerticesReading();
         //quadMesh.Draw();
-
-        light.model = Maths::Matrix4::Translate({0, sin(count), 0});
+        light.model = Maths::Matrix4::Translate({cos(count/10) * 30, sin(count/10) * 30, 0});
 
         shader.Use();
         shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * M_PI/180));
         shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
-        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,5}) * Maths::Matrix4::RotateY(0) * Maths::Matrix4::RotateX(-90 * M_PI / 180) * Maths::Matrix4::Scale({2,2,1}));
+        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(0) * Maths::Matrix4::RotateX(-180 * M_PI / 180) * Maths::Matrix4::Scale({1,1,1}));
 
-        RendererPlatform::SetLight(shader.ID, 0, light);
+        RendererPlatform::SetPointLight(shader.ID, 0, light);
+        RendererPlatform::SetDirectionalLight(shader.ID, 0, light);
 
         texture.Bind();
         model.Draw();
@@ -231,7 +236,7 @@ int main()
       RendererPlatform::ClearColor({0.2f, 0.2f, 0.2f, 1.f});
       RendererPlatform::Clear();
       shaderFb.Use();
-      shaderFb.SetMatrix4("projection", Maths::Matrix4::OrthoMatrix(width, height, -1, 1));
+      shaderFb.SetMatrix4("view", Maths::Matrix4::Identity());
       framebuffer.BindTexture();
       quadMesh.Draw();
       glfwSwapBuffers(window);

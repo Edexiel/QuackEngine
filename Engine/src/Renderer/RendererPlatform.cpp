@@ -23,8 +23,9 @@ int RendererPlatform::LoadGL()
   return version;
 }
 
-void RendererPlatform::BindTexture(unsigned int texture)
+void RendererPlatform::BindTexture(unsigned int texture, unsigned int index)
 {
+  glActiveTexture(GL_TEXTURE0 + index);
   glBindTexture(GL_TEXTURE_2D, (Gluint)texture);
 }
 void RendererPlatform::ClearColor(const Maths::Vector4f &color)
@@ -242,48 +243,87 @@ void RendererPlatform::SetTextureImage2D(unsigned char *image, unsigned int nrCh
 void RendererPlatform::SetLight(const unsigned int shaderID, const unsigned int index, const Light& light)
 {
     std::string set             = "lights[" + std::to_string(index);
-    std::string position        = "].position";
-    std::string direction       = "].direction";
-    std::string ambient         = "].ambient";
-    std::string diffuse         = "].diffuse";
-    std::string specular        = "].specular";
-    std::string spotAngle       = "].spotAngle";
-    std::string outerSpotAngle  = "].outerSpotAngle";
-    std::string constant        = "].constant";
-    std::string linear          = "].linear";
-    std::string quadratic       = "].quadratic";
 
     Maths::Vector3f positionVect = light.GetPosition();
     Maths::Vector3f directionVect = light.GetDirection();
 
 
-    int location = glGetUniformLocation(shaderID, (set + position).c_str());
+    int location = glGetUniformLocation(shaderID, (set + "].position").c_str());
     glUniform3f(location, positionVect.x, positionVect.y, positionVect.z);
 
-    location = glGetUniformLocation(shaderID, (set + direction).c_str());
+    location = glGetUniformLocation(shaderID, (set + "].direction").c_str());
     glUniform3f(location, directionVect.x, directionVect.y, directionVect.z);
 
-    location = glGetUniformLocation(shaderID, (set + ambient).c_str());
+    location = glGetUniformLocation(shaderID, (set + "].ambient").c_str());
     glUniform3f(location, light.ambient.x, light.ambient.y, light.ambient.z);
 
-    location = glGetUniformLocation(shaderID, (set + diffuse).c_str());
+    location = glGetUniformLocation(shaderID, (set + "].diffuse").c_str());
     glUniform3f(location, light.diffuse.x, light.diffuse.y, light.diffuse.z);
 
-    location = glGetUniformLocation(shaderID, (set + specular).c_str());
+    location = glGetUniformLocation(shaderID, (set + "].specular").c_str());
     glUniform3f(location, light.specular.x, light.specular.y, light.specular.z);
 
-    location = glGetUniformLocation(shaderID, (set + spotAngle).c_str());
+    location = glGetUniformLocation(shaderID, (set + "].spotAngle").c_str());
     glUniform1f(location, light.spotAngle);
 
-    location = glGetUniformLocation(shaderID, (set + outerSpotAngle).c_str());
+    location = glGetUniformLocation(shaderID, (set + "].outerSpotAngle").c_str());
     glUniform1f(location, light.outerSpotAngle);
 
-    location = glGetUniformLocation(shaderID, (set + constant).c_str());
+    location = glGetUniformLocation(shaderID, (set + "].constant").c_str());
     glUniform1f(location, light.constant);
 
-    location = glGetUniformLocation(shaderID, (set + linear).c_str());
+    location = glGetUniformLocation(shaderID, (set + "].linear").c_str());
     glUniform1f(location, light.linear);
 
-    location = glGetUniformLocation(shaderID, (set + quadratic).c_str());
+    location = glGetUniformLocation(shaderID, (set + "].quadratic").c_str());
     glUniform1f(location, light.quadratic);
+}
+
+void RendererPlatform::SetDirectionalLight(const unsigned int shaderID, const unsigned int index, const Light &light)
+{
+  std::string set = "directionalLights[" + std::to_string(index);
+
+  Maths::Vector3f directionVect = light.GetDirection();
+
+  int location = glGetUniformLocation(shaderID, (set + "].direction").c_str());
+  glUniform3f(location, directionVect.x, directionVect.y, directionVect.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].ambient").c_str());
+  glUniform3f(location, light.ambient.x, light.ambient.y, light.ambient.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].diffuse").c_str());
+  glUniform3f(location, light.diffuse.x, light.diffuse.y, light.diffuse.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].specular").c_str());
+  glUniform3f(location, light.specular.x, light.specular.y, light.specular.z);
+
+}
+
+void RendererPlatform::SetPointLight(const unsigned int shaderID, const unsigned int index, const Light &light)
+{
+  std::string set             = "pointLights[" + std::to_string(index);
+
+  Maths::Vector3f positionVect = light.GetPosition();
+
+  int location = glGetUniformLocation(shaderID, (set + "].position").c_str());
+  glUniform3f(location, positionVect.x, positionVect.y, positionVect.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].ambient").c_str());
+  glUniform3f(location, light.ambient.x, light.ambient.y, light.ambient.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].diffuse").c_str());
+  glUniform3f(location, light.diffuse.x, light.diffuse.y, light.diffuse.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].specular").c_str());
+  glUniform3f(location, light.specular.x, light.specular.y, light.specular.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].constant").c_str());
+  glUniform1f(location, light.constant);
+
+  location = glGetUniformLocation(shaderID, (set + "].linear").c_str());
+  glUniform1f(location, light.linear);
+
+  location = glGetUniformLocation(shaderID, (set + "].quadratic").c_str());
+  glUniform1f(location, light.quadratic);
+
 }
