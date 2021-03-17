@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cmath>
+#include "Maths/Vector2.hpp"
 
 namespace Maths
 {
@@ -26,6 +27,10 @@ template<typename T>
       };
       T e[3];
     };
+
+    Vector3<T>() = default;
+    Vector3<T>(T _x, T _y, T _z);
+    Vector3<T>(Vector2<T> v, T _z);
 
     T Length() const;
     T SqrLength() const;
@@ -56,7 +61,13 @@ template<typename T>
   typedef Vector3<int> Vector3i;
   typedef Vector3<unsigned char> Color3;
 
-  template<typename T>
+template<typename T>
+inline Vector3<T>::Vector3(T _x, T _y, T _z):x{_x},y{_y},z{_z}{}
+
+template<typename T>
+inline Vector3<T>::Vector3(Vector2<T> v, T _z):x{v.x},y{v.y},z{_z}{}
+
+template<typename T>
 inline T Vector3<T>::Length() const
 {
     return sqrtf(x * x + y * y + z * z);
@@ -93,7 +104,7 @@ inline Vector3<T> Vector3<T>::GetNormalized() const
 }
 
 template<typename T>
-void Vector3<T>::Normalized(Vector3<T>& v)
+inline void Vector3<T>::Normalized(Vector3<T>& v)
 {
   T length = v.Length();
 
@@ -115,43 +126,43 @@ inline Vector3<T> Vector3<T>::CrossProduct(const Vector3<T>& v1, const Vector3<T
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Up()
+inline Vector3<T> Vector3<T>::Up()
 {
   return{0,1,0};
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Down()
+inline Vector3<T> Vector3<T>::Down()
 {
   return{0,-1,0};
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Right()
+inline Vector3<T> Vector3<T>::Right()
 {
   return{1,0,0};
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Left()
+inline Vector3<T> Vector3<T>::Left()
 {
   return{-1, 0, 0};
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Forward()
+inline Vector3<T> Vector3<T>::Forward()
 {
   return{0, 0, 1};
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Backward()
+inline Vector3<T> Vector3<T>::Backward()
 {
   return{0, 0, -1};
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::Zero()
+inline Vector3<T> Vector3<T>::Zero()
 {
   return{0, 0, 0};
 }

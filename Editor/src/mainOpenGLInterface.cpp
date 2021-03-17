@@ -163,7 +163,7 @@ int main()
 
 
 //    Texture
-    Model model =  Model::LoadModel("../../../Dragon_Baked_Actions_fbx_7.4_binary.fbx");
+    Model model =  Model::LoadModel("../../../fbx/Dragon_Baked_Actions_fbx_7.4_binary.fbx");
     Texture texture = rm.LoadTexture("../../../DirtCube.jpg");
 
 
