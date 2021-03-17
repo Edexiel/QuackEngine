@@ -1,5 +1,4 @@
 #include "GLFW/glfw3.h"
-#include "glad/gl.h"
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shader.hpp"
@@ -169,8 +168,8 @@ int main()
 
     float count = 0;
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+    /*glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);*/
 
     while (!glfwWindowShouldClose(window))
     {
@@ -188,9 +187,9 @@ int main()
         //quadMesh.Draw();
 
         shader.Use();
-        shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * M_PI/180));
+        shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.14f/180));
         shader.SetMatrix4("view", Maths::Matrix4::Identity());
-        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,-10,150}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-90 * M_PI / 180));
+        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,-10,150}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-90 * 3.14f / 180));
 
         texture.Bind();
         model.Draw();
