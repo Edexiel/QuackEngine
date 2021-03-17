@@ -6,57 +6,81 @@
 
 namespace Maths
 {
+template<typename T>
   struct Vector4
   {
     union
     {
       struct
       {
-        float x, y, z, w;
+        T x, y, z, w;
       };
 
       struct
       {
-        float r, g, b, a;
+        T r, g, b, a;
       };
-      float e[4];
-      Vector3 xyz;
+      T e[4];
+      Vector3<T> xyz;
     };
 
-    float Length() const;
-    float SqrLength() const;
+    Vector4() = default;
+    Vector4(T _x, T _y, T _z, T _w);
+    Vector4(Vector3<T> v, T _w);
 
-    Vector4 Homogenize();
-    Vector3 Homogenized() const;
+    T Length() const;
+    T SqrLength() const;
 
-    static float DotProduct(const Vector4& v1, const Vector4& v2);
+    Vector4<T>& Homogenize();
+    Vector3<T> GetHomogenized() const;
+    static void Homogenized(Vector4<T>& v);
 
-    Vector4 operator+(const Vector4& v2) const;
-    Vector4 operator-(const Vector4& v2) const;
-    Vector4 operator*(const float& f) const;
+    static T DotProduct(const Vector4<T>& v1, const Vector4<T>& v2);
 
-//    std::ostream& operator<<(std::ostream& os);
+    static Vector4<T> Zero();
+    static Vector4<T> One();
+
+    Vector4<T> operator+(const Vector4<T>& v2) const;
+    Vector4<T> operator-(const Vector4<T>& v2) const;
+    Vector4<T> operator*(const T& f) const;
   };
 
+  typedef Vector4<float> Vector4f;
+  typedef Vector4<float> Color4f;
+  typedef Vector4<double> Vector4d;
 
-inline float Vector4::Length() const
+template<typename T>
+inline Vector4<T>::Vector4(T _x, T _y, T _z, T _w):x{_x}, y{_y}, z{_z}, w{_w}{}
+
+template<typename T>
+inline Vector4<T>::Vector4(Vector3<T> v, T _w):x{v.x}, y{v.y}, z{v.z}, w{_w}{}
+template<typename T>
+inline T Vector4<T>::Length() const
 {
     return sqrtf(x * x + y * y + z * z + w * w);
 }
 
-inline float Vector4::SqrLength() const
+template<typename T>
+inline T Vector4<T>::SqrLength() const
 {
     return x * x + y * y + z * z + w * w;
 }
 
-inline Vector4 Vector4::Homogenize()
+template<typename T>
+inline Vector4<T>& Vector4<T>::Homogenize()
 {
-    if (w == 0 || w == 1)
-        return *this;
+  if (w != 0 && w != 1)
+  {
+    x /= w;
+    y /= w;
+    z /= w;
+  }
 
-    return {x /= w, y /= w, z /= w, w};
+  return *this;
 }
-inline Maths::Vector3 Vector4::Homogenized() const
+
+template<typename T>
+inline Vector3<T> Vector4<T>::GetHomogenized() const
 {
     if (w == 0 || w == 1)
         return xyz;
@@ -64,32 +88,51 @@ inline Maths::Vector3 Vector4::Homogenized() const
     return { x / w, y / w, z / w };
 }
 
+template<typename T>
+void Vector4<T>::Homogenized(Vector4<T>& v)
+{
+  if (v.w != 0 && v.w != 1)
+  {
+    v.x /= v.w;
+    v.y /= v.w;
+    v.z /= v.w;
+  }
+}
 
-
-inline float Vector4::DotProduct(const Vector4& v1, const Vector4& v2)
+template<typename T>
+inline T Vector4<T>::DotProduct(const Vector4<T>& v1, const Vector4<T>& v2)
 {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
 }
 
-inline Vector4 Vector4::operator+(const Vector4& v2) const
+template<typename T>
+inline Vector4<T> Vector4<T>::Zero()
+{
+  return {0, 0, 0, 0};
+}
+
+template<typename T>
+inline Vector4<T> Vector4<T>::One()
+{
+  return {1, 1, 1, 1};
+}
+
+template<typename T>
+inline Vector4<T> Vector4<T>::operator+(const Vector4<T>& v2) const
 {
   return { this->x + v2.x, this->y + v2.y, this->z + v2.z, this->w + v2.w };
 }
 
-inline Vector4 Vector4::operator-(const Vector4& v2) const
+template<typename T>
+inline Vector4<T> Vector4<T>::operator-(const Vector4<T>& v2) const
 {
   return { this->x - v2.x, this->y - v2.y, this->z - v2.z, this->w - v2.w };
 }
 
-inline Vector4 Vector4::operator*(const float& f) const
+template<typename T>
+inline Vector4<T> Vector4<T>::operator*(const T& f) const
 {
   return { this->x * f, this->y * f, this->z * f, this->w * f };
 }
-/*
-std::ostream& operator<<(std::ostream &os, Vector4 v)
-{
-  os << "x = " << v.x << "y = " << v.y << "z = " << v.z << "w = " << v.w << std::endl;
-  return os;
-}*/
 }
 #endif // QUACKENGINE_VECTOR4_HPP

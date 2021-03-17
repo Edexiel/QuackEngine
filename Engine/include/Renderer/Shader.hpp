@@ -5,19 +5,29 @@
 
 namespace Renderer
 {
+    struct ShaderConstructData
+    {
+      unsigned int nbPointLight;
+      unsigned int nbDirectionalLight;
+      unsigned int nbSpotLight;
+    };
+
     class Shader
     {
-    private:
-
       public:
         unsigned int ID;// TO DO: put the variable in private
         Shader() = default;
         Shader(const unsigned int& _ID);
-        Shader(const char* vertexShaderSource, const char* fragmentShaderSource);
         ~Shader();
 
         void Use();
         void SetMatrix4(const char* name, Maths::Matrix4 mat);
+
+        static Shader LoadShader(const char* vertexPath, const char* fragmentPath);
+        static Shader LoadShader(const ShaderConstructData& shaderData);
+
+    private:
+      static std::string LoadStringFromFile(const char* path);
     };
 }
 

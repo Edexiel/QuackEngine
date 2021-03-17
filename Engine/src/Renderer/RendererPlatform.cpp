@@ -5,6 +5,11 @@
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Framebuffer.hpp"
 
+#include "Renderer/Mesh.hpp"
+#include "Renderer/Shader.hpp"
+#include "Renderer/Texture.hpp"
+#include "Renderer/Light.hpp"
+
 using namespace Renderer;
 
 int RendererPlatform::LoadGL()
@@ -17,43 +22,28 @@ int RendererPlatform::LoadGL()
 
   return version;
 }
-void RendererPlatform::BindTexture(unsigned int texture)
+
+void RendererPlatform::BindTexture(unsigned int texture, unsigned int index)
 {
-  glBindTexture(GL_TEXTURE_2D, texture);
+  glActiveTexture(GL_TEXTURE0 + index);
+  glBindTexture(GL_TEXTURE_2D, (Gluint)texture);
 }
-void RendererPlatform::ClearColor(const Maths::Vector4 &color)
+void RendererPlatform::ClearColor(const Maths::Vector4f &color)
 {
   glClearColor(color.r, color.g, color.b, color.a);
 }
+
 void RendererPlatform::Clear()
 {
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-unsigned int RendererPlatform::CreateVertices(const float *vertices, unsigned int verticesSize)
-{
-  unsigned int vao, vbo;
 
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
-
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, verticesSize, vertices, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, position));
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, normal));
-  glEnableVertexAttribArray(1);
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, uv));
-  glEnableVertexAttribArray(2);
-
-  return vao;
-}
 void RendererPlatform::DrawVertices(unsigned int vertices, unsigned int nbVertices)
 {
   glBindVertexArray(vertices);
-
   glDrawArrays(GL_TRIANGLES, 0, nbVertices);
 }
+
 Mesh RendererPlatform::CreateMesh(const Vertex *vertices, unsigned int verticesSize, const unsigned int *indices, unsigned int indicesSize)
 {
   unsigned int vao, vbo;
@@ -62,47 +52,84 @@ Mesh RendererPlatform::CreateMesh(const Vertex *vertices, unsigned int verticesS
 
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, verticesSize, vertices, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, position));
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, normal));
-  glEnableVertexAttribArray(1);
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, uv));
-  glEnableVertexAttribArray(2);
-
+  glBufferData(GL_ARRAY_BUFFER, verticesSize * sizeof(float), vertices, GL_STATIC_DRAW);
+  
   unsigned int ebo;
   glGenBuffers(1, &ebo);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, indices, GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
-  return Mesh(vao, vbo, ebo, indicesSize / sizeof(unsigned int));
+  return Mesh(vao, vbo, ebo, verticesSize, indicesSize);
 }
-void RendererPlatform::DrawMesh(unsigned int vao, unsigned int nbVertices)
+
+Mesh RendererPlatform::CreateMesh(const float *vertices, unsigned int verticesSize, const unsigned int *indices, unsigned int indicesSize)
+{
+  unsigned int vao, vbo, ebo;
+
+  glGenVertexArrays(1, &vao);
+  glGenBuffers(1, &vbo);
+  glGenBuffers(1, &ebo);
+
+  glBindVertexArray(vao);
+
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, verticesSize * sizeof(float), vertices, GL_STATIC_DRAW);
+  
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+
+  VerticesReading();
+
+  return Mesh(vao, vbo, ebo, verticesSize, indicesSize);
+}
+
+void RendererPlatform::DrawMesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbIndices)
 {
   glBindVertexArray(vao);
-  glDrawElements(GL_TRIANGLES, nbVertices, GL_UNSIGNED_INT, 0);
+
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+
+  glDrawElements(GL_TRIANGLES, nbIndices, GL_UNSIGNED_INT, (const void*)0);
+
 }
+
 void RendererPlatform::DeleteMesh(unsigned int vao, unsigned int vbo, unsigned int ebo)
 {
   glDeleteVertexArrays (1, &vao);
   glDeleteBuffers      (1, &vbo);
   glDeleteBuffers      (1, &ebo);
 }
+
+void RendererPlatform::VerticesReading()
+{
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, position));
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, normal));
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, uv));
+  glEnableVertexAttribArray(2);
+}
+
+
 void RendererPlatform::UseShader(unsigned int shaderProgram)
 {
   glUseProgram(shaderProgram);
 }
+
 void RendererPlatform::DeleteShader(unsigned int shaderProgram)
 {
   glDeleteProgram(shaderProgram);
 }
+
 void RendererPlatform::SetMatrix4(unsigned int shaderProgram, const char *name,
                                   const Maths::Matrix4 &mat)
 {
   glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name),1, GL_FALSE, mat.e);
 }
-unsigned int
-RendererPlatform::CreateProgramShader(const char *vertexShaderSource,
+
+Shader RendererPlatform::CreateShader(const char *vertexShaderSource,
                                       const char *fragmentShaderSource)
 {
   // vertexShader
@@ -114,16 +141,33 @@ RendererPlatform::CreateProgramShader(const char *vertexShaderSource,
   unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
   glCompileShader(fragmentShader);
-  //programShader
-  unsigned int programShader = glCreateProgram();
-  glAttachShader(programShader, vertexShader);
-  glAttachShader(programShader, fragmentShader);
-  glLinkProgram(programShader);
+  //shaderID
+  unsigned int shaderID = glCreateProgram();
+  glAttachShader(shaderID, vertexShader);
+  glAttachShader(shaderID, fragmentShader);
+  glLinkProgram(shaderID);
+
+
+  GLint Result = GL_FALSE;
+  int InfoLogLength;
+
+  // Check the program
+  glGetProgramiv(shaderID, GL_LINK_STATUS, &Result);
+  glGetProgramiv(shaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+  if (InfoLogLength > 0)
+  {
+    std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
+    glGetProgramInfoLog(shaderID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
+    printf("%s\n", &ProgramErrorMessage[0]);
+  }
+
+  glDetachShader(shaderID, vertexShader);
+  glDetachShader(shaderID, fragmentShader);
 
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
-  return programShader;
+  return {shaderID};
 }
 Framebuffer RendererPlatform::CreateFramebuffer(unsigned int width,
                                          unsigned int height)
@@ -157,6 +201,7 @@ void RendererPlatform::DeleteTexture(unsigned int texture)
 {
   glDeleteTextures(1, &texture);
 }
+
 void RendererPlatform::DeleteFramebuffer(unsigned int fbo, unsigned int rbo,
                                          unsigned int texture)
 {
@@ -164,6 +209,7 @@ void RendererPlatform::DeleteFramebuffer(unsigned int fbo, unsigned int rbo,
   glDeleteRenderbuffers(1, &rbo);
   glDeleteTextures(1, &texture);
 }
+
 void RendererPlatform::TextureParameter()
 {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
@@ -172,19 +218,112 @@ void RendererPlatform::TextureParameter()
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
-unsigned int RendererPlatform::CreateTexture()
+
+Texture RendererPlatform::CreateTexture()
 {
   unsigned int IDTexture;
 
   glGenTextures(1, &IDTexture);
   glBindTexture(GL_TEXTURE_2D, IDTexture);
-  return IDTexture;
+
+  return {IDTexture};
 }
-void RendererPlatform::SetTextureImage2D(unsigned char *image, unsigned int nrChannels,unsigned int width, unsigned int height)
+
+void RendererPlatform::SetTextureImage2D(unsigned char *image, unsigned int nrChannels, unsigned int width, unsigned int height)
 {
   if (nrChannels == 4)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
   else
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+
   glGenerateMipmap(GL_TEXTURE_2D);
+}
+
+
+void RendererPlatform::SetLight(const unsigned int shaderID, const unsigned int index, const Light& light)
+{
+    std::string set             = "lights[" + std::to_string(index);
+
+    Maths::Vector3f positionVect = light.GetPosition();
+    Maths::Vector3f directionVect = light.GetDirection();
+
+
+    int location = glGetUniformLocation(shaderID, (set + "].position").c_str());
+    glUniform3f(location, positionVect.x, positionVect.y, positionVect.z);
+
+    location = glGetUniformLocation(shaderID, (set + "].direction").c_str());
+    glUniform3f(location, directionVect.x, directionVect.y, directionVect.z);
+
+    location = glGetUniformLocation(shaderID, (set + "].ambient").c_str());
+    glUniform3f(location, light.ambient.x, light.ambient.y, light.ambient.z);
+
+    location = glGetUniformLocation(shaderID, (set + "].diffuse").c_str());
+    glUniform3f(location, light.diffuse.x, light.diffuse.y, light.diffuse.z);
+
+    location = glGetUniformLocation(shaderID, (set + "].specular").c_str());
+    glUniform3f(location, light.specular.x, light.specular.y, light.specular.z);
+
+    location = glGetUniformLocation(shaderID, (set + "].spotAngle").c_str());
+    glUniform1f(location, light.spotAngle);
+
+    location = glGetUniformLocation(shaderID, (set + "].outerSpotAngle").c_str());
+    glUniform1f(location, light.outerSpotAngle);
+
+    location = glGetUniformLocation(shaderID, (set + "].constant").c_str());
+    glUniform1f(location, light.constant);
+
+    location = glGetUniformLocation(shaderID, (set + "].linear").c_str());
+    glUniform1f(location, light.linear);
+
+    location = glGetUniformLocation(shaderID, (set + "].quadratic").c_str());
+    glUniform1f(location, light.quadratic);
+}
+
+void RendererPlatform::SetDirectionalLight(const unsigned int shaderID, const unsigned int index, const Light &light)
+{
+  std::string set = "directionalLights[" + std::to_string(index);
+
+  Maths::Vector3f directionVect = light.GetDirection();
+
+  int location = glGetUniformLocation(shaderID, (set + "].direction").c_str());
+  glUniform3f(location, directionVect.x, directionVect.y, directionVect.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].ambient").c_str());
+  glUniform3f(location, light.ambient.x, light.ambient.y, light.ambient.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].diffuse").c_str());
+  glUniform3f(location, light.diffuse.x, light.diffuse.y, light.diffuse.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].specular").c_str());
+  glUniform3f(location, light.specular.x, light.specular.y, light.specular.z);
+
+}
+
+void RendererPlatform::SetPointLight(const unsigned int shaderID, const unsigned int index, const Light &light)
+{
+  std::string set             = "pointLights[" + std::to_string(index);
+
+  Maths::Vector3f positionVect = light.GetPosition();
+
+  int location = glGetUniformLocation(shaderID, (set + "].position").c_str());
+  glUniform3f(location, positionVect.x, positionVect.y, positionVect.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].ambient").c_str());
+  glUniform3f(location, light.ambient.x, light.ambient.y, light.ambient.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].diffuse").c_str());
+  glUniform3f(location, light.diffuse.x, light.diffuse.y, light.diffuse.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].specular").c_str());
+  glUniform3f(location, light.specular.x, light.specular.y, light.specular.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].constant").c_str());
+  glUniform1f(location, light.constant);
+
+  location = glGetUniformLocation(shaderID, (set + "].linear").c_str());
+  glUniform1f(location, light.linear);
+
+  location = glGetUniformLocation(shaderID, (set + "].quadratic").c_str());
+  glUniform1f(location, light.quadratic);
+
 }

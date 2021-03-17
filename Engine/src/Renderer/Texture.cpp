@@ -2,26 +2,26 @@
 #include "Renderer/Texture.hpp"
 #include "Renderer/RendererPlatform.hpp"
 
-
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 using namespace Renderer;
 
 Texture::Texture(const unsigned int& ID): _ID{ID} {}
+
 Texture::~Texture()
 {
-  RendererPlatform::DeleteTexture(_ID);
+  //RendererPlatform::DeleteTexture(_ID);
 }
 
 unsigned int Texture::GetID() const
 {
   return _ID;
 }
-unsigned int Texture::LoadTexture(const char* filepath)
-{
-  unsigned int IDTexture = RendererPlatform::CreateTexture();
 
+Texture Texture::LoadTexture(const char* filepath)
+{
+  Texture texture(RendererPlatform::CreateTexture());
   RendererPlatform::TextureParameter();
 
   int width, height, nrChannels;
@@ -37,9 +37,10 @@ unsigned int Texture::LoadTexture(const char* filepath)
   }
   stbi_image_free(data);
 
-  return IDTexture;
+  return texture;
 }
-void Texture::Bind()
+
+void Texture::Bind(unsigned int index)
 {
   RendererPlatform::BindTexture(_ID);
 }

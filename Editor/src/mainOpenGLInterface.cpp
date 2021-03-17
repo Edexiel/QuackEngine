@@ -1,10 +1,16 @@
 #include "GLFW/glfw3.h"
+//#include "glad/gl.h"
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/Framebuffer.hpp"
 #include "Renderer/Texture.hpp"
 #include "Renderer/Vertex.hpp"
+#include "Renderer/Mesh.hpp"
+#include "Renderer/Light.hpp"
+#include "Resources/ResourcesManager.hpp"
+
+#include <cmath>
 
 using namespace Renderer;
 const char* vertexShader =
@@ -40,7 +46,7 @@ const char* fragmentShader =
 
                      void main()
                      {
-                      FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+                      FragColor = vec4(1,0,0,1);// texture(ourTexture, TexCoord);
                      }
                      )GLSL"
     };
@@ -53,11 +59,13 @@ const char* vertexShaderFb =
                       layout (location = 1) in vec3 aNormal;
                       layout (location = 2) in vec2 aTexCoord;
 
+                      uniform mat4 view;
+
                       out vec2 TexCoord;
 
                       void main()
                       {
-                      gl_Position = vec4(aPos, 1.0);
+                      gl_Position = view * vec4(aPos, 1.0);
                       TexCoord = aTexCoord;
                      }
                      )GLSL"
@@ -106,22 +114,43 @@ int main()
 
     const Renderer::Vertex quad[] = {
         // positions          // texture coords
-        {{0.5f, 0.5f, 0.0f}, {0, 0, 1}, {1.0f, 1.0f}},   // top right
-        {{0.5f, -0.5f, 0.0f}, {0, 0, 1}, {1.0f, 0.0f}},  // bottom right
-        {{-0.5f, -0.5f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
-        {{-0.5f, 0.5f, 0.0f}, {0, 0, 1}, {0.0f, 1.0f}}   // top left
+        {{1.0f, 1.0f, 0.0f}, {0, 0, 1}, {1.0f, 1.0f}},   // top right
+        {{1.0f, -1.0f, 0.0f}, {0, 0, 1}, {1.0f, 0.0f}},  // bottom right
+        {{-1.0f, -1.0f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
+        {{-1.0f, 1.0f, 0.0f}, {0, 0, 1}, {0.0f, 1.0f}}   // top left
+    };
+    const Renderer::Vertex triangle[] = {
+        // positions          // texture coords
+        {{0.0f, 1.0f, 0.0f}, {0, 0, 1}, {1.0f, 1.0f}},   // top right
+        {{1.0f, -1.0f, 0.0f}, {0, 0, 1}, {1.0f, 0.0f}},  // bottom right
+        {{-1.0f, -1.0f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
+    };
+
+    const Renderer::Vertex quad2[] = {
+        // positions          // texture coords
+        {{0.5f, 0.8f, 0.0f}, {0, 0, 1}, {1.0f, 1.0f}},   // top right
+        {{0.9f, -0.4f, 0.0f}, {0, 0, 1}, {1.0f, 0.0f}},  // bottom right
+        {{-0.75f, -0.6f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
+        {{-0.5f, 0.58f, 0.0f}, {0, 0, 1}, {0.0f, 1.0f}}   // top left
     };
 
     unsigned int quadIndices[] = {
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
     };
-    // Mesh
-    Renderer::Mesh quadMesh = Renderer::RendererPlatform::CreateMesh(
-        quad, sizeof(quad), quadIndices, sizeof(quadIndices));
+
+    Resources::ResourcesManager rm;
+
     // shader
-    Shader shader(Renderer::RendererPlatform::CreateProgramShader(
-        vertexShader, fragmentShader));
+
+    ShaderConstructData shd = {1,0,0};
+
+    //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+
+    Shader shader = Shader::LoadShader(shd);
+
+    //Shader shader(Renderer::RendererPlatform::CreateShader(
+    //    vertexShader, fragmentShader));
     RendererPlatform::UseShader(shader.ID);
     shader.SetMatrix4
         (
@@ -129,32 +158,87 @@ int main()
         Maths::Matrix4::Perspective(width, height, -1.f, 100.f, 3.14f / 2.f)
         );
     shader.SetMatrix4("view", Maths::Matrix4::Identity());
-    shader.SetMatrix4("model", Maths::Matrix4::Translate({0, 0, 1}));
     // Shader fb
-    Shader shaderFb(Renderer::RendererPlatform::CreateProgramShader(
+    Shader shaderFb(Renderer::RendererPlatform::CreateShader(
         vertexShaderFb, fragmentShaderFb));
     // Framebuffer
     Renderer::Framebuffer framebuffer =
         Renderer::RendererPlatform::CreateFramebuffer(width, height);
 
+
+
+    Renderer::Mesh quadMesh = Renderer::RendererPlatform::CreateMesh(
+        quad, sizeof(quad) / sizeof (float ), quadIndices, sizeof(quadIndices) / sizeof(unsigned int));
+
+
+
 //    Texture
-    Texture texture (Texture::LoadTexture("../../../DirtCube.jpg"));
+    Model model =  Model::LoadModel("../../../eyeball.fbx");
+    Texture texture = rm.LoadTexture("../../../Eye_D.jpg");
+    //Texture textureDiffuse = rm.LoadTexture("../../../Eye_D.jpg");
+
+    Renderer::Light light;
+
+    light.model = Maths::Matrix4::Translate({0,0, 0});
+    light.ambient = {0.0f, 0.1f, 0.0f};
+    light.diffuse = {0.7f, 0.7f, 0.7f};
+    light.specular = {1.0f, 1.0f, 1.0f};
+    light.constant = 1.0f;
+    light.linear = 0.0014f;
+    light.quadratic = 0.000007f;
+
+    light.outerSpotAngle = 10.5;
+    light.spotAngle = 8.5;
+
+
+    float count = 0;
+
+    //glEnable(GL_DEPTH_TEST);
+    //glDepthFunc(GL_LESS);
+
     while (!glfwWindowShouldClose(window))
     {
+      count += 0.01f;
+
       // framebuffer
       {
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE))
+        {
+          glfwSetWindowShouldClose(window, 1);
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_R))
+        {
+          shader = Shader::LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+        }
+
         framebuffer.Bind();
         RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
         RendererPlatform::Clear();
-        shaderFb.Use();
         texture.Bind();
-        quadMesh.Draw();
+
+        RendererPlatform::VerticesReading();
+        //quadMesh.Draw();
+        light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
+
+        shader.Use();
+        shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415 /180));
+        shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
+        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(0) * Maths::Matrix4::RotateX(0) * Maths::Matrix4::Scale({1,1,1}));
+
+        RendererPlatform::SetPointLight(shader.ID, 0, light);
+        //RendererPlatform::SetDirectionalLight(shader.ID, 0, light);
+
+        texture.Bind();
+        model.Draw();
+
         RendererPlatform::BindFramebuffer(0);
       }
 
       RendererPlatform::ClearColor({0.2f, 0.2f, 0.2f, 1.f});
       RendererPlatform::Clear();
       shaderFb.Use();
+      shaderFb.SetMatrix4("view", Maths::Matrix4::Identity());
       framebuffer.BindTexture();
       quadMesh.Draw();
       glfwSwapBuffers(window);
