@@ -11,6 +11,7 @@ class Framebuffer;
 class Shader;
 class Mesh;
 class Texture;
+class Light;
 
 class RendererPlatform
 {
@@ -37,11 +38,16 @@ public:
   static void DeleteFramebuffer(unsigned int fbo, unsigned int rbo, unsigned int texture);
 
   static Texture CreateTexture();
-  static void BindTexture(unsigned int texture);
+  static void BindTexture(unsigned int texture, unsigned int index = 0);
   static void DeleteTexture(unsigned int texture);
   static void SetTextureImage2D(unsigned char *image, unsigned int nrChannels, unsigned int width, unsigned int height);
   static void TextureParameter();
 
+  // Light
+
+  static void SetLight(const unsigned int shaderID, const unsigned int index, const Light& light);
+  static void SetDirectionalLight(const unsigned int shaderID, const unsigned int index, const Light& light);
+  static void SetPointLight(const unsigned int shaderID, const unsigned int index, const Light& light);
 
   void DrawVertices(unsigned int vertices, unsigned int nbVertices);
 };

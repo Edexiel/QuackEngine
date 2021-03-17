@@ -60,6 +60,7 @@ template<typename T>
   typedef Vector3<double> Vector3d;
   typedef Vector3<int> Vector3i;
   typedef Vector3<unsigned char> Color3;
+  typedef Vector3<float> Color3f;
 
 template<typename T>
 inline Vector3<T>::Vector3(T _x, T _y, T _z):x{_x},y{_y},z{_z}{}
