@@ -7,7 +7,6 @@ in vec3 Normal;
 
 in vec3 cameraPosition;
 
-
 struct DirectionalLight
 {
   vec3 direction;
@@ -50,7 +49,7 @@ struct SpotLight
 #define NB_MAX_DIRECTIONAL_LIGHT 1
 uniform DirectionalLight directionalLights[NB_MAX_DIRECTIONAL_LIGHT];
 
-#define NB_MAX_POINT_LIGHT 2
+#define NB_MAX_POINT_LIGHT 1
 uniform PointLight pointLights[NB_MAX_POINT_LIGHT];
 
 #define NB_MAX_SPOT_LIGHT 2
@@ -148,7 +147,7 @@ void main()
 {
     vec3 fragmentColor = vec3(0,0,0);
 
-    fragmentColor += GetColorAfterPointLight(pointLights[0], vec3(Position), normalize(vec3(Normal)));
+    //fragmentColor += GetColorAfterPointLight(pointLights[0], vec3(Position), normalize(vec3(Normal)));
     //fragmentColor += GetColorAfterPointLight(pointLights[1], vec3(Position), normalize(vec3(Normal)));
     //fragmentColor += GetColorAfterPointLight(pointLights[2], vec3(Position), normalize(vec3(Normal)));
     //fragmentColor += GetColorAfterPointLight(pointLights[3], vec3(Position), normalize(vec3(Normal)));
@@ -156,10 +155,10 @@ void main()
 
     //fragmentColor += GetColorAfterDirectionalLight(directionalLights[0], vec3(Position), normalize(vec3(Normal)));
 
-    //for (int i = 1 ; i < nbLights && i < NB_MAX_LIGHT ; i++)
-    //{
-    //  fragmentColor += GetColorAfterDirectionnalLight(lights[i], vec3(Position), normalize(vec3(Normal)));
-    //}
+    for (int i = 0 ; i < NB_MAX_POINT_LIGHT ; i++)
+    {
+      fragmentColor += GetColorAfterPointLight(pointLights[i], vec3(Position), normalize(vec3(Normal)));
+    }
 
     FragColor = texture(ourTexture, TexCoord) * vec4(fragmentColor, 1.f);
 }
