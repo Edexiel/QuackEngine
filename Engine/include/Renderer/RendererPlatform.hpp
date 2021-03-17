@@ -20,6 +20,7 @@ public:
   static int LoadGL();
   static void ClearColor(const Maths::Vector4f& color);
   static void Clear();
+  static void EnableDepthBuffer(bool isEnable);
 
   static Mesh CreateMesh(const Vertex* vertices, unsigned int verticesSize, const unsigned int* indices, unsigned int indicesSize);
   static Mesh CreateMesh(const float* vertices, unsigned int verticesSize, const unsigned int* indices, unsigned int indicesSize);
