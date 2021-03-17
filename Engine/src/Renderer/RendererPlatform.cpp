@@ -137,6 +137,21 @@ void RendererPlatform::SetMatrix4(unsigned int shaderProgram, const char *name,
   glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name),1, GL_FALSE, mat.e);
 }
 
+void RendererPlatform::SetVector3f(unsigned int shaderProgram, const char* name, const Maths::Vector3f& vec)
+{
+  glUniform3fv(glGetUniformLocation(shaderProgram, name), 1, vec.e);
+}
+
+void RendererPlatform::SetVector4f(unsigned int shaderProgram, const char* name, const Maths::Vector4f& vec)
+{
+  glUniform4fv(glGetUniformLocation(shaderProgram, name), 1, vec.e);
+}
+
+void RendererPlatform::SetSampler(unsigned int shaderProgram, const char* name, int value)
+{
+  glUniform1i(glGetUniformLocation(shaderProgram, name), value);
+}
+
 Shader RendererPlatform::CreateShader(const char *vertexShaderSource,
                                       const char *fragmentShaderSource)
 {
@@ -309,7 +324,7 @@ void RendererPlatform::SetDirectionalLight(const unsigned int shaderID, const un
 
 void RendererPlatform::SetPointLight(const unsigned int shaderID, const unsigned int index, const Light &light)
 {
-  std::string set             = "pointLights[" + std::to_string(index);
+  std::string set  = "pointLights[" + std::to_string(index);
 
   Maths::Vector3f positionVect = light.GetPosition();
 

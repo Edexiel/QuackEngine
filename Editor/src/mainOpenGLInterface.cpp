@@ -143,19 +143,17 @@ int main()
 
     // shader
 
-    ShaderConstructData shd = {1,0,0};
+    ShaderConstructData shd = {1,1,0, 0, 1, 1, 1};
 
     //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
     Shader shader = Shader::LoadShader(shd);
 
-    //Shader shader(Renderer::RendererPlatform::CreateShader(
-    //    vertexShader, fragmentShader));
     RendererPlatform::UseShader(shader.ID);
     shader.SetMatrix4
         (
         "projection",
-        Maths::Matrix4::Perspective(width, height, -1.f, 100.f, 3.14f / 2.f)
+        Maths::Matrix4::Perspective(width, height, -1.f, 100.f, 3.1415f / 2.f)
         );
     shader.SetMatrix4("view", Maths::Matrix4::Identity());
     // Shader fb
@@ -195,6 +193,8 @@ int main()
 
     RendererPlatform::EnableDepthBuffer(true);
 
+    //glfwSetWindowShouldClose(window, 1);
+
     while (!glfwWindowShouldClose(window))
     {
       count += 0.01f;
@@ -214,16 +214,18 @@ int main()
         framebuffer.Bind();
         RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
         RendererPlatform::Clear();
-        texture.Bind();
+        texture.Bind(0);
 
         RendererPlatform::VerticesReading();
         //quadMesh.Draw();
         light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
 
         shader.Use();
-        shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415 /180));
+        shader.SetVector4f("material.color", {1,1,1, 1});
+
+        shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415/180));
         shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
-        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(0) * Maths::Matrix4::RotateX(0) * Maths::Matrix4::Scale({1,1,1}));
+        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(count/1) * Maths::Matrix4::RotateX(0) * Maths::Matrix4::Scale({1,1,1}));
 
         RendererPlatform::SetPointLight(shader.ID, 0, light);
         //RendererPlatform::SetDirectionalLight(shader.ID, 0, light);

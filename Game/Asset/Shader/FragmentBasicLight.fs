@@ -19,6 +19,22 @@ vec3 GetColorAfterDirectionalLight(DirectionalLight light, vec3 position, vec3 n
   return reflected;
 }
 
+vec3 GetColorAfterPointLight(PointLight light, vec3 position, vec3 normal)
+{
+  float length = length(light.position - position);
+  float attenuation = 1.0f / (light.constant + light.linear * length + 
+    		    light.quadratic * (length * length));
+  
+    //diffuse
+  vec3 lightDir = normalize(light.position - position);
+  vec3 diffuse = light.diffuse * max(dot(lightDir, normal), 0.0);
+
+  //specular Blinn - Phong
+  vec3 specular = light.specular * pow(max(dot(normal, normalize(lightDir + normalize(cameraPosition - position))), 0.0), 128);//shininess);
+
+  return (light.ambient + diffuse + specular) * attenuation;
+}
+
 vec3 GetColorAfterSpotLight(SpotLight light, vec3 position, vec3 normal)
 {
   float length = length(light.position - position);
@@ -50,30 +66,4 @@ vec3 GetColorAfterSpotLight(SpotLight light, vec3 position, vec3 normal)
 
   return reflected;
 
-}
-
-vec3 GetColorAfterPointLight(PointLight light, vec3 position, vec3 normal)
-{
-  float length = length(light.position - position);
-  float attenuation = 1.0f / (light.constant + light.linear * length + 
-    		    light.quadratic * (length * length));
-  
-
-    //diffuse
-  vec3 lightDir = normalize(light.position - position);
-  //float lightNor = max(dot(lightDir, normal), 0.0);
-  vec3 diffuse = light.diffuse * max(dot(lightDir, normal), 0.0);
-
-  //specular Blinn - Phong
-
-  //vec3 viewDir    = normalize(cameraPosition - position);
-  //vec3 halfwayDir = normalize(lightDir + normalize(cameraPosition - position));
-
-  //float spec = pow(max(dot(normal, normalize(lightDir + normalize(cameraPosition - position))), 0.0), 128);//shininess);
-  vec3 specular = light.specular * pow(max(dot(normal, normalize(lightDir + normalize(cameraPosition - position))), 0.0), 128);
-
-  //vec3 reflected = (light.ambient + diffuse + specular) * attenuation;
-  //reflected *= attenuation;
-
-  return (light.ambient + diffuse + specular) * attenuation;
 }
