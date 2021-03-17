@@ -131,6 +131,11 @@ void RendererPlatform::DeleteShader(unsigned int shaderProgram)
   glDeleteProgram(shaderProgram);
 }
 
+void RendererPlatform::SetFloat(unsigned int shaderProgram, const char* name, float value)
+{
+  glUniform1f(glGetUniformLocation(shaderProgram, name), value);
+}
+
 void RendererPlatform::SetMatrix4(unsigned int shaderProgram, const char *name,
                                   const Maths::Matrix4 &mat)
 {
@@ -263,9 +268,9 @@ void RendererPlatform::SetTextureImage2D(unsigned char *image, unsigned int nrCh
 }
 
 
-void RendererPlatform::SetLight(const unsigned int shaderID, const unsigned int index, const Light& light)
+void RendererPlatform::SetSpotLight(const unsigned int shaderID, const unsigned int index, const Light& light)
 {
-    std::string set             = "lights[" + std::to_string(index);
+    std::string set             = "spotLights[" + std::to_string(index);
 
     Maths::Vector3f positionVect = light.GetPosition();
     Maths::Vector3f directionVect = light.GetDirection();

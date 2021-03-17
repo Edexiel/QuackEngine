@@ -16,6 +16,12 @@ void Shader::Use()
 {
   RendererPlatform::UseShader(ID);
 }
+
+void Shader::SetFloat(const char* name, float value)
+{
+  RendererPlatform::SetFloat(ID, name, value);
+}
+
 void Shader::SetMatrix4(const char *name, const Maths::Matrix4& mat)
 {
   RendererPlatform::SetMatrix4(ID, name, mat);
@@ -93,30 +99,33 @@ Shader Shader::LoadShader(const ShaderConstructData& shaderData)
                           std::to_string(shaderData.nbSpotLight) + "\n";
 
     FragmentShaderCode +=
-        LoadStringFromFile("../../Game/Asset/Shader/FragmentStartLight.fs");
-    FragmentShaderCode +=
-        LoadStringFromFile("../../Game/Asset/Shader/FragmentBasicLight.fs");
+        LoadStringFromFile("../../Engine/Shader/FragmentLight/FragmentStartLight.fs");
   }
   else
   {
       FragmentShaderCode +=
-              LoadStringFromFile("../../Game/Asset/Shader/FragmentStart.fs");
+              LoadStringFromFile("../../Engine/Shader/FragmentStart.fs");
   }
-
 
   FragmentShaderCode += CreateMaterial(shaderData);
   FragmentShaderCode += "uniform Material material;\n\n";
   FragmentShaderCode += CreateColorFunctions(shaderData);
 
   if (shaderData.hasLight)
-    FragmentShaderCode += LoadStringFromFile("../../Game/Asset/Shader/FragmentMainLight.fs");
+  {
+    FragmentShaderCode +=
+        LoadStringFromFile("../../Engine/Shader/FragmentLight/FragmentBasicLight.fs");
+    FragmentShaderCode += LoadStringFromFile(
+        "../../Engine/Shader/FragmentLight/FragmentMainLight.fs");
+  }
   else
-      FragmentShaderCode += LoadStringFromFile("../../Game/Asset/Shader/FragmentMain.fs");
+    FragmentShaderCode += LoadStringFromFile("../../Engine/Shader/FragmentMain.fs");
+
   std::cout << FragmentShaderCode << std::endl;
 
 
   // Read the Vertex Shader code from the file
-  std::string VertexShaderCode = LoadStringFromFile("../../Game/Asset/Shader/vertex.vs");
+  std::string VertexShaderCode = LoadStringFromFile("../../Engine/Shader/vertex.vs");
 
 
   return RendererPlatform::CreateShader(VertexShaderCode.c_str(), FragmentShaderCode.c_str());
@@ -131,21 +140,39 @@ std::string Shader::CreateMaterial(const ShaderConstructData& shaderData)
 
     if (shaderData.hasColorTexture)
       frag += "  sampler2D colorTexture;\n";
+    
+    if (shaderData.hasDiffuseTexture)
+      frag += "  sampler2D diffuseTexture;\n";
+    
+    if (shaderData.hasSpecularTexture)
+      frag += "  sampler2D specularTexture;\n";
 
-    frag += "  vec3 ambient;\n  vec3 diffuse;\n  vec3 specular;\n  uint shininess;\n";
-    frag += "};\n\n";
+    if (shaderData.hasNormalMap)
+      frag += "  sampler2D normalMap;\n";
+
+    frag += "  vec3 ambient;\n  vec3 diffuse;\n  vec3 specular;\n  float shininess;\n};\n\n";
 
   return frag;
 }
 
 std::string Shader::CreateColorFunctions(const ShaderConstructData& shaderData)
 {
-    std::string frag;
+  std::string frag;
 
-    if (shaderData.hasColorTexture)
-        frag += LoadStringFromFile("../../Game/Asset/Shader/FragmentColor/FragmentTextureColor.fs");
-    else
-        frag += LoadStringFromFile("../../Game/Asset/Shader/FragmentColor/FragmentColor.fs");
+  if (shaderData.hasColorTexture)
+    frag += LoadStringFromFile("../../Engine/Shader/FragmentColor/FragmentTextureColor.fs");
+  else
+    frag += LoadStringFromFile("../../Engine/Shader/FragmentColor/FragmentColor.fs");
+
+  if (shaderData.hasDiffuseTexture)
+    frag += LoadStringFromFile("../../Engine/Shader/FragmentLight/Texture/FragmentAmbientDiffuseColor.fs");
+  else
+    frag += LoadStringFromFile("../../Engine/Shader/FragmentLight/Color/FragmentAmbientDiffuseColor.fs");
+
+  if (shaderData.hasSpecularTexture)
+    frag += LoadStringFromFile("../../Engine/Shader/FragmentLight/Texture/FragmentSpecularColor.fs");
+  else
+    frag += LoadStringFromFile("../../Engine/Shader/FragmentLight/Color/FragmentSpecularColor.fs");
 
     return frag;
 }

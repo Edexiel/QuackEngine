@@ -29,6 +29,7 @@ namespace Renderer
         ~Shader();
 
         void Use();
+        void SetFloat(const char* name, float value);
         void SetMatrix4(const char* name, const Maths::Matrix4& mat);
         void SetVector3f(const char* name, const Maths::Vector3f vec);
         void SetVector4f(const char* name, const Maths::Vector4f vec);
@@ -37,10 +38,10 @@ namespace Renderer
         static Shader LoadShader(const char* vertexPath, const char* fragmentPath);
         static Shader LoadShader(const ShaderConstructData& shaderData);
 
-    private:
-      static std::string CreateMaterial(const ShaderConstructData& shaderData);
-      static std::string CreateColorFunctions(const ShaderConstructData& shaderData);
-      static std::string LoadStringFromFile(const char* path);
+      private:
+        static std::string CreateMaterial(const ShaderConstructData& shaderData);
+        static std::string CreateColorFunctions(const ShaderConstructData& shaderData);
+        static std::string LoadStringFromFile(const char* path);
     };
 }
 

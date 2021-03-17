@@ -4,8 +4,8 @@ using namespace Renderer;
 
 Maths::Vector3f Light::GetDirection() const
 {
-    //Maths::Vector3f direction = model * Maths::Vector4f{0.f, 0.f, 1.f, 0.f};
-        return  {0,0,1};
+    Maths::Vector4f direction = model * Maths::Vector4f{0.f, 0.f, 1.f, 0.f};
+        return  {direction.x,direction.y,direction.z};
 }
 
 Maths::Vector3f Light::GetPosition () const

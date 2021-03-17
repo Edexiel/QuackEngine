@@ -9,6 +9,7 @@
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Light.hpp"
 #include "Resources/ResourcesManager.hpp"
+#include "Renderer/Material.hpp"
 
 #include <cmath>
 
@@ -143,7 +144,7 @@ int main()
 
     // shader
 
-    ShaderConstructData shd = {1,1,0, 0, 1, 1, 1};
+    ShaderConstructData shd = {1,1,1, 0, 1, 0, 0, 1};
 
     //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
@@ -173,7 +174,7 @@ int main()
 //    Texture
     Model model =  Model::LoadModel("../../../eyeball.fbx");
     Texture texture = rm.LoadTexture("../../../Eye_D.jpg");
-    //Texture textureDiffuse = rm.LoadTexture("../../../Eye_D.jpg");
+    Texture textureDiffuse = rm.LoadTexture("../../../DiffuseTest.jpg");
 
     Renderer::Light light;
 
@@ -188,6 +189,9 @@ int main()
     light.outerSpotAngle = 10.5;
     light.spotAngle = 8.5;
 
+
+    Material material;
+    material.shader = shader;
 
     float count = 0;
 
@@ -219,13 +223,20 @@ int main()
         RendererPlatform::VerticesReading();
         //quadMesh.Draw();
         light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
+        //light.model = Maths::Matrix4::RotateY(count);
 
-        shader.Use();
-        shader.SetVector4f("material.color", {1,1,1, 1});
+        material.ambient = {1, 0, 0};
+        material.diffuse = {1, 0, 0};
+        material.specular = {0, 1, 0};
 
-        shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415/180));
-        shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
-        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(count/1) * Maths::Matrix4::RotateX(0) * Maths::Matrix4::Scale({1,1,1}));
+        material.Apply();
+
+        //shader.Use();
+        //shader.SetVector4f("material.color", {1,1,1, 1});
+
+        material.shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415/180));
+        material.shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
+        material.shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(3.1415) * Maths::Matrix4::RotateX(0) * Maths::Matrix4::Scale({1,1,1}));
 
         RendererPlatform::SetPointLight(shader.ID, 0, light);
         //RendererPlatform::SetDirectionalLight(shader.ID, 0, light);

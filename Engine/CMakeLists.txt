@@ -16,6 +16,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/Mesh.cpp
         src/Renderer/Shader.cpp
         src/Renderer/Texture.cpp
+        src/Renderer/Material.cpp
         src/Renderer/RendererPlatform.cpp
         src/Renderer/Framebuffer.cpp
         src/Scene/TransformComponent.cpp
