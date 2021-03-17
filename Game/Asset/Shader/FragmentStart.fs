@@ -58,3 +58,4 @@ uniform SpotLight spotLights[NB_MAX_SPOT_LIGHT];
 
 
 uniform sampler2D ourTexture;
+

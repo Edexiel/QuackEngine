@@ -1,12 +1,10 @@
 vec3 GetColorAfterDirectionalLight(DirectionalLight light, vec3 position, vec3 normal)
 {    
-  //ambient
-  vec3 ambient = light.ambient;
 
   //diffuse
   vec3 lightDir = normalize(-light.direction);
   float lightNor = max(dot(lightDir, normal), 0.0);
-  vec3 diffuse = light.diffuse * lightNor;
+  vec3 diffuse = light.diffuse * max(dot(lightDir, normal), 0.0);
 
   //specular Blinn - Phong
 
@@ -16,7 +14,7 @@ vec3 GetColorAfterDirectionalLight(DirectionalLight light, vec3 position, vec3 n
   float spec = pow(max(dot(normal, halfwayDir), 0.0), 128);//shininess);
   vec3 specular = light.specular * spec;
 
-  vec3 reflected = ambient + diffuse + specular;
+  vec3 reflected = light.ambient + diffuse + specular;
   
   return reflected;
 }
@@ -60,24 +58,22 @@ vec3 GetColorAfterPointLight(PointLight light, vec3 position, vec3 normal)
   float attenuation = 1.0f / (light.constant + light.linear * length + 
     		    light.quadratic * (length * length));
   
-    //ambient
-  vec3 ambient = light.ambient;
 
     //diffuse
   vec3 lightDir = normalize(light.position - position);
-  float lightNor = max(dot(lightDir, normal), 0.0);
-  vec3 diffuse = light.diffuse * lightNor;
+  //float lightNor = max(dot(lightDir, normal), 0.0);
+  vec3 diffuse = light.diffuse * max(dot(lightDir, normal), 0.0);
 
   //specular Blinn - Phong
 
-  vec3 viewDir    = normalize(cameraPosition - position);
-  vec3 halfwayDir = normalize(lightDir + viewDir);
+  //vec3 viewDir    = normalize(cameraPosition - position);
+  //vec3 halfwayDir = normalize(lightDir + normalize(cameraPosition - position));
 
-  float spec = pow(max(dot(normal, halfwayDir), 0.0), 128);//shininess);
-  vec3 specular = light.specular * spec;
+  //float spec = pow(max(dot(normal, normalize(lightDir + normalize(cameraPosition - position))), 0.0), 128);//shininess);
+  vec3 specular = light.specular * pow(max(dot(normal, normalize(lightDir + normalize(cameraPosition - position))), 0.0), 128);
 
-  vec3 reflected = ambient + (diffuse + specular);
-  reflected *= attenuation;
+  //vec3 reflected = (light.ambient + diffuse + specular) * attenuation;
+  //reflected *= attenuation;
 
-  return reflected;
+  return (light.ambient + diffuse + specular) * attenuation;
 }

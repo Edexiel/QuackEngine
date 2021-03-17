@@ -143,9 +143,9 @@ int main()
 
     ShaderConstructData shd = {1,0,0};
 
-    Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+    //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
-    shader = Shader::LoadShader(shd);
+    Shader shader = Shader::LoadShader(shd);
 
     //Shader shader(Renderer::RendererPlatform::CreateShader(
     //    vertexShader, fragmentShader));
@@ -173,7 +173,7 @@ int main()
 //    Texture
     Model model =  Model::LoadModel("../../../eyeball.fbx");
     Texture texture = rm.LoadTexture("../../../Eye_D.jpg");
-    Texture textureDiffuse = rm.LoadTexture("../../../Eye_D.jpg");
+    //Texture textureDiffuse = rm.LoadTexture("../../../Eye_D.jpg");
 
     Renderer::Light light;
 
@@ -217,15 +217,15 @@ int main()
 
         RendererPlatform::VerticesReading();
         //quadMesh.Draw();
-        light.model = Maths::Matrix4::Translate({cos(count/10) * 30, sin(count/10) * 30, 0});
+        light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
 
         shader.Use();
         shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * M_PI/180));
         shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
-        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(0) * Maths::Matrix4::RotateX(-180 * M_PI / 180) * Maths::Matrix4::Scale({1,1,1}));
+        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(0) * Maths::Matrix4::RotateX(0) * Maths::Matrix4::Scale({1,1,1}));
 
         RendererPlatform::SetPointLight(shader.ID, 0, light);
-        RendererPlatform::SetDirectionalLight(shader.ID, 0, light);
+        //RendererPlatform::SetDirectionalLight(shader.ID, 0, light);
 
         texture.Bind();
         model.Draw();
