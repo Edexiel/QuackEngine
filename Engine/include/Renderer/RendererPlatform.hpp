@@ -53,7 +53,10 @@ public:
   static void SetDirectionalLight(const unsigned int shaderID, const unsigned int index, const Light& light);
   static void SetPointLight(const unsigned int shaderID, const unsigned int index, const Light& light);
 
-  void DrawVertices(unsigned int vertices, unsigned int nbVertices);
+  //Shape
+  static Mesh CreateQuad();
+  static Mesh CreateCube();
+
 };
 }
 

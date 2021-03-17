@@ -6,8 +6,6 @@
 
 #include "Renderer/RendererPlatform.hpp"
 
-#include "glad/gl.h"
-
 #include <iostream>
 
 using namespace Renderer;
