@@ -67,10 +67,10 @@ Model Model::LoadModel(const char *path)
 
       //scene->mMeshes[i]->mTextureCoords[0][e].x;
 
-      if (scene->mMeshes[i]->HasTextureCoords(e))
+      if (scene->mMeshes[i]->HasTextureCoords(0))
       {
-        vertices[count + 6] = (scene->mMeshes[i]->mTextureCoords[e])->x;
-        vertices[count + 7] = (scene->mMeshes[i]->mTextureCoords[e])->y;
+        vertices[count + 6] = (scene->mMeshes[i]->mTextureCoords[0][e]).x;
+        vertices[count + 7] = (scene->mMeshes[i]->mTextureCoords[0][e]).y;
       }
       else
       {
