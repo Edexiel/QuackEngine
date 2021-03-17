@@ -5,8 +5,10 @@
 #ifndef QUACKENGINE_PHYSICS_HPP
 #define QUACKENGINE_PHYSICS_HPP
 
+#include "Scene/Components/Component.hpp"
 
-class Physics {
+class Physics : public Component
+{
 
 };
 

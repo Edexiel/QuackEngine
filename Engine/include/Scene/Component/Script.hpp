@@ -5,7 +5,7 @@
 #ifndef QUACKENGINE_SCRIPT_HPP
 #define QUACKENGINE_SCRIPT_HPP
 
-#include "Scene/Component.hpp"
+#include "Component.hpp"
 
 class Script : public Component  {
 

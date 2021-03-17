@@ -6,7 +6,8 @@
 #define QUACKENGINE_RENDERER_HPP
 
 
-class Renderer {
+class Renderer : public Component
+{
 
 };
 

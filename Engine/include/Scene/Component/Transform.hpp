@@ -1,11 +1,11 @@
 #ifndef QUACKENGINE_TRANSFORM_HPP
 #define QUACKENGINE_TRANSFORM_HPP
 
-#include "Scene/Component.hpp"
+#include "Component.hpp"
 #include <Maths/Quaternion.hpp>
 #include <Maths/Vector3.hpp>
 
-class Transform
+class Transform : public Component
 {
 private:
     Maths::Vector3f _position;
