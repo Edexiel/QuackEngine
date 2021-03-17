@@ -5,17 +5,19 @@
 #ifndef QUACKENGINE_SCENE_HPP
 #define QUACKENGINE_SCENE_HPP
 
+#include "Scene/Entity.hpp"
+
 class Scene
 {
 
 public:
-    void createEntity();
+    void getEntity(EntityId id);
+    Entity& createEntity();
     void removeEntity();
     void update(float DeltaTime);
     void fixedUpdate(float FixedDeltaTime);
     void draw();
     void load();
-    void imDraw();
 };
 
 #endif // QUACKENGINE_SCENE_HPP

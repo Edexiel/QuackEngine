@@ -8,15 +8,13 @@
 
 enum class Type
 {
-  E_STATIC,
-  E_DYNAMIC
+    E_STATIC,
+    E_DYNAMIC
 };
 
 class Component
 {
-  Entity entity;
-
-  virtual void update()=0;
+    virtual void update() = 0;
 };
 
 #endif // QUACKENGINE_COMPONENT_HPP

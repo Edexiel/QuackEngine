@@ -3,3 +3,19 @@
 //
 
 #include "Scene/Scene.hpp"
+void Scene::getEntity(unsigned int id) {}
+
+Entity &Scene::createEntity()
+{
+    return <#initializer#>;
+}
+
+void Scene::removeEntity()
+{
+
+}
+
+void Scene::load()
+{
+
+}
