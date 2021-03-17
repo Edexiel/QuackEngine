@@ -1,4 +1,3 @@
-
 vec3 GetColorAfterDirectionalLight(DirectionalLight light, vec3 position, vec3 normal)
 {    
 

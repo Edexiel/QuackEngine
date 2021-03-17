@@ -1,6 +1,5 @@
-#include "glad/gl.h"
+//#include "glad/gl.h"
 #include "GLFW/glfw3.h"
-//
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shader.hpp"
@@ -192,8 +191,7 @@ int main()
 
     float count = 0;
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+    RendererPlatform::EnableDepthBuffer(true);
 
     //glfwSetWindowShouldClose(window, 1);
 

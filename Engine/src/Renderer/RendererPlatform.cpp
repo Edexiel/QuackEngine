@@ -38,6 +38,20 @@ void RendererPlatform::Clear()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void RendererPlatform::EnableDepthBuffer(bool isEnable)
+{
+  if(isEnable)
+  {
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+  }
+  else
+  {
+    glDisable(GL_DEPTH_TEST);
+    glDepthFunc(GL_ALWAYS);
+  }
+}
+
 void RendererPlatform::DrawVertices(unsigned int vertices, unsigned int nbVertices)
 {
   glBindVertexArray(vertices);
