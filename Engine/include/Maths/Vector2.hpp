@@ -36,9 +36,9 @@ struct Vector2
   static Vector2<T> Left();
   static Vector2<T> Zero();
 
-  Vector2<T> operator+(const Vector2<T>& v2) const;
-  Vector2<T> operator-(const Vector2<T>& v2) const;
-  Vector2<T> operator*(const T& f)    const;
+  Vector2<T> operator+(const Vector2<T>& v2)   const;
+  Vector2<T> operator-(const Vector2<T>& v2)   const;
+  Vector2<T> operator*(const T& f)             const;
 };
 
 typedef Vector2<double> Vector2d;
@@ -64,7 +64,7 @@ template<typename T>
 inline Vector2<T>& Vector2<T>::Normalize()
 {
   T length = Length();
-  if (length < 0)
+  if (length > 0)
   {
     x /= length;
     y /= length;
@@ -84,7 +84,7 @@ inline Vector2<T> Vector2<T>::GetNormalized() const
 }
 
 template<typename T>
-void Vector2<T>::Normalized(Vector2<T>& v)
+inline void Vector2<T>::Normalized(Vector2<T>& v)
 {
   T length = v.Length();
 
@@ -97,6 +97,7 @@ inline T Vector2<T>::DotProduct(const Vector2<T>& v1, const Vector2<T>& v2)
 {
   return v1.x * v2.x + v1.y * v2.y;
 }
+
 
 template<typename T>
 inline Vector2<T> Vector2<T>::Up()
@@ -145,6 +146,5 @@ inline Vector2<T> Vector2<T>::operator*(const T& f) const
 {
   return { this->x * f, this->y * f };
 }
-
 }
 #endif // QUACKENGINE_VECTOR2_HPP

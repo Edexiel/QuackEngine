@@ -104,7 +104,7 @@ inline Vector3<T> Vector3<T>::GetNormalized() const
 }
 
 template<typename T>
-void Vector3<T>::Normalized(Vector3<T>& v)
+inline void Vector3<T>::Normalized(Vector3<T>& v)
 {
   T length = v.Length();
 
