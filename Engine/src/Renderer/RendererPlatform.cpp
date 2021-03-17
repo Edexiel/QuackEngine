@@ -52,12 +52,6 @@ void RendererPlatform::EnableDepthBuffer(bool isEnable)
   }
 }
 
-void RendererPlatform::DrawVertices(unsigned int vertices, unsigned int nbVertices)
-{
-  glBindVertexArray(vertices);
-  glDrawArrays(GL_TRIANGLES, 0, nbVertices);
-}
-
 Mesh RendererPlatform::CreateMesh(const Vertex *vertices, unsigned int verticesSize, const unsigned int *indices, unsigned int indicesSize)
 {
   unsigned int vao, vbo;
@@ -355,4 +349,82 @@ void RendererPlatform::SetPointLight(const unsigned int shaderID, const unsigned
   location = glGetUniformLocation(shaderID, (set + "].quadratic").c_str());
   glUniform1f(location, light.quadratic);
 
+}
+Mesh RendererPlatform::CreateQuad()
+{
+  const Vertex vertices[4]{
+      // positions          // texture coords
+      {{1.0f, 1.0f, 0.0f}, {0, 0, -1}, {1.0f, 1.0f}},   // top right
+      {{1.0f, -1.0f, 0.0f}, {0, 0, -1}, {1.0f, 0.0f}},  // bottom right
+      {{-1.0f, -1.0f, 0.0f}, {0, 0, -1}, {0.0f, 0.0f}}, // bottom left
+      {{-1.0f, 1.0f, 0.0f}, {0, 0, -1}, {0.0f, 1.0f}}   // top left
+  };
+
+  unsigned int indices[6]{
+      0, 1, 3, // first triangle
+      1, 2, 3  // second triangle
+  };
+  return CreateMesh(vertices, sizeof (vertices), indices, sizeof(indices));
+}
+Mesh RendererPlatform::CreateCube()
+{
+  const Vertex vertices[24] {
+    //Front
+    {{1.0f, 1.0f, -1.0f}, {0, 0, -1}, {1.0f, 1.0f}},//0
+    {{1.0f, -1.0f, -1.0f}, {0, 0, -1}, {1.0f, 0.0f}},//1
+    {{-1.0f, -1.0f, -1.0f}, {0, 0, -1}, {0.0f, 0.0f}},//2
+    {{-1.0f, 1.0f, -1.0f}, {0, 0, -1}, { 0.0f, 1.0f}},//3
+
+    //Back
+    {{1.0f, 1.0f, 1.0f}, {0, 0, 1}, {1.0f, 1.0f}},//4
+    {{1.0f, -1.0f, 1.0f}, {0, 0, 1}, {1.0f, 0.0f}},//5
+    {{-1.0f, -1.0f, 1.0f}, {0, 0, 1}, {0.0f, 0.0f}},//6
+    {{-1.0f, 1.0f, 1.0f}, {0, 0, 1}, { 0.0f, 1.0f }},//7
+
+    //Left
+    {{-1.0f, 1.0f, 1.0f}, {-1, 0, 0}, {1.0f, 1.0f}},//8
+    {{-1.0f, 1.0f, -1.0f}, {-1, 0, 0}, {1.0f, 0.0f}},//9
+    {{-1.0f, -1.0f, -1.0f}, {-1, 0, 0}, {0.0f, 0.0f}},//10
+    {{-1.0f, -1.0f, 1.0f}, {-1, 0, 0}, { 0.0f, 1.0f }},//11
+
+    //Right
+    {{1.0f, 1.0f, 1.0f}, {1, 0, 0}, {1.0f, 1.0f}},//12
+    {{1.0f, 1.0f, -1.0f}, {1, 0, 0}, {1.0f, 0.0f}},//13
+    {{1.0f, -1.0f, -1.0f}, {1, 0, 0}, {0.0f, 0.0f}},//14
+    {{1.0f, -1.0f, 1.0f}, {1, 0, 0}, { 0.0f, 1.0f }},//15
+
+    //Top
+    {{1.0f, 1.0f, 1.0f}, {0, 1, 0}, {1.0f, 1.0f}},//16
+    {{1.0f, 1.0f, -1.0f}, {0, 1, 0}, {1.0f, 0.0f}},//17
+    {{-1.0f, 1.0f, -1.0f}, {0, 1, 0}, {0.0f, 0.0f}},//18
+    {{-1.0f, 1.0f, 1.0f}, {0, 1, 0}, { 0.0f, 1.0f }},//19
+
+    //Down
+    {{1.0f, -1.0f, 1.0f}, {0, -1, 0}, {1.0f, 1.0f}},//20
+    {{1.0f, -1.0f, -1.0f}, {0, -1, 0}, {1.0f, 0.0f}},//21
+    {{-1.0f, -1.0f, -1.0f}, {0, -1, 0}, {0.0f, 0.0f}},//22
+    {{-1.0f, -1.0f, 1.0f}, {0, -1, 0}, { 0.0f, 1.0f }}//23
+  };
+  const unsigned int indices[36]{
+      //Back
+      0, 1, 3,
+      1, 2, 3,
+      //Front
+      4, 5, 7,
+      5, 6, 7,
+      //Left
+      8, 9, 11,
+      9, 10, 11,
+      //Right
+      12, 13, 15,
+      13, 14, 15,
+      //Top
+      16, 17, 19,
+      17, 18, 19,
+      //Down
+      20, 21, 23,
+      21, 22, 23
+      };
+
+  return CreateMesh(vertices, sizeof (vertices), indices, sizeof(indices));
 }
