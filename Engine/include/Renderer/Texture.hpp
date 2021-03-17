@@ -17,7 +17,7 @@ public:
   ~Texture();
   unsigned int GetID() const;
   static Texture LoadTexture(const char* filepath);
-  void Bind();
+  void Bind(unsigned int index = 0);
 };
 }
 

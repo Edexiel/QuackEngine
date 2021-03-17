@@ -8,6 +8,7 @@
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
+#include "Renderer/Light.hpp"
 
 using namespace Renderer;
 
@@ -22,8 +23,9 @@ int RendererPlatform::LoadGL()
   return version;
 }
 
-void RendererPlatform::BindTexture(unsigned int texture)
+void RendererPlatform::BindTexture(unsigned int texture, unsigned int index)
 {
+  glActiveTexture(GL_TEXTURE0 + index);
   glBindTexture(GL_TEXTURE_2D, (Gluint)texture);
 }
 void RendererPlatform::ClearColor(const Maths::Vector4f &color)
@@ -34,6 +36,20 @@ void RendererPlatform::ClearColor(const Maths::Vector4f &color)
 void RendererPlatform::Clear()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void RendererPlatform::EnableDepthBuffer(bool isEnable)
+{
+  if(isEnable)
+  {
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+  }
+  else
+  {
+    glDisable(GL_DEPTH_TEST);
+    glDepthFunc(GL_ALWAYS);
+  }
 }
 
 void RendererPlatform::DrawVertices(unsigned int vertices, unsigned int nbVertices)
@@ -125,6 +141,21 @@ void RendererPlatform::SetMatrix4(unsigned int shaderProgram, const char *name,
                                   const Maths::Matrix4 &mat)
 {
   glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name),1, GL_FALSE, mat.e);
+}
+
+void RendererPlatform::SetVector3f(unsigned int shaderProgram, const char* name, const Maths::Vector3f& vec)
+{
+  glUniform3fv(glGetUniformLocation(shaderProgram, name), 1, vec.e);
+}
+
+void RendererPlatform::SetVector4f(unsigned int shaderProgram, const char* name, const Maths::Vector4f& vec)
+{
+  glUniform4fv(glGetUniformLocation(shaderProgram, name), 1, vec.e);
+}
+
+void RendererPlatform::SetSampler(unsigned int shaderProgram, const char* name, int value)
+{
+  glUniform1i(glGetUniformLocation(shaderProgram, name), value);
 }
 
 Shader RendererPlatform::CreateShader(const char *vertexShaderSource,
@@ -235,4 +266,93 @@ void RendererPlatform::SetTextureImage2D(unsigned char *image, unsigned int nrCh
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 
   glGenerateMipmap(GL_TEXTURE_2D);
+}
+
+
+void RendererPlatform::SetLight(const unsigned int shaderID, const unsigned int index, const Light& light)
+{
+    std::string set             = "lights[" + std::to_string(index);
+
+    Maths::Vector3f positionVect = light.GetPosition();
+    Maths::Vector3f directionVect = light.GetDirection();
+
+
+    int location = glGetUniformLocation(shaderID, (set + "].position").c_str());
+    glUniform3f(location, positionVect.x, positionVect.y, positionVect.z);
+
+    location = glGetUniformLocation(shaderID, (set + "].direction").c_str());
+    glUniform3f(location, directionVect.x, directionVect.y, directionVect.z);
+
+    location = glGetUniformLocation(shaderID, (set + "].ambient").c_str());
+    glUniform3f(location, light.ambient.x, light.ambient.y, light.ambient.z);
+
+    location = glGetUniformLocation(shaderID, (set + "].diffuse").c_str());
+    glUniform3f(location, light.diffuse.x, light.diffuse.y, light.diffuse.z);
+
+    location = glGetUniformLocation(shaderID, (set + "].specular").c_str());
+    glUniform3f(location, light.specular.x, light.specular.y, light.specular.z);
+
+    location = glGetUniformLocation(shaderID, (set + "].spotAngle").c_str());
+    glUniform1f(location, light.spotAngle);
+
+    location = glGetUniformLocation(shaderID, (set + "].outerSpotAngle").c_str());
+    glUniform1f(location, light.outerSpotAngle);
+
+    location = glGetUniformLocation(shaderID, (set + "].constant").c_str());
+    glUniform1f(location, light.constant);
+
+    location = glGetUniformLocation(shaderID, (set + "].linear").c_str());
+    glUniform1f(location, light.linear);
+
+    location = glGetUniformLocation(shaderID, (set + "].quadratic").c_str());
+    glUniform1f(location, light.quadratic);
+}
+
+void RendererPlatform::SetDirectionalLight(const unsigned int shaderID, const unsigned int index, const Light &light)
+{
+  std::string set = "directionalLights[" + std::to_string(index);
+
+  Maths::Vector3f directionVect = light.GetDirection();
+
+  int location = glGetUniformLocation(shaderID, (set + "].direction").c_str());
+  glUniform3f(location, directionVect.x, directionVect.y, directionVect.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].ambient").c_str());
+  glUniform3f(location, light.ambient.x, light.ambient.y, light.ambient.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].diffuse").c_str());
+  glUniform3f(location, light.diffuse.x, light.diffuse.y, light.diffuse.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].specular").c_str());
+  glUniform3f(location, light.specular.x, light.specular.y, light.specular.z);
+
+}
+
+void RendererPlatform::SetPointLight(const unsigned int shaderID, const unsigned int index, const Light &light)
+{
+  std::string set  = "pointLights[" + std::to_string(index);
+
+  Maths::Vector3f positionVect = light.GetPosition();
+
+  int location = glGetUniformLocation(shaderID, (set + "].position").c_str());
+  glUniform3f(location, positionVect.x, positionVect.y, positionVect.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].ambient").c_str());
+  glUniform3f(location, light.ambient.x, light.ambient.y, light.ambient.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].diffuse").c_str());
+  glUniform3f(location, light.diffuse.x, light.diffuse.y, light.diffuse.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].specular").c_str());
+  glUniform3f(location, light.specular.x, light.specular.y, light.specular.z);
+
+  location = glGetUniformLocation(shaderID, (set + "].constant").c_str());
+  glUniform1f(location, light.constant);
+
+  location = glGetUniformLocation(shaderID, (set + "].linear").c_str());
+  glUniform1f(location, light.linear);
+
+  location = glGetUniformLocation(shaderID, (set + "].quadratic").c_str());
+  glUniform1f(location, light.quadratic);
+
 }

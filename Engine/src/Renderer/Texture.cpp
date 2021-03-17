@@ -40,7 +40,7 @@ Texture Texture::LoadTexture(const char* filepath)
   return texture;
 }
 
-void Texture::Bind()
+void Texture::Bind(unsigned int index)
 {
   RendererPlatform::BindTexture(_ID);
 }
