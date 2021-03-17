@@ -1,5 +1,5 @@
 #include "GLFW/glfw3.h"
-#include "glad/gl.h"
+//#include "glad/gl.h"
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shader.hpp"
@@ -9,6 +9,8 @@
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Light.hpp"
 #include "Resources/ResourcesManager.hpp"
+
+#include <cmath>
 
 using namespace Renderer;
 const char* vertexShader =
@@ -191,8 +193,8 @@ int main()
 
     float count = 0;
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+    //glEnable(GL_DEPTH_TEST);
+    //glDepthFunc(GL_LESS);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -220,7 +222,7 @@ int main()
         light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
 
         shader.Use();
-        shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * M_PI/180));
+        shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415 /180));
         shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
         shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(0) * Maths::Matrix4::RotateX(0) * Maths::Matrix4::Scale({1,1,1}));
 
