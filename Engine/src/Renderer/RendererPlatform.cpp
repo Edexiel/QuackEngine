@@ -1,7 +1,9 @@
+#include "Renderer/RendererPlatform.hpp"
+#include <cmath>
+
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
 
-#include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Framebuffer.hpp"
 
@@ -9,6 +11,8 @@
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
 #include "Renderer/Light.hpp"
+
+#include "Maths/Vector3.hpp"
 
 using namespace Renderer;
 
@@ -352,7 +356,7 @@ void RendererPlatform::SetPointLight(const unsigned int shaderID, const unsigned
 }
 Mesh RendererPlatform::CreateQuad()
 {
-  const Vertex vertices[4]{
+  const Vertex vertices[]{
       // positions          // texture coords
       {{1.0f, 1.0f, 0.0f}, {0, 0, -1}, {1.0f, 1.0f}},   // top right
       {{1.0f, -1.0f, 0.0f}, {0, 0, -1}, {1.0f, 0.0f}},  // bottom right
@@ -360,7 +364,7 @@ Mesh RendererPlatform::CreateQuad()
       {{-1.0f, 1.0f, 0.0f}, {0, 0, -1}, {0.0f, 1.0f}}   // top left
   };
 
-  unsigned int indices[6]{
+  unsigned int indices[]{
       0, 1, 3, // first triangle
       1, 2, 3  // second triangle
   };
@@ -368,7 +372,7 @@ Mesh RendererPlatform::CreateQuad()
 }
 Mesh RendererPlatform::CreateCube()
 {
-  const Vertex vertices[24] {
+  const Vertex vertices[] {
     //Front
     {{1.0f, 1.0f, -1.0f}, {0, 0, -1}, {1.0f, 1.0f}},//0
     {{1.0f, -1.0f, -1.0f}, {0, 0, -1}, {1.0f, 0.0f}},//1
@@ -405,7 +409,7 @@ Mesh RendererPlatform::CreateCube()
     {{-1.0f, -1.0f, -1.0f}, {0, -1, 0}, {0.0f, 0.0f}},//22
     {{-1.0f, -1.0f, 1.0f}, {0, -1, 0}, { 0.0f, 1.0f }}//23
   };
-  const unsigned int indices[36]{
+  const unsigned int indices[]{
       //Back
       0, 1, 3,
       1, 2, 3,

@@ -56,7 +56,6 @@ public:
   //Shape
   static Mesh CreateQuad();
   static Mesh CreateCube();
-
 };
 }
 
