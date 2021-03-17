@@ -4,8 +4,6 @@
 #include "Maths/Vector4.hpp"
 #include <iostream>
 
-#define M_PI 3.14
-
 namespace Maths
 {
   struct Matrix4
@@ -251,8 +249,8 @@ inline Matrix4 Matrix4::operator*(const Matrix4& m)
 }
 inline Matrix4& Matrix4::operator*=(const Matrix4& m)
 {
-  Matrix4 result = *this * m;
-  return result;
+  *this = *this * m;
+  return *this;
 }
 
 inline Matrix4 Matrix4::operator*(float f)

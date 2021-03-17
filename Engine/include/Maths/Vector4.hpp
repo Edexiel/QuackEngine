@@ -48,7 +48,6 @@ template<typename T>
   typedef Vector4<float> Vector4f;
   typedef Vector4<float> Color4f;
   typedef Vector4<double> Vector4d;
-  typedef Vector4<int> Vector4i;
 
 template<typename T>
 inline Vector4<T>::Vector4(T _x, T _y, T _z, T _w):x{_x}, y{_y}, z{_z}, w{_w}{}
