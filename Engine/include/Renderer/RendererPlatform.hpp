@@ -56,6 +56,7 @@ public:
   //Shape
   static Mesh CreateQuad();
   static Mesh CreateCube();
+  static Mesh CreateSphere(int sectorCount = 36, int stackCount = 18);
 };
 }
 

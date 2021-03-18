@@ -1,5 +1,9 @@
 #include "Renderer/RendererPlatform.hpp"
-#include <cmath>
+
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+#include <vector>
 
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
@@ -431,4 +435,55 @@ Mesh RendererPlatform::CreateCube()
       };
 
   return CreateMesh(vertices, sizeof (vertices), indices, sizeof(indices));
+}
+Mesh RendererPlatform::CreateSphere(int sectorCount, int stackCount)
+{
+  std::vector<Vertex> vertices;
+  std::vector<unsigned int> indices;
+  std::vector<unsigned int> lineIndices;
+
+  float sectorStep = 2 * (float)M_PI / sectorCount;
+  float stackStep = (float)M_PI / stackCount;
+  float sectorAngle, stackAngle;
+  int k1, k2;
+
+  for(int i = 0; i <= stackCount; ++i)
+  {
+    stackAngle = (float)M_PI / 2 - i * stackStep; // starting from pi/2 to -pi/2
+    float xy = cosf(stackAngle);           // r * cos(u)
+    float z = sinf(stackAngle);            // r * sin(u)
+
+    k1 = i * (sectorCount + 1);
+    k2 = k1 + sectorCount + 1;
+
+    for (int j = 0; j <= sectorCount; ++j, ++k1, ++k2)
+    {
+      //Vertices
+      sectorAngle = j * sectorStep; // starting from 0 to 2pi
+
+      // vertex position (x, y, z)
+      float x = xy * cosf(sectorAngle);
+      float y = xy * sinf(sectorAngle);
+
+      vertices.push_back({{x, y, z}, {x, y, z},{(float)j / (float)sectorCount, (float)i / (float)stackCount}});
+
+      //indices
+      if(i != 0)
+      {
+        indices.push_back(k1);
+        indices.push_back(k2);
+        indices.push_back(k1 + 1);
+      }
+
+      // k1+1 => k2 => k2+1
+      if(i != (stackCount-1))
+      {
+        indices.push_back(k1 + 1);
+        indices.push_back(k2);
+        indices.push_back(k2 + 1);
+      }
+    }
+  }
+
+  return CreateMesh(vertices.data(), vertices.size() * sizeof(vertices[0]), indices.data(), indices.size() * sizeof(indices[0]));
 }

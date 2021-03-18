@@ -13,9 +13,8 @@ struct MeshSlice {
 
 class IcoSphere
 {
-
 public:
-  IcoSphere(const VertexDescriptor& descriptor, void** verticesPtr, int* vertexCount);
+  IcoSphere();
 
   MeshSlice GenTriangle(int* startIndex);
   MeshSlice GenIcosphere(int* startIndex, int depth = 2);
