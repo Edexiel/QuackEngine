@@ -6,8 +6,10 @@ const size_t START_SIZE = 1000;
 
 EntityManager::EntityManager()
 {
-    _entities.reserve(START_SIZE);
-    _entityLut.reserve(START_SIZE);
+    _entityLut.reserve(START_SIZE); //lookup table to translate faster Entity id to index in array
+
+    _entities.reserve(START_SIZE); //Entity array
+    _signatures.reserve(START_SIZE); // Signature array
 }
 
 /**
@@ -18,6 +20,7 @@ EntityManager::EntityManager()
 Entity &EntityManager::instantiate(const std::string &name)
 {
     Entity &e = _entities.emplace_back(name);
+    _signatures.emplace_back();
     _entityLut.insert({e.getId(), _entities.size() - 1});
 
     return e;
@@ -38,6 +41,10 @@ Entity *EntityManager::get(EntityId id)
     return nullptr;
 }
 
+/**
+ * Removes an Entity by id
+ * @param id
+ */
 void EntityManager::remove(EntityId id)
 {
     auto it = _entityLut.find(id);
@@ -50,9 +57,38 @@ void EntityManager::remove(EntityId id)
         std::swap(_entities[index], _entities.back());
         _entities.pop_back();
 
+        std::swap(_signatures[index], _signatures.back());
+        _signatures.pop_back();
+
         _entityLut[backId] = index;
         _entityLut.erase(id);
     }
+}
 
+/**
+ * Get the signature of an Entity by id, a signature is a bitfield which contains components registration
+ * @param id
+ * @return The signature of the entity
+ */
+Signature EntityManager::getSignature(EntityId id)
+{
+    auto it = _entityLut.find(id);
 
+    if (it != _entityLut.end())
+        return _signatures[it->second];
+
+    return Signature{};
+}
+
+/**
+ * Sets the signature of an entity
+ * @param id
+ * @param signature
+ */
+void EntityManager::setSignature(EntityId id, Signature signature)
+{
+    auto it = _entityLut.find(id);
+
+    if (it != _entityLut.end())
+        _signatures[it->second] = signature;
 }

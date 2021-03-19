@@ -9,12 +9,12 @@
 //todo : remplacer ca par un enum
 typedef std::uin8_t ComponentType;
 
-class Component
+class ComponentArray
 {
 private:
     ComponentType _type;
 public:
-    Component(const std::uin8_t &type) : _type(type)
+    ComponentArray(const std::uin8_t &type) : _type(type)
     {}
 };
 

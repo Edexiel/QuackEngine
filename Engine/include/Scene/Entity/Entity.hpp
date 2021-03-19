@@ -13,8 +13,9 @@ class Entity
 private:
     static EntityId _idCount;
     static std::queue<EntityId> _garbage;
+
     EntityId _id;
-    std::string _name = nullptr;
+    std::string _name;
 
     static unsigned int getIdCount();
 
