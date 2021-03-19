@@ -62,7 +62,7 @@ int main()
 
     Renderer::Mesh quad = RendererPlatform::CreateQuad();
     Renderer::Mesh cube = RendererPlatform::CreateCube();
-    Renderer::Mesh sphere = RendererPlatform::CreateSphere(36, 18);
+    Renderer::Mesh sphere = RendererPlatform::CreateSphere(38, 18);
 
 
 
@@ -137,12 +137,12 @@ int main()
       shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,3}) *
                                  Maths::Matrix4::RotateX(angleX) * Maths::Matrix4::RotateY(angleY) *
                                  Maths::Matrix4::Scale({1,1,1}));
+      texture.Bind();
+//      quad.Draw();
 //      cube.Draw();
       sphere.Draw();
       RendererPlatform::SetPointLight(shader.ID, 0, light);
 
-      texture.Bind();
-//      quad.Draw();
 
       glfwSwapBuffers(window);
       glfwPollEvents();

@@ -68,7 +68,7 @@ Mesh RendererPlatform::CreateMesh(const Vertex *vertices, unsigned int verticesS
 
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, verticesSize * sizeof(float), vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, verticesSize * sizeof(Vertex), vertices, GL_STATIC_DRAW);
   
   unsigned int ebo;
   glGenBuffers(1, &ebo);
@@ -360,7 +360,7 @@ void RendererPlatform::SetPointLight(const unsigned int shaderID, const unsigned
 }
 Mesh RendererPlatform::CreateQuad()
 {
-  const Vertex vertices[]{
+  const Vertex vertices[4]{
       // positions          // texture coords
       {{1.0f, 1.0f, 0.0f}, {0, 0, -1}, {1.0f, 1.0f}},   // top right
       {{1.0f, -1.0f, 0.0f}, {0, 0, -1}, {1.0f, 0.0f}},  // bottom right
@@ -368,11 +368,11 @@ Mesh RendererPlatform::CreateQuad()
       {{-1.0f, 1.0f, 0.0f}, {0, 0, -1}, {0.0f, 1.0f}}   // top left
   };
 
-  unsigned int indices[]{
+  unsigned int indices[6]{
       0, 1, 3, // first triangle
       1, 2, 3  // second triangle
   };
-  return CreateMesh(vertices, sizeof (vertices), indices, sizeof(indices));
+  return CreateMesh(vertices, 4, indices, 6);
 }
 Mesh RendererPlatform::CreateCube()
 {
@@ -434,56 +434,60 @@ Mesh RendererPlatform::CreateCube()
       21, 22, 23
       };
 
-  return CreateMesh(vertices, sizeof (vertices), indices, sizeof(indices));
+  return CreateMesh(vertices, sizeof (vertices)/sizeof (vertices[0]), indices, sizeof(indices)/sizeof(indices[0]));
 }
 Mesh RendererPlatform::CreateSphere(int sectorCount, int stackCount)
 {
   std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;
-  std::vector<unsigned int> lineIndices;
 
-  float sectorStep = 2 * (float)M_PI / sectorCount;
-  float stackStep = (float)M_PI / stackCount;
+  float sectorStep = 2 * (float)M_PI / (float)sectorCount;
+  float stackStep = (float)M_PI / (float)stackCount;
   float sectorAngle, stackAngle;
-  int k1, k2;
 
+  //Vertices
   for(int i = 0; i <= stackCount; ++i)
   {
-    stackAngle = (float)M_PI / 2 - i * stackStep; // starting from pi/2 to -pi/2
+    stackAngle = (float)M_PI / 2.f - (float)i * stackStep; // starting from pi/2 to -pi/2
     float xy = cosf(stackAngle);           // r * cos(u)
     float z = sinf(stackAngle);            // r * sin(u)
 
-    k1 = i * (sectorCount + 1);
-    k2 = k1 + sectorCount + 1;
-
-    for (int j = 0; j <= sectorCount; ++j, ++k1, ++k2)
+    for (int j = 0; j <= sectorCount; ++j)
     {
-      //Vertices
-      sectorAngle = j * sectorStep; // starting from 0 to 2pi
+      sectorAngle = (float)j * sectorStep; // starting from 0 to 2pi
 
-      // vertex position (x, y, z)
       float x = xy * cosf(sectorAngle);
       float y = xy * sinf(sectorAngle);
 
       vertices.push_back({{x, y, z}, {x, y, z},{(float)j / (float)sectorCount, (float)i / (float)stackCount}});
+    }
+  }
 
-      //indices
+  //Indices
+  unsigned int k1, k2;
+  for(int i = 0; i < stackCount; ++i)
+  {
+    k1 = i * (sectorCount + 1);
+    k2 = k1 + sectorCount + 1;
+
+    for(int j = 0; j < sectorCount; ++j, ++k1, ++k2)
+    {
+      // 2 triangles per sector excluding 1st and last stacks
       if(i != 0)
       {
         indices.push_back(k1);
         indices.push_back(k2);
-        indices.push_back(k1 + 1);
+        indices.push_back(k1+1);
       }
 
-      // k1+1 => k2 => k2+1
       if(i != (stackCount-1))
       {
-        indices.push_back(k1 + 1);
+        indices.push_back(k1+1);
         indices.push_back(k2);
-        indices.push_back(k2 + 1);
+        indices.push_back(k2+1);
       }
     }
   }
 
-  return CreateMesh(vertices.data(), vertices.size() * sizeof(vertices[0]), indices.data(), indices.size() * sizeof(indices[0]));
+  return CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
 }
