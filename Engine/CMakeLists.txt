@@ -19,6 +19,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/Material.cpp
         src/Renderer/RendererPlatform.cpp
         src/Renderer/Framebuffer.cpp
+        src/Renderer/IcoSphere.cpp
         src/Scene/TransformComponent.cpp
         src/Scene/Archetype.cpp
         src/Scene/RendererComponent.cpp
