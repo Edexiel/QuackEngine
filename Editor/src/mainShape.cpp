@@ -38,13 +38,11 @@ int main()
     // loadGL
     RendererPlatform::LoadGL();
 
-
-
     Resources::ResourcesManager rm;
 
     // shader
 
-    ShaderConstructData shd = {1,0,0};
+    ShaderConstructData shd = {1,1,0, 0, 1, 0,0};
 
     //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
@@ -64,6 +62,7 @@ int main()
 
     Renderer::Mesh quad = RendererPlatform::CreateQuad();
     Renderer::Mesh cube = RendererPlatform::CreateCube();
+    Renderer::Mesh sphere = RendererPlatform::CreateSphere(38, 18);
 
 
 
@@ -133,16 +132,17 @@ int main()
 //      light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
 
       shader.Use();
+      shader.SetVector4f("material.color", {1,1,1, 1});
 //      shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415 /180));
-      shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,5}) *
-                                     Maths::Matrix4::RotateY(angleY) * Maths::Matrix4::RotateX(angleX) *
-                                     Maths::Matrix4::Scale({1,1,1}));
-      cube.Draw();
-
-      RendererPlatform::SetPointLight(shader.ID, 0, light);
-
+      shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,3}) *
+                                 Maths::Matrix4::RotateX(angleX) * Maths::Matrix4::RotateY(angleY) *
+                                 Maths::Matrix4::Scale({1,1,1}));
       texture.Bind();
 //      quad.Draw();
+//      cube.Draw();
+      sphere.Draw();
+      RendererPlatform::SetPointLight(shader.ID, 0, light);
+
 
       glfwSwapBuffers(window);
       glfwPollEvents();
