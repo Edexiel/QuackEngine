@@ -3,6 +3,8 @@
 
 
 #include <functional>
+#include "Maths/Vector2.hpp"
+
 namespace Input
 {
     enum class Action
@@ -156,8 +158,8 @@ namespace Input
     };
     struct MousePosition
     {
-        double x, y = 0;
-        double prevX, prevY = 0;
+        Maths::Vector2d pos{0,0};
+        Maths::Vector2d oldPos{0,0};
     };
 
     class PlatformInput

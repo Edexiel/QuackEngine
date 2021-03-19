@@ -43,11 +43,11 @@ void Input::InputManager::OnMouseButtonEvent(Action action, MouseButton button)
 
 void Input::InputManager::OnUpdateMousePositionEvent(const double xPos, const double yPos)
 {
-	mousePosition.prevX = mousePosition.x;
-	mousePosition.prevY = mousePosition.y;
+	mousePosition.oldPos = mousePosition.pos;
+	mousePosition.pos = {xPos, yPos};
 
-	mousePosition.x = xPos;
-	mousePosition.y = yPos;
+        std::cout << "oldPos.x = " << mousePosition.oldPos.x << " oldPos.y = " << mousePosition.oldPos.y << std::endl;
+        std::cout << "pos.x = " << mousePosition.pos.x << " pos.y = " << mousePosition.pos.y << std::endl;
 }
 
 void InputManager::BindEvent(std::string event, Key key, Action Action)

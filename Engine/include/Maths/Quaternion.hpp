@@ -21,7 +21,7 @@ namespace Maths
       float e[4]{ 0 };
     };
 
-    Quaternion();
+    Quaternion() = default;
     Quaternion(const float& _w,
                const float& _x,
                const float& _y,
@@ -61,13 +61,11 @@ namespace Maths
     bool       operator==(const Quaternion& q) const;
   };
 
-Quaternion::Quaternion(){}
+inline Quaternion::Quaternion(const float& _w, const float& _x, const float& _y, const float& _z) : x{_x}, y{ _y }, z{ _z }, w{ _w }{}
 
-Quaternion::Quaternion(const float& _w, const float& _x, const float& _y, const float& _z) : x{_x}, y{ _y }, z{ _z }, w{ _w }{}
+inline Quaternion::Quaternion(const float& _w, const Vector3f& _axis) : x{ _axis.x }, y{ _axis.y }, z{_axis.z}, w{ _w } {}
 
-Quaternion::Quaternion(const float& _w, const Vector3f& _axis) : x{ _axis.x }, y{ _axis.y }, z{_axis.z}, w{ _w } {}
-
-Quaternion::Quaternion(const Vector3f& Axe, const float& angle)
+inline Quaternion::Quaternion(const Vector3f& Axe, const float& angle)
 {
     w = cosf(angle / 2);
 
@@ -77,16 +75,16 @@ Quaternion::Quaternion(const Vector3f& Axe, const float& angle)
 }
 
 
-float Quaternion::GetMagnitude() const
+inline float Quaternion::GetMagnitude() const
 {
   return sqrtf(w * w + x * x + y * y + z * z);
 }
-Quaternion Quaternion::GetConjugate() const
+inline Quaternion Quaternion::GetConjugate() const
 {
   return {w, -x, -y, -z};
 }
 
-Quaternion& Quaternion::Normalize()
+inline Quaternion& Quaternion::Normalize()
 {
     float size = GetMagnitude();
 
@@ -98,14 +96,14 @@ Quaternion& Quaternion::Normalize()
     return *this;
 }
 
-Quaternion Quaternion::GetNormalized() const
+inline Quaternion Quaternion::GetNormalized() const
 {
     float size = GetMagnitude();
 
     return{w / size, x  / size, y  / size,z / size};
 }
 
-void Quaternion::Normalized(Quaternion& q)
+inline void Quaternion::Normalized(Quaternion& q)
 {
   float size = q.GetMagnitude();
 
@@ -115,7 +113,7 @@ void Quaternion::Normalized(Quaternion& q)
   q.z  /= size;
 }
 
-Maths::Matrix4 Quaternion::QuaternionToMatrix() const
+inline Maths::Matrix4 Quaternion::QuaternionToMatrix() const
 {
     Maths::Matrix4 result;
 
@@ -136,12 +134,12 @@ Maths::Matrix4 Quaternion::QuaternionToMatrix() const
     return result;
 }
 
-float Quaternion::DotProduct(const Quaternion& q1, const Quaternion& q)
+inline float Quaternion::DotProduct(const Quaternion& q1, const Quaternion& q)
 {
     return q1.x * q.x + q1.y * q.y + q1.z * q.z + q1.w * q.w;
 }
 
-Quaternion Quaternion::Slerp(const Quaternion& q1, const Quaternion& q2, const float& completion)
+inline Quaternion Quaternion::Slerp(const Quaternion& q1, const Quaternion& q2, const float& completion)
 {
     if (q1 == q2 || completion <= 0.f)
     {
@@ -175,21 +173,21 @@ Quaternion Quaternion::Slerp(const Quaternion& q1, const Quaternion& q2, const f
     return newQ1 * (sinf((1.0f - completion) * omega) / sin) + q2 * (sinf(completion * omega) / sin);
 }
 
-Quaternion Quaternion::Lerp(const Quaternion& q1, const Quaternion& q2, const float& t)
+inline Quaternion Quaternion::Lerp(const Quaternion& q1, const Quaternion& q2, const float& t)
 {
     return q1 * (1 - t) + q2 * t;
 }
-Quaternion Quaternion::Nlerp(const Quaternion& q1, const Quaternion& q2, const float& t)
+inline Quaternion Quaternion::Nlerp(const Quaternion& q1, const Quaternion& q2, const float& t)
 {
     return Lerp(q1, q2, t).GetNormalized();
 }
 
-Maths::Vector3f Quaternion::XYZVector() const
+inline Maths::Vector3f Quaternion::XYZVector() const
 {
     return { x, y, z };
 }
 
-Quaternion Quaternion::GetInverse() const
+inline Quaternion Quaternion::GetInverse() const
 {
   Quaternion q = *this;
   return q / (w * w + x * x + y * y + z * z);
