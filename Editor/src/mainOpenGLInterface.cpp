@@ -144,7 +144,7 @@ int main()
 
     // shader
 
-    ShaderConstructData shd = {1,1,1, 0, 1, 0, 0, 1};
+    ShaderConstructData shd = {1,1,1, 0, 1, 0, 1, 1};
 
     //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
@@ -172,9 +172,10 @@ int main()
 
 
 //    Texture
-    Model model =  Model::LoadModel("../../../eyeball.fbx");
-    Texture texture = rm.LoadTexture("../../../Eye_D.jpg");
-    Texture textureDiffuse = rm.LoadTexture("../../../DiffuseTest.jpg");
+    Model model =  Model::LoadModel("../../../Dragon_Baked_Actions_fbx_7.4_binary.fbx");
+    Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
+    Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
+
 
     Renderer::Light light;
 
@@ -192,6 +193,14 @@ int main()
 
     Material material;
     material.shader = shader;
+
+    material.ambient = {1, 1, 1};
+    material.diffuse = {1, 1, 1};
+    material.specular = {1, 1, 1};
+
+    material.colorTexture = texture;
+    material.specularTexture = textureSpecular;
+
 
     float count = 0;
 
@@ -218,16 +227,11 @@ int main()
         framebuffer.Bind();
         RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
         RendererPlatform::Clear();
-        texture.Bind(0);
 
         RendererPlatform::VerticesReading();
         //quadMesh.Draw();
         light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
         //light.model = Maths::Matrix4::RotateY(count);
-
-        material.ambient = {1, 0, 0};
-        material.diffuse = {1, 0, 0};
-        material.specular = {0, 1, 0};
 
         material.Apply();
 
@@ -236,12 +240,11 @@ int main()
 
         material.shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415/180));
         material.shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
-        material.shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(3.1415) * Maths::Matrix4::RotateX(0) * Maths::Matrix4::Scale({1,1,1}));
+        material.shader.SetMatrix4("model", Maths::Matrix4::Translate({0,-20,100}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Scale({1,1,1}));
 
         RendererPlatform::SetPointLight(shader.ID, 0, light);
         //RendererPlatform::SetDirectionalLight(shader.ID, 0, light);
 
-        texture.Bind();
         model.Draw();
 
         RendererPlatform::BindFramebuffer(0);
