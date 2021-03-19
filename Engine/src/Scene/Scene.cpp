@@ -3,19 +3,24 @@
 //
 
 #include "Scene/Scene.hpp"
-void Scene::getEntity(unsigned int id) {}
 
-Entity &Scene::createEntity()
-{
-    return <#initializer#>;
-}
-
-void Scene::removeEntity()
-{
-
-}
 
 void Scene::load()
+{
+
+}
+
+void Scene::update(float DeltaTime)
+{
+
+}
+
+void Scene::fixedUpdate(float FixedDeltaTime)
+{
+
+}
+
+void Scene::draw()
 {
 
 }

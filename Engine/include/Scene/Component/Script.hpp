@@ -5,9 +5,9 @@
 #ifndef QUACKENGINE_SCRIPT_HPP
 #define QUACKENGINE_SCRIPT_HPP
 
-#include "Component.hpp"
+#include "Component.hpp.todelete"
 
-class Script : public Component  {
+class Script
 
 };
 

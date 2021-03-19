@@ -2,47 +2,64 @@
 #define QUACKENGINE_ENTITY_HPP
 
 #include <cstdint>
+#include <queue>
+#include <string>
+#include <utility>
 
-typedef std::uint32_t EntityId;
+typedef std::int_fast64_t EntityId;
 
 class Entity
 {
 private:
     static EntityId _idCount;
-    unsigned int _id;
-    const char *_name;
+    static std::queue<EntityId> _garbage;
+    EntityId _id;
+    std::string _name = nullptr;
 
     static unsigned int getIdCount();
 
 public:
     Entity() = delete;
-    Entity(const char *name);
+
+    Entity(std::string name);
     ~Entity();
 
     EntityId getId() const;
-    const char * getName() const;
+    std::string getName() const;
 };
 
-unsigned int Entity::_idCount = 0;
+EntityId Entity::_idCount = 0;
 
-Entity::Entity(const char *name) : _name(name)
-{ _id = _idCount++; }
+Entity::Entity(std::string name) : _name(std::move(name))
+{
+    if (!_garbage.empty())
+    {
+        _id = _garbage.front();
+        _garbage.pop();
+        return;
+    }
+    _id = _idCount++;
+}
 
 Entity::~Entity()
 {
-    // delete all components associated ?
-    // add itself to garbage for recycling
+    _garbage.push(_id);
 }
 
-inline unsigned int Entity::getId() const
-{ return _id; }
+inline EntityId Entity::getId() const
+{
+    return _id;
+}
 
-inline const char *Entity::getName() const
-{ return _name; }
+inline std::string Entity::getName() const
+{
+    return _name;
+}
 
 unsigned int Entity::getIdCount()
 {
     return _idCount;
 }
+
 
 #endif // QUACKENGINE_ENTITY_HPP
