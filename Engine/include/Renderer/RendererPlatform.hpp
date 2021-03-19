@@ -24,10 +24,14 @@ public:
 
   static Mesh CreateMesh(const Vertex* vertices, unsigned int verticesSize, const unsigned int* indices, unsigned int indicesSize);
   static Mesh CreateMesh(const float* vertices, unsigned int verticesSize, const unsigned int* indices, unsigned int indicesSize);
+
   static void DrawMesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbIndices);
+  static void DrawMeshNormalMap(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbIndices);
+
   static void DeleteMesh(unsigned int vao, unsigned int vbo, unsigned int ebo);
 
   static void VerticesReading();
+  static void VerticesReadingNormalMapping();
 
   static Shader CreateShader(const char* vertexShaderSource, const char* fragmentShaderSource);
   static void UseShader(unsigned int shaderProgram);

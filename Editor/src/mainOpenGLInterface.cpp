@@ -142,21 +142,6 @@ int main()
 
     Resources::ResourcesManager rm;
 
-    // shader
-
-    ShaderConstructData shd = {1,1,1, 0, 1, 0, 1, 1};
-
-    //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
-
-    Shader shader = Shader::LoadShader(shd);
-
-    RendererPlatform::UseShader(shader.ID);
-    shader.SetMatrix4
-        (
-        "projection",
-        Maths::Matrix4::Perspective(width, height, -1.f, 100.f, 3.1415f / 2.f)
-        );
-    shader.SetMatrix4("view", Maths::Matrix4::Identity());
     // Shader fb
     Shader shaderFb(Renderer::RendererPlatform::CreateShader(
         vertexShaderFb, fragmentShaderFb));
@@ -168,18 +153,12 @@ int main()
 
     Renderer::Mesh quadMesh = Renderer::RendererPlatform::CreateMesh(
         quad, sizeof(quad) / sizeof (float ), quadIndices, sizeof(quadIndices) / sizeof(unsigned int));
-
-
-
-//    Texture
-    Model model =  Model::LoadModel("../../../Dragon_Baked_Actions_fbx_7.4_binary.fbx");
-    Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
-    Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
+    RendererPlatform::VerticesReading();
 
 
     Renderer::Light light;
 
-    light.model = Maths::Matrix4::Translate({0,0, 0});
+    light.model = Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Translate({0,0, 0});
     light.ambient = {0.0f, 0.1f, 0.0f};
     light.diffuse = {0.7f, 0.7f, 0.7f};
     light.specular = {1.0f, 1.0f, 1.0f};
@@ -191,15 +170,38 @@ int main()
     light.spotAngle = 8.5;
 
 
+
+    ShaderConstructData shd = {1,0,1, 0, 1, 1, 1, 1};
+
+    //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+
+    Shader shader = Shader::LoadShader(shd);
+
+    RendererPlatform::UseShader(shader.ID);
+    shader.SetMatrix4
+        (
+            "projection",
+            Maths::Matrix4::Perspective(width, height, -1.f, 100.f, 3.1415f / 2.f)
+        );
+    shader.SetMatrix4("view", Maths::Matrix4::Identity());
+
+    Model model =  Model::LoadModel("../../../Dragon_Baked_Actions_fbx_7.4_binary.fbx", VertexType::V_NORMALMAP);
+    Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
+    Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
+    Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
+
     Material material;
     material.shader = shader;
 
     material.ambient = {1, 1, 1};
     material.diffuse = {1, 1, 1};
     material.specular = {1, 1, 1};
+    material.shininess = 1;
 
     material.colorTexture = texture;
+    material.diffuseTexture = textureDiffuse;
     material.specularTexture = textureSpecular;
+    material.normalMap = rm.LoadTexture("../../../Dragon_Nor_mirror2.jpg");
 
 
     float count = 0;
@@ -221,16 +223,16 @@ int main()
 
         if (glfwGetKey(window, GLFW_KEY_R))
         {
-          shader = Shader::LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+          //shader = Shader::LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
         }
 
         framebuffer.Bind();
         RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
         RendererPlatform::Clear();
 
-        RendererPlatform::VerticesReading();
+        RendererPlatform::VerticesReadingNormalMapping();
         //quadMesh.Draw();
-        light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
+        //light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
         //light.model = Maths::Matrix4::RotateY(count);
 
         material.Apply();
@@ -242,10 +244,11 @@ int main()
         material.shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
         material.shader.SetMatrix4("model", Maths::Matrix4::Translate({0,-20,100}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Scale({1,1,1}));
 
-        RendererPlatform::SetPointLight(shader.ID, 0, light);
-        //RendererPlatform::SetDirectionalLight(shader.ID, 0, light);
+        //RendererPlatform::SetPointLight(shader.ID, 0, light);
+        RendererPlatform::SetDirectionalLight(shader.ID, 0, light);
 
         model.Draw();
+
 
         RendererPlatform::BindFramebuffer(0);
       }

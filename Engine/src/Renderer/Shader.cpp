@@ -113,10 +113,20 @@ Shader Shader::LoadShader(const ShaderConstructData& shaderData)
 
   if (shaderData.hasLight)
   {
-    FragmentShaderCode +=
-        LoadStringFromFile("../../Engine/Shader/FragmentLight/FragmentBasicLight.fs");
-    FragmentShaderCode += LoadStringFromFile(
-        "../../Engine/Shader/FragmentLight/FragmentMainLight.fs");
+    if (shaderData.hasNormalMap)
+    {
+      FragmentShaderCode +=
+          LoadStringFromFile("../../Engine/Shader/FragmentLight/FragmentNormalMapLight.fs");
+      FragmentShaderCode += LoadStringFromFile(
+          "../../Engine/Shader/FragmentLight/FragmentMainLightNormal.fs");
+    }
+    else
+    {
+      FragmentShaderCode +=
+          LoadStringFromFile("../../Engine/Shader/FragmentLight/FragmentBasicLight.fs");
+      FragmentShaderCode += LoadStringFromFile(
+          "../../Engine/Shader/FragmentLight/FragmentMainLight.fs");
+    }
   }
   else
     FragmentShaderCode += LoadStringFromFile("../../Engine/Shader/FragmentMain.fs");
@@ -124,8 +134,13 @@ Shader Shader::LoadShader(const ShaderConstructData& shaderData)
   std::cout << FragmentShaderCode << std::endl;
 
 
+  std::string VertexShaderCode;
+
   // Read the Vertex Shader code from the file
-  std::string VertexShaderCode = LoadStringFromFile("../../Engine/Shader/vertex.vs");
+  if (shaderData.hasNormalMap)
+    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/vertexNormalMap.vs");
+  else
+    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/vertex.vs");
 
 
   return RendererPlatform::CreateShader(VertexShaderCode.c_str(), FragmentShaderCode.c_str());

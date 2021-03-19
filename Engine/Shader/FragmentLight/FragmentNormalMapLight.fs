@@ -1,3 +1,6 @@
+
+in mat3 TBN;
+
 vec3 GetColorAfterDirectionalLight(DirectionalLight light, vec3 position, vec3 normal, vec2 texCoord)
 {    
 

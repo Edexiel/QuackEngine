@@ -95,7 +95,7 @@ Mesh RendererPlatform::CreateMesh(const float *vertices, unsigned int verticesSi
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
-  VerticesReading();
+  //VerticesReading();
 
   return Mesh(vao, vbo, ebo, verticesSize, indicesSize);
 }
@@ -106,6 +106,21 @@ void RendererPlatform::DrawMesh(unsigned int vao, unsigned int vbo, unsigned int
 
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+
+  VerticesReading();
+
+  glDrawElements(GL_TRIANGLES, nbIndices, GL_UNSIGNED_INT, (const void*)0);
+
+}
+
+void RendererPlatform::DrawMeshNormalMap(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbIndices)
+{
+  glBindVertexArray(vao);
+
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+
+  VerticesReadingNormalMapping();
 
   glDrawElements(GL_TRIANGLES, nbIndices, GL_UNSIGNED_INT, (const void*)0);
 
@@ -120,12 +135,40 @@ void RendererPlatform::DeleteMesh(unsigned int vao, unsigned int vbo, unsigned i
 
 void RendererPlatform::VerticesReading()
 {
+  glDisableVertexAttribArray(0);
+  glDisableVertexAttribArray(1);
+  glDisableVertexAttribArray(2);
+  glDisableVertexAttribArray(3);
+  glDisableVertexAttribArray(4);
+
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, position));
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, normal));
   glEnableVertexAttribArray(1);
   glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)offsetof(Vertex, uv));
   glEnableVertexAttribArray(2);
+}
+
+void RendererPlatform::VerticesReadingNormalMapping()
+{
+  //std::cout << sizeof(float) << std::endl;
+
+  glDisableVertexAttribArray(0);
+  glDisableVertexAttribArray(1);
+  glDisableVertexAttribArray(2);
+  glDisableVertexAttribArray(3);
+  glDisableVertexAttribArray(4);
+
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (const GLvoid*)(0 * sizeof(float)));
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (const GLvoid*)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 14 * sizeof(float) , (const GLvoid*)(6 * sizeof(float)));
+  glEnableVertexAttribArray(2);
+  glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (const GLvoid*)(8 * sizeof(float)));
+  glEnableVertexAttribArray(3);
+  glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (const GLvoid*)(11 * sizeof(float)));
+  glEnableVertexAttribArray(4);
 }
 
 
@@ -320,6 +363,7 @@ void RendererPlatform::SetDirectionalLight(const unsigned int shaderID, const un
   std::string set = "directionalLights[" + std::to_string(index);
 
   Maths::Vector3f directionVect = light.GetDirection();
+
 
   int location = glGetUniformLocation(shaderID, (set + "].direction").c_str());
   glUniform3f(location, directionVect.x, directionVect.y, directionVect.z);
