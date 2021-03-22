@@ -1,101 +1,150 @@
-//
-// Created by a.figueiredo on 25/01/2021.
-//
-
 #ifndef QUACKENGINE_VECTOR2_HPP
 #define QUACKENGINE_VECTOR2_HPP
 
 #include <cmath>
-#include <string>
+#include <iostream>
 
 namespace Maths
 {
-  struct Vector2
+template<typename T>
+struct Vector2
+{
+  union
   {
-    union
+    struct
     {
-      struct
-      {
-        float x;
-        float y;
-      };
-
-      float e[2];
+      T x;
+      T y;
     };
 
-    float Length();
-
-    float SqrLength();
-
-    // Normalize the vector and return it;
-    Vector2 Normalize();
-
-    // Return the vector normalized
-    Vector2 Normalized();
-
-    static float DotProduct(const Vector2& v1, const Vector2& v2);
-
-    std::string ToString();
+    T e[2]{0};
   };
+  Vector2<T>() = default;
+  Vector2<T>(T _x, T _y);
+  T Length() const;
+  T SqrLength() const;
+
+  Vector2<T>& Normalize();
+  Vector2<T> GetNormalized() const;
+  static void Normalized(Vector2<T>& v);
+
+  static T DotProduct(const Vector2<T>& v1, const Vector2<T>& v2);
+
+  static Vector2<T> Up();
+  static Vector2<T> Down();
+  static Vector2<T> Right();
+  static Vector2<T> Left();
+  static Vector2<T> Zero();
+
+  Vector2<T> operator+(const Vector2<T>& v2)   const;
+  Vector2<T> operator-(const Vector2<T>& v2)   const;
+  Vector2<T> operator*(const T& f)             const;
+};
+
+typedef Vector2<double> Vector2d;
+typedef Vector2<float> Vector2f;
+typedef Vector2<int> Vector2i;
+
+template<typename T>
+Vector2<T>::Vector2(T _x, T _y): x{_x},y{_y}{}
+
+template<typename T>
+inline T Vector2<T>::Length() const
+{
+  return sqrtf(x*x + y*y);
 }
 
-
-Maths::Vector2 operator+(const Maths::Vector2& v, const Maths::Vector2& v2)
+template<typename T>
+inline T Vector2<T>::SqrLength() const
 {
-    return { v.x + v2.x, v.y + v2.y };
+  return x * x + y * y;
 }
 
-Maths::Vector2 operator-(const Maths::Vector2& v, const Maths::Vector2& v2)
+template<typename T>
+inline Vector2<T>& Vector2<T>::Normalize()
 {
-    return { v.x - v2.x, v.y - v2.y };
+  T length = Length();
+  if (length > 0)
+  {
+    x /= length;
+    y /= length;
+  }
+
+  return *this;
 }
 
-Maths::Vector2 operator*(const Maths::Vector2& v, const float& f)
+template<typename T>
+inline Vector2<T> Vector2<T>::GetNormalized() const
 {
-    return { v.x * f, v.y * f };
-}
-
-float Maths::Vector2::Length()
-{
-    return sqrtf(x*x + y*y);
-}
-
-float Maths::Vector2::SqrLength()
-{
-    return x * x + y * y;
-}
-
-//Normalize the Maths::Vector and return it;
-Maths::Vector2 Maths::Vector2::Normalize()
-{
-    float length = Length();
-    if (length < 0)
-    {
-        x /= length;
-        y /= length;
-    }
-
+  T length = Length();
+  if (length > 0)
+    return { x / length, y / length };
+  else
     return *this;
 }
 
-// Return the Maths::Vector normalized
-Maths::Vector2 Maths::Vector2::Normalized()
+template<typename T>
+inline void Vector2<T>::Normalized(Vector2<T>& v)
 {
-    float length = Length();
-    if (length > 0)
-        return { x / length, y / length };
-    else
-        return *this;
+  T length = v.Length();
+
+  v.x /= length;
+  v.y /= length;
 }
 
-float Maths::Vector2::DotProduct(const Maths::Vector2& v1, const Maths::Vector2& v2)
+template<typename T>
+inline T Vector2<T>::DotProduct(const Vector2<T>& v1, const Vector2<T>& v2)
 {
-    return v1.x * v2.x + v1.y * v2.y;
+  return v1.x * v2.x + v1.y * v2.y;
 }
 
-std::string Maths::Vector2::ToString()
+
+template<typename T>
+inline Vector2<T> Vector2<T>::Up()
 {
-    return "x = " + std::to_string(x) + ", y = " + std::to_string(y);
+  return{0,1};
 }
 
+template<typename T>
+inline Vector2<T> Vector2<T>::Down()
+{
+  return{0,-1};
+}
+
+template<typename T>
+inline Vector2<T> Vector2<T>::Right()
+{
+  return{1,0};
+}
+
+template<typename T>
+inline Vector2<T> Vector2<T>::Left()
+{
+  return{-1, 0};
+}
+
+template<typename T>
+inline Vector2<T> Vector2<T>::Zero()
+{
+  return{0, 0};
+}
+
+template<typename T>
+inline Vector2<T> Vector2<T>::operator+(const Vector2<T>& v2) const
+{
+  return { this->x + v2.x, this->y + v2.y };
+}
+
+template<typename T>
+inline Vector2<T> Vector2<T>::operator-(const Vector2<T>& v2) const
+{
+  return { this->x - v2.x, this->y - v2.y };
+}
+
+template<typename T>
+inline Vector2<T> Vector2<T>::operator*(const T& f) const
+{
+  return { this->x * f, this->y * f };
+}
+}
 #endif // QUACKENGINE_VECTOR2_HPP
