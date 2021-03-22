@@ -3,6 +3,8 @@
 
 
 #include <functional>
+
+#include "Maths/Vector2.hpp"
 namespace Input
 {
     enum class Action
@@ -156,8 +158,8 @@ namespace Input
     };
     struct MousePosition
     {
-        double x, y = 0;
-        double prevX, prevY = 0;
+      Maths::Vector2d pos{0,0};
+      Maths::Vector2d prevPos{0,0};
     };
 
     class PlatformInput
@@ -167,6 +169,9 @@ namespace Input
         std::function<void(Action, Key)> keyEvent;
         std::function<void(Action, MouseButton)> MouseButtonEvent;
         std::function<void(const double x, const double y)> UpdateMousePosition;
+
+        virtual void PollEvents() = 0;
+        virtual void UpdateCursorPosition(MousePosition& mousePosition) = 0;
     };
 }
 

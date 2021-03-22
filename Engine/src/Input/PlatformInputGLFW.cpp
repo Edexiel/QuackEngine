@@ -35,6 +35,7 @@ PlatformInputGLFW::PlatformInputGLFW(GLFWwindow* window)
 			manager->OnScrollCallback(xoffset, yoffset);
 		}
 	);
+        _window = window;
 }
 void PlatformInputGLFW::OnKeyEvent(int key, int scancode, int action, int mods)
 {
@@ -58,4 +59,13 @@ void PlatformInputGLFW::OnCursorPositionCallback(double xpos, double ypos)
 void PlatformInputGLFW::OnScrollCallback(double xoffset, double yoffset)
 {
 	std::cout << "xoffset = " << xoffset << " yoffset = " << yoffset << std::endl;
+}
+void PlatformInputGLFW::PollEvents()
+{
+  glfwPollEvents();
+}
+void PlatformInputGLFW::UpdateCursorPosition(MousePosition &mousePosition)
+{
+  mousePosition.prevPos = mousePosition.pos;
+  glfwGetCursorPos(_window, &mousePosition.pos.x,&mousePosition.pos.y);
 }
