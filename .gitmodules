@@ -7,9 +7,6 @@
 [submodule "Vendor/assimp"]
 	path = Vendor/assimp
 	url = git@github.com:assimp/assimp.git
-[submodule "reactphysics3d"]
-	path = reactphysics3d
-	url = git@github.com:DanielChappuis/reactphysics3d.git
 [submodule "Vendor/reactphysics3d"]
 	path = Vendor/reactphysics3d
 	url = git@github.com:DanielChappuis/reactphysics3d.git
