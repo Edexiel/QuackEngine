@@ -4,16 +4,14 @@
 #include "Maths/Vector4.hpp"
 #include <iostream>
 
-#define M_PI 3.14
-
 namespace Maths
 {
   struct Matrix4
   {
     union
     {
-      Vector4f v[4];
       float e[16]{ 0 };
+      Vector4f v[4];
     };
 
     static Matrix4 Identity();
@@ -44,7 +42,8 @@ namespace Maths
 
     Matrix4 operator*(const Matrix4& m);
     Matrix4& operator*=(const Matrix4& m);
-    Matrix4 operator*(const float& f);
+    Matrix4 operator*(float f);
+    Vector4f operator*(const Vector4f& v) const;
     Matrix4 operator+(const Matrix4& m2);
   };
 
@@ -180,7 +179,8 @@ inline Matrix4 Matrix4::Perspective(const int& width, const int& height, const f
 {
   Matrix4 projection;
   float const a = 1.f / tanf(fov / 2.f);
-  float const aspect = width / height;
+  float const aspect = (float)width / height;
+
   projection.e[0] = a / aspect;
 
   projection.e[5] = a;
@@ -189,7 +189,6 @@ inline Matrix4 Matrix4::Perspective(const int& width, const int& height, const f
   projection.e[14] = -1.f;
 
   projection.e[11] = -((2.f * far * near) / (far - near));
-
 
   return projection;
 }
@@ -250,16 +249,28 @@ inline Matrix4 Matrix4::operator*(const Matrix4& m)
 }
 inline Matrix4& Matrix4::operator*=(const Matrix4& m)
 {
-  Matrix4 result = *this * m;
-  return result;
+  *this = *this * m;
+  return *this;
 }
 
-inline Matrix4 Matrix4::operator*(const float& f)
+inline Matrix4 Matrix4::operator*(float f)
 {
   Matrix4 result;
 
   for (unsigned int i = 0 ; i < 16 ; i++)
     result.e[i] = this->e[i] * f;
+
+  return result;
+}
+
+inline Vector4f Matrix4::operator*(const Vector4f& v) const
+{
+  Vector4f result;
+
+  result.x = v.x * e[0] + v.y * e[1] + v.z * e[2] + v.w * e[3];
+  result.y = v.x * e[4] + v.y * e[5] + v.z * e[6] + v.w * e[7];
+  result.z = v.x * e[8] + v.y * e[9] + v.z * e[10] + v.w * e[11];
+  result.w = v.x * e[12] + v.y * e[13] + v.z * e[14] + v.w * e[15];
 
   return result;
 }

@@ -1,5 +1,5 @@
+//#include "glad/gl.h"
 #include "GLFW/glfw3.h"
-#include "glad/gl.h"
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shader.hpp"
@@ -7,7 +7,14 @@
 #include "Renderer/Texture.hpp"
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Mesh.hpp"
+#include "Renderer/Light.hpp"
 #include "Resources/ResourcesManager.hpp"
+#include "Renderer/Material.hpp"
+
+#include "Input/PlatformInputGLFW.hpp"
+#include "Input/InputManager.hpp"
+
+#include <cmath>
 
 using namespace Renderer;
 const char* vertexShader =
@@ -56,11 +63,13 @@ const char* vertexShaderFb =
                       layout (location = 1) in vec3 aNormal;
                       layout (location = 2) in vec2 aTexCoord;
 
+                      uniform mat4 view;
+
                       out vec2 TexCoord;
 
                       void main()
                       {
-                      gl_Position = vec4(aPos, 1.0);
+                      gl_Position = view * vec4(aPos, 1.0);
                       TexCoord = aTexCoord;
                      }
                      )GLSL"
@@ -109,10 +118,10 @@ int main()
 
     const Renderer::Vertex quad[] = {
         // positions          // texture coords
-        {{0.5f, 0.5f, 0.0f}, {0, 0, 1}, {1.0f, 1.0f}},   // top right
-        {{0.5f, -0.5f, 0.0f}, {0, 0, 1}, {1.0f, 0.0f}},  // bottom right
-        {{-0.5f, -0.5f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
-        {{-0.5f, 0.5f, 0.0f}, {0, 0, 1}, {0.0f, 1.0f}}   // top left
+        {{1.0f, 1.0f, 0.0f}, {0, 0, 1}, {1.0f, 1.0f}},   // top right
+        {{1.0f, -1.0f, 0.0f}, {0, 0, 1}, {1.0f, 0.0f}},  // bottom right
+        {{-1.0f, -1.0f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
+        {{-1.0f, 1.0f, 0.0f}, {0, 0, 1}, {0.0f, 1.0f}}   // top left
     };
     const Renderer::Vertex triangle[] = {
         // positions          // texture coords
@@ -136,19 +145,6 @@ int main()
 
     Resources::ResourcesManager rm;
 
-    // shader
-
-    Shader shader = rm.LoadShader("../../../vertex.vs", "../../../fragment.fs");
-
-    //Shader shader(Renderer::RendererPlatform::CreateShader(
-    //    vertexShader, fragmentShader));
-    RendererPlatform::UseShader(shader.ID);
-    shader.SetMatrix4
-        (
-        "projection",
-        Maths::Matrix4::Perspective(width, height, -1.f, 100.f, 3.14f / 2.f)
-        );
-    shader.SetMatrix4("view", Maths::Matrix4::Identity());
     // Shader fb
     Shader shaderFb(Renderer::RendererPlatform::CreateShader(
         vertexShaderFb, fragmentShaderFb));
@@ -160,40 +156,109 @@ int main()
 
     Renderer::Mesh quadMesh = Renderer::RendererPlatform::CreateMesh(
         quad, sizeof(quad) / sizeof (float ), quadIndices, sizeof(quadIndices) / sizeof(unsigned int));
+    RendererPlatform::VerticesReading();
 
 
-//    Texture
-    Model model =  Model::LoadModel("../../../Dragon_Baked_Actions_fbx_7.4_binary.fbx");
-    Texture texture = rm.LoadTexture("../../../DirtCube.jpg");
+    Renderer::Light light(Renderer::Light_Type::L_POINT);
+
+    light.model = Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Translate({0,0, 0});
+    light.ambient = {0.0f, 0.1f, 0.0f};
+    light.diffuse = {0.7f, 0.7f, 0.7f};
+    light.specular = {1.0f, 1.0f, 1.0f};
+    light.constant = 1.0f;
+    light.linear = 0.0014f;
+    light.quadratic = 0.000007f;
+
+    light.outerSpotAngle = 10.5;
+    light.spotAngle = 8.5;
+
+
+
+    ShaderConstructData shd = {1,1,0, 0, 1, 1, 1, 1};
+
+    //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+
+    Shader shader = Shader::LoadShader(shd);
+
+    RendererPlatform::UseShader(shader.ID);
+    shader.SetMatrix4
+        (
+            "projection",
+            Maths::Matrix4::Perspective(width, height, -1.f, 100.f, 3.1415f / 2.f)
+        );
+    shader.SetMatrix4("view", Maths::Matrix4::Identity());
+
+    Model model =  Model::LoadModel("../../../eyeball.fbx", VertexType::V_NORMALMAP);
+    Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
+    Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
+    Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
+
+    Material material;
+    material.shader = shader;
+
+    material.ambient = {1, 1, 1};
+    material.diffuse = {1, 1, 1};
+    material.specular = {1, 1, 1};
+    material.shininess = 256;
+
+    material.colorTexture = texture;
+    material.diffuseTexture = textureDiffuse;
+    material.specularTexture = textureSpecular;
+    material.normalMap = rm.LoadTexture("../../../Dragon_Nor_mirror2.jpg");
 
 
     float count = 0;
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+    RendererPlatform::EnableDepthBuffer(true);
+
+    //glfwSetWindowShouldClose(window, 1);
+
+    //test inputManager
+    Input::PlatformInputGLFW platformInput(window);
+    Input::InputManager inputManager(platformInput);
 
     while (!glfwWindowShouldClose(window))
     {
-      count += 0.001f;
+      inputManager.Update();
+
+      count += 0.01f;
 
       // framebuffer
       {
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE))
+        {
+          glfwSetWindowShouldClose(window, 1);
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_R))
+        {
+          //shader = Shader::LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+        }
+
         framebuffer.Bind();
         RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
         RendererPlatform::Clear();
-        shaderFb.Use();
-        texture.Bind();
 
-        RendererPlatform::VerticesReading();
         //quadMesh.Draw();
+        light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
+        //light.model = Maths::Matrix4::RotateY(count);
 
-        shader.Use();
-        shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * M_PI/180));
-        shader.SetMatrix4("view", Maths::Matrix4::Identity());
-        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,-10,150}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-90 * M_PI / 180));
+        material.Apply();
 
-        texture.Bind();
+        //shader.Use();
+        //shader.SetVector4f("material.color", {1,1,1, 1});
+
+        material.shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415/180));
+        material.shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
+        material.shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Scale({1,1,1}));
+
+        //RendererPlatform::SetPointLight(shader.ID, 0, light);
+        //RendererPlatform::SetDirectionalLight(shader.ID, 0, light);
+
+        shader.SetLight(light, 0);
+
         model.Draw();
+
 
         RendererPlatform::BindFramebuffer(0);
       }
@@ -201,6 +266,7 @@ int main()
       RendererPlatform::ClearColor({0.2f, 0.2f, 0.2f, 1.f});
       RendererPlatform::Clear();
       shaderFb.Use();
+      shaderFb.SetMatrix4("view", Maths::Matrix4::Identity());
       framebuffer.BindTexture();
       quadMesh.Draw();
       glfwSwapBuffers(window);

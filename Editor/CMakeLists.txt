@@ -6,6 +6,4 @@ add_executable(${PROJECT_NAME} src/mainOpenGLInterface.cpp)
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE "GLFW_INCLUDE_NONE")
-
 target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw imgui Engine)
