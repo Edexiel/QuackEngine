@@ -1,4 +1,4 @@
-vec3 GetColorAfterDirectionalLight(DirectionalLight light, vec3 position, vec3 normal)
+vec3 GetColorAfterDirectionalLight(DirectionalLight light, vec3 position, vec3 normal, vec2 texCoord)
 {    
 
   //diffuse
@@ -11,15 +11,13 @@ vec3 GetColorAfterDirectionalLight(DirectionalLight light, vec3 position, vec3 n
   vec3 viewDir    = normalize(cameraPosition - position);
   vec3 halfwayDir = normalize(lightDir + viewDir);
 
-  float spec = pow(max(dot(normal, halfwayDir), 0.0), 128);//shininess);
+  float spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
   vec3 specular = light.specular * spec;
-
-  vec3 reflected = light.ambient + diffuse + specular;
-  
-  return reflected;
+ 
+  return light.ambient * GetMaterialAmbient(texCoord) + diffuse * GetMaterialDiffuse(texCoord) + specular * GetMaterialSpecular(texCoord);
 }
 
-vec3 GetColorAfterPointLight(PointLight light, vec3 position, vec3 normal)
+vec3 GetColorAfterPointLight(PointLight light, vec3 position, vec3 normal, vec2 texCoord)
 {
   float length = length(light.position - position);
   float attenuation = 1.0f / (light.constant + light.linear * length + 
@@ -30,12 +28,12 @@ vec3 GetColorAfterPointLight(PointLight light, vec3 position, vec3 normal)
   vec3 diffuse = light.diffuse * max(dot(lightDir, normal), 0.0);
 
   //specular Blinn - Phong
-  vec3 specular = light.specular * pow(max(dot(normal, normalize(lightDir + normalize(cameraPosition - position))), 0.0), 128);//shininess);
+  vec3 specular = light.specular * pow(max(dot(normal, normalize(lightDir + normalize(cameraPosition - position))), 0.0), material.shininess);
 
-  return (light.ambient + diffuse + specular) * attenuation;
+  return (light.ambient * GetMaterialAmbient(texCoord) + diffuse * GetMaterialDiffuse(texCoord) + specular * GetMaterialSpecular(texCoord)) * attenuation;
 }
 
-vec3 GetColorAfterSpotLight(SpotLight light, vec3 position, vec3 normal)
+vec3 GetColorAfterSpotLight(SpotLight light, vec3 position, vec3 normal, vec2 texCoord)
 {
   float length = length(light.position - position);
   float attenuation = 1.0f / (light.constant + light.linear * length + 
@@ -58,12 +56,15 @@ vec3 GetColorAfterSpotLight(SpotLight light, vec3 position, vec3 normal)
   vec3 viewDir    = normalize(cameraPosition - position);
   vec3 halfwayDir = normalize(lightDir + viewDir);
 
-  float spec = pow(max(dot(normal, halfwayDir), 0.0), 128);//shininess);
+  float spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
   vec3 specular = light.specular * spec;
 
-  vec3 reflected = ambient + (diffuse + specular) * intensity;
-  reflected *= attenuation;
+  //vec3 reflected = ambient + (diffuse + specular) * intensity;
+  //reflected *= attenuation;
 
-  return reflected;
+  return ((light.ambient * GetMaterialAmbient(texCoord) + 
+        diffuse * GetMaterialDiffuse(texCoord) + 
+        specular * GetMaterialSpecular(texCoord))
+        * intensity) * attenuation;
 
 }

@@ -24,17 +24,24 @@ public:
 
   static Mesh CreateMesh(const Vertex* vertices, unsigned int verticesSize, const unsigned int* indices, unsigned int indicesSize);
   static Mesh CreateMesh(const float* vertices, unsigned int verticesSize, const unsigned int* indices, unsigned int indicesSize);
+
   static void DrawMesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbIndices);
+  static void DrawMeshNormalMap(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbIndices);
+
   static void DeleteMesh(unsigned int vao, unsigned int vbo, unsigned int ebo);
 
   static void VerticesReading();
+  static void VerticesReadingNormalMapping();
 
   static Shader CreateShader(const char* vertexShaderSource, const char* fragmentShaderSource);
   static void UseShader(unsigned int shaderProgram);
+
+  static void SetFloat(unsigned int shaderProgram, const char* name, float value);
   static void SetMatrix4(unsigned int shaderProgram, const char* name, const Maths::Matrix4& mat);
   static void SetVector3f(unsigned int shaderProgram, const char* name, const Maths::Vector3f& vec);
   static void SetVector4f(unsigned int shaderProgram, const char* name, const Maths::Vector4f& vec);
   static void SetSampler(unsigned int shaderProgram, const char* name, int value);
+
   static void DeleteShader(unsigned int shaderProgram);
 
   static Framebuffer CreateFramebuffer(unsigned int width, unsigned int height);
@@ -49,7 +56,7 @@ public:
 
   // Light
 
-  static void SetLight(const unsigned int shaderID, const unsigned int index, const Light& light);
+  static void SetSpotLight(const unsigned int shaderID, const unsigned int index, const Light& light);
   static void SetDirectionalLight(const unsigned int shaderID, const unsigned int index, const Light& light);
   static void SetPointLight(const unsigned int shaderID, const unsigned int index, const Light& light);
 
