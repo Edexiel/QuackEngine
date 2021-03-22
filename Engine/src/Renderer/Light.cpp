@@ -2,6 +2,8 @@
 
 using namespace Renderer;
 
+Light::Light(Light_Type lightType) : type{lightType} {}
+
 Maths::Vector3f Light::GetDirection() const
 {
     Maths::Vector4f direction = model * Maths::Vector4f{0.f, 0.f, 1.f, 0.f};

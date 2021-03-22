@@ -1,5 +1,8 @@
 #include "Renderer/Shader.hpp"
+#include "Renderer/Light.hpp"
 #include "Renderer/RendererPlatform.hpp"
+
+#include "Debug/Assertion.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -40,6 +43,16 @@ void Shader::SetVector4f(const char* name, const Maths::Vector4f vec)
 void Shader::SetSampler(const char* name, int sampler)
 {
     RendererPlatform::SetSampler(ID, name, sampler);
+}
+
+void Shader::SetLight(const Light& light, unsigned int index)
+{
+  switch (light.type) 
+  {
+    case Light_Type::L_DIRECTIONAL : return RendererPlatform::SetDirectionalLight(ID, index, light);
+    case Light_Type::L_SPOT : return RendererPlatform::SetSpotLight(ID, index, light);
+    default : return RendererPlatform::SetPointLight(ID, index, light);
+  }
 }
 
 Shader Shader::LoadShader(const char* vertexPath, const char* fragmentPath)
@@ -99,7 +112,7 @@ Shader Shader::LoadShader(const ShaderConstructData& shaderData)
                           std::to_string(shaderData.nbSpotLight) + "\n";
 
     FragmentShaderCode +=
-        LoadStringFromFile("../../Engine/Shader/FragmentLight/FragmentStartLight.fs");
+        LoadStringFromFile("../../Engine/Shader/Light/FragmentStartLight.fs");
   }
   else
   {
@@ -116,20 +129,20 @@ Shader Shader::LoadShader(const ShaderConstructData& shaderData)
     if (shaderData.hasNormalMap)
     {
       FragmentShaderCode +=
-          LoadStringFromFile("../../Engine/Shader/FragmentLight/FragmentNormalMapLight.fs");
+          LoadStringFromFile("../../Engine/Shader/Light/FragmentNormalMapLight.fs");
       FragmentShaderCode += LoadStringFromFile(
-          "../../Engine/Shader/FragmentLight/FragmentMainLightNormal.fs");
+          "../../Engine/Shader/Light/FragmentMainLightNormal.fs");
     }
     else
     {
       FragmentShaderCode +=
-          LoadStringFromFile("../../Engine/Shader/FragmentLight/FragmentBasicLight.fs");
+          LoadStringFromFile("../../Engine/Shader/Light/FragmentBasicLight.fs");
       FragmentShaderCode += LoadStringFromFile(
-          "../../Engine/Shader/FragmentLight/FragmentMainLight.fs");
+          "../../Engine/Shader/Light/FragmentMainLight.fs");
     }
   }
   else
-    FragmentShaderCode += LoadStringFromFile("../../Engine/Shader/FragmentMain.fs");
+    FragmentShaderCode += LoadStringFromFile("../../Engine/Shader/Base/FragmentMain.fs");
 
   std::cout << FragmentShaderCode << std::endl;
 
@@ -138,9 +151,9 @@ Shader Shader::LoadShader(const ShaderConstructData& shaderData)
 
   // Read the Vertex Shader code from the file
   if (shaderData.hasNormalMap)
-    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/vertexNormalMap.vs");
+    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/Light/vertexNormalMap.vs");
   else
-    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/vertex.vs");
+    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/Base/Vertex.vs");
 
 
   return RendererPlatform::CreateShader(VertexShaderCode.c_str(), FragmentShaderCode.c_str());
@@ -180,14 +193,14 @@ std::string Shader::CreateColorFunctions(const ShaderConstructData& shaderData)
     frag += LoadStringFromFile("../../Engine/Shader/FragmentColor/FragmentColor.fs");
 
   if (shaderData.hasDiffuseTexture)
-    frag += LoadStringFromFile("../../Engine/Shader/FragmentLight/Texture/FragmentAmbientDiffuseColor.fs");
+    frag += LoadStringFromFile("../../Engine/Shader/Light/Texture/FragmentAmbientDiffuseColor.fs");
   else
-    frag += LoadStringFromFile("../../Engine/Shader/FragmentLight/Color/FragmentAmbientDiffuseColor.fs");
+    frag += LoadStringFromFile("../../Engine/Shader/Light/Color/FragmentAmbientDiffuseColor.fs");
 
   if (shaderData.hasSpecularTexture)
-    frag += LoadStringFromFile("../../Engine/Shader/FragmentLight/Texture/FragmentSpecularColor.fs");
+    frag += LoadStringFromFile("../../Engine/Shader/Light/Texture/FragmentSpecularColor.fs");
   else
-    frag += LoadStringFromFile("../../Engine/Shader/FragmentLight/Color/FragmentSpecularColor.fs");
+    frag += LoadStringFromFile("../../Engine/Shader/Light/Color/FragmentSpecularColor.fs");
 
     return frag;
 }
@@ -205,7 +218,7 @@ std::string Shader::LoadStringFromFile(const char* path)
     }
     else
     {
-        printf("Impossible to open %s.\n", path);
+        Assert_Error(true, (std::string("Impossible to open %s.\n") + path).c_str());
         getchar();
         return {0};
     }

@@ -156,7 +156,7 @@ int main()
     RendererPlatform::VerticesReading();
 
 
-    Renderer::Light light;
+    Renderer::Light light(Renderer::Light_Type::L_DIRECTIONAL);
 
     light.model = Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Translate({0,0, 0});
     light.ambient = {0.0f, 0.1f, 0.0f};
@@ -185,7 +185,7 @@ int main()
         );
     shader.SetMatrix4("view", Maths::Matrix4::Identity());
 
-    Model model =  Model::LoadModel("../../../Dragon_Baked_Actions_fbx_7.4_binary.fbx", VertexType::V_NORMALMAP);
+    Model model =  Model::LoadModel("../../../eyeball.fbx", VertexType::V_NORMALMAP);
     Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
     Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
     Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
@@ -230,7 +230,6 @@ int main()
         RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
         RendererPlatform::Clear();
 
-        RendererPlatform::VerticesReadingNormalMapping();
         //quadMesh.Draw();
         //light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
         //light.model = Maths::Matrix4::RotateY(count);
@@ -242,10 +241,12 @@ int main()
 
         material.shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415/180));
         material.shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
-        material.shader.SetMatrix4("model", Maths::Matrix4::Translate({0,-20,100}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Scale({1,1,1}));
+        material.shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Scale({1,1,1}));
 
         //RendererPlatform::SetPointLight(shader.ID, 0, light);
-        RendererPlatform::SetDirectionalLight(shader.ID, 0, light);
+        //RendererPlatform::SetDirectionalLight(shader.ID, 0, light);
+
+        shader.SetLight(light, 0);
 
         model.Draw();
 
