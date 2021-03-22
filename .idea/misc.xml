@@ -3,10 +3,13 @@
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
   <component name="CidrRootsConfiguration">
     <sourceRoots>
-      <file path="$PROJECT_DIR$/Editor" />
+      <file path="$PROJECT_DIR$/Editor/include" />
+      <file path="$PROJECT_DIR$/Editor/src" />
       <file path="$PROJECT_DIR$/Engine" />
-      <file path="$PROJECT_DIR$/Game" />
-      <file path="$PROJECT_DIR$/Runner" />
+      <file path="$PROJECT_DIR$/Game/include" />
+      <file path="$PROJECT_DIR$/Game/src" />
+      <file path="$PROJECT_DIR$/Runner/include" />
+      <file path="$PROJECT_DIR$/Runner/src" />
     </sourceRoots>
     <libraryRoots>
       <file path="$PROJECT_DIR$/Vendor" />

@@ -3,8 +3,9 @@
 
 #include <Maths/Quaternion.hpp>
 #include <Maths/Vector3.hpp>
+#include "Scene/System/System.hpp"
 
-struct Transform
+struct Transform : public System
 {
     Maths::Vector3f position;
     Maths::Vector3f scale;

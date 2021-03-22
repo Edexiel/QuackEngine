@@ -16,11 +16,13 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/RendererPlatform.cpp
         src/Renderer/Framebuffer.cpp
         src/Scene/Scene.cpp
-        src/Scene/Entity/Entity.cpp
-        src/Scene/Entity/EntityManager.cpp
-        src/Scene/Component/ComponentArray.cpp
-        src/Scene/Component/ComponentManager.cpp
-        )
+
+        include/Scene/Entity/Entity.hpp
+        include/Scene/Entity/EntityManager.hpp
+        include/Scene/Component/ComponentArray.hpp
+        include/Scene/Component/ComponentManager.hpp
+        include/Scene/System/System.hpp
+        include/Scene/System/SystemManager.hpp src/Scene/System/SystemManager.cpp src/Scene/Ecs.cpp include/Scene/Ecs.hpp)
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

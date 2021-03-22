@@ -11,6 +11,7 @@
 #define __FILENAME__ (strrchr(__FILE__,'\\')+1)
 #endif
 #ifdef LINUX
+#include <cstring>
 #define __FILENAME__ (strrchr(__FILE__,'/')+1)
 #endif
 
@@ -49,11 +50,11 @@ namespace Debug
 
     /* Get the Current Time */
     time_t time = std::time(nullptr);
-    tm localTime = *std::localtime(&time);
+    tm* localTime = std::localtime(&time);
     std::ostringstream oss;
-    oss << std::put_time(&localTime, "%H:%M:%S");
+    oss << std::put_time(localTime, "%H:%M:%S");
 
-    char* levelString;
+    const char* levelString;
 
     switch (assertLvl)
     {

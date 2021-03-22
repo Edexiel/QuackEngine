@@ -33,4 +33,11 @@ cmake ..
 cmake --build .
 ```
 
+### Credits
+
+ECS largly thanks to : 
+
+https://austinmorlan.com/posts/entity_component_system/
+https://rams3s.github.io/blog/2019-01-09-ecs-deep-dive/
+https://www.samjgriffiths.co.uk/2018/01/game-entity-management.html
 

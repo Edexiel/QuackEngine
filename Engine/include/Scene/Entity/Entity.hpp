@@ -1,12 +1,10 @@
 #ifndef QUACKENGINE_ENTITY_HPP
 #define QUACKENGINE_ENTITY_HPP
 
-#include <cstdint>
 #include <queue>
 #include <string>
 #include <utility>
-
-typedef std::int_fast64_t EntityId;
+#include "Scene/Types.hpp"
 
 class Entity
 {
@@ -21,12 +19,11 @@ private:
 
 public:
     Entity() = delete;
-
-    Entity(std::string name);
+    explicit Entity(std::string name);
     ~Entity();
 
     EntityId getId() const;
-    std::string getName() const;
+    const std::string &getName() const;
 };
 
 EntityId Entity::_idCount = 0;
@@ -52,7 +49,7 @@ inline EntityId Entity::getId() const
     return _id;
 }
 
-inline std::string Entity::getName() const
+inline const std::string &Entity::getName() const
 {
     return _name;
 }
