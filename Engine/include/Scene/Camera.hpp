@@ -18,6 +18,7 @@ private:
   float          _far;
   float          _near;
   float          _speedRotation{0};
+  float          _speedTranslation{0};
 
   bool           _isPerspective = true;
 
@@ -25,6 +26,7 @@ private:
   Maths::Matrix4 _view;
 
   Maths::Vector3f _position;
+  Maths::Vector2d _angleRotation{0,0};
   Maths::Quaternion _rotation;
 
 
@@ -41,9 +43,13 @@ public:
   void SetPosition(const Maths::Vector3f& pos);
   void SetRotation(const Maths::Quaternion& rot);
   void SetRotationSpeed(const float speed);
+  void SetTranslationSpeed(const float speed);
 
   void MouseMovement(const Maths::Vector2d& currentPos, const Maths::Vector2d& oldPos);
-
+  void MoveForward();
+  void MoveBackward();
+  void MoveLeft();
+  void MoveRight();
 };
 }
 #endif // QUACKENGINE_CAMERA_HPP

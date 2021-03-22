@@ -57,8 +57,30 @@ void Camera::SetRotationSpeed(const float speed)
   _speedRotation = speed;
 }
 
+void Camera::SetTranslationSpeed(const float speed)
+{
+  _speedTranslation = speed;
+}
+
 void Camera::MouseMovement(const Vector2d &currentPos, const Vector2d &oldPos)
 {
-  Vector2d newAngle = (currentPos - oldPos) * (_speedRotation * 3.14f / 180.f);
-  _rotation = _rotation * Quaternion({0,1,0}, newAngle.x) * Quaternion({1,0,0}, newAngle.y);
+  _angleRotation = _angleRotation + (oldPos - currentPos) * (_speedRotation * 3.14f / 180.f);
+  _rotation = Quaternion({1,0,0}, _angleRotation.y) * Quaternion({0,1,0}, _angleRotation.x);
+}
+void Camera::MoveForward()
+{
+  _position.z -= _speedTranslation;
+}
+void Camera::MoveBackward()
+{
+  _position.z += _speedTranslation;
+}
+void Camera::MoveRight()
+{
+  _position.x -= _speedTranslation;
+}
+void Camera::MoveLeft()
+{
+  _position.x += _speedTranslation;
+
 }

@@ -43,11 +43,7 @@ void Input::InputManager::OnMouseButtonEvent(Action action, MouseButton button)
 
 void Input::InputManager::OnUpdateMousePositionEvent(const double xPos, const double yPos)
 {
-	mousePosition.oldPos = mousePosition.pos;
-	mousePosition.pos = {xPos, yPos};
-
-        std::cout << "oldPos.x = " << mousePosition.oldPos.x << " oldPos.y = " << mousePosition.oldPos.y << std::endl;
-        std::cout << "pos.x = " << mousePosition.pos.x << " pos.y = " << mousePosition.pos.y << std::endl;
+  //todo: Delete this function or make a boolean to choose between update each frame or update when the mouse move
 }
 
 void InputManager::BindEvent(std::string event, Key key, Action Action)
@@ -77,4 +73,10 @@ void Input::InputManager::BindEvent(std::string event, MouseButton button, Actio
 	}
 	eventMouseButtons[event].push_back(button);
 	eventAction[event] = Action;
+}
+
+void InputManager::Update()
+{
+  platformInput.PollEvents();
+  platformInput.UpdateCursorPosition(mousePosition);
 }
