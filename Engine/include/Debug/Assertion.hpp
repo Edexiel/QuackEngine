@@ -2,6 +2,8 @@
 #define _ASSERTION_H_
 
 #include <iostream>
+#include <sstream>
+#include <string>
 #include <vector>
 #include <chrono>
 #include <iomanip>
@@ -20,12 +22,12 @@
   #define Assert_Error(check, message) (Debug::Assert(check, message, __FILENAME__, __func__, __LINE__, Debug::AssertLevel::A_ERROR))
   #define Assert_Warning(check, message) (Debug::Assert(check, message, __FILENAME__, __func__, __LINE__, Debug::AssertLevel::A_WARNING))
 //#endif
-#ifdef RELEASE
-  #define Assert_Release(check, message) (check)
-  #define Assert_Fatal_Error(check, message) (check)
-  #define Assert_Error(check, message) (check)
-  #define Assert_Warning(check, message) (check)
-#endif
+//#ifdef RELEASE
+//  #define Assert_Release(check, message) (check)
+//  #define Assert_Fatal_Error(check, message) (check)
+//  #define Assert_Error(check, message) (check)
+//  #define Assert_Warning(check, message) (check)
+//#endif
 
 namespace Debug
 {
