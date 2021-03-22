@@ -240,7 +240,7 @@ int main()
         RendererPlatform::Clear();
 
         //quadMesh.Draw();
-        light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
+        light.model = Maths::Matrix4::Translate({cosf(count) * 30.f, sinf(count) * 30.f, 0});
         //light.model = Maths::Matrix4::RotateY(count);
 
         material.Apply();

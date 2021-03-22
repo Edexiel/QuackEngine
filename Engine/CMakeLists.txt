@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.17)
 project(Engine VERSION 0.1.0 LANGUAGES CXX C)
 
 add_library(${PROJECT_NAME} STATIC
-        src/main.cpp
         src/Input/InputManager.cpp
         src/Input/PlatformInputGLFW.cpp
         src/Thread/TaskSystem.cpp
@@ -17,7 +16,6 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/RendererPlatform.cpp
         src/Renderer/Framebuffer.cpp
         src/Renderer/IcoSphere.cpp
-        src/Scene/ScriptComponent.cpp
         src/Renderer/Light.cpp
         src/Scene/Scene.cpp
 
