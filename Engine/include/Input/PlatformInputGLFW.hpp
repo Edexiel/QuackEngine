@@ -8,14 +8,18 @@ namespace Input
 {
   class PlatformInputGLFW : public PlatformInput
   {
+  private:
     void OnKeyEvent(int key, int scancode, int action, int mods);
     void OnMouseButtonCallback(int button, int action, int mods);
     void OnCursorPositionCallback(double xpos, double ypos);
     void OnScrollCallback(double xoffset, double yoffset);
-
+    GLFWwindow* _window;
   public:
     PlatformInputGLFW(GLFWwindow* window);
     ~PlatformInputGLFW() = default;
+
+    void PollEvents() override;
+    void UpdateCursorPosition(MousePosition& mousePosition) override;
   };
 }
 
