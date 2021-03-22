@@ -220,11 +220,7 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
       inputManager.Update();
-      std::cout << "inputManager.mousePosition.pos.x = " << inputManager.mousePosition.pos.x << std::endl;
-      std::cout << "inputManager.mousePosition.pos.y = " << inputManager.mousePosition.pos.y<< std::endl;
 
-      std::cout << "inputManager.mousePosition.prevPos.x = " << inputManager.mousePosition.prevPos.x << std::endl;
-      std::cout << "inputManager.mousePosition.prevPos.y = " << inputManager.mousePosition.prevPos.y<< std::endl;
       count += 0.01f;
 
       // framebuffer
