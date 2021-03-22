@@ -42,5 +42,5 @@ Texture Texture::LoadTexture(const char* filepath)
 
 void Texture::Bind(unsigned int index)
 {
-  RendererPlatform::BindTexture(_ID);
+  RendererPlatform::BindTexture(_ID, index);
 }

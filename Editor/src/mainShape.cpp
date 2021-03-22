@@ -140,9 +140,9 @@ int main()
       texture.Bind();
 //      quad.Draw();
 //      cube.Draw();
-      sphere.Draw();
       RendererPlatform::SetPointLight(shader.ID, 0, light);
-
+      sphere.Draw();
+      
 
       glfwSwapBuffers(window);
       glfwPollEvents();

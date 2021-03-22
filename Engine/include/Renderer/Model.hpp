@@ -3,17 +3,29 @@
 
 #include <vector>
 
-#include "../include/Renderer/Mesh.hpp"
+#include "Renderer/Mesh.hpp"
+#include "Renderer/Vertex.hpp"
 
 namespace Renderer
 {
     struct Model
     {
-        std::vector<Mesh> meshList;
 
-        static Model LoadModel(const char* path);
+      Model() = default;
+      Model(VertexType vertexType);
 
-        void Draw();
+      std::vector<Mesh> meshList;
+
+      static Model LoadModel(const char* path, VertexType vertexType = VertexType::V_CLASSIC);
+
+      void Draw();
+
+    private:
+
+      VertexType _vertexType = VertexType::V_CLASSIC;
+
+      static Model LoadClassicModel(const void* loadedScene);
+      static Model LoadNormalMapModel(const void* loadedScene);
 
     };
 }
