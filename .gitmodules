@@ -13,3 +13,6 @@
 [submodule "imgui"]
 	path = Vendor/imgui
 	url = git@gitlab.com:quack-engine/imgui.git
+[submodule "Vendor/googletest"]
+	path = Vendor/googletest
+	url = https://github.com/google/googletest.git

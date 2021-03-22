@@ -4,8 +4,6 @@
 #include "Maths/Vector4.hpp"
 #include <iostream>
 
-#define M_PI 3.14
-
 namespace Maths
 {
   struct Matrix4
@@ -181,7 +179,8 @@ inline Matrix4 Matrix4::Perspective(const int& width, const int& height, const f
 {
   Matrix4 projection;
   float const a = 1.f / tanf(fov / 2.f);
-  float const aspect = width / height;
+  float const aspect = (float)width / height;
+
   projection.e[0] = a / aspect;
 
   projection.e[5] = a;
@@ -190,7 +189,6 @@ inline Matrix4 Matrix4::Perspective(const int& width, const int& height, const f
   projection.e[14] = -1.f;
 
   projection.e[11] = -((2.f * far * near) / (far - near));
-
 
   return projection;
 }
@@ -251,8 +249,8 @@ inline Matrix4 Matrix4::operator*(const Matrix4& m)
 }
 inline Matrix4& Matrix4::operator*=(const Matrix4& m)
 {
-  Matrix4 result = *this * m;
-  return result;
+  *this = *this * m;
+  return *this;
 }
 
 inline Matrix4 Matrix4::operator*(float f)
