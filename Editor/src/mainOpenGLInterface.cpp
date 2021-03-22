@@ -159,7 +159,7 @@ int main()
     RendererPlatform::VerticesReading();
 
 
-    Renderer::Light light(Renderer::Light_Type::L_DIRECTIONAL);
+    Renderer::Light light(Renderer::Light_Type::L_POINT);
 
     light.model = Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Translate({0,0, 0});
     light.ambient = {0.0f, 0.1f, 0.0f};
@@ -174,7 +174,7 @@ int main()
 
 
 
-    ShaderConstructData shd = {1,0,1, 0, 1, 1, 1, 1};
+    ShaderConstructData shd = {1,1,0, 0, 1, 1, 1, 1};
 
     //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
@@ -199,7 +199,7 @@ int main()
     material.ambient = {1, 1, 1};
     material.diffuse = {1, 1, 1};
     material.specular = {1, 1, 1};
-    material.shininess = 1;
+    material.shininess = 256;
 
     material.colorTexture = texture;
     material.diffuseTexture = textureDiffuse;
@@ -240,7 +240,7 @@ int main()
         RendererPlatform::Clear();
 
         //quadMesh.Draw();
-        //light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
+        light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
         //light.model = Maths::Matrix4::RotateY(count);
 
         material.Apply();
