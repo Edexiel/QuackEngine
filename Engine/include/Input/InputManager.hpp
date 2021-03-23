@@ -34,14 +34,14 @@ namespace Input
     void BindEvent(std::string event, Key key, Action Action);
     void BindEvent(std::string event, MouseButton key, Action Action);
     template<typename C, typename F>
-    void RegisterEvent(std::string event, C& classObject, F&& function);
+    void RegisterEvent(std::string event, C* classObject, F&& function);
     void Update();
 
     MousePosition mousePosition;
   };
 
   template<typename C, typename F>
-  inline void InputManager::RegisterEvent(std::string event, C& classObject, F&& function)
+  inline void InputManager::RegisterEvent(std::string event, C* classObject, F&& function)
   {
       eventFuncs[event].push_back(std::bind(function, classObject));
   }
