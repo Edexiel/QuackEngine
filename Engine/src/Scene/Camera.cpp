@@ -66,21 +66,57 @@ void Camera::MouseMovement(const Vector2d &currentPos, const Vector2d &oldPos)
 {
   _angleRotation = _angleRotation + (oldPos - currentPos) * (_speedRotation * 3.14f / 180.f);
   _rotation = Quaternion({1,0,0}, _angleRotation.y) * Quaternion({0,1,0}, _angleRotation.x);
+  _forward = (_rotation.QuaternionToMatrix() * Vector4f(Vector3f::Backward(),0)).xyz;
+  _right = (_rotation.QuaternionToMatrix() * Vector4f(Vector3f::Left(),0)).xyz;
 }
 void Camera::MoveForward()
 {
-  _position.z -= _speedTranslation;
+  _isMovingForward = true;
 }
 void Camera::MoveBackward()
 {
-  _position.z += _speedTranslation;
+  _isMovingBackward = true;
 }
 void Camera::MoveRight()
 {
-  _position.x -= _speedTranslation;
+  _isMovingRight = true;
 }
 void Camera::MoveLeft()
 {
-  _position.x += _speedTranslation;
+  _isMovingLeft = true;
+}
+void Camera::Update()
+{
+  Move();
+}
+void Camera::Move()
+{
+  Vector3f direction{0,0,0};
 
+  if (_isMovingForward)
+    direction = direction + _forward;
+  if (_isMovingBackward)
+    direction = direction - _forward;
+  if (_isMovingLeft)
+    direction = direction - _right;
+  if (_isMovingRight)
+    direction = direction + _right;
+
+  _position = _position + (direction.Normalize() * _speedTranslation);
+}
+void Camera::StopMoveForward()
+{
+  _isMovingForward = false;
+}
+void Camera::StopMoveBackward()
+{
+  _isMovingBackward = false;
+}
+void Camera::StopMoveLeft()
+{
+  _isMovingLeft = false;
+}
+void Camera::StopMoveRight()
+{
+  _isMovingRight = false;
 }

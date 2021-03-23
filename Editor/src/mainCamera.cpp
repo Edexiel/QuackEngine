@@ -74,15 +74,25 @@ int main()
     cam.SetTranslationSpeed(0.01f);
     cam.CreateView();
 
-    inputManager.BindEvent("CameraMoveForward", Input::Key::KEY_W, Input::Action::REPEAT);
-    inputManager.BindEvent("CameraMoveBackward", Input::Key::KEY_S, Input::Action::REPEAT);
-    inputManager.BindEvent("CameraMoveRight", Input::Key::KEY_D, Input::Action::REPEAT);
-    inputManager.BindEvent("CameraMoveLeft", Input::Key::KEY_A, Input::Action::REPEAT);
+    inputManager.BindEvent("CameraMoveForward", Input::Key::KEY_W, Input::Action::PRESS);
+    inputManager.BindEvent("CameraMoveBackward", Input::Key::KEY_S, Input::Action::PRESS);
+    inputManager.BindEvent("CameraMoveRight", Input::Key::KEY_D, Input::Action::PRESS);
+    inputManager.BindEvent("CameraMoveLeft", Input::Key::KEY_A, Input::Action::PRESS);
+
+    inputManager.BindEvent("StopCameraMoveForward", Input::Key::KEY_W, Input::Action::RELEASE);
+    inputManager.BindEvent("StopCameraMoveBackward", Input::Key::KEY_S, Input::Action::RELEASE);
+    inputManager.BindEvent("StopCameraMoveRight", Input::Key::KEY_D, Input::Action::RELEASE);
+    inputManager.BindEvent("StopCameraMoveLeft", Input::Key::KEY_A, Input::Action::RELEASE);
 
     inputManager.RegisterEvent("CameraMoveForward",&cam, &Scene::Camera::MoveForward);
     inputManager.RegisterEvent("CameraMoveBackward",&cam, &Scene::Camera::MoveBackward);
     inputManager.RegisterEvent("CameraMoveRight",&cam, &Scene::Camera::MoveRight);
     inputManager.RegisterEvent("CameraMoveLeft",&cam, &Scene::Camera::MoveLeft);
+
+    inputManager.RegisterEvent("StopCameraMoveForward",&cam, &Scene::Camera::StopMoveForward);
+    inputManager.RegisterEvent("StopCameraMoveBackward",&cam, &Scene::Camera::StopMoveBackward);
+    inputManager.RegisterEvent("StopCameraMoveRight",&cam, &Scene::Camera::StopMoveRight);
+    inputManager.RegisterEvent("StopCameraMoveLeft",&cam, &Scene::Camera::StopMoveLeft);
 
     shader.SetMatrix4("projection", cam.GetProjection());
     shader.SetMatrix4("view", cam.GetView());
@@ -136,6 +146,8 @@ int main()
       shader.SetVector4f("material.color", {1,1,1, 1});
 //      shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415 /180));
       shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,3}));
+
+      cam.Update();
       cam.MouseMovement(inputManager.mousePosition.pos, inputManager.mousePosition.prevPos);
       cam.CreateView();
       shader.SetMatrix4("projection", cam.GetProjection());
