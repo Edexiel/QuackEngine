@@ -21,7 +21,7 @@ namespace Input
     std::map<std::string, std::vector<MouseButton>> eventMouseButtons;
     std::map<std::string, Action> eventAction;
 
-    
+
 
     void OnKeyEvent(Action action, Key key);
     void OnMouseButtonEvent(Action action, MouseButton button);
@@ -31,8 +31,8 @@ namespace Input
     InputManager(PlatformInput& platformInput);
     ~InputManager() = default;
 
-    void BindEvent(std::string event, Key key, Action Action);
-    void BindEvent(std::string event, MouseButton key, Action Action);
+    void BindEvent(std::string event, Key key, Action action);
+    void BindEvent(std::string event, MouseButton key, Action action);
     template<typename C, typename F>
     void RegisterEvent(std::string event, C* classObject, F&& function);
     void Update();

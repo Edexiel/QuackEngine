@@ -61,7 +61,7 @@ void InputManager::BindEvent(std::string event, Key key, Action Action)
 	eventAction[event] = Action;
 }
 
-void Input::InputManager::BindEvent(std::string event, MouseButton button, Action Action)
+void Input::InputManager::BindEvent(std::string event, MouseButton button, Action action)
 {
 	for (MouseButton _button : eventMouseButtons[event])
 	{
@@ -72,7 +72,7 @@ void Input::InputManager::BindEvent(std::string event, MouseButton button, Actio
 		}
 	}
 	eventMouseButtons[event].push_back(button);
-	eventAction[event] = Action;
+	eventAction[event] = action;
 }
 void InputManager::Update()
 {
