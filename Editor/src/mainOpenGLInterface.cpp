@@ -16,43 +16,6 @@
 #include <cmath>
 
 using namespace Renderer;
-const char* vertexShader =
-    {
-                      R"GLSL(
-                      #version 330 core
-                      layout (location = 0) in vec3 aPos;
-                      layout (location = 1) in vec3 aNormal;
-                      layout (location = 2) in vec2 aTexCoord;
-
-                      uniform mat4 projection;
-                      uniform mat4 view;
-                      uniform mat4 model;
-
-                      out vec2 TexCoord;
-
-                      void main()
-                      {
-                      gl_Position = projection * view * model * vec4(aPos, 1.0);
-                      TexCoord = aTexCoord;
-                     }
-                     )GLSL"
-    };
-
-const char* fragmentShader =
-    {
-        R"GLSL(
-                     #version 330 core
-                     out vec4 FragColor;
-                     in vec2 TexCoord;
-
-                     uniform sampler2D ourTexture;
-
-                     void main()
-                     {
-                      FragColor = vec4(1,0,0,1);// texture(ourTexture, TexCoord);
-                     }
-                     )GLSL"
-    };
 
 const char* vertexShaderFb =
     {
@@ -89,6 +52,12 @@ const char* fragmentShaderFb =
                      )GLSL"
     };
 
+struct MyHero
+{
+  void IsPressed(){std::cout << "IsPressed\n";};
+  void IsReleased(){std::cout << "IsReleased\n";};
+  void TestAxis(float bonsoir){std::cout<< bonsoir<< std::endl;};
+};
 
 int main()
 {
@@ -202,14 +171,19 @@ int main()
     Input::PlatformInputGLFW platformInput(window);
     Input::InputManager inputManager(platformInput);
 
+    inputManager.BindEvent("Hero", Input::MouseButton::MOUSE_BUTTON_1);
+    inputManager.BindEvent("Hero", Input::MouseButton::MOUSE_BUTTON_2);
+    inputManager.BindEventAxis("Axis", Input::Key::KEY_SPACE, 1.0f);
+    MyHero hero;
+    inputManager.RegisterEvent("Hero",Input::Action::PRESS, &hero, &MyHero::IsPressed);
+    inputManager.RegisterEvent("Hero",Input::Action::RELEASE, &hero, &MyHero::IsReleased);
+    inputManager.RegisterEventAxis("Axis",&hero, &MyHero::TestAxis);
+
+    int bonsoir;
+    glfwGetJoystickAxes(GLFW_JOYSTICK_5, &bonsoir);
     while (!glfwWindowShouldClose(window))
     {
       inputManager.Update();
-      std::cout << "inputManager.mousePosition.pos.x = " << inputManager.mousePosition.pos.x << std::endl;
-      std::cout << "inputManager.mousePosition.pos.y = " << inputManager.mousePosition.pos.y<< std::endl;
-
-      std::cout << "inputManager.mousePosition.prevPos.x = " << inputManager.mousePosition.prevPos.x << std::endl;
-      std::cout << "inputManager.mousePosition.prevPos.y = " << inputManager.mousePosition.prevPos.y<< std::endl;
       count += 0.01f;
 
       // framebuffer
