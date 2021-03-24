@@ -12,9 +12,15 @@ using namespace Maths;
 int main()
 {
     Ecs ecs{};
-    ecs.init();
+    ecs.Init();
 
-    Entity& entity = ecs.createEntity("first");
-    ecs.addComponent(entity, Transform{Vector3f::Zero(),Vector3f::One(),Quaternion{}});
+    ecs.RegisterComponent<Transform>();
+    Signature signature;
+    signature.set(ecs.GetComponentType<Transform>());
+    ecs.SetSystemSignature<>();
+
+    Entity& entity = ecs.CreateEntity("first");
+    ecs.AddComponent(entity, Transform{Vector3f::Zero(), Vector3f::One(), Quaternion{}});
+    ecs.
 
 }

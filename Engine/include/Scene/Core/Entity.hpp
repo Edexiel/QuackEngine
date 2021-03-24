@@ -15,23 +15,33 @@ private:
     EntityId _id;
     std::string _name;
 
-    static unsigned int getIdCount();
+    static unsigned int GetIdCount();
 
 public:
     Entity() = delete;
-    explicit Entity(std::string name);
+
+    explicit Entity(EntityId id, std::string name);
+
+    Entity(EntityId id, const std::string &name);
+
     ~Entity();
 
-    EntityId getId() const;
-    const std::string &getName() const;
+    [[nodiscard]]
+    EntityId GetId() const;
+
+    [[nodiscard]]
+    const std::string &GetName() const;
 };
+
 EntityId Entity::_idCount = 0;
 std::queue<EntityId> Entity::_garbage{};
 
+Entity::Entity(EntityId id, const std::string &name) : _id(id), _name(name)
+{}
+
 Entity::Entity(std::string name) : _name(std::move(name))
 {
-    if (!_garbage.empty())
-    {
+    if (!_garbage.empty()) {
         _id = _garbage.front();
         _garbage.pop();
         return;
@@ -44,17 +54,17 @@ Entity::~Entity()
     _garbage.push(_id);
 }
 
-inline EntityId Entity::getId() const
+inline EntityId Entity::GetId() const
 {
     return _id;
 }
 
-inline const std::string &Entity::getName() const
+inline const std::string &Entity::GetName() const
 {
     return _name;
 }
 
-unsigned int Entity::getIdCount()
+unsigned int Entity::GetIdCount()
 {
     return _idCount;
 }

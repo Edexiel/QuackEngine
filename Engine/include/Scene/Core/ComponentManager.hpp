@@ -22,29 +22,29 @@ private:
     ComponentType _nextType;
 
     template<typename T>
-    std::shared_ptr<ComponentArray<T>> getComponentArray();
+    std::shared_ptr<ComponentArray<T>> GetComponentArray();
 
 public:
     template<typename T>
-    void registerComponent();
+    void RegisterComponent();
 
     template<typename T>
-    ComponentType getComponentType();
+    ComponentType GetComponentType();
 
     template<typename T>
-    void addComponent(EntityId id, T component);
+    void AddComponent(EntityId id, T component);
 
     template<typename T>
-    void removeComponent(EntityId id);
+    void RemoveComponent(EntityId id);
 
     template<typename T>
-    T &getComponent(EntityId id);
+    T &GetComponent(EntityId id);
 
-    void entityDestroyed(EntityId id);
+    void EntityDestroyed(EntityId id);
 };
 
 template<typename T>
-std::shared_ptr<ComponentArray<T>> ComponentManager::getComponentArray()
+std::shared_ptr<ComponentArray<T>> ComponentManager::GetComponentArray()
 {
     const char *typeName = typeid(T).name();
     Assert_Fatal_Error(_componentTypes.find(typeName) != _componentTypes.end(), "Component not registered before use.");
@@ -52,7 +52,7 @@ std::shared_ptr<ComponentArray<T>> ComponentManager::getComponentArray()
 }
 
 template<typename T>
-void ComponentManager::registerComponent()
+void ComponentManager::RegisterComponent()
 {
 
     const char *typeName = typeid(T).name();
@@ -61,7 +61,7 @@ void ComponentManager::registerComponent()
                        "Registering component type more than once.");
 
     // Add this component type to the component type map
-    _componentTypes.insert({typeName, _nextType});
+    (void)_componentTypes.insert({typeName, _nextType});
 
     // Create a ComponentArray pointer and add it to the component arrays map
     _componentArrays.insert({typeName, std::make_shared<ComponentArray<T>>()});
@@ -71,7 +71,7 @@ void ComponentManager::registerComponent()
 }
 
 template<typename T>
-ComponentType ComponentManager::getComponentType()
+ComponentType ComponentManager::GetComponentType()
 {
     const char *typeName = typeid(T).name();
     Assert_Fatal_Error(_componentTypes.find(typeName) != _componentTypes.end(), "Component not registered before use.");
@@ -79,32 +79,30 @@ ComponentType ComponentManager::getComponentType()
 }
 
 template<typename T>
-void ComponentManager::addComponent(EntityId id, T component)
+void ComponentManager::AddComponent(EntityId id, T component)
 {
-    getComponentArray<T>()->addData(id, component);
+    GetComponentArray<T>()->AddData(id, component);
 }
 
 template<typename T>
-void ComponentManager::removeComponent(EntityId id)
+void ComponentManager::RemoveComponent(EntityId id)
 {
-    getComponentArray<T>()->removeData(id);
+    GetComponentArray<T>()->RemoveData(id);
 }
 
 template<typename T>
-T &ComponentManager::getComponent(EntityId id)
+T &ComponentManager::GetComponent(EntityId id)
 {
-    return getComponentArray<T>()->getData(id);
+    return GetComponentArray<T>()->GetData(id);
 }
 
-void ComponentManager::entityDestroyed(EntityId id)
+void ComponentManager::EntityDestroyed(EntityId id)
 {
-    for (auto const &pair : _componentArrays)
-    {
+    for (auto const &pair : _componentArrays) {
         auto const &component = pair.second;
 
         component->EntityDestroyed(id);
     }
 }
-
 
 #endif //QUACKENGINE_COMPONENTMANAGER_HPP

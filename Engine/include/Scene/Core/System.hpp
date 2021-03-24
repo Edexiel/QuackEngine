@@ -8,12 +8,10 @@
 #include "Types.hpp"
 #include <set>
 
-
 class System
 {
 public:
     std::set<EntityId> _entities;
 };
-
 
 #endif //QUACKENGINE_SYSTEM_HPP

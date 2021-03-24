@@ -19,109 +19,108 @@ private:
     std::unique_ptr<SystemManager> _systemManager;
 
 public:
-    void init();
+    void Init();
 
     // Entity methods
-    Entity &createEntity(std::string name);
-    void destroyEntity(Entity &entity);
+    Entity &CreateEntity(std::string name);
+
+    void DestroyEntity(Entity &entity);
 
     // Component methods
     template<typename T>
-    void registerComponent();
+    void RegisterComponent();
 
     template<typename T>
-    void addComponent(Entity &entity, T component);
+    void AddComponent(Entity &entity, T component);
 
     template<typename T>
-    void removeComponent(Entity &entity);
+    void RemoveComponent(Entity &entity);
 
     template<typename T>
-    T &getComponent(Entity &entity);
+    T &GetComponent(Entity &entity);
 
     template<typename T>
-    ComponentType getComponentType();
-
+    ComponentType GetComponentType();
 
     // System methods
     template<typename T>
-    std::shared_ptr<T> registerSystem();
+    std::shared_ptr<T> RegisterSystem();
 
     template<typename T>
-    void setSystemSignature(Signature signature);
+    void SetSystemSignature(Signature signature);
 };
 
-void Ecs::init()
+void Ecs::Init()
 {
     _componentManager = std::make_unique<ComponentManager>();
     _entityManager = std::make_unique<EntityManager>();
     _systemManager = std::make_unique<SystemManager>();
 }
 
-Entity &Ecs::createEntity(std::string name)
+Entity &Ecs::CreateEntity(std::string name)
 {
-    return _entityManager->create(name);
+    return _entityManager->Create(name);
 }
 
-void Ecs::destroyEntity(Entity &entity)
+void Ecs::DestroyEntity(Entity &entity)
 {
-    _entityManager->destroy(entity.getId());
-    _componentManager->entityDestroyed(entity.getId());
-    _systemManager->entityDestroyed(entity.getId());
-}
-
-template<typename T>
-void Ecs::registerComponent()
-{
-    _componentManager->registerComponent<T>();
+    _entityManager->Destroy(entity.GetId());
+    _componentManager->EntityDestroyed(entity.GetId());
+    _systemManager->EntityDestroyed(entity.GetId());
 }
 
 template<typename T>
-void Ecs::addComponent(Entity &entity, T component)
+void Ecs::RegisterComponent()
 {
-    _componentManager->addComponent<T>(entity.getId(), component);
-
-    auto signature = _entityManager->getSignature(entity.getId());
-    signature.set(_componentManager->getComponentType<T>(), true);
-    _entityManager->setSignature(entity.getId(), signature);
-
-    _systemManager->entitySignatureChanged(entity.getId(), signature);
+    _componentManager->RegisterComponent<T>();
 }
 
 template<typename T>
-void Ecs::removeComponent(Entity &entity)
+void Ecs::AddComponent(Entity &entity, T component)
 {
-    _componentManager->removeComponent<T>(entity.getId());
+    _componentManager->AddComponent<T>(entity.GetId(), component);
 
-    auto signature = _entityManager->getSignature(entity.getId());
-    signature.set(_componentManager->getComponentType<T>(), false);
+    auto signature = _entityManager->GetSignature(entity.GetId());
+    signature.set(_componentManager->GetComponentType<T>(), true);
+    _entityManager->SetSignature(entity.GetId(), signature);
 
-    _entityManager->setSignature(entity.getId(), signature);
-    _systemManager->entitySignatureChanged(entity.getId(), signature);
+    _systemManager->EntitySignatureChanged(entity.GetId(), signature)
 }
 
 template<typename T>
-T &Ecs::getComponent(Entity &entity)
+void Ecs::RemoveComponent(Entity &entity)
 {
-    return _componentManager->getComponent<T>(entity.getId());
+    _componentManager->RemoveComponent<T>(entity.GetId());
+
+    auto signature = _entityManager->GetSignature(entity.GetId());
+    signature.set(_componentManager->GetComponentType<T>(), false);
+
+    _entityManager->SetSignature(entity.GetId(), signature);
+    _systemManager->EntitySignatureChanged(entity.GetId(), signature);
 }
 
 template<typename T>
-ComponentType Ecs::getComponentType()
+T &Ecs::GetComponent(Entity &entity)
 {
-    return _componentManager->getComponentType<T>();
+    return _componentManager->GetComponent<T>(entity.GetId());
 }
 
 template<typename T>
-std::shared_ptr<T> Ecs::registerSystem()
+ComponentType Ecs::GetComponentType()
 {
-    return _systemManager->registerSystem<T>();
+    return _componentManager->GetComponentType<T>();
 }
 
 template<typename T>
-void Ecs::setSystemSignature(Signature signature)
+std::shared_ptr<T> Ecs::RegisterSystem()
 {
-    _systemManager->setSignature<T>(signature);
+    return _systemManager->RegisterSystem<T>();
 }
 
+template<typename T>
+void Ecs::SetSystemSignature(Signature signature)
+{
+    _systemManager->SetSignature<T>(signature);
+}
 
 #endif //QUACKENGINE_ECS_HPP

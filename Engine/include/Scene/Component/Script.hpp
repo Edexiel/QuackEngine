@@ -11,5 +11,4 @@ class Script
 
 };
 
-
 #endif //QUACKENGINE_SCRIPT_HPP

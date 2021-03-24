@@ -5,11 +5,8 @@
 #ifndef QUACKENGINE_RENDERER_HPP
 #define QUACKENGINE_RENDERER_HPP
 
-
-class Renderer
-{
+class Renderer {
 
 };
-
 
 #endif //QUACKENGINE_RENDERER_HPP

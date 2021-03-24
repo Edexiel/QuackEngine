@@ -5,10 +5,8 @@
 #ifndef QUACKENGINE_PHYSICS_HPP
 #define QUACKENGINE_PHYSICS_HPP
 
-struct Physics
-{
+struct Physics {
 
 };
-
 
 #endif //QUACKENGINE_PHYSICS_HPP

@@ -16,6 +16,7 @@ class IComponentArray
 {
 public:
     virtual ~IComponentArray() = default;
+
     virtual void EntityDestroyed(EntityId id) = 0;
 };
 
@@ -28,46 +29,48 @@ private:
     std::vector<T> _components;
 
 public:
-    void addData(EntityId id, T &data);
-    void deleteData(EntityId id);
-    T &getData(EntityId id);
-    void EntityDestroyed(EntityId id) override;
+    void AddData(EntityId id, T &data);
+
+    void DeleteData(EntityId id);
+
+    T &GetData(EntityId id);
+
+    virtual void EntityDestroyed(EntityId id) override;
 
 };
 
 template<typename T>
-void ComponentArray<T>::addData(EntityId id, T &data)
+void ComponentArray<T>::AddData(EntityId id, T &data)
 {
     size_t end = _components.size();
     _components.emplace_back(std::move(data));
-    _entityToIndex.insert({id, end});
-    _indexToEntity.insert({end, id});
+    (void)_entityToIndex.insert({id, end});
+    (void)_indexToEntity.insert({end, id});
 }
 
 template<typename T>
-void ComponentArray<T>::deleteData(EntityId id)
+void ComponentArray<T>::DeleteData(EntityId id)
 {
     Assert_Fatal_Error(_entityToIndex.find(id) != _entityToIndex.end(), "Removing non-existent component.");
 
-
-    size_t indexDelete = _components[_entityToIndex[id]];
+    size_t indexDelete = _entityToIndex[id];
     size_t indexEnd = _components.size() - 1;
 
     std::swap(_components[indexDelete], _components[indexEnd]);
 
-    EntityId EntityEnd = _indexToEntity[indexEnd];
-    _entityToIndex[EntityEnd] = indexDelete;
-    _indexToEntity[indexDelete] = EntityEnd;
+    EntityId entityEnd = _indexToEntity[indexEnd];
+    _entityToIndex[entityEnd] = indexDelete;
+    _indexToEntity[indexDelete] = entityEnd;
 
-    _entityToIndex.erase(id);
-    _indexToEntity.erase(indexEnd);
+    (void)_entityToIndex.erase(id);
+    (void)_indexToEntity.erase(indexEnd);
 
     _components.pop_back();
 
 }
 
 template<typename T>
-T &ComponentArray<T>::getData(EntityId id)
+T &ComponentArray<T>::GetData(EntityId id)
 {
     Assert_Fatal_Error(_entityToIndex.find(id) != _entityToIndex.end(), "Retrieving non-existent component.");
 
@@ -77,9 +80,8 @@ T &ComponentArray<T>::getData(EntityId id)
 template<typename T>
 void ComponentArray<T>::EntityDestroyed(EntityId id)
 {
-    if (_indexToEntity.find(id) != _indexToEntity.end())
-    {
-        deleteData(id);
+    if (_indexToEntity.find(id) != _indexToEntity.end()) {
+        DeleteData(id);
     }
 }
 

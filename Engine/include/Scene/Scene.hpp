@@ -7,13 +7,12 @@
 
 #include "Scene/Core/Entity.hpp"
 
-class Scene
-{
-public:
-    void update(float DeltaTime);
-    void fixedUpdate(float FixedDeltaTime);
-    void draw();
-    void load();
+class Scene {
+ public:
+  void update(float DeltaTime);
+  void fixedUpdate(float FixedDeltaTime);
+  void draw();
+  void load();
 };
 
 #endif // QUACKENGINE_SCENE_HPP

@@ -20,17 +20,19 @@ private:
 
 public:
     template<typename T>
-    std::shared_ptr<T> registerSystem();
-    template<typename T>
-    void setSignature(Signature signature);
+    std::shared_ptr<T> RegisterSystem();
 
-    void entityDestroyed(EntityId id);
-    void entitySignatureChanged(EntityId id, Signature entitySignature);
+    template<typename T>
+    void SetSignature(Signature signature);
+
+    void EntityDestroyed(EntityId id);
+
+    void EntitySignatureChanged(EntityId id, Signature entitySignature);
 
 };
 
 template<typename T>
-std::shared_ptr<T> SystemManager::registerSystem()
+std::shared_ptr<T> SystemManager::RegisterSystem()
 {
     const char *typeName = typeid(T).name();
     Assert_Fatal_Error(_systems.find(typeName) != _systems.end(), "Registering system more than once.");
@@ -42,44 +44,39 @@ std::shared_ptr<T> SystemManager::registerSystem()
 }
 
 template<typename T>
-void SystemManager::setSignature(Signature signature)
+void SystemManager::SetSignature(Signature signature)
 {
     const char *typeName = typeid(T).name();
     Assert_Fatal_Error(_systems.find(typeName) != _systems.end(), "System used before registered.");
 
-    _signatures.insert({typeName, signature});
+    (void)_signatures.insert({typeName, signature});
 
 }
 
-void SystemManager::entityDestroyed(EntityId id)
+void SystemManager::EntityDestroyed(EntityId id)
 {
-    for (auto const &pair : _systems)
-    {
+    for (auto const &pair : _systems) {
         auto const &system = pair.second;
 
-        system->_entities.erase(id);
+        (void)system->_entities.erase(id);
     }
 
 }
 
-void SystemManager::entitySignatureChanged(EntityId id, Signature entitySignature)
+void SystemManager::EntitySignatureChanged(EntityId id, Signature entitySignature)
 {
-    for (auto const &pair : _systems)
-    {
+    for (auto const &pair : _systems) {
         auto const &type = pair.first;
         auto const &system = pair.second;
         auto const &systemSignature = _signatures[type];
 
-        if ((entitySignature & systemSignature) == systemSignature)
-        {
-            system->_entities.insert(id);
-        } else
-        {
-            system->_entities.erase(id);
+        if ((entitySignature & systemSignature) == systemSignature) {
+            (void)system->_entities.insert(id);
+        } else {
+            (void)system->_entities.erase(id);
         }
     }
 
 }
-
 
 #endif //QUACKENGINE_SYSTEMMANAGER_HPP
