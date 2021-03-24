@@ -63,6 +63,10 @@ target_link_libraries(imgui INTERFACE glfw glad)
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE ${external_lib}/stb)
 
+#miniaudio
+add_library(miniaudio INTERFACE)
+target_include_directories(miniaudio INTERFACE ${external_lib}/miniaudio)
+
 #assimp
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE)

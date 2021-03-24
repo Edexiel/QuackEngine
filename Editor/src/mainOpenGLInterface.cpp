@@ -14,6 +14,14 @@
 #include "Input/PlatformInputGLFW.hpp"
 #include "Input/InputManager.hpp"
 
+#include "Audio/SoundManager.hpp"
+#include "Audio/Sound.hpp"
+
+#include "Debug/Log.hpp"
+
+//#define MINIAUDIO_IMPLEMENTATION
+//#include "miniaudio.h"
+
 #include <cmath>
 
 using namespace Renderer;
@@ -93,6 +101,15 @@ const char* fragmentShaderFb =
 
 int main()
 {
+
+  int argc = 3;
+  char* argv[3] {  "../../../dragonball-z-abridged-space-duck.wav", "../../../mac-quack.mp3", "../../../doom-crossing-eternal-horizons-feat-natalia-natchan.mp3"};
+
+
+  Audio::SoundManager sd;
+  Audio::Sound sound = sd.CreateSound("../../../inactive.ogg");
+  Audio::Sound sound2 = sd.CreateSound("../../../doom-crossing-eternal-horizons-feat-natalia-natchan.m3");
+
   GLFWwindow* window;
   unsigned int width = 1280, height = 720;
   /* Initialize the library */
@@ -159,7 +176,7 @@ int main()
     RendererPlatform::VerticesReading();
 
 
-    Renderer::Light light(Renderer::Light_Type::L_DIRECTIONAL);
+    Renderer::Light light(Renderer::Light_Type::L_POINT);
 
     light.model = Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Translate({0,0, 0});
     light.ambient = {0.0f, 0.1f, 0.0f};
@@ -174,11 +191,15 @@ int main()
 
 
 
-    ShaderConstructData shd = {1,0,1, 0, 1, 1, 1, 1};
+    ShaderConstructData shd = {1,1,0, 0, 0, 0, 0, 1};
+    ShaderConstructData shd2 = {1,5,12, 5, 0, 0, 0, 1};
 
     //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
     Shader shader = Shader::LoadShader(shd);
+
+    std::cout << "KEY : " << shd.GetKey() << std::endl;
+    std::cout << "KEY2 : " << shd2.GetKey() << std::endl;
 
     RendererPlatform::UseShader(shader.ID);
     shader.SetMatrix4
@@ -188,10 +209,10 @@ int main()
         );
     shader.SetMatrix4("view", Maths::Matrix4::Identity());
 
-    Model model =  Model::LoadModel("../../../eyeball.fbx", VertexType::V_NORMALMAP);
+    Model model =  Model::LoadModel("../../../SphereHeavy.fbx", VertexType::V_NORMALMAP);
     Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
-    Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
-    Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
+    //Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
+    //Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
 
     Material material;
     material.shader = shader;
@@ -199,12 +220,12 @@ int main()
     material.ambient = {1, 1, 1};
     material.diffuse = {1, 1, 1};
     material.specular = {1, 1, 1};
-    material.shininess = 1;
+    material.shininess = 128;
 
     material.colorTexture = texture;
-    material.diffuseTexture = textureDiffuse;
-    material.specularTexture = textureSpecular;
-    material.normalMap = rm.LoadTexture("../../../Dragon_Nor_mirror2.jpg");
+    //material.diffuseTexture = textureDiffuse;
+    //material.specularTexture = textureSpecular;
+    material.normalMap = rm.LoadTexture("../../../Floor_N.jpg");
 
 
     float count = 0;
@@ -232,15 +253,33 @@ int main()
 
         if (glfwGetKey(window, GLFW_KEY_R))
         {
-          //shader = Shader::LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+            sound2.Restart();
         }
+        if (glfwGetKey(window, GLFW_KEY_P))
+        {
+            sound.Play();
+        }
+        if (glfwGetKey(window, GLFW_KEY_S))
+        {
+            sound.Stop();
+        }
+
+          if (glfwGetKey(window, GLFW_KEY_K))
+          {
+              //sd.SetVolume(sd.GetVolume() + 0.01);
+          }
+          if (glfwGetKey(window, GLFW_KEY_M))
+          {
+              //sd.SetVolume(sd.GetVolume() - 0.01);
+          }
+
 
         framebuffer.Bind();
         RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
         RendererPlatform::Clear();
 
         //quadMesh.Draw();
-        //light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
+        light.model = Maths::Matrix4::Translate({cosf(count) * 30, sinf(count) * 30, 0});
         //light.model = Maths::Matrix4::RotateY(count);
 
         material.Apply();
@@ -272,6 +311,8 @@ int main()
       glfwSwapBuffers(window);
       glfwPollEvents();
     }
+    //ma_device_uninit(&device);
+    //ma_decoder_uninit(&decoder);
   }
   glfwTerminate();
   return 0;
