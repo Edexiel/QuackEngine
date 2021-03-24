@@ -68,31 +68,14 @@ int main()
 
     //Camera
     Scene::Camera cam(width, height, 1000, -1, 45.f * 3.14f/180.f);
+    cam.SetInput(inputManager);
     cam.SetPosition({0,0,3});
     cam.SetRotation(Maths::Quaternion({0,1,0}, 3.14f/2.f));
     cam.SetRotationSpeed(0.1f);
-    cam.SetTranslationSpeed(0.01f);
+    cam.SetTranslationSpeed(0.1f);
     cam.CreateView();
 
-    inputManager.BindEvent("CameraMoveForward", Input::Key::KEY_W, Input::Action::PRESS);
-    inputManager.BindEvent("CameraMoveBackward", Input::Key::KEY_S, Input::Action::PRESS);
-    inputManager.BindEvent("CameraMoveRight", Input::Key::KEY_D, Input::Action::PRESS);
-    inputManager.BindEvent("CameraMoveLeft", Input::Key::KEY_A, Input::Action::PRESS);
 
-    inputManager.BindEvent("StopCameraMoveForward", Input::Key::KEY_W, Input::Action::RELEASE);
-    inputManager.BindEvent("StopCameraMoveBackward", Input::Key::KEY_S, Input::Action::RELEASE);
-    inputManager.BindEvent("StopCameraMoveRight", Input::Key::KEY_D, Input::Action::RELEASE);
-    inputManager.BindEvent("StopCameraMoveLeft", Input::Key::KEY_A, Input::Action::RELEASE);
-
-    inputManager.RegisterEvent("CameraMoveForward",&cam, &Scene::Camera::MoveForward);
-    inputManager.RegisterEvent("CameraMoveBackward",&cam, &Scene::Camera::MoveBackward);
-    inputManager.RegisterEvent("CameraMoveRight",&cam, &Scene::Camera::MoveRight);
-    inputManager.RegisterEvent("CameraMoveLeft",&cam, &Scene::Camera::MoveLeft);
-
-    inputManager.RegisterEvent("StopCameraMoveForward",&cam, &Scene::Camera::StopMoveForward);
-    inputManager.RegisterEvent("StopCameraMoveBackward",&cam, &Scene::Camera::StopMoveBackward);
-    inputManager.RegisterEvent("StopCameraMoveRight",&cam, &Scene::Camera::StopMoveRight);
-    inputManager.RegisterEvent("StopCameraMoveLeft",&cam, &Scene::Camera::StopMoveLeft);
 
     shader.SetMatrix4("projection", cam.GetProjection());
     shader.SetMatrix4("view", cam.GetView());
