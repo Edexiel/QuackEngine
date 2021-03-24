@@ -8,8 +8,8 @@
 #include <memory>
 #include <unordered_map>
 
-#include "Scene/Types.hpp"
-#include "Scene/System/System.hpp"
+#include "Types.hpp"
+#include "System.hpp"
 #include "Debug/Assertion.hpp"
 
 class SystemManager

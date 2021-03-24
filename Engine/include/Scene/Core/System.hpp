@@ -5,7 +5,7 @@
 #ifndef QUACKENGINE_SYSTEM_HPP
 #define QUACKENGINE_SYSTEM_HPP
 
-#include "Scene/Types.hpp"
+#include "Types.hpp"
 #include <set>
 
 

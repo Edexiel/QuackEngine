@@ -4,7 +4,7 @@
 #include <queue>
 #include <string>
 #include <utility>
-#include "Scene/Types.hpp"
+#include "Types.hpp"
 
 class Entity
 {
@@ -25,8 +25,8 @@ public:
     EntityId getId() const;
     const std::string &getName() const;
 };
-
 EntityId Entity::_idCount = 0;
+std::queue<EntityId> Entity::_garbage{};
 
 Entity::Entity(std::string name) : _name(std::move(name))
 {

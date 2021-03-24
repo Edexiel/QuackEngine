@@ -5,7 +5,7 @@
 #ifndef QUACKENGINE_SCENE_HPP
 #define QUACKENGINE_SCENE_HPP
 
-#include "Scene/Entity/Entity.hpp"
+#include "Scene/Core/Entity.hpp"
 
 class Scene
 {

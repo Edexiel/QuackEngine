@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <algorithm>
 
-#include "Scene/Entity/Entity.hpp"
+#include "Scene/Core/Entity.hpp"
 #include "Debug/Assertion.hpp"
 
 class IComponentArray

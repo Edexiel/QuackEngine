@@ -7,8 +7,10 @@
 
 #include <unordered_map>
 #include <memory>
-#include "Scene/Types.hpp"
-#include "Scene/Component/ComponentArray.hpp"
+
+#include "Types.hpp"
+#include "ComponentArray.hpp"
+
 #include "Debug/Assertion.hpp"
 
 class ComponentManager
@@ -79,13 +81,13 @@ ComponentType ComponentManager::getComponentType()
 template<typename T>
 void ComponentManager::addComponent(EntityId id, T component)
 {
-    getComponentArray<T>()->InsertData(id, component);
+    getComponentArray<T>()->addData(id, component);
 }
 
 template<typename T>
 void ComponentManager::removeComponent(EntityId id)
 {
-    getComponentArray<T>()->RemoveData(id);
+    getComponentArray<T>()->removeData(id);
 }
 
 template<typename T>

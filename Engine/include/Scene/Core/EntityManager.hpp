@@ -10,8 +10,8 @@
 #include <bitset>
 #include <algorithm>
 
-#include "Scene/Entity/Entity.hpp"
-#include "Scene/Types.hpp"
+#include "Entity.hpp"
+#include "Types.hpp"
 #include "Debug/Assertion.hpp"
 
 const size_t START_SIZE = 1000;
@@ -26,7 +26,7 @@ private:
 
 public:
     EntityManager();
-    Entity &create(const std::string &name);
+    Entity &create(std::string &name);
     Entity &get(EntityId id);
     Signature getSignature(EntityId id);
     void setSignature(EntityId id, Signature signature);
@@ -45,9 +45,9 @@ EntityManager::EntityManager()
  * @param name Entity's name
  * @return Reference to entity
  */
-Entity &EntityManager::create(const std::string &name)
+Entity &EntityManager::create(std::string &name)
 {
-    Entity &e = _entities.emplace_back(name);
+    Entity &e = _entities.emplace_back(std::move(name));
     _signatures.emplace_back();
     _entityLut.insert({e.getId(), _entities.size() - 1});
 
