@@ -173,14 +173,13 @@ int main()
 
     inputManager.BindEvent("Hero", Input::MouseButton::MOUSE_BUTTON_1);
     inputManager.BindEvent("Hero", Input::MouseButton::MOUSE_BUTTON_2);
-    inputManager.BindEventAxis("Axis", Input::Key::KEY_SPACE, 1.0f);
+    inputManager.BindEventAxis("Axis", Input::Key::KEY_W, 1.0f);
+    inputManager.BindEventAxis("Axis", Input::Key::KEY_S, -1.0f);
     MyHero hero;
     inputManager.RegisterEvent("Hero",Input::Action::PRESS, &hero, &MyHero::IsPressed);
     inputManager.RegisterEvent("Hero",Input::Action::RELEASE, &hero, &MyHero::IsReleased);
     inputManager.RegisterEventAxis("Axis",&hero, &MyHero::TestAxis);
 
-    int bonsoir;
-    glfwGetJoystickAxes(GLFW_JOYSTICK_5, &bonsoir);
     while (!glfwWindowShouldClose(window))
     {
       inputManager.Update();

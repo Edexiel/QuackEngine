@@ -17,27 +17,25 @@ void InputManager::OnKeyEvent(Action action, Key key)
   {
     for (Input::Key _key : eventKey.second)
     {
-      if (_key == key)
-        for (std::pair<std::function<void()>, Action> function :
+      for (std::pair<std::function<void()>, Action> function :
              _eventFuncs[eventKey.first])
-        {
-          if (function.second == action)
-            function.first();
-        }
+      {
+      if (_key == key && function.second == action)
+        function.first();
+      }
     }
   }
   for (std::pair<const std::string, std::vector<std::pair<Key, float>>> eventKeyAxis : _eventKeysAxis)
   {
     for (std::pair<Key,float> _key : eventKeyAxis.second)
     {
-      if (_key.first == key)
-        for (std::function<void(float)> function : _eventFuncsAxis[eventKeyAxis.first])
-        {
-          if (action == Action::PRESS)
-            function(_key.second);
-          else if(action == Action::RELEASE)
-            function(0);
-        }
+     for (std::function<void(float)> function : _eventFuncsAxis[eventKeyAxis.first])
+     {
+      if (_key.first == key && action == Action::PRESS)
+        function(_key.second);
+      else if(_key.first == key && action == Action::RELEASE)
+        function(0);
+     }
     }
   }
 }
@@ -52,7 +50,7 @@ void InputManager::OnMouseButtonEvent(Action action, MouseButton button)
       for (std::pair<std::function<void()>, Action> function :
            _eventFuncs[eventMouseButton.first])
         {
-          if (function.second == action)
+          if (_button == button && function.second == action)
             function.first();
         }
     }
