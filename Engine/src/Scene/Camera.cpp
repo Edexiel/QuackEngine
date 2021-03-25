@@ -108,9 +108,10 @@ void Camera::Update()
  */
 void Camera::FreeFly()
 {
-  _forward = (_rotation * Vector4f(Vector3f::Forward(), 0)).xyz * _AxisScaleZ;
-  _right = (_rotation * Vector4f(Vector3f::Right(), 0)).xyz * _AxisScaleX;
-  Vector3f direction = (_forward + _right).GetNormalized();
+  _forward = (_rotation * Vector4f(Vector3f::Forward(), 0)).xyz * _axisScaleZ;
+  _right = (_rotation * Vector4f(Vector3f::Right(), 0)).xyz * _axisScaleX;
+  Vector3f up = Vector3f::Up() * _axisScaleY;
+  Vector3f direction = (_forward + _right + up).GetNormalized();
 
   _position = _position + (direction.Normalize() * _speedTranslation);
 }
@@ -118,19 +119,16 @@ void Camera::FreeFly()
 
 void Camera::SetInput(Input::InputManager &inputManager)
 {
-  inputManager.BindEventAxis("CameraMovementForwardAxis", Input::Key::KEY_W, -1.0f);
-  inputManager.BindEventAxis("CameraMovementForwardAxis", Input::Key::KEY_S, 1.0f);
-  inputManager.BindEventAxis("CameraMovementRightAxis", Input::Key::KEY_D, -1.0f);
-  inputManager.BindEventAxis("CameraMovementRightAxis", Input::Key::KEY_A, 1.0f);
-
   inputManager.RegisterEventAxis("CameraMovementForwardAxis",this, &Camera::SetAxisScaleZ);
   inputManager.RegisterEventAxis("CameraMovementRightAxis",this, &Camera::SetAxisScaleX);
+  inputManager.RegisterEventAxis("CameraMovementUpAxis",this, &Camera::SetAxisScaleY);
 }
 void Camera::SetAxisScaleX(const float scale)
-{
-  _AxisScaleX = scale;
+{ _axisScaleX = scale;
+}
+void Camera::SetAxisScaleY(const float scale)
+{ _axisScaleY = scale;
 }
 void Camera::SetAxisScaleZ(const float scale)
-{
-  _AxisScaleZ = scale;
+{ _axisScaleZ = scale;
 }

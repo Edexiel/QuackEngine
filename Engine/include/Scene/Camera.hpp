@@ -30,9 +30,9 @@ private:
   double         _pitch{0};
   double         _yaw{0};
 
-  float _AxisScaleX{0};
-  float _AxisScaleY{0};
-  float _AxisScaleZ{0};
+  float _axisScaleX{0};
+  float _axisScaleY{0};
+  float _axisScaleZ{0};
 
   Maths::Matrix4 _projection;
   Maths::Matrix4 _rotation;// todo: check what is better between Quaternion and Matrix for the rotation.
@@ -45,6 +45,7 @@ private:
 
   void FreeFly();
   void SetAxisScaleX(const float scale);
+  void SetAxisScaleY(const float scale);
   void SetAxisScaleZ(const float scale);
 
 
