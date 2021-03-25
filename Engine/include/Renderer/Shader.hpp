@@ -20,6 +20,11 @@ namespace Renderer
       bool hasSpecularTexture;
 
       bool hasNormalMap;
+
+      unsigned int GetKey() const
+      {
+        return hasLight + nbPointLight * 10 + hasColorTexture * 100 + nbDirectionalLight * 1000 + hasDiffuseTexture * 10000 + hasSpecularTexture * 100000 + nbSpotLight * 1000000 + hasNormalMap * 10000000;
+      };
     };
 
     class Shader
