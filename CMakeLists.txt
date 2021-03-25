@@ -98,8 +98,6 @@ add_subdirectory(Editor)
 #Engine
 add_subdirectory(Engine)
 
-target_include_directories(Editor PRIVATE Engine/include)
-
 #if(debug)
 #{
 #target_link_libraries(Editor PUBLIC Engine)
