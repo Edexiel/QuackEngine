@@ -225,6 +225,7 @@ int main()
         }*/
 
       inputManager.Update();
+
       count += 0.01f;
 
       // framebuffer
