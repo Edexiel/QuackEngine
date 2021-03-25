@@ -14,6 +14,7 @@
 #include "Debug/Assertion.hpp"
 
 #include <algorithm>
+#include <string>
 
 using namespace Audio;
 
@@ -125,7 +126,8 @@ Sound SoundManager::CreateSound(const char *path)
 
     decoderConfig = ma_decoder_config_init(SAMPLE_FORMAT, CHANNEL_COUNT, SAMPLE_RATE);
     ma_decoder* decoder = new ma_decoder;
-    Assert_Error((ma_decoder_init_file(path, &decoderConfig, decoder) != MA_SUCCESS), "Failed to open playback device.\n");
+    Assert_Error((ma_decoder_init_file(path, &decoderConfig, decoder) != MA_SUCCESS),
+                 (std::string("SOUND : Failed to open : ") + path).c_str());
 
     _index += 1;
 
