@@ -5,12 +5,20 @@
 #include "Maths/Vector3.hpp"
 namespace Renderer
 {
-struct Vertex
-{
-  Maths::Vector3f position;
-  Maths::Vector3f normal;
-  Maths::Vector2f uv;
-};
+  enum class VertexType{V_CLASSIC, V_NORMALMAP};
+
+  struct Vertex
+  {
+    Maths::Vector3f position;
+    Maths::Vector3f normal;
+    Maths::Vector2f uv;
+  };
+
+  struct normalMapVertex : Vertex
+  {
+    Maths::Vector3f tangent;
+    Maths::Vector3f biTangent;
+  };
 }
 
 #endif // _VERTEX_HPP
