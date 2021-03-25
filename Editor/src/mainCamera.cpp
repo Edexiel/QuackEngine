@@ -7,6 +7,7 @@
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Light.hpp"
+#include "Renderer/Material.hpp"
 
 #include "Resources/ResourcesManager.hpp"
 
@@ -88,7 +89,7 @@ int main()
 //    Texture
     Texture texture = rm.LoadTexture("../../../Eye_D.jpg");
 
-    Renderer::Light light;
+    Renderer::Light light(Renderer::Light_Type::L_POINT);
 
     light.model = Maths::Matrix4::Translate({0,0, 0});
     light.ambient = {0.0f, 0.1f, 0.0f};
@@ -124,15 +125,23 @@ int main()
       RendererPlatform::VerticesReading();
       //quadMesh.Draw();
 //      light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
+      Material material;
+      material.shader = shader;
 
+      material.ambient = {1, 1, 1};
+      material.diffuse = {1, 1, 1};
+      material.specular = {1, 1, 1};
+      material.shininess = 256;
       shader.Use();
+
       shader.SetVector4f("material.color", {1,1,1, 1});
 //      shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415 /180));
       shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,3}));
-
+      shader.SetLight(light, 0);
       cam.Update();
       cam.MouseMovement(inputManager.mousePosition.pos, inputManager.mousePosition.prevPos);
       cam.CreateView();
+      material.Apply();
       shader.SetMatrix4("projection", cam.GetProjection());
       shader.SetMatrix4("view", cam.GetView());
 

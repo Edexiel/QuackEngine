@@ -97,32 +97,7 @@ void Camera::MouseMovement(const Vector2d &currentPos, const Vector2d &oldPos)
 
   _rotation = (Quaternion({1,0,0}, _pitch) * Quaternion({0,1,0}, _yaw)).QuaternionToMatrix();
 }
-void Camera::MoveForward()
-{
-  _isMovingForward = true;
-}
-void Camera::MoveBackward()
-{
-  _isMovingBackward = true;
-}
-void Camera::MoveRight()
-{
-  _isMovingRight = true;
-}
-void Camera::MoveLeft()
-{
-  _isMovingLeft = true;
-}
 
-void Camera::MoveUp()
-{
-  _isMovingUp = true;
-}
-
-void Camera::MoveDown()
-{
-  _isMovingDown = true;
-}
 
 void Camera::Update()
 {
@@ -133,71 +108,29 @@ void Camera::Update()
  */
 void Camera::FreeFly()
 {
-  Vector3f direction{0,0,0};
-  _forward = (_rotation * Vector4f(Vector3f::Backward(), 0)).xyz;
-  _right = (_rotation * Vector4f(Vector3f::Left(), 0)).xyz;
-
-  if (_isMovingForward)
-    direction = direction + _forward;
-  if (_isMovingBackward)
-    direction = direction - _forward;
-  if (_isMovingLeft)
-    direction = direction - _right;
-  if (_isMovingRight)
-    direction = direction + _right;
-  if(_isMovingUp)
-    direction = direction + Vector3f::Down();
-  if(_isMovingDown)
-    direction = direction + Vector3f::Up();
+  _forward = (_rotation * Vector4f(Vector3f::Forward(), 0)).xyz * _AxisScaleZ;
+  _right = (_rotation * Vector4f(Vector3f::Right(), 0)).xyz * _AxisScaleX;
+  Vector3f direction = (_forward + _right).GetNormalized();
 
   _position = _position + (direction.Normalize() * _speedTranslation);
 }
-void Camera::StopMoveForward()
-{
-  _isMovingForward = false;
-}
-void Camera::StopMoveBackward()
-{
-  _isMovingBackward = false;
-}
-void Camera::StopMoveLeft()
-{
-  _isMovingLeft = false;
-}
-void Camera::StopMoveRight()
-{
-  _isMovingRight = false;
-}
-void Camera::StopMoveUp()
-{
-  _isMovingUp = false;
-}
 
-void Camera::StopMoveDown()
-{
-  _isMovingDown = false;
-}
 
 void Camera::SetInput(Input::InputManager &inputManager)
 {
-  inputManager.BindEvent("CameraMoveForward", Input::Key::KEY_W, Input::Action::PRESS);
-  inputManager.BindEvent("CameraMoveBackward", Input::Key::KEY_S, Input::Action::PRESS);
-  inputManager.BindEvent("CameraMoveRight", Input::Key::KEY_D, Input::Action::PRESS);
-  inputManager.BindEvent("CameraMoveLeft", Input::Key::KEY_A, Input::Action::PRESS);
+  inputManager.BindEventAxis("CameraMovementForwardAxis", Input::Key::KEY_W, -1.0f);
+  inputManager.BindEventAxis("CameraMovementForwardAxis", Input::Key::KEY_S, 1.0f);
+  inputManager.BindEventAxis("CameraMovementRightAxis", Input::Key::KEY_D, -1.0f);
+  inputManager.BindEventAxis("CameraMovementRightAxis", Input::Key::KEY_A, 1.0f);
 
-  inputManager.BindEvent("StopCameraMoveForward", Input::Key::KEY_W, Input::Action::RELEASE);
-  inputManager.BindEvent("StopCameraMoveBackward", Input::Key::KEY_S, Input::Action::RELEASE);
-  inputManager.BindEvent("StopCameraMoveRight", Input::Key::KEY_D, Input::Action::RELEASE);
-  inputManager.BindEvent("StopCameraMoveLeft", Input::Key::KEY_A, Input::Action::RELEASE);
-
-  inputManager.RegisterEvent("CameraMoveForward",this, &Scene::Camera::MoveForward);
-  inputManager.RegisterEvent("CameraMoveBackward",this, &Scene::Camera::MoveBackward);
-  inputManager.RegisterEvent("CameraMoveRight",this, &Scene::Camera::MoveRight);
-  inputManager.RegisterEvent("CameraMoveLeft",this, &Scene::Camera::MoveLeft);
-
-  inputManager.RegisterEvent("StopCameraMoveForward",this, &Scene::Camera::StopMoveForward);
-  inputManager.RegisterEvent("StopCameraMoveBackward",this, &Scene::Camera::StopMoveBackward);
-  inputManager.RegisterEvent("StopCameraMoveRight",this, &Scene::Camera::StopMoveRight);
-  inputManager.RegisterEvent("StopCameraMoveLeft",this, &Scene::Camera::StopMoveLeft);
+  inputManager.RegisterEventAxis("CameraMovementForwardAxis",this, &Camera::SetAxisScaleZ);
+  inputManager.RegisterEventAxis("CameraMovementRightAxis",this, &Camera::SetAxisScaleX);
 }
-
+void Camera::SetAxisScaleX(const float scale)
+{
+  _AxisScaleX = scale;
+}
+void Camera::SetAxisScaleZ(const float scale)
+{
+  _AxisScaleZ = scale;
+}

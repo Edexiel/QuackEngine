@@ -19,6 +19,8 @@ private:
   unsigned int   _width;
   unsigned int   _height;
 
+  bool           _isPerspective{true};
+
   float          _fov;
   float          _far;
   float          _near;
@@ -28,13 +30,9 @@ private:
   double         _pitch{0};
   double         _yaw{0};
 
-  bool           _isPerspective    = false;
-  bool           _isMovingForward  = false;
-  bool           _isMovingBackward = false;
-  bool           _isMovingLeft     = false;
-  bool           _isMovingRight    = false;
-  bool           _isMovingUp       = false;
-  bool           _isMovingDown     = false;
+  float _AxisScaleX{0};
+  float _AxisScaleY{0};
+  float _AxisScaleZ{0};
 
   Maths::Matrix4 _projection;
   Maths::Matrix4 _rotation;// todo: check what is better between Quaternion and Matrix for the rotation.
@@ -46,18 +44,9 @@ private:
 
 
   void FreeFly();
-  void MoveForward();
-  void MoveBackward();
-  void MoveLeft();
-  void MoveRight();
-  void MoveUp();
-  void MoveDown();
-  void StopMoveForward();
-  void StopMoveBackward();
-  void StopMoveLeft();
-  void StopMoveRight();
-  void StopMoveUp();
-  void StopMoveDown();
+  void SetAxisScaleX(const float scale);
+  void SetAxisScaleZ(const float scale);
+
 
 public:
   Camera() = default;
