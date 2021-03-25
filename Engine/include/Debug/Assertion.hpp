@@ -33,7 +33,7 @@
 namespace Debug
 {
 
-  enum class AssertLevel {  A_RELEASE,
+  enum class AssertLevel {  A_RELEASE = 0,
                             A_FATAL_ERROR, // The program will stop immediately if the error is true
                             A_ERROR,        // The program will stop when the function DisplayAssertion is called if the error is true
                             A_WARNING       // Don't stop the program
@@ -68,7 +68,7 @@ namespace Debug
     }
     printf("%s %s : %s : %s() l[%s] : %s\n", oss.str().c_str(), levelString, file, function, std::to_string(line).c_str(), message);
 
-    if (assertLvl > AssertLevel::A_WARNING)
+    if (assertLvl < AssertLevel::A_WARNING)
     {
       exit(5);
     }

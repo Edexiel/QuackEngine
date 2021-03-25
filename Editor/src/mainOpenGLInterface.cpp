@@ -14,46 +14,17 @@
 #include "Input/PlatformInputGLFW.hpp"
 #include "Input/InputManager.hpp"
 
+#include "Audio/SoundManager.hpp"
+#include "Audio/Sound.hpp"
+
+#include "Debug/Log.hpp"
+
+//#define MINIAUDIO_IMPLEMENTATION
+//#include "miniaudio.h"
+
 #include <cmath>
 
 using namespace Renderer;
-const char* vertexShader =
-    {
-                      R"GLSL(
-                      #version 330 core
-                      layout (location = 0) in vec3 aPos;
-                      layout (location = 1) in vec3 aNormal;
-                      layout (location = 2) in vec2 aTexCoord;
-
-                      uniform mat4 projection;
-                      uniform mat4 view;
-                      uniform mat4 model;
-
-                      out vec2 TexCoord;
-
-                      void main()
-                      {
-                      gl_Position = projection * view * model * vec4(aPos, 1.0);
-                      TexCoord = aTexCoord;
-                     }
-                     )GLSL"
-    };
-
-const char* fragmentShader =
-    {
-        R"GLSL(
-                     #version 330 core
-                     out vec4 FragColor;
-                     in vec2 TexCoord;
-
-                     uniform sampler2D ourTexture;
-
-                     void main()
-                     {
-                      FragColor = vec4(1,0,0,1);// texture(ourTexture, TexCoord);
-                     }
-                     )GLSL"
-    };
 
 const char* vertexShaderFb =
     {
@@ -90,9 +61,20 @@ const char* fragmentShaderFb =
                      )GLSL"
     };
 
+struct MyHero
+{
+  void IsPressed(){std::cout << "IsPressed\n";};
+  void IsReleased(){std::cout << "IsReleased\n";};
+  void TestAxis(float bonsoir){std::cout<< bonsoir<< std::endl;};
+};
 
 int main()
 {
+
+  //Audio::SoundManager sd;
+  //Audio::Sound sound = sd.CreateSound("../../../inactive.ogg");
+
+
   GLFWwindow* window;
   unsigned int width = 1280, height = 720;
   /* Initialize the library */
@@ -174,7 +156,7 @@ int main()
 
 
 
-    ShaderConstructData shd = {1,1,0, 0, 1, 1, 1, 1};
+    ShaderConstructData shd = {1,1,0, 0, 0, 0, 0, 0};
 
     //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
@@ -189,9 +171,9 @@ int main()
     shader.SetMatrix4("view", Maths::Matrix4::Identity());
 
     Model model =  Model::LoadModel("../../../eyeball.fbx", VertexType::V_NORMALMAP);
-    Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
-    Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
-    Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
+    //Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
+    //Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
+    //Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
 
     Material material;
     material.shader = shader;
@@ -201,10 +183,10 @@ int main()
     material.specular = {1, 1, 1};
     material.shininess = 256;
 
-    material.colorTexture = texture;
-    material.diffuseTexture = textureDiffuse;
-    material.specularTexture = textureSpecular;
-    material.normalMap = rm.LoadTexture("../../../Dragon_Nor_mirror2.jpg");
+    //material.colorTexture = texture;
+    //material.diffuseTexture = textureDiffuse;
+    //material.specularTexture = textureSpecular;
+    //material.normalMap = rm.LoadTexture("../../../Dragon_Nor_mirror2.jpg");
 
 
     float count = 0;
@@ -217,8 +199,31 @@ int main()
     Input::PlatformInputGLFW platformInput(window);
     Input::InputManager inputManager(platformInput);
 
+    inputManager.BindEvent("Hero", Input::MouseButton::MOUSE_BUTTON_1);
+    inputManager.BindEvent("Hero", Input::MouseButton::MOUSE_BUTTON_2);
+    inputManager.BindEventAxis("Axis", Input::Key::KEY_W, 1.0f);
+    inputManager.BindEventAxis("Axis", Input::Key::KEY_S, -1.0f);
+    MyHero hero;
+    inputManager.RegisterEvent("Hero",Input::Action::PRESS, &hero, &MyHero::IsPressed);
+    inputManager.RegisterEvent("Hero",Input::Action::RELEASE, &hero, &MyHero::IsReleased);
+    inputManager.RegisterEventAxis("Axis",&hero, &MyHero::TestAxis);
+
     while (!glfwWindowShouldClose(window))
     {
+        /*frameNB++;
+
+        std::cout << "Freq : " << glfwGetTime() - lastFrameTime << std::endl;
+        lastFrameTime = glfwGetTime();
+
+        if (frameNB == 99)
+        {
+            start = glfwGetTime();
+        }
+        if (frameNB >= 100) {
+            avg = (glfwGetTime() - start) / (frameNB - 99);
+            std::cout << "average = " << avg << std::endl;
+        }*/
+
       inputManager.Update();
 
       count += 0.01f;
@@ -232,15 +237,35 @@ int main()
 
         if (glfwGetKey(window, GLFW_KEY_R))
         {
-          //shader = Shader::LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+            //sound.Restart();
         }
+        if (glfwGetKey(window, GLFW_KEY_P))
+        {
+            //sound.Play();
+        }
+        if (glfwGetKey(window, GLFW_KEY_S))
+        {
+            //sound.Stop();
+        }
+
+          if (glfwGetKey(window, GLFW_KEY_K))
+          {
+              //sound.SetVolume(sound.GetVolume() + 0.01);
+              //sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) + 0.01);
+          }
+          if (glfwGetKey(window, GLFW_KEY_M))
+          {
+              //sound.SetVolume(sound.GetVolume() - 0.01);
+              //sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) - 0.01);
+          }
+
 
         framebuffer.Bind();
         RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
         RendererPlatform::Clear();
 
         //quadMesh.Draw();
-        light.model = Maths::Matrix4::Translate({cosf(count) * 30.f, sinf(count) * 30.f, 0});
+        light.model = Maths::Matrix4::Translate({cosf(count) * 30, sinf(count) * 30, 0});
         //light.model = Maths::Matrix4::RotateY(count);
 
         material.Apply();
@@ -272,6 +297,8 @@ int main()
       glfwSwapBuffers(window);
       glfwPollEvents();
     }
+    //ma_device_uninit(&device);
+    //ma_decoder_uninit(&decoder);
   }
   glfwTerminate();
   return 0;

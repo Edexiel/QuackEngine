@@ -19,12 +19,10 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/Light.cpp
         src/Scene/World.cpp
         src/Scene/System/TestSystem.cpp
-        include/Scene/System/TestSystem.hpp
         src/Scene/System/ScriptSystem.cpp
-        include/Scene/System/ScriptSystem.hpp
         src/Scene/System/PhysicsSystem.cpp
-        include/Scene/System/PhysicsSystem.hpp
-        include/Scene/Component/Mesh.hpp
+        src/Audio/Sound.cpp
+        src/Audio/SoundManager.cpp
         )
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
