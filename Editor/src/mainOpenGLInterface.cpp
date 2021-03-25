@@ -9,6 +9,10 @@
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Light.hpp"
 #include "Resources/ResourcesManager.hpp"
+#include "Renderer/Material.hpp"
+
+#include "Input/PlatformInputGLFW.hpp"
+#include "Input/InputManager.hpp"
 
 #include "Input/PlatformInputGLFW.hpp"
 #include "Input/InputManager.hpp"
@@ -113,21 +117,6 @@ int main()
 
     Resources::ResourcesManager rm;
 
-    // shader
-
-    ShaderConstructData shd = {1,1,0, 0, 1, 1, 1};
-
-    //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
-
-    Shader shader = Shader::LoadShader(shd);
-
-    RendererPlatform::UseShader(shader.ID);
-    shader.SetMatrix4
-        (
-        "projection",
-        Maths::Matrix4::Perspective(width, height, -1.f, 100.f, 3.1415f / 2.f)
-        );
-    shader.SetMatrix4("view", Maths::Matrix4::Identity());
     // Shader fb
     Shader shaderFb(Renderer::RendererPlatform::CreateShader(
         vertexShaderFb, fragmentShaderFb));
@@ -139,17 +128,12 @@ int main()
 
     Renderer::Mesh quadMesh = Renderer::RendererPlatform::CreateMesh(
         quad, sizeof(quad) / sizeof (float ), quadIndices, sizeof(quadIndices) / sizeof(unsigned int));
+    RendererPlatform::VerticesReading();
 
 
+    Renderer::Light light(Renderer::Light_Type::L_POINT);
 
-//    Texture
-    Model model =  Model::LoadModel("../../../eyeball.fbx");
-    Texture texture = rm.LoadTexture("../../../Eye_D.jpg");
-    //Texture textureDiffuse = rm.LoadTexture("../../../Eye_D.jpg");
-
-    Renderer::Light light;
-
-    light.model = Maths::Matrix4::Translate({0,0, 0});
+    light.model = Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Translate({0,0, 0});
     light.ambient = {0.0f, 0.1f, 0.0f};
     light.diffuse = {0.7f, 0.7f, 0.7f};
     light.specular = {1.0f, 1.0f, 1.0f};
@@ -159,6 +143,40 @@ int main()
 
     light.outerSpotAngle = 10.5;
     light.spotAngle = 8.5;
+
+
+
+    ShaderConstructData shd = {1,1,0, 0, 0, 0, 0, 0};
+
+    //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+
+    Shader shader = Shader::LoadShader(shd);
+
+    RendererPlatform::UseShader(shader.ID);
+    shader.SetMatrix4
+        (
+            "projection",
+            Maths::Matrix4::Perspective(width, height, -1.f, 100.f, 3.1415f / 2.f)
+        );
+    shader.SetMatrix4("view", Maths::Matrix4::Identity());
+
+    Model model =  Model::LoadModel("../../../eyeball.fbx", VertexType::V_NORMALMAP);
+    //Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
+    //Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
+    //Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
+
+    Material material;
+    material.shader = shader;
+
+    material.ambient = {1, 1, 1};
+    material.diffuse = {1, 1, 1};
+    material.specular = {1, 1, 1};
+    material.shininess = 256;
+
+    //material.colorTexture = texture;
+    //material.diffuseTexture = textureDiffuse;
+    //material.specularTexture = textureSpecular;
+    //material.normalMap = rm.LoadTexture("../../../Dragon_Nor_mirror2.jpg");
 
 
     float count = 0;
@@ -194,30 +212,33 @@ int main()
 
         if (glfwGetKey(window, GLFW_KEY_R))
         {
-          shader = Shader::LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+          //shader = Shader::LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
         }
 
         framebuffer.Bind();
         RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
         RendererPlatform::Clear();
-        texture.Bind(0);
 
-        RendererPlatform::VerticesReading();
         //quadMesh.Draw();
         light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
+        //light.model = Maths::Matrix4::RotateY(count);
 
-        shader.Use();
-        shader.SetVector4f("material.color", {1,1,1, 1});
+        material.Apply();
 
-        shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415/180));
-        shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
-        shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(count/1) * Maths::Matrix4::RotateX(0) * Maths::Matrix4::Scale({1,1,1}));
+        //shader.Use();
+        //shader.SetVector4f("material.color", {1,1,1, 1});
 
-        RendererPlatform::SetPointLight(shader.ID, 0, light);
+        material.shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415/180));
+        material.shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
+        material.shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Scale({1,1,1}));
+
+        //RendererPlatform::SetPointLight(shader.ID, 0, light);
         //RendererPlatform::SetDirectionalLight(shader.ID, 0, light);
 
-        texture.Bind();
+        shader.SetLight(light, 0);
+
         model.Draw();
+
 
         RendererPlatform::BindFramebuffer(0);
       }

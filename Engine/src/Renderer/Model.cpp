@@ -10,16 +10,17 @@
 
 using namespace Renderer;
 
-Model Model::LoadModel(const char *path)
+Model::Model(VertexType vertexType) : _vertexType{vertexType} {}
+
+Model Model::LoadModel(const char *path, VertexType vertexType)
 {
   Assimp::Importer importer;
 
   const aiScene* scene = importer.ReadFile(path,
-                                           aiProcess_CalcTangentSpace   |
-                                           aiProcess_Triangulate              |
-                                           aiProcess_SortByPType              |
-                                           aiProcess_JoinIdenticalVertices
-                                           );
+                    aiProcess_Triangulate |
+                    aiProcess_SortByPType |
+                    aiProcess_JoinIdenticalVertices |
+                    aiProcess_CalcTangentSpace);
 
   if (!scene)
   {
@@ -27,11 +28,28 @@ Model Model::LoadModel(const char *path)
     return {};
   }
 
-  Model model;
+  switch (vertexType)
+  {
+    case VertexType::V_NORMALMAP : return LoadNormalMapModel(scene);
+    default : return LoadClassicModel(scene);
+  }
+
+  //if (normalMapping)
+  //  return  LoadModelNormalMap(scene);
+
+  return Model();
+}
+
+
+Model Model::LoadClassicModel(const void* loadedScene)
+{
+  const aiScene* scene = (aiScene*)loadedScene;
+
+  Model model(VertexType::V_CLASSIC);
   model.meshList.resize(scene->mNumMeshes);
 
   unsigned int count;
-  
+
   for (unsigned int i = 0; i < scene->mNumMeshes ; i++)
   {
     std::vector<float> vertices;
@@ -42,12 +60,12 @@ Model Model::LoadModel(const char *path)
     // Load indices
     for (unsigned int g = 0; g < scene->mMeshes[i]->mNumFaces ; g++)
     {
-        if (scene->mMeshes[i]->mFaces[g].mNumIndices == 3)
-        {
-            indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[0]);
-            indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[1]);
-            indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[2]);
-        }
+      if (scene->mMeshes[i]->mFaces[g].mNumIndices == 3)
+      {
+        indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[0]);
+        indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[1]);
+        indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[2]);
+      }
     }
 
 
@@ -80,17 +98,90 @@ Model Model::LoadModel(const char *path)
 
     // Put loaded data in buffers
     model.meshList[i] = Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
+    RendererPlatform::VerticesReading();
+  }
+  return model;
+}
 
+
+Model Model::LoadNormalMapModel(const void* loadedScene)
+{
+  const aiScene* scene = (aiScene*)loadedScene;
+
+  Model model(VertexType::V_NORMALMAP);
+  model.meshList.resize(scene->mNumMeshes);
+
+  unsigned int count;
+  
+  for (unsigned int i = 0; i < scene->mNumMeshes ; i++)
+  {
+    std::vector<float> vertices;
+    std::vector<unsigned int> indices;
+
+    //vertices.resize(scene->mMeshes[i]->mNumVertices * 14);
+
+    // Load indices
+    for (unsigned int g = 0; g < scene->mMeshes[i]->mNumFaces ; g++)
+    {
+        if (scene->mMeshes[i]->mFaces[g].mNumIndices == 3)
+        {
+            indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[0]);
+            indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[1]);
+            indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[2]);
+        }
+    }
+
+
+    // Load Vertices
+    count = 0;
+    for (unsigned int e = 0 ; e < scene->mMeshes[i]->mNumVertices ; e++)
+    {
+      vertices.push_back((scene->mMeshes[i]->mVertices[e]).x);
+      vertices.push_back((scene->mMeshes[i]->mVertices[e]).y);
+      vertices.push_back((scene->mMeshes[i]->mVertices[e]).z);
+
+      vertices.push_back((scene->mMeshes[i]->mNormals[e]).x);
+      vertices.push_back((scene->mMeshes[i]->mNormals[e]).y);
+      vertices.push_back((scene->mMeshes[i]->mNormals[e]).z);
+
+      //scene->mMeshes[i]->mTextureCoords[0][e].x;
+
+      if (scene->mMeshes[i]->HasTextureCoords(0))
+      {
+        vertices.push_back((scene->mMeshes[i]->mTextureCoords[0][e]).x);
+        vertices.push_back((scene->mMeshes[i]->mTextureCoords[0][e]).y);
+      }
+      else
+      {
+        vertices.push_back(0);
+        vertices.push_back(0);
+      }
+
+      vertices.push_back((scene->mMeshes[i]->mTangents[e]).x);
+      vertices.push_back((scene->mMeshes[i]->mTangents[e]).y);
+      vertices.push_back((scene->mMeshes[i]->mTangents[e]).z);
+
+      vertices.push_back((scene->mMeshes[i]->mBitangents[e]).x);
+      vertices.push_back((scene->mMeshes[i]->mBitangents[e]).y);
+      vertices.push_back((scene->mMeshes[i]->mBitangents[e]).z);
+      
+      count += 14;
+    }
+
+    // Put loaded data in buffers
+    model.meshList[i] = Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
+    RendererPlatform::VerticesReadingNormalMapping();
   }
 
 
   return model;
 }
 
+
 void Model::Draw()
 {
   for (unsigned int i = 0 ; i < meshList.size() ; i++)
   {
-    meshList[i].Draw();
+    meshList[i].Draw(_vertexType);
   }
 }
