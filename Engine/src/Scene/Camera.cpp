@@ -76,7 +76,7 @@ void Camera::SetPosition(const Vector3f &pos)
 
 void Camera::SetRotation(const Quaternion& rot)
 {
-  _rotation = rot.QuaternionToMatrix();
+  _rotation = rot.ToMatrix();
 }
 
 void Camera::SetRotationSpeed(const float speed)
@@ -95,7 +95,7 @@ void Camera::MouseMovement(const Vector2d &currentPos, const Vector2d &oldPos)
   _yaw += angleRotation.x;
   _pitch = std::clamp(_pitch + angleRotation.y, -M_PI/2.0, M_PI/2.0);
 
-  _rotation = (Quaternion({1,0,0}, _pitch) * Quaternion({0,1,0}, _yaw)).QuaternionToMatrix();
+  _rotation = (Quaternion({1,0,0}, _pitch) * Quaternion({0,1,0}, _yaw)).ToMatrix();
 }
 
 

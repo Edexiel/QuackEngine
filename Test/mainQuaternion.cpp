@@ -113,7 +113,7 @@ TEST(Quaternion, QuaternionToMatrix)
 {
   Quaternion q({1.0f,0.0f,0.0f}, 3.14/3.f);
   q.Normalize();
-  Matrix4 mat = q.QuaternionToMatrix();
+  Matrix4 mat = q.ToMatrix();
   Matrix4 goodRes = Matrix4::RotateX(3.14/3.f);
   for (int i = 0; i < 16; i++)
     EXPECT_NEAR(mat.e[i], goodRes.e[i], 0.01);

@@ -37,7 +37,7 @@ template<typename T>
 
     Vector3<T>& Normalize();
     Vector3<T> GetNormalized() const;
-    static void Normalized(Vector3<T>& v);
+    static void Normalize(Vector3<T>& v);
 
     static T DotProduct(const Vector3<T>& v1, const Vector3<T>& v2);
     static Vector3<T> CrossProduct(const Vector3<T>& v1, const Vector3<T>& v2);
@@ -105,7 +105,7 @@ inline Vector3<T> Vector3<T>::GetNormalized() const
 }
 
 template<typename T>
-inline void Vector3<T>::Normalized(Vector3<T>& v)
+inline void Vector3<T>::Normalize(Vector3<T>& v)
 {
   T length = v.Length();
 
