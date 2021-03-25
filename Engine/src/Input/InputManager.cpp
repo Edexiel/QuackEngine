@@ -13,46 +13,58 @@ InputManager::InputManager(PlatformInput& platformInput)
 
 void InputManager::OnKeyEvent(Action action, Key key)
 {
-	for (std::pair<const std::string, std::vector<Key>> eventKey : eventKeys)
-	{
-		for (Input::Key _key : eventKey.second)
-		{
-			if (action == eventAction[eventKey.first] && _key == key)
-				for (std::function<void()> func : eventFuncs[eventKey.first])
-				{
-					func();
-				}
-		}
-	}
+  for (std::pair<const std::string, std::vector<Key>> eventKey : _eventKeys)
+  {
+    for (Input::Key _key : eventKey.second)
+    {
+      for (std::pair<std::function<void()>, Action> function :
+             _eventFuncs[eventKey.first])
+      {
+      if (_key == key && function.second == action)
+        function.first();
+      }
+    }
+  }
+  for (std::pair<const std::string, std::vector<std::pair<Key, float>>> eventKeyAxis : _eventKeysAxis)
+  {
+    for (std::pair<Key,float> _key : eventKeyAxis.second)
+    {
+     for (std::function<void(float)> function : _eventFuncsAxis[eventKeyAxis.first])
+     {
+      if (_key.first == key && action == Action::PRESS)
+        function(_key.second);
+      else if(_key.first == key && action == Action::RELEASE)
+        function(0);
+     }
+    }
+  }
 }
 
-void Input::InputManager::OnMouseButtonEvent(Action action, MouseButton button)
+void InputManager::OnMouseButtonEvent(Action action, MouseButton button)
 {
-	for (std::pair<const std::string, std::vector<MouseButton>> eventMouseButton : eventMouseButtons)
-	{
-		for (Input::MouseButton _button : eventMouseButton.second)
-		{
-			if (action == eventAction[eventMouseButton.first] && _button == button)
-				for (std::function<void()> func : eventFuncs[eventMouseButton.first])
-				{
-					func();
-				}
-		}
-	}
+  for (std::pair<const std::string, std::vector<MouseButton>> eventMouseButton :
+       _eventMouseButtons)
+  {
+    for (Input::MouseButton _button : eventMouseButton.second)
+    {
+      for (std::pair<std::function<void()>, Action> function :
+           _eventFuncs[eventMouseButton.first])
+        {
+          if (_button == button && function.second == action)
+            function.first();
+        }
+    }
+  }
 }
 
-void Input::InputManager::OnUpdateMousePositionEvent(const double xPos, const double yPos)
+void InputManager::OnUpdateMousePositionEvent(const double xPos, const double yPos)
 {
-	mousePosition.prevX = mousePosition.x;
-	mousePosition.prevY = mousePosition.y;
-
-	mousePosition.x = xPos;
-	mousePosition.y = yPos;
+  //todo: Delete this function or make a boolean to choose between update each frame or update when the mouse move
 }
 
-void InputManager::BindEvent(std::string event, Key key, Action Action)
+void InputManager::BindEvent(const std::string& event, Key key)
 {
-	for (Key _key : eventKeys[event])
+	for (Key _key : _eventKeys[event])
 	{
 		if (_key == key)
 		{
@@ -61,13 +73,12 @@ void InputManager::BindEvent(std::string event, Key key, Action Action)
 		}
 	}
 
-	eventKeys[event].push_back(key);
-	eventAction[event] = Action;
+        _eventKeys[event].push_back(key);
 }
 
-void Input::InputManager::BindEvent(std::string event, MouseButton button, Action Action)
+void InputManager::BindEvent(const std::string& event, MouseButton button)
 {
-	for (MouseButton _button : eventMouseButtons[event])
+	for (MouseButton _button : _eventMouseButtons[event])
 	{
 		if (_button == button)
 		{
@@ -75,6 +86,15 @@ void Input::InputManager::BindEvent(std::string event, MouseButton button, Actio
 			return;
 		}
 	}
-	eventMouseButtons[event].push_back(button);
-	eventAction[event] = Action;
+        _eventMouseButtons[event].push_back(button);
+}
+
+void InputManager::BindEventAxis(const std::string& event, Key key, const float scale)
+{
+  _eventKeysAxis[event].push_back(std::pair<Key, float>(key, scale));
+}
+void InputManager::Update()
+{
+  platformInput.PollEvents();
+  platformInput.UpdateCursorPosition(mousePosition);
 }

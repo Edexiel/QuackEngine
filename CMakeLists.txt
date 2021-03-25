@@ -63,6 +63,10 @@ target_link_libraries(imgui INTERFACE glfw glad)
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE ${external_lib}/stb)
 
+#miniaudio
+add_library(miniaudio INTERFACE)
+target_include_directories(miniaudio INTERFACE ${external_lib}/miniaudio)
+
 #assimp
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE)
@@ -87,6 +91,10 @@ add_subdirectory(${external_lib}/assimp)
 #reactphysics3d
 add_subdirectory(${external_lib}/reactphysics3d)
 
+#gtest
+#todo: create variable test
+add_subdirectory(${external_lib}/googletest)
+add_subdirectory(Test)
 
 #Editor
 add_subdirectory(Editor)
@@ -94,7 +102,7 @@ add_subdirectory(Editor)
 #Engine
 add_subdirectory(Engine)
 
-target_include_directories(Editor PRIVATE Engine/include)
+#target_include_directories(Editor PRIVATE Engine/include)
 
 #if(debug)
 #{
