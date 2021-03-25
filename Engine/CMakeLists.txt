@@ -24,8 +24,11 @@ add_library(${PROJECT_NAME} STATIC
         src/Scene/Archetype.cpp
         src/Scene/RendererComponent.cpp
         src/Scene/PhysicsComponent.cpp
-        src/Scene/ScriptComponent.cpp src/Renderer/Light.cpp)
+        src/Scene/ScriptComponent.cpp
+        src/Renderer/Light.cpp
+        src/Audio/Sound.cpp
+        src/Audio/SoundManager.cpp)
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp stb)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp stb miniaudio)
