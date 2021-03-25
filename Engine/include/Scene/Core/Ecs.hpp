@@ -50,19 +50,19 @@ public:
     void SetSystemSignature(Signature signature);
 };
 
-void Ecs::Init()
+inline void Ecs::Init()
 {
     _componentManager = std::make_unique<ComponentManager>();
     _entityManager = std::make_unique<EntityManager>();
     _systemManager = std::make_unique<SystemManager>();
 }
 
-Entity &Ecs::CreateEntity(std::string name)
+inline Entity &Ecs::CreateEntity(std::string name)
 {
     return _entityManager->Create(name);
 }
 
-void Ecs::DestroyEntity(Entity &entity)
+inline void Ecs::DestroyEntity(Entity &entity)
 {
     _entityManager->Destroy(entity.GetId());
     _componentManager->EntityDestroyed(entity.GetId());
@@ -84,7 +84,7 @@ void Ecs::AddComponent(Entity &entity, T component)
     signature.set(_componentManager->GetComponentType<T>(), true);
     _entityManager->SetSignature(entity.GetId(), signature);
 
-    _systemManager->EntitySignatureChanged(entity.GetId(), signature)
+    _systemManager->EntitySignatureChanged(entity.GetId(), signature);
 }
 
 template<typename T>

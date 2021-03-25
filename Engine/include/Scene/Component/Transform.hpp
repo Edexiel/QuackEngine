@@ -5,19 +5,21 @@
 #include <Maths/Vector3.hpp>
 #include "Scene/Core/System.hpp"
 
-struct Transform : public System {
-  /**
-   * Transform component
-   * @param position
-   * @param scale
-   * @param rotation
-   */
-  Transform(const Maths::Vector3f &position, const Maths::Vector3f &scale,
-			const Maths::Quaternion &rotation) : position(position), scale(scale), rotation(rotation) {}
+struct Transform
+{
+    /**
+     * Transform component
+     * @param position
+     * @param scale
+     * @param rotation
+     */
+    Transform(const Maths::Vector3f &position, const Maths::Vector3f &scale,
+              const Maths::Quaternion &rotation) : position(position), scale(scale), rotation(rotation)
+    {}
 
-  Maths::Vector3f position;
-  Maths::Vector3f scale;
-  Maths::Quaternion rotation;
+    Maths::Vector3f position;
+    Maths::Vector3f scale;
+    Maths::Quaternion rotation;
 };
 //struct Transform : public Component
 //{

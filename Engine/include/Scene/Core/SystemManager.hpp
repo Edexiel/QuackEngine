@@ -32,7 +32,7 @@ public:
 };
 
 template<typename T>
-std::shared_ptr<T> SystemManager::RegisterSystem()
+inline std::shared_ptr<T> SystemManager::RegisterSystem()
 {
     const char *typeName = typeid(T).name();
     Assert_Fatal_Error(_systems.find(typeName) != _systems.end(), "Registering system more than once.");
@@ -40,11 +40,10 @@ std::shared_ptr<T> SystemManager::RegisterSystem()
     auto system = std::make_shared<T>();
     _systems.insert({typeName, system});
     return system;
-
 }
 
 template<typename T>
-void SystemManager::SetSignature(Signature signature)
+inline void SystemManager::SetSignature(Signature signature)
 {
     const char *typeName = typeid(T).name();
     Assert_Fatal_Error(_systems.find(typeName) != _systems.end(), "System used before registered.");
@@ -53,7 +52,7 @@ void SystemManager::SetSignature(Signature signature)
 
 }
 
-void SystemManager::EntityDestroyed(EntityId id)
+inline void SystemManager::EntityDestroyed(EntityId id)
 {
     for (auto const &pair : _systems) {
         auto const &system = pair.second;
@@ -63,7 +62,7 @@ void SystemManager::EntityDestroyed(EntityId id)
 
 }
 
-void SystemManager::EntitySignatureChanged(EntityId id, Signature entitySignature)
+inline void SystemManager::EntitySignatureChanged(EntityId id, Signature entitySignature)
 {
     for (auto const &pair : _systems) {
         auto const &type = pair.first;

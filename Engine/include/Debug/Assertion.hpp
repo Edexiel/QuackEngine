@@ -41,7 +41,7 @@ namespace Debug
 
   static AssertLevel assertLevel = AssertLevel::A_WARNING;
 
-  bool Assert(bool check, const char* message, const char* file, const char* function, unsigned int line, AssertLevel assertLvl = AssertLevel::A_WARNING)
+  inline bool Assert(bool check, const char* message, const char* file, const char* function, unsigned int line, AssertLevel assertLvl = AssertLevel::A_WARNING)
   {
 
     if (!check)

@@ -96,7 +96,7 @@ T &ComponentManager::GetComponent(EntityId id)
     return GetComponentArray<T>()->GetData(id);
 }
 
-void ComponentManager::EntityDestroyed(EntityId id)
+inline void ComponentManager::EntityDestroyed(EntityId id)
 {
     for (auto const &pair : _componentArrays) {
         auto const &component = pair.second;

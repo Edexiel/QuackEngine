@@ -14,15 +14,20 @@
 #include "Types.hpp"
 #include "Debug/Assertion.hpp"
 
-const size_t START_SIZE = 1000;
 
 class EntityManager
 {
 private:
+    EntityId _idCount;
+
     std::vector<Entity> _entities{};
+public:
+    const std::vector<Entity> &GetEntities() const;
+
+private:
     std::vector<Signature> _signatures{};
+
     std::unordered_map<EntityId, size_t> _entityLut{};
-    std::unordered_map<EntityId, Signature> _entityComp{};
 
 public:
     EntityManager();
@@ -38,11 +43,14 @@ public:
     void Destroy(EntityId id);
 };
 
-EntityManager::EntityManager()
+/**
+ * Entity constructor
+ */
+ inline EntityManager::EntityManager()
 {
-    _entityLut.reserve(START_SIZE); //lookup table to translate faster Entity id to index in array
-    _entities.reserve(START_SIZE); //Entity array
-    _signatures.reserve(START_SIZE); // Signature array
+    _entityLut.reserve(START_SIZE);     //lookup table to translate faster Entity id to index in array
+    _entities.reserve(START_SIZE);      //Entity array
+    _signatures.reserve(START_SIZE);    // Signature array
 }
 
 /**
@@ -50,11 +58,11 @@ EntityManager::EntityManager()
  * @param name Entity's name
  * @return Reference to entity
  */
-Entity &EntityManager::Create(std::string &name)
+inline Entity &EntityManager::Create(std::string &name)
 {
-    Entity &e = _entities.emplace_back(std::move(name));
-    (void)_signatures.emplace_back();
-    (void)_entityLut.insert({e.GetId(), _entities.size() - 1});
+    Entity &e = _entities.emplace_back(_idCount++, std::move(name));
+    _signatures.emplace_back();
+    _entityLut.insert({e.GetId(), _entities.size() - 1});
 
     return e;
 }
@@ -64,7 +72,7 @@ Entity &EntityManager::Create(std::string &name)
  * @param id Entity's id
  * @return A valid pointer to an entity or nullptr if no Entity is associated to id (do not store, lifetime not garanteed)
  */
-Entity &EntityManager::Get(EntityId id)
+inline Entity &EntityManager::Get(EntityId id)
 {
     Assert_Fatal_Error(_entityLut.find(id) != _entityLut.end(), "Entity id does not exists");
     return _entities[_entityLut[id]];
@@ -74,11 +82,11 @@ Entity &EntityManager::Get(EntityId id)
  * Removes an Entity by id
  * @param id
  */
-void EntityManager::Destroy(EntityId id)
+inline void EntityManager::Destroy(EntityId id)
 {
     Assert_Error(_entityLut.find(id) != _entityLut.end(), "Entity id does not exists");
 
-    size_t index = _entityLut[id];
+    size_t index = _entityLut[id]; //index of the entity and signature
     EntityId backId = _entities.back().GetId();
 
     std::swap(_entities[index], _entities.back());
@@ -87,8 +95,11 @@ void EntityManager::Destroy(EntityId id)
     std::swap(_signatures[index], _signatures.back());
     _signatures.pop_back();
 
+/* Since we swapped for the back entity
+ * we set the index of this entity to the index of the previous one
+ */
     _entityLut[backId] = index;
-    (void)_entityLut.erase(id);
+    _entityLut.erase(id);
 
 }
 
@@ -97,7 +108,7 @@ void EntityManager::Destroy(EntityId id)
  * @param id
  * @return The signature of the entity
  */
-Signature EntityManager::GetSignature(EntityId id)
+inline Signature EntityManager::GetSignature(EntityId id)
 {
     Assert_Fatal_Error(_entityLut.find(id) != _entityLut.end(), "Entity id does not exists");
 
@@ -110,11 +121,16 @@ Signature EntityManager::GetSignature(EntityId id)
  * @param id
  * @param signature
  */
-void EntityManager::SetSignature(EntityId id, Signature signature)
+inline void EntityManager::SetSignature(EntityId id, Signature signature)
 {
     Assert_Error(_entityLut.find(id) != _entityLut.end(), "Entity id does not exists");
 
     _signatures[_entityLut[id]] = signature;
+}
+
+inline const std::vector<Entity> &EntityManager::GetEntities() const
+{
+    return _entities;
 }
 
 #endif //QUACKENGINE_ENTITYMANAGER_HPP
