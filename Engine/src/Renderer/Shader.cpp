@@ -144,7 +144,7 @@ Shader Shader::LoadShader(const ShaderConstructData& shaderData)
   else
     FragmentShaderCode += LoadStringFromFile("../../Engine/Shader/Base/FragmentMain.fs");
 
-  std::cout << FragmentShaderCode << std::endl;
+  //std::cout << FragmentShaderCode << std::endl;
 
 
   std::string VertexShaderCode;

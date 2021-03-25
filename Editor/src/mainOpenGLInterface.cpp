@@ -108,7 +108,12 @@ int main()
 
   Audio::SoundManager sd;
   Audio::Sound sound = sd.CreateSound("../../../inactive.ogg");
-  Audio::Sound sound2 = sd.CreateSound("../../../doom-crossing-eternal-horizons-feat-natalia-natchan.m3");
+  Audio::Sound sound2 = sd.CreateSound("../../../doom-crossing-eternal-horizons-feat-natalia-natchan.mp3");
+  sound = sd.CreateSound("../../../inactive.ogg");
+  sound = sd.CreateSound("../../../inactive.ogg");
+  sound = sd.CreateSound("../../../inactive.ogg");
+  sound = sd.CreateSound("../../../inactive.ogg");
+  sound = sd.CreateSound("../../../inactive.ogg");
 
   GLFWwindow* window;
   unsigned int width = 1280, height = 720;
@@ -238,8 +243,29 @@ int main()
     Input::PlatformInputGLFW platformInput(window);
     Input::InputManager inputManager(platformInput);
 
+    double lastFrameTime = glfwGetTime();
+
+    double start {0};
+
+    unsigned int frameNB {0};
+    double avg {0};
+
     while (!glfwWindowShouldClose(window))
     {
+        /*frameNB++;
+
+        std::cout << "Freq : " << glfwGetTime() - lastFrameTime << std::endl;
+        lastFrameTime = glfwGetTime();
+
+        if (frameNB == 99)
+        {
+            start = glfwGetTime();
+        }
+        if (frameNB >= 100) {
+            avg = (glfwGetTime() - start) / (frameNB - 99);
+            std::cout << "average = " << avg << std::endl;
+        }*/
+
       inputManager.Update();
 
       count += 0.01f;
@@ -266,10 +292,14 @@ int main()
 
           if (glfwGetKey(window, GLFW_KEY_K))
           {
+              sound.SetVolume(sound.GetVolume() + 0.01);
+              //sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) + 0.01);
               //sd.SetVolume(sd.GetVolume() + 0.01);
           }
           if (glfwGetKey(window, GLFW_KEY_M))
           {
+              sound.SetVolume(sound.GetVolume() - 0.01);
+              //sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) - 0.01);
               //sd.SetVolume(sd.GetVolume() - 0.01);
           }
 

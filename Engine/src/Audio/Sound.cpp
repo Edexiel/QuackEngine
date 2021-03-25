@@ -2,13 +2,13 @@
 
 #include "Audio/SoundManager.hpp"
 
+#include <algorithm>
+
+#include <iostream>
+
 using namespace Audio;
 
 Sound::Sound(SoundManager* soundManager, unsigned int indexSound) : _soundManager{soundManager}, _ID{indexSound} {}
-
-void Sound::SetState(bool isPlaying)
-{
-}
 
 void Sound::Play()
 {
@@ -23,4 +23,21 @@ void Sound::Stop()
 void Sound::Restart()
 {
     _soundManager->RestartSound(_ID);
+}
+
+float Sound::GetVolume()
+{
+    return _soundManager->SoundVolume(_ID);
+}
+
+float Sound::SetVolume(float newVolume)
+{
+    float& volume = _soundManager->SoundVolume(_ID);
+    volume = std::max(newVolume, 0.f);
+    return volume;
+}
+
+SoundType& Sound::Type()
+{
+    return _soundManager->Sound_SoundType(_ID);
 }
