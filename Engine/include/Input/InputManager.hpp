@@ -15,13 +15,12 @@ namespace Input
   private:
     PlatformInput& platformInput;
 
-    std::map<std::string, std::vector<std::function<void()>>> eventFuncs;
+    std::unordered_map<std::string, std::vector<std::pair<std::function<void()>, Action>>> _eventFuncs;
+    std::unordered_map<std::string, std::vector<std::function<void(float)>>> _eventFuncsAxis;
 
-    std::map<std::string, std::vector<Key>> eventKeys;
-    std::map<std::string, std::vector<MouseButton>> eventMouseButtons;
-    std::map<std::string, Action> eventAction;
-
-    
+    std::unordered_map<std::string, std::vector<Key>> _eventKeys;
+    std::unordered_map<std::string, std::vector<std::pair<Key, float>>> _eventKeysAxis;
+    std::unordered_map<std::string, std::vector<MouseButton>> _eventMouseButtons;
 
     void OnKeyEvent(Action action, Key key);
     void OnMouseButtonEvent(Action action, MouseButton button);
@@ -31,19 +30,28 @@ namespace Input
     InputManager(PlatformInput& platformInput);
     ~InputManager() = default;
 
-    void BindEvent(std::string event, Key key, Action Action);
-    void BindEvent(std::string event, MouseButton key, Action Action);
+    void BindEvent(const std::string& event, Key key);
+    void BindEvent(const std::string& event, MouseButton key);
+    void BindEventAxis(const std::string& event, Key key, const float scale);
     template<typename C, typename F>
-    void RegisterEvent(std::string event, C& classObject, F&& function);
+    void RegisterEvent(std::string event, Action action, C* classObject, F&& function);
+    template<typename C, typename F>
+    void RegisterEventAxis(std::string event, C* classObject, F&& function);
     void Update();
 
     MousePosition mousePosition;
   };
 
   template<typename C, typename F>
-  inline void InputManager::RegisterEvent(std::string event, C& classObject, F&& function)
+  inline void InputManager::RegisterEvent(std::string event, Action action, C* classObject, F&& function)
   {
-      eventFuncs[event].push_back(std::bind(function, classObject));
+    _eventFuncs[event].push_back(std::pair<std::function<void()>, Action>(std::bind(function, classObject), action));
+  }
+
+template <typename C, typename F>
+inline void InputManager::RegisterEventAxis(std::string event, C *classObject, F &&function)
+  {
+    _eventFuncsAxis[event].push_back(std::bind(function, classObject, std::placeholders::_1));
   }
 }
 

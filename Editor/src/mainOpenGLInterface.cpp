@@ -14,46 +14,12 @@
 #include "Input/PlatformInputGLFW.hpp"
 #include "Input/InputManager.hpp"
 
+#include "Input/PlatformInputGLFW.hpp"
+#include "Input/InputManager.hpp"
+
 #include <cmath>
 
 using namespace Renderer;
-const char* vertexShader =
-    {
-                      R"GLSL(
-                      #version 330 core
-                      layout (location = 0) in vec3 aPos;
-                      layout (location = 1) in vec3 aNormal;
-                      layout (location = 2) in vec2 aTexCoord;
-
-                      uniform mat4 projection;
-                      uniform mat4 view;
-                      uniform mat4 model;
-
-                      out vec2 TexCoord;
-
-                      void main()
-                      {
-                      gl_Position = projection * view * model * vec4(aPos, 1.0);
-                      TexCoord = aTexCoord;
-                     }
-                     )GLSL"
-    };
-
-const char* fragmentShader =
-    {
-        R"GLSL(
-                     #version 330 core
-                     out vec4 FragColor;
-                     in vec2 TexCoord;
-
-                     uniform sampler2D ourTexture;
-
-                     void main()
-                     {
-                      FragColor = vec4(1,0,0,1);// texture(ourTexture, TexCoord);
-                     }
-                     )GLSL"
-    };
 
 const char* vertexShaderFb =
     {
@@ -90,6 +56,12 @@ const char* fragmentShaderFb =
                      )GLSL"
     };
 
+struct MyHero
+{
+  void IsPressed(){std::cout << "IsPressed\n";};
+  void IsReleased(){std::cout << "IsReleased\n";};
+  void TestAxis(float bonsoir){std::cout<< bonsoir<< std::endl;};
+};
 
 int main()
 {
@@ -174,7 +146,7 @@ int main()
 
 
 
-    ShaderConstructData shd = {1,1,0, 0, 1, 1, 1, 1};
+    ShaderConstructData shd = {1,1,0, 0, 0, 0, 0, 0};
 
     //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
@@ -189,9 +161,9 @@ int main()
     shader.SetMatrix4("view", Maths::Matrix4::Identity());
 
     Model model =  Model::LoadModel("../../../eyeball.fbx", VertexType::V_NORMALMAP);
-    Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
-    Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
-    Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
+    //Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
+    //Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
+    //Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
 
     Material material;
     material.shader = shader;
@@ -201,10 +173,10 @@ int main()
     material.specular = {1, 1, 1};
     material.shininess = 256;
 
-    material.colorTexture = texture;
-    material.diffuseTexture = textureDiffuse;
-    material.specularTexture = textureSpecular;
-    material.normalMap = rm.LoadTexture("../../../Dragon_Nor_mirror2.jpg");
+    //material.colorTexture = texture;
+    //material.diffuseTexture = textureDiffuse;
+    //material.specularTexture = textureSpecular;
+    //material.normalMap = rm.LoadTexture("../../../Dragon_Nor_mirror2.jpg");
 
 
     float count = 0;
@@ -217,10 +189,18 @@ int main()
     Input::PlatformInputGLFW platformInput(window);
     Input::InputManager inputManager(platformInput);
 
+    inputManager.BindEvent("Hero", Input::MouseButton::MOUSE_BUTTON_1);
+    inputManager.BindEvent("Hero", Input::MouseButton::MOUSE_BUTTON_2);
+    inputManager.BindEventAxis("Axis", Input::Key::KEY_W, 1.0f);
+    inputManager.BindEventAxis("Axis", Input::Key::KEY_S, -1.0f);
+    MyHero hero;
+    inputManager.RegisterEvent("Hero",Input::Action::PRESS, &hero, &MyHero::IsPressed);
+    inputManager.RegisterEvent("Hero",Input::Action::RELEASE, &hero, &MyHero::IsReleased);
+    inputManager.RegisterEventAxis("Axis",&hero, &MyHero::TestAxis);
+
     while (!glfwWindowShouldClose(window))
     {
       inputManager.Update();
-
       count += 0.01f;
 
       // framebuffer
