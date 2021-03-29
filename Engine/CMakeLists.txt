@@ -20,6 +20,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Scene/System/TestSystem.cpp
         src/Scene/System/ScriptSystem.cpp
         src/Scene/System/PhysicsSystem.cpp
+        src/Scene/Camera.cpp
         src/Audio/Sound.cpp
         src/Audio/SoundManager.cpp
         )
