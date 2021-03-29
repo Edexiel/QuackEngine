@@ -25,6 +25,7 @@ namespace Input
     void OnKeyEvent(Action action, Key key);
     void OnMouseButtonEvent(Action action, MouseButton button);
     void OnUpdateMousePositionEvent(const double xPos,const double yPos);
+    void InitInput();// todo: Remove this function by serialisation of BindEvent
 
   public:
     InputManager(PlatformInput& platformInput);

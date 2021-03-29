@@ -33,7 +33,7 @@ template<typename T>
 
     Vector4<T>& Homogenize();
     Vector3<T> GetHomogenized() const;
-    static void Homogenized(Vector4<T>& v);
+    static void Homogenize(Vector4<T>& v);
 
     static T DotProduct(const Vector4<T>& v1, const Vector4<T>& v2);
 
@@ -89,7 +89,7 @@ inline Vector3<T> Vector4<T>::GetHomogenized() const
 }
 
 template<typename T>
-void Vector4<T>::Homogenized(Vector4<T>& v)
+void Vector4<T>::Homogenize(Vector4<T>& v)
 {
   if (v.w != 0 && v.w != 1)
   {
