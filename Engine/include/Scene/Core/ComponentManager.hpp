@@ -19,7 +19,7 @@ private:
     std::unordered_map<const char *, ComponentType> _componentTypes;
     std::unordered_map<const char *, std::shared_ptr<IComponentArray>> _componentArrays;
 
-    ComponentType _nextType;
+    ComponentType _nextType =0;
 
     template<typename T>
     std::shared_ptr<ComponentArray<T>> GetComponentArray();
@@ -44,24 +44,27 @@ public:
 };
 
 template<typename T>
-std::shared_ptr<ComponentArray<T>> ComponentManager::GetComponentArray()
+inline std::shared_ptr<ComponentArray<T>> ComponentManager::GetComponentArray()
 {
     const char *typeName = typeid(T).name();
+
+    //std::printf("GetComponentArray : %s \n",typeName);
     Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "Component not registered before use.");
     return std::static_pointer_cast<ComponentArray<T>>(_componentArrays[typeName]);
 }
 
 template<typename T>
-void ComponentManager::RegisterComponent()
+inline void ComponentManager::RegisterComponent()
 {
 
     const char *typeName = typeid(T).name();
+    std::printf("Register : %s \n",typeName);
 
     Assert_Fatal_Error(_componentTypes.find(typeName) != _componentTypes.end(),
                        "Registering component type more than once.");
 
     // Add this component type to the component type map
-    (void) _componentTypes.insert({typeName, _nextType});
+    _componentTypes.insert({typeName, _nextType});
 
     // Create a ComponentArray pointer and add it to the component arrays map
     _componentArrays.insert({typeName, std::make_shared<ComponentArray<T>>()});
@@ -71,7 +74,7 @@ void ComponentManager::RegisterComponent()
 }
 
 template<typename T>
-ComponentType ComponentManager::GetComponentType()
+inline ComponentType ComponentManager::GetComponentType()
 {
     const char *typeName = typeid(T).name();
     Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "Component not registered before use.");
@@ -79,19 +82,19 @@ ComponentType ComponentManager::GetComponentType()
 }
 
 template<typename T>
-void ComponentManager::AddComponent(Entity id, T component)
+inline void ComponentManager::AddComponent(Entity id, T component)
 {
     GetComponentArray<T>()->AddData(id, component);
 }
 
 template<typename T>
-void ComponentManager::RemoveComponent(Entity id)
+inline void ComponentManager::RemoveComponent(Entity id)
 {
     GetComponentArray<T>()->RemoveData(id);
 }
 
 template<typename T>
-T &ComponentManager::GetComponent(Entity id)
+inline T &ComponentManager::GetComponent(Entity id)
 {
     return GetComponentArray<T>()->GetData(id);
 }

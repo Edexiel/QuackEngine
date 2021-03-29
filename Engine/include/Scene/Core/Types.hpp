@@ -11,7 +11,7 @@
 const std::uint32_t COMPONENTS_NUMBER = 10;
 const size_t START_SIZE = 1000;
 typedef std::uint_fast32_t Entity;
-typedef std::uint_fast8_t ComponentType;
+typedef std::uint8_t ComponentType;
 typedef std::bitset<COMPONENTS_NUMBER> Signature;
 
 

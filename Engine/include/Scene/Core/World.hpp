@@ -16,6 +16,7 @@
 class World
 {
 private:
+    World()=default;
 
     static World _instance;
 
@@ -24,6 +25,8 @@ private:
     std::unique_ptr<SystemManager> _systemManager;
 
 public:
+
+
     static World &Instance();
 
     void Init();
@@ -57,7 +60,7 @@ public:
     void SetSystemSignature(Signature signature);
 };
 
-World World::_instance = World();
+inline World World::_instance = World();
 
 inline World &World::Instance()
 {
@@ -70,13 +73,13 @@ inline void World::Init()
     _entityManager = std::make_unique<EntityManager>();
     _systemManager = std::make_unique<SystemManager>();
 
-    _componentManager->RegisterComponent<Name>();
+    //_componentManager->RegisterComponent<Name>();
 }
 
 inline Entity World::CreateEntity(std::string name)
 {
     Entity id = _entityManager->Create();
-    AddComponent(id, Name{std::move(name)});
+    //AddComponent(id, Name{std::move(name)});
     return id;
 }
 
@@ -88,13 +91,13 @@ inline void World::DestroyEntity(Entity id)
 }
 
 template<typename T>
-void World::RegisterComponent()
+inline void World::RegisterComponent()
 {
     _componentManager->RegisterComponent<T>();
 }
 
 template<typename T>
-void World::AddComponent(Entity id, T component)
+inline void World::AddComponent(Entity id, T component)
 {
     _componentManager->AddComponent<T>(id, component);
 
@@ -106,7 +109,7 @@ void World::AddComponent(Entity id, T component)
 }
 
 template<typename T>
-void World::RemoveComponent(Entity id)
+inline void World::RemoveComponent(Entity id)
 {
     _componentManager->RemoveComponent<T>(id);
 
@@ -118,25 +121,25 @@ void World::RemoveComponent(Entity id)
 }
 
 template<typename T>
-T &World::GetComponent(Entity id)
+inline T &World::GetComponent(Entity id)
 {
     return _componentManager->GetComponent<T>(id);
 }
 
 template<typename T>
-ComponentType World::GetComponentType()
+inline ComponentType World::GetComponentType()
 {
     return _componentManager->GetComponentType<T>();
 }
 
 template<typename T>
-std::shared_ptr<T> World::RegisterSystem()
+inline std::shared_ptr<T> World::RegisterSystem()
 {
     return _systemManager->RegisterSystem<T>();
 }
 
 template<typename T>
-void World::SetSystemSignature(Signature signature)
+inline void World::SetSystemSignature(Signature signature)
 {
     _systemManager->SetSignature<T>(signature);
 }

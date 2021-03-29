@@ -31,7 +31,7 @@ void TestSystem::Update(float deltaTime)
     for (Entity entity: _entities) {
         auto& t = World::Instance().GetComponent<Transform>(entity);
 
-        std::printf("x: %f y: %f z:%f",t.position.x,t.position.y,t.position.z);
+        std::printf("x: %f y: %f z:%f\n",t.position.x,t.position.y,t.position.z);
 
     }
 

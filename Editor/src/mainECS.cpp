@@ -12,7 +12,7 @@ using namespace Maths;
 
 int main()
 {
-    World ecs{};
+    World &ecs=World::Instance();
     ecs.Init();
 
     ecs.RegisterComponent<Transform>();
@@ -23,8 +23,8 @@ int main()
     ecs.SetSystemSignature<TestSystem>(signature);
 
     Entity id = ecs.CreateEntity("Test");
-    Entity idd = ecs.CreateEntity("Test2");
-    ecs.AddComponent(id, Transform{Vector3f::Zero(), Vector3f::One(), Quaternion{}});
+    Transform t = {Vector3f::One(), Vector3f::One(), Quaternion{}};
+    ecs.AddComponent(id, t);
 
     float dt = 0.0f;
 

@@ -28,7 +28,7 @@ private:
     std::vector<T> _components;
 
 public:
-    void AddData(Entity id, T &data);
+    void AddData(Entity id, T data);
 
     void DeleteData(Entity id);
 
@@ -39,12 +39,16 @@ public:
 };
 
 template<typename T>
-void ComponentArray<T>::AddData(Entity id, T &data)
+void ComponentArray<T>::AddData(Entity id, T data)
 {
+    Assert_Fatal_Error(_entityToIndex.find(id) != _entityToIndex.end(),
+                       "Component added to same entity more than once.");
+
     size_t end = _components.size();
-    _components.emplace_back(std::move(data));
-    (void) _entityToIndex.insert({id, end});
-    (void) _indexToEntity.insert({end, id});
+
+    _entityToIndex[id] = end;
+    _indexToEntity[end] = id;
+    _components.push_back(data);
 }
 
 template<typename T>
