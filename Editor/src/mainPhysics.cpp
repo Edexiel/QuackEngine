@@ -12,6 +12,8 @@
 
 #include "Resources/ResourcesManager.hpp"
 
+#include "Maths/Quaternion.hpp"
+
 
 #include <cmath>
 
@@ -86,7 +88,10 @@ int main()
     Renderer::Framebuffer framebuffer =
         Renderer::RendererPlatform::CreateFramebuffer(width, height);
 
-    Mesh quad = RendererPlatform::CreateQuad();
+    Mesh quad   = RendererPlatform::CreateQuad();
+    Mesh sphere = RendererPlatform::CreateSphere();
+    Mesh cube   = RendererPlatform::CreateCube();
+
     RendererPlatform::VerticesReading();
 
     Renderer::Light light(Renderer::Light_Type::L_POINT);
@@ -114,8 +119,6 @@ int main()
         );
     shader.SetMatrix4("view", Maths::Matrix4::Identity());
 
-    Model model =  Model::LoadModel("../../../eyeball.fbx", VertexType::V_NORMALMAP);
-
     Material material;
     material.shader = shader;
 
@@ -137,13 +140,37 @@ int main()
 
     reactphysics3d::PhysicsCommon physicsCommon;
     reactphysics3d::PhysicsWorld* world = physicsCommon.createPhysicsWorld(settings);
-    reactphysics3d::Vector3 position{0,0,0};
-    reactphysics3d::Quaternion rotation = reactphysics3d::Quaternion::identity();
-    reactphysics3d::Transform transform(position, rotation);
-    reactphysics3d::RigidBody * rb = world->createRigidBody(transform);
+    reactphysics3d::Vector3 positionSphere{0,1,10};
+    reactphysics3d::Quaternion rotationSphere = reactphysics3d::Quaternion::identity();
+
+    reactphysics3d::Vector3 positionCube{0,-1,10};
+    reactphysics3d::Quaternion rotationCube = reactphysics3d::Quaternion::identity();
+
+    reactphysics3d::Transform transformSphere(positionSphere, rotationSphere);
+    reactphysics3d::Transform transformCube(positionCube, rotationCube);
+
+    reactphysics3d::RigidBody * rbSphere = world->createRigidBody(transformSphere);
+    reactphysics3d::RigidBody * rbCube = world->createRigidBody(transformCube);
+    rbCube->enableGravity(false);
+    rbCube->setType(reactphysics3d::BodyType::DYNAMIC);
+
+    reactphysics3d::SphereShape* sphereShape = physicsCommon.createSphereShape(1.f);
+    reactphysics3d::BoxShape* cubeShape = physicsCommon.createBoxShape({1,1,1});
+
+    reactphysics3d::Collider* colliderSphere = rbSphere->addCollider(sphereShape, transformSphere);
+    reactphysics3d::Collider* colliderCube = rbCube->addCollider(cubeShape, transformCube);
 
     while (!glfwWindowShouldClose(window))
     {
+      world->update(1.f/60.f);
+      reactphysics3d::Transform ts = rbSphere->getTransform();
+      Maths::Vector3f posSphere {ts.getPosition().x, ts.getPosition().y, ts.getPosition().z};
+      Maths::Quaternion rotSphere {ts.getOrientation().w, ts.getOrientation().x, ts.getOrientation().y, ts.getOrientation().z};
+
+      reactphysics3d::Transform tc = rbCube->getTransform();
+      Maths::Vector3f posCube {tc.getPosition().x, tc.getPosition().y, tc.getPosition().z};
+      Maths::Quaternion rotCube {tc.getOrientation().w, tc.getOrientation().x, tc.getOrientation().y, tc.getOrientation().z};
+
       count += 0.01f;
 
       if (glfwGetKey(window, GLFW_KEY_ESCAPE))
@@ -162,12 +189,14 @@ int main()
         material.Apply();
 
         material.shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415/180));
-        material.shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
-        material.shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Scale({1,1,1}));
+        material.shader.SetMatrix4("view", Maths::Matrix4::Translate({0, -5, 0}) * Maths::Quaternion({1,0,0}, -3.14f/6.f).QuaternionToMatrix());
+        material.shader.SetMatrix4("model", Maths::Matrix4::Translate(posSphere) * rotSphere.QuaternionToMatrix() * Maths::Matrix4::Scale({1,1,1}));
 
         shader.SetLight(light, 0);
 
-        model.Draw();
+        sphere.Draw();
+        material.shader.SetMatrix4("model", Maths::Matrix4::Translate(posCube) * rotCube.QuaternionToMatrix() * Maths::Matrix4::Scale({1,1,1}));
+        cube.Draw();
 
         RendererPlatform::BindFramebuffer(0);
       }
