@@ -38,15 +38,15 @@ TEST(Quaternion, Multiplication)
 
 TEST(Quaternion, MultiplicationByVector)
 {
-  Quaternion q{.5f,5.0f,4.0f,8.0f};
+  Quaternion q{1.f,12,14.0f,17.0f};
   q.Normalize();
-  Vector3f   v {2.0f,4.0f,5.0f};
+  Vector3f   v {5.0f,4.0f,10.0f};
   Vector3f res = q * v;
 
-  Vector3f goodRes{4.16f, 0.95f, 5.17f};
+  Vector3f goodRes{6.139, 8.612f, 5.396f};
 
   for(int i = 0; i < 3; i++)
-    EXPECT_NEAR(res.e[i],goodRes.e[i], 0.01f);
+    EXPECT_NEAR(res.e[i],goodRes.e[i], 0.001f);
 }
 
 TEST(Quaternion, MultiplicationByScalar)
@@ -113,7 +113,7 @@ TEST(Quaternion, QuaternionToMatrix)
 {
   Quaternion q({1.0f,0.0f,0.0f}, 3.14/3.f);
   q.Normalize();
-  Matrix4 mat = q.QuaternionToMatrix();
+  Matrix4 mat = q.ToMatrix();
   Matrix4 goodRes = Matrix4::RotateX(3.14/3.f);
   for (int i = 0; i < 16; i++)
     EXPECT_NEAR(mat.e[i], goodRes.e[i], 0.01);
