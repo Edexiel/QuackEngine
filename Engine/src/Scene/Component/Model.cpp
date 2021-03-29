@@ -1,4 +1,4 @@
-#include "../include/Renderer/Model.hpp"
+#include "Scene/Component/Model.hpp"
 
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
@@ -8,6 +8,7 @@
 
 #include <iostream>
 
+using namespace Component;
 using namespace Renderer;
 
 Model::Model(VertexType vertexType) : _vertexType{vertexType} {}
@@ -172,7 +173,6 @@ Model Model::LoadNormalMapModel(const void* loadedScene)
     model.meshList[i] = Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
     RendererPlatform::VerticesReadingNormalMapping();
   }
-
 
   return model;
 }

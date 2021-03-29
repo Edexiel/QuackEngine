@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 #include "Renderer/Shader.hpp"
-#include "Renderer/Model.hpp"
+#include "Scene/Component/Model.hpp"
 #include "Renderer/Texture.hpp"
 
 
@@ -23,7 +23,7 @@ namespace Resources
     class ResourcesManager
     {
     private:
-        std::unordered_map<std::string, Renderer::Model   >  mapModel;
+        std::unordered_map<std::string, Component::Model   >  mapModel;
         std::unordered_map<std::string, Renderer::Texture >  mapTexture;
         std::vector<ReferenceShader >                        listShader;
 
@@ -31,7 +31,7 @@ namespace Resources
         ResourcesManager()  = default;
         ~ResourcesManager() = default;
 
-        Renderer::Model   LoadModel     (const char* path);
+        Component::Model   LoadModel     (const char* path);
         Renderer::Texture LoadTexture   (const char* path);
         Renderer::Shader  LoadShader    (const char* vertexShader, const char* fragmentShader);
 

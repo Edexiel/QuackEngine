@@ -37,7 +37,7 @@ public:
     void RemoveComponent(Entity &entity);
 
     template<typename T>
-    T &GetComponent(Entity &entity);
+    T &GetComponent(EntityId &entity);
 
     template<typename T>
     ComponentType GetComponentType();
@@ -100,9 +100,9 @@ void Ecs::RemoveComponent(Entity &entity)
 }
 
 template<typename T>
-T &Ecs::GetComponent(Entity &entity)
+T &Ecs::GetComponent(EntityId &entity)
 {
-    return _componentManager->GetComponent<T>(entity.GetId());
+    return _componentManager->GetComponent<T>(entity);
 }
 
 template<typename T>

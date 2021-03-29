@@ -15,12 +15,15 @@
 #include "Input/InputManager.hpp"
 
 #include "Audio/SoundManager.hpp"
-#include "Audio/Sound.hpp"
 
 #include "Debug/Log.hpp"
 
-//#define MINIAUDIO_IMPLEMENTATION
-//#include "miniaudio.h"
+
+#include "Scene/Core/Ecs.hpp"
+#include "Maths/Vector3.hpp"
+#include "Maths/Quaternion.hpp"
+#include "Scene/Component/Transform.hpp"
+#include "Scene/System/TestSystem.hpp"
 
 #include <cmath>
 
@@ -156,6 +159,23 @@ int main()
 
 
 
+    Debug::assertLevel = Debug::AssertLevel::A_RELEASE;
+
+    Ecs ecs{};
+    ecs.Init();
+
+    ecs.RegisterComponent<Transform>();
+    auto testSystem = ecs.RegisterSystem<TestSystem>();
+
+    Signature signature;
+    signature.set(ecs.GetComponentType<Transform>());
+    ecs.SetSystemSignature<TestSystem>(signature);
+
+    Entity &e = ecs.CreateEntity("Test");
+    Entity &ee = ecs.CreateEntity("Test2");
+    ecs.AddComponent(e, Transform{Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{}});
+
+
     ShaderConstructData shd = {1,1,0, 0, 0, 0, 0, 0};
 
     //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
@@ -170,7 +190,7 @@ int main()
         );
     shader.SetMatrix4("view", Maths::Matrix4::Identity());
 
-    Model model =  Model::LoadModel("../../../eyeball.fbx", VertexType::V_NORMALMAP);
+    Component::Model model =  Component::Model::LoadModel("../../../eyeball.fbx", VertexType::V_NORMALMAP);
     //Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
     //Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
     //Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
@@ -226,7 +246,7 @@ int main()
 
       inputManager.Update();
 
-      count += 0.01f;
+      count += 0.0001f;
 
       // framebuffer
       {

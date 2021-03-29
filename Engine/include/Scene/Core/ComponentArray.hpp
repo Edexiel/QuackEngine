@@ -74,7 +74,7 @@ T &ComponentArray<T>::GetData(EntityId id)
 {
     Assert_Fatal_Error(_entityToIndex.find(id) != _entityToIndex.end(), "Retrieving non-existent component.");
 
-    return &_components[_entityToIndex[id]];
+    return &_components[_indexToEntity[id]];
 }
 
 template<typename T>

@@ -8,7 +8,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Thread/TaskSystem.cpp
         src/Thread/ThreadPool.cpp
         src/Resources/ResourcesManager.cpp
-        src/Renderer/Model.cpp
+        src/Scene/Component/Model.cpp
         src/Renderer/Mesh.cpp
         src/Renderer/Shader.cpp
         src/Renderer/Texture.cpp
@@ -23,7 +23,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Scene/System/PhysicsSystem.cpp
         src/Audio/Sound.cpp
         src/Audio/SoundManager.cpp
-        )
+        src/Scene/System/RenderSystem.cpp)
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

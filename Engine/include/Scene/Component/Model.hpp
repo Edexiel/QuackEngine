@@ -6,23 +6,24 @@
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Vertex.hpp"
 
-namespace Renderer
+namespace Component
 {
     struct Model
     {
 
       Model() = default;
-      Model(VertexType vertexType);
+      Model(Renderer::VertexType vertexType);
 
-      std::vector<Mesh> meshList;
+      std::vector<Renderer::Mesh> meshList;
 
-      static Model LoadModel(const char* path, VertexType vertexType = VertexType::V_CLASSIC);
+
+      static Model LoadModel(const char* path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
 
       void Draw();
 
     private:
 
-      VertexType _vertexType = VertexType::V_CLASSIC;
+        Renderer::VertexType _vertexType = Renderer::VertexType::V_CLASSIC;
 
       static Model LoadClassicModel(const void* loadedScene);
       static Model LoadNormalMapModel(const void* loadedScene);

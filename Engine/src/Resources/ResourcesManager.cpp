@@ -17,6 +17,7 @@
 
 using namespace Resources;
 using namespace Renderer;
+using namespace Component;
 
 Model ResourcesManager::LoadModel(const char* path)
 {

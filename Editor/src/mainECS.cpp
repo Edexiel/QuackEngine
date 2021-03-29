@@ -9,10 +9,14 @@
 #include "Scene/System/TestSystem.hpp"
 #include "Scene/Core/Entity.hpp"
 
+#include "Scene/System/RenderSystem.hpp"
+
 using namespace Maths;
 
 int main()
 {
+    Debug::assertLevel = Debug::AssertLevel::A_RELEASE;
+
     Ecs ecs{};
     ecs.Init();
 
