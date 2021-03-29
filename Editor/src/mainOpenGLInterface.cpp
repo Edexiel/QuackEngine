@@ -1,5 +1,6 @@
 //#include "glad/gl.h"
 #include "GLFW/glfw3.h"
+#include "Maths/Quaternion.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shader.hpp"
@@ -13,6 +14,14 @@
 
 #include "Input/PlatformInputGLFW.hpp"
 #include "Input/InputManager.hpp"
+
+#include "Audio/SoundManager.hpp"
+#include "Audio/Sound.hpp"
+
+#include "Debug/Log.hpp"
+
+//#define MINIAUDIO_IMPLEMENTATION
+//#include "miniaudio.h"
 
 #include <cmath>
 
@@ -56,6 +65,11 @@ const char* fragmentShaderFb =
 
 int main()
 {
+
+  //Audio::SoundManager sd;
+  //Audio::Sound sound = sd.CreateSound("../../../inactive.ogg");
+
+
   GLFWwindow* window;
   unsigned int width = 1280, height = 720;
   /* Initialize the library */
@@ -150,7 +164,22 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
+        /*frameNB++;
+
+        std::cout << "Freq : " << glfwGetTime() - lastFrameTime << std::endl;
+        lastFrameTime = glfwGetTime();
+
+        if (frameNB == 99)
+        {
+            start = glfwGetTime();
+        }
+        if (frameNB >= 100) {
+            avg = (glfwGetTime() - start) / (frameNB - 99);
+            std::cout << "average = " << avg << std::endl;
+        }*/
+
       inputManager.Update();
+
       count += 0.01f;
 
       // framebuffer
@@ -162,15 +191,35 @@ int main()
 
         if (glfwGetKey(window, GLFW_KEY_R))
         {
-          //shader = Shader::LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
+            //sound.Restart();
         }
+        if (glfwGetKey(window, GLFW_KEY_P))
+        {
+            //sound.Play();
+        }
+        if (glfwGetKey(window, GLFW_KEY_S))
+        {
+            //sound.Stop();
+        }
+
+          if (glfwGetKey(window, GLFW_KEY_K))
+          {
+              //sound.SetVolume(sound.GetVolume() + 0.01);
+              //sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) + 0.01);
+          }
+          if (glfwGetKey(window, GLFW_KEY_M))
+          {
+              //sound.SetVolume(sound.GetVolume() - 0.01);
+              //sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) - 0.01);
+          }
+
 
         framebuffer.Bind();
         RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
         RendererPlatform::Clear();
 
         //quadMesh.Draw();
-        light.model = Maths::Matrix4::Translate({cos(count) * 30, sin(count) * 30, 0});
+        light.model = Maths::Matrix4::Translate({cosf(count) * 30, sinf(count) * 30, 0});
         //light.model = Maths::Matrix4::RotateY(count);
 
         material.Apply();
@@ -202,6 +251,8 @@ int main()
       glfwSwapBuffers(window);
       glfwPollEvents();
     }
+    //ma_device_uninit(&device);
+    //ma_decoder_uninit(&decoder);
   }
   glfwTerminate();
   return 0;

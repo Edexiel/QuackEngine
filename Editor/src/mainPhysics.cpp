@@ -151,18 +151,20 @@ int main()
 
     reactphysics3d::RigidBody * rbSphere = world->createRigidBody(transformSphere);
     reactphysics3d::RigidBody * rbCube = world->createRigidBody(transformCube);
-    rbCube->enableGravity(false);
-    rbCube->setType(reactphysics3d::BodyType::DYNAMIC);
+
+    rbSphere->setType(reactphysics3d::BodyType::DYNAMIC);
+    rbCube->setType(reactphysics3d::BodyType::STATIC);
 
     reactphysics3d::SphereShape* sphereShape = physicsCommon.createSphereShape(1.f);
-    reactphysics3d::BoxShape* cubeShape = physicsCommon.createBoxShape({1,1,1});
+    Maths::Vector3f scaleCube{1, 1, 1};
+    reactphysics3d::BoxShape* cubeShape = physicsCommon.createBoxShape({scaleCube.x * 0.5f, scaleCube.y * 0.5f, scaleCube.z * 0.5f});
 
     reactphysics3d::Collider* colliderSphere = rbSphere->addCollider(sphereShape, transformSphere);
     reactphysics3d::Collider* colliderCube = rbCube->addCollider(cubeShape, transformCube);
 
     while (!glfwWindowShouldClose(window))
     {
-      world->update(1.f/60.f);
+      world->update(1.f/144.f);
       reactphysics3d::Transform ts = rbSphere->getTransform();
       Maths::Vector3f posSphere {ts.getPosition().x, ts.getPosition().y, ts.getPosition().z};
       Maths::Quaternion rotSphere {ts.getOrientation().w, ts.getOrientation().x, ts.getOrientation().y, ts.getOrientation().z};
@@ -189,13 +191,13 @@ int main()
         material.Apply();
 
         material.shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415/180));
-        material.shader.SetMatrix4("view", Maths::Matrix4::Translate({0, -5, 0}) * Maths::Quaternion({1,0,0}, -3.14f/6.f).QuaternionToMatrix());
-        material.shader.SetMatrix4("model", Maths::Matrix4::Translate(posSphere) * rotSphere.QuaternionToMatrix() * Maths::Matrix4::Scale({1,1,1}));
+        material.shader.SetMatrix4("view", Maths::Matrix4::Translate({0, -5, 0}) * Maths::Quaternion({1,0,0}, -3.14f/6.f).ToMatrix());
+        material.shader.SetMatrix4("model", Maths::Matrix4::Translate(posSphere) * rotSphere.ToMatrix() * Maths::Matrix4::Scale({1,1,1}));
 
         shader.SetLight(light, 0);
 
         sphere.Draw();
-        material.shader.SetMatrix4("model", Maths::Matrix4::Translate(posCube) * rotCube.QuaternionToMatrix() * Maths::Matrix4::Scale({1,1,1}));
+        material.shader.SetMatrix4("model", Maths::Matrix4::Translate(posCube) * rotCube.ToMatrix() * Maths::Matrix4::Scale(scaleCube));
         cube.Draw();
 
         RendererPlatform::BindFramebuffer(0);
