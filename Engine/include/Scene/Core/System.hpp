@@ -12,9 +12,9 @@
 class System
 {
 protected:
-    //Ecs& _ecs;
+    //World& _ecs;
 public:
-    std::set<EntityId> _entities;
+    std::set<Entity> _entities;
 
     explicit System()
     {}
