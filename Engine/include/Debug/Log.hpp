@@ -37,7 +37,7 @@ namespace Debug
     enum class LogLevel {L_RELEASE, L_ERROR, L_WARNING, L_INFO, L_DEBUG};
 
     static LogLevel logLevel = LogLevel::L_DEBUG;
-    void Log(const char* message, const char* file, const char* function, unsigned int line, LogLevel logLvl = LogLevel::L_DEBUG)
+    inline void Log(const char* message, const char* file, const char* function, unsigned int line, LogLevel logLvl = LogLevel::L_DEBUG)
     {
 
       if (logLvl > logLevel)
