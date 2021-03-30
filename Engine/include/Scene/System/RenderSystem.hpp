@@ -3,15 +3,12 @@
 
 #include "Scene/Core/System.hpp"
 
-namespace Renderer
+class RenderSystem : public System
 {
-    class RenderSystem : public System
-    {
+public:
+    void Init();
+    void Draw(float deltaTime);
 
-        void Init();
-        void Draw(float deltaTime);
-
-    };
-}
+};
 
 #endif

@@ -9,49 +9,60 @@
 
 using namespace Renderer;
 
-Shader::Shader(const unsigned int& _ID) : ID {_ID} {}
+Shader::Shader(const unsigned int& ID) : _ID {ID} {}
 
 Shader::~Shader()
 {
   //RendererPlatform::DeleteShader(ID);
 }
+
+unsigned int Shader::GetID() const
+{
+    return _ID;
+}
+
 void Shader::Use()
 {
-  RendererPlatform::UseShader(ID);
+  RendererPlatform::UseShader(_ID);
 }
 
 void Shader::SetFloat(const char* name, float value)
 {
-  RendererPlatform::SetFloat(ID, name, value);
+  RendererPlatform::SetFloat(_ID, name, value);
 }
 
 void Shader::SetMatrix4(const char *name, const Maths::Matrix4& mat)
 {
-  RendererPlatform::SetMatrix4(ID, name, mat);
+  RendererPlatform::SetMatrix4(_ID, name, mat);
 }
 
 void Shader::SetVector3f(const char* name, const Maths::Vector3f vec)
 {
-    RendererPlatform::SetVector3f(ID, name, vec);
+    RendererPlatform::SetVector3f(_ID, name, vec);
 }
 
 void Shader::SetVector4f(const char* name, const Maths::Vector4f vec)
 {
-    RendererPlatform::SetVector4f(ID, name, vec);
+    RendererPlatform::SetVector4f(_ID, name, vec);
+}
+
+void Shader::SetUint(const char *name, unsigned int value)
+{
+    RendererPlatform::SetUint(_ID, name, value);
 }
 
 void Shader::SetSampler(const char* name, int sampler)
 {
-    RendererPlatform::SetSampler(ID, name, sampler);
+    RendererPlatform::SetSampler(_ID, name, sampler);
 }
 
 void Shader::SetLight(const Light& light, unsigned int index)
 {
   switch (light.type) 
   {
-    case Light_Type::L_DIRECTIONAL : return RendererPlatform::SetDirectionalLight(ID, index, light);
-    case Light_Type::L_SPOT : return RendererPlatform::SetSpotLight(ID, index, light);
-    default : return RendererPlatform::SetPointLight(ID, index, light);
+    case Light_Type::L_DIRECTIONAL : return RendererPlatform::SetDirectionalLight(_ID, index, light);
+    case Light_Type::L_SPOT : return RendererPlatform::SetSpotLight(_ID, index, light);
+    default : return RendererPlatform::SetPointLight(_ID, index, light);
   }
 }
 
@@ -104,12 +115,12 @@ Shader Shader::LoadShader(const ShaderConstructData& shaderData)
   std::string FragmentShaderCode = "#version 330 core\n";
   if (shaderData.hasLight)
   {
-    FragmentShaderCode += "#define NB_DIRECTIONAL_LIGHT " +
-                          std::to_string(shaderData.nbDirectionalLight) + "\n";
-    FragmentShaderCode += "#define NB_POINT_LIGHT " +
-                          std::to_string(shaderData.nbPointLight) + "\n";
-    FragmentShaderCode += "#define NB_SPOT_LIGHT " +
-                          std::to_string(shaderData.nbSpotLight) + "\n";
+    FragmentShaderCode += "#define NB_MAX_DIRECTIONAL_LIGHT " +
+                          std::to_string(MAX_DIRECTIONAL_LIGHT_NB) + "\n";
+    FragmentShaderCode += "#define NB_MAX_POINT_LIGHT " +
+                          std::to_string(MAX_POINT_LIGHT_NB) + "\n";
+    FragmentShaderCode += "#define NB_MAX_SPOT_LIGHT " +
+                          std::to_string(MAX_SPOT_LIGHT_NB) + "\n";
 
     FragmentShaderCode +=
         LoadStringFromFile("../../Engine/Shader/Light/FragmentStartLight.fs");
@@ -144,7 +155,7 @@ Shader Shader::LoadShader(const ShaderConstructData& shaderData)
   else
     FragmentShaderCode += LoadStringFromFile("../../Engine/Shader/Base/FragmentMain.fs");
 
-  //std::cout << FragmentShaderCode << std::endl;
+  std::cout << FragmentShaderCode << std::endl;
 
 
   std::string VertexShaderCode;

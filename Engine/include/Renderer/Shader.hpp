@@ -11,10 +11,6 @@ namespace Renderer
     {
       bool hasLight {false};
 
-      unsigned int nbPointLight       {0};
-      unsigned int nbDirectionalLight {0};
-      unsigned int nbSpotLight        {0};
-
       bool hasColorTexture;
       bool hasDiffuseTexture;
       bool hasSpecularTexture;
@@ -23,23 +19,27 @@ namespace Renderer
 
       unsigned int GetKey() const
       {
-        return hasLight + nbPointLight * 10 + hasColorTexture * 100 + nbDirectionalLight * 1000 + hasDiffuseTexture * 10000 + hasSpecularTexture * 100000 + nbSpotLight * 1000000 + hasNormalMap * 10000000;
+        return hasLight + hasColorTexture * 10 + hasDiffuseTexture * 100 + hasSpecularTexture * 1000 + hasNormalMap * 10000;
       };
     };
 
     class Shader
     {
+        unsigned int _ID;
+
       public:
-        unsigned int ID;// TO DO: put the variable in private
         Shader() = default;
         Shader(const unsigned int& _ID);
         ~Shader();
+
+        unsigned int GetID() const;
 
         void Use();
         void SetFloat(const char* name, float value);
         void SetMatrix4(const char* name, const Maths::Matrix4& mat);
         void SetVector3f(const char* name, const Maths::Vector3f vec);
         void SetVector4f(const char* name, const Maths::Vector4f vec);
+        void SetUint(const char* name, unsigned int value);
         void SetSampler(const char* name, int sampler);
         void SetLight(const Light& light, unsigned int index);
 

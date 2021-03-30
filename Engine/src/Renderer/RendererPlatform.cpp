@@ -203,6 +203,11 @@ void RendererPlatform::SetVector4f(unsigned int shaderProgram, const char* name,
   glUniform4fv(glGetUniformLocation(shaderProgram, name), 1, vec.e);
 }
 
+void RendererPlatform::SetUint(unsigned int shaderProgram, const char* name, unsigned int value)
+{
+    glUniform1ui(glGetUniformLocation(shaderProgram, name), value);
+}
+
 void RendererPlatform::SetSampler(unsigned int shaderProgram, const char* name, int value)
 {
   glUniform1i(glGetUniformLocation(shaderProgram, name), value);

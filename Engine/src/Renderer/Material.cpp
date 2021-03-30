@@ -3,6 +3,17 @@
 
 using namespace Renderer;
 
+void Material::GenerateShader()
+{
+
+    ShaderConstructData scd{checkLight, colorTexture.GetID() != 0,
+                            diffuseTexture.GetID() != 0,
+                            specularTexture.GetID() != 0,
+                            normalMap.GetID() != 0};
+
+    shader = Shader::LoadShader(scd);
+}
+
 void Material::Apply()
 {
   shader.Use();

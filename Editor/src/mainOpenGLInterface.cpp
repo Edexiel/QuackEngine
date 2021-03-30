@@ -17,13 +17,13 @@
 
 #include "Audio/SoundManager.hpp"
 
-#include "Debug/Log.hpp"
 
-
-#include "Maths/Vector3.hpp"
-#include "Maths/Quaternion.hpp"
 #include "Scene/Component/Transform.hpp"
 #include "Scene/System/TestSystem.hpp"
+
+
+#include "Scene/Core/World.hpp"
+#include "Scene/System/RenderSystem.hpp"
 
 #include <cmath>
 
@@ -157,26 +157,28 @@ int main()
     light.outerSpotAngle = 10.5;
     light.spotAngle = 8.5;
 
+      Renderer::Light light2(Renderer::Light_Type::L_POINT);
 
-    ecs.RegisterComponent<Transform>();
-    auto testSystem = ecs.RegisterSystem<TestSystem>();
+      light2.model = Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Translate({0,0, 0});
+      light2.ambient = {0.0f, 0.1f, 0.0f};
+      light2.diffuse = {0.7f, 0.7f, 0.7f};
+      light2.specular = {1.0f, 1.0f, 1.0f};
+      light2.constant = 1.0f;
+      light2.linear = 0.0014f;
+      light2.quadratic = 0.000007f;
 
-    Signature signature;
-    signature.set(ecs.GetComponentType<Transform>());
-    ecs.SetSystemSignature<TestSystem>(signature);
-
-    Entity &e = ecs.CreateEntity("Test");
-    Entity &ee = ecs.CreateEntity("Test2");
-    ecs.AddComponent(e, Transform{Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{}});
+      light2.outerSpotAngle = 10.5;
+      light2.spotAngle = 8.5;
 
 
-    ShaderConstructData shd = {1,1,0, 0, 0, 0, 0, 0};
+
+    ShaderConstructData shd = {1, 0, 0, 0, 0};
 
     //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
     Shader shader = Shader::LoadShader(shd);
 
-    RendererPlatform::UseShader(shader.ID);
+    RendererPlatform::UseShader(shader.GetID());
     shader.SetMatrix4
         (
             "projection",
@@ -200,8 +202,37 @@ int main()
     //material.colorTexture = texture;
     //material.diffuseTexture = textureDiffuse;
     //material.specularTexture = textureSpecular;
-    //material.normalMap = rm.LoadTexture("../../../Dragon_Nor_mirror2.jpg");
+    material.normalMap = rm.LoadTexture("../../../DirtCube.jpg");
 
+
+      World &ecs=World::Instance();
+      ecs.Init();
+
+      ecs.RegisterComponent<Transform>();
+      ecs.RegisterComponent<Component::Model>();
+      auto testSystem = ecs.RegisterSystem<TestSystem>();
+      auto renderSystem = ecs.RegisterSystem<RenderSystem>();
+
+      Signature signature;
+      signature.set(ecs.GetComponentType<Transform>());
+      ecs.SetSystemSignature<TestSystem>(signature);
+
+      Signature signatureRender;
+      signatureRender.set(ecs.GetComponentType<Component::Model>());
+      signatureRender.set(ecs.GetComponentType<Transform>());
+      ecs.SetSystemSignature<RenderSystem>(signatureRender);
+
+
+      Entity id = ecs.CreateEntity("Test");
+      Transform t = {Maths::Vector3f::One(), Maths::Vector3f::One(), Maths::Quaternion{}};
+      ecs.AddComponent(id, t);
+
+      Entity idRenderTest = ecs.CreateEntity("Test");
+      Transform t2 = {Maths::Vector3f{0,1,0}, Maths::Vector3f::One(), Maths::Quaternion{}};
+      Component::Model md;
+      md.AddMaterial(material);
+      ecs.AddComponent(idRenderTest, t2);
+      ecs.AddComponent(idRenderTest, model);
 
     float count = 0;
 
@@ -280,6 +311,7 @@ int main()
 
         //quadMesh.Draw();
         light.model = Maths::Matrix4::Translate({cosf(count) * 30, sinf(count) * 30, 0});
+        light2.model = Maths::Matrix4::Translate({-cosf(count) * 30, -sinf(count) * 30, 0});
         //light.model = Maths::Matrix4::RotateY(count);
 
         material.Apply();
@@ -291,12 +323,17 @@ int main()
         material.shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
         material.shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Scale({1,1,1}));
 
+        material.shader.SetUint("nbPointLight", 2);
+
         //RendererPlatform::SetPointLight(shader.ID, 0, light);
         //RendererPlatform::SetDirectionalLight(shader.ID, 0, light);
 
+        material.shader.SetUint("nbPointLights", 2);
         shader.SetLight(light, 0);
+        shader.SetLight(light2, 1);
 
-        model.Draw();
+        //model.Draw();
+        renderSystem->Draw(0);
 
 
         RendererPlatform::BindFramebuffer(0);

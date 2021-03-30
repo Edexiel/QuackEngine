@@ -1,6 +1,10 @@
 #ifndef _LIGHT_
 #define _LIGHT_
 
+#define MAX_POINT_LIGHT_NB 5
+#define MAX_DIRECTIONAL_LIGHT_NB 5
+#define MAX_SPOT_LIGHT_NB 5
+
 #include "Maths/Vector3.hpp"
 #include "Maths/Matrix4.hpp"
 
