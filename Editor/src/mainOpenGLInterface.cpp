@@ -1,5 +1,6 @@
 //#include "glad/gl.h"
 #include "GLFW/glfw3.h"
+#include "Maths/Quaternion.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shader.hpp"
@@ -196,6 +197,8 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
+
+      inputManager.Update();
 
       count += 0.01f;
 

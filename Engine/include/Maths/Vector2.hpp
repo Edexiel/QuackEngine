@@ -26,7 +26,7 @@ struct Vector2
 
   Vector2<T>& Normalize();
   Vector2<T> GetNormalized() const;
-  static void Normalized(Vector2<T>& v);
+  static void Normalize(Vector2<T>& v);
 
   static T DotProduct(const Vector2<T>& v1, const Vector2<T>& v2);
 
@@ -84,7 +84,7 @@ inline Vector2<T> Vector2<T>::GetNormalized() const
 }
 
 template<typename T>
-inline void Vector2<T>::Normalized(Vector2<T>& v)
+inline void Vector2<T>::Normalize(Vector2<T>& v)
 {
   T length = v.Length();
 

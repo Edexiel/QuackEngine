@@ -22,6 +22,11 @@
 using namespace Resources;
 using namespace Renderer;
 
+ResourcesManager &ResourcesManager::Instance()
+{
+    return _instance;
+}
+
 Model ResourcesManager::LoadModel(const char* path)
 {
     // Check if the Model already exist

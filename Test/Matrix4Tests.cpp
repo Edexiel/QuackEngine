@@ -98,8 +98,4 @@ TEST(Matrix4, Transpose)
 
 }
 
-int main()
-{
-  testing::InitGoogleTest();
-  return RUN_ALL_TESTS();
-}
+

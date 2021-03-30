@@ -25,6 +25,9 @@ namespace Resources
     class ResourcesManager
     {
     private:
+
+      static ResourcesManager _instance;
+
       std::unordered_map<std::string, Renderer::Model   > mapModel;
       std::unordered_map<std::string, Renderer::Texture > mapTexture;
       std::vector<ReferenceShader >                       listShader;
@@ -34,6 +37,9 @@ namespace Resources
       Audio::SoundManager* _soundManager;
 
     public:
+
+      static ResourcesManager &Instance();
+
       ResourcesManager()  = default;
       ResourcesManager(Audio::SoundManager* soundManager) : _soundManager{soundManager} {}; // To redo when the scene is complete
       ~ResourcesManager() = default;
