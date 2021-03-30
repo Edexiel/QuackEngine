@@ -25,9 +25,9 @@ public:
     template<typename T>
     void SetSignature(Signature signature);
 
-    void EntityDestroyed(EntityId id);
+    void EntityDestroyed(Entity id);
 
-    void EntitySignatureChanged(EntityId id, Signature entitySignature);
+    void EntitySignatureChanged(Entity id, Signature entitySignature);
 
 };
 
@@ -46,13 +46,13 @@ template<typename T>
 inline void SystemManager::SetSignature(Signature signature)
 {
     const char *typeName = typeid(T).name();
-    Assert_Fatal_Error(_systems.find(typeName) != _systems.end(), "System used before registered.");
+    Assert_Fatal_Error(_systems.find(typeName) == _systems.end(), "System used before registered.");
 
     (void)_signatures.insert({typeName, signature});
 
 }
 
-inline void SystemManager::EntityDestroyed(EntityId id)
+inline void SystemManager::EntityDestroyed(Entity id)
 {
     for (auto const &pair : _systems) {
         auto const &system = pair.second;
@@ -62,7 +62,7 @@ inline void SystemManager::EntityDestroyed(EntityId id)
 
 }
 
-inline void SystemManager::EntitySignatureChanged(EntityId id, Signature entitySignature)
+inline void SystemManager::EntitySignatureChanged(Entity id, Signature entitySignature)
 {
     for (auto const &pair : _systems) {
         auto const &type = pair.first;
