@@ -16,7 +16,7 @@
 struct ma_decoder;
 struct ma_device;
 
-typedef unsigned int sUint;
+typedef unsigned int soundIndex;
 
 namespace Audio
 {
@@ -40,7 +40,7 @@ namespace Audio
         float effectVolume {1.0f};
         float musicVolume  {1.0f};
 
-        std::unordered_map<sUint, SoundData> soundMap;
+        std::unordered_map<soundIndex, SoundData> soundMap;
 
         float GetVolume(SoundType soundType);
     };
@@ -65,14 +65,14 @@ namespace Audio
         float SetVolume(SoundType soundType, float newVolume);
 
         /*Sound Function*/
-        Sound CreateSound(const char* path);
+        Sound CreateSound(const char* path, SoundType soundType);
 
-        void StartSound(sUint soundIndex);
-        void StopSound(sUint soundIndex);
-        void RestartSound(sUint soundIndex);
+        void StartSound(soundIndex soundIndex);
+        void StopSound(soundIndex soundIndex);
+        void RestartSound(soundIndex soundIndex);
 
-        float& SoundVolume(sUint soundIndex);
-        SoundType& Sound_SoundType(sUint soundIndex);
+        float& SoundVolume(soundIndex soundIndex);
+        SoundType& Sound_SoundType(soundIndex soundIndex);
     };
 }
 

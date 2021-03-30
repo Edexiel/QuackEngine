@@ -9,49 +9,55 @@
 
 using namespace Renderer;
 
-Shader::Shader(const unsigned int& _ID) : ID {_ID} {}
+Shader::Shader(unsigned int ID) : _ID {ID} {}
 
 Shader::~Shader()
 {
-  //RendererPlatform::DeleteShader(ID);
+  //RendererPlatform::DeleteShader(_ID);
 }
+
+unsigned int Shader::GetID() const
+{
+  return _ID;
+}
+
 void Shader::Use()
 {
-  RendererPlatform::UseShader(ID);
+  RendererPlatform::UseShader(_ID);
 }
 
 void Shader::SetFloat(const char* name, float value)
 {
-  RendererPlatform::SetFloat(ID, name, value);
+  RendererPlatform::SetFloat(_ID, name, value);
 }
 
 void Shader::SetMatrix4(const char *name, const Maths::Matrix4& mat)
 {
-  RendererPlatform::SetMatrix4(ID, name, mat);
+  RendererPlatform::SetMatrix4(_ID, name, mat);
 }
 
 void Shader::SetVector3f(const char* name, const Maths::Vector3f vec)
 {
-    RendererPlatform::SetVector3f(ID, name, vec);
+    RendererPlatform::SetVector3f(_ID, name, vec);
 }
 
 void Shader::SetVector4f(const char* name, const Maths::Vector4f vec)
 {
-    RendererPlatform::SetVector4f(ID, name, vec);
+    RendererPlatform::SetVector4f(_ID, name, vec);
 }
 
 void Shader::SetSampler(const char* name, int sampler)
 {
-    RendererPlatform::SetSampler(ID, name, sampler);
+    RendererPlatform::SetSampler(_ID, name, sampler);
 }
 
 void Shader::SetLight(const Light& light, unsigned int index)
 {
   switch (light.type) 
   {
-    case Light_Type::L_DIRECTIONAL : return RendererPlatform::SetDirectionalLight(ID, index, light);
-    case Light_Type::L_SPOT : return RendererPlatform::SetSpotLight(ID, index, light);
-    default : return RendererPlatform::SetPointLight(ID, index, light);
+    case Light_Type::L_DIRECTIONAL : return RendererPlatform::SetDirectionalLight(_ID, index, light);
+    case Light_Type::L_SPOT : return RendererPlatform::SetSpotLight(_ID, index, light);
+    default : return RendererPlatform::SetPointLight(_ID, index, light);
   }
 }
 
@@ -93,7 +99,7 @@ Shader Shader::LoadShader(const char* vertexPath, const char* fragmentPath)
         return {0};
     }
 
-    std::cout << FragmentShaderCode << std::endl;
+    //std::cout << VertexShaderCode << std::endl;
 
     return RendererPlatform::CreateShader(VertexShaderCode.c_str(), FragmentShaderCode.c_str());
 
@@ -219,7 +225,6 @@ std::string Shader::LoadStringFromFile(const char* path)
     else
     {
         Assert_Error(true, (std::string("Impossible to open %s.\n") + path).c_str());
-        getchar();
         return {0};
     }
     return fileData;
