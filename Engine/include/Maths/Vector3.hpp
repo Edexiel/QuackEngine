@@ -1,9 +1,9 @@
 #ifndef QUACKENGINE_VECTOR3_HPP
 #define QUACKENGINE_VECTOR3_HPP
 
-#include <iostream>
-#include <cmath>
 #include "Maths/Vector2.hpp"
+#include <cmath>
+#include <iostream>
 
 namespace Maths
 {
@@ -29,31 +29,45 @@ namespace Maths
         };
 
         Vector3<T>() = default;
+
         Vector3<T>(T _x, T _y, T _z);
+
         Vector3<T>(Vector2<T> v, T _z);
 
         T Length() const;
+
         T SqrLength() const;
 
         Vector3<T> &Normalize();
+
         Vector3<T> GetNormalized() const;
-        static void Normalized(Vector3<T> &v);
+
+        static void Normalize(Vector3<T> &v);
 
         static T DotProduct(const Vector3<T> &v1, const Vector3<T> &v2);
+
         static Vector3<T> CrossProduct(const Vector3<T> &v1, const Vector3<T> &v2);
 
         static Vector3<T> Up();
+
         static Vector3<T> Down();
+
         static Vector3<T> Right();
+
         static Vector3<T> Left();
+
         static Vector3<T> Forward();
+
         static Vector3<T> Backward();
 
         static Vector3<T> Zero();
+
         static Vector3<T> One();
 
         Vector3<T> operator+(const Vector3<T> &v2) const;
+
         Vector3<T> operator-(const Vector3<T> &v2) const;
+
         Vector3<T> operator*(const T &f) const;
     };
 
@@ -64,11 +78,11 @@ namespace Maths
     typedef Vector3<float> Color3f;
 
     template<typename T>
-    inline Vector3<T>::Vector3(T _x, T _y, T _z):x{_x}, y{_y}, z{_z}
+    inline Vector3<T>::Vector3(T _x, T _y, T _z) : x{_x}, y{_y}, z{_z}
     {}
 
     template<typename T>
-    inline Vector3<T>::Vector3(Vector2<T> v, T _z):x{v.x}, y{v.y}, z{_z}
+    inline Vector3<T>::Vector3(Vector2<T> v, T _z) : x{v.x}, y{v.y}, z{_z}
     {}
 
     template<typename T>
@@ -87,8 +101,7 @@ namespace Maths
     inline Vector3<T> &Vector3<T>::Normalize()
     {
         T length = Length();
-        if (length > 0)
-        {
+        if (length > 0) {
             x /= length;
             y /= length;
             z /= length;
@@ -108,7 +121,7 @@ namespace Maths
     }
 
     template<typename T>
-    inline void Vector3<T>::Normalized(Vector3<T> &v)
+    inline void Vector3<T>::Normalize(Vector3<T> &v)
     {
         T length = v.Length();
 
@@ -124,16 +137,16 @@ namespace Maths
     }
 
     template<typename T>
-    inline Vector3<T> Vector3<T>::CrossProduct(const Vector3<T> &v1, const Vector3<T> &v2)
+    inline Vector3<T> Vector3<T>::CrossProduct(const Vector3<T> &v1,
+                                               const Vector3<T> &v2)
     {
-        return {(v1.y * v2.z) - (v1.z * v2.y), (v1.z * v2.x) - (v1.x * v2.z), (v1.x * v2.y) - (v1.y * v2.x)};
+        return {(v1.y * v2.z) - (v1.z * v2.y), (v1.z * v2.x) - (v1.x * v2.z),
+                (v1.x * v2.y) - (v1.y * v2.x)};
     }
 
     template<typename T>
     inline Vector3<T> Vector3<T>::Up()
-    {
-        return {0, 1, 0};
-    }
+    { return {0, 1, 0}; }
 
     template<typename T>
     inline Vector3<T> Vector3<T>::Down()
@@ -167,16 +180,11 @@ namespace Maths
 
     template<typename T>
     inline Vector3<T> Vector3<T>::Zero()
-    {
-        return {0, 0, 0};
-    }
-
+    { return {0, 0, 0}; }
 
     template<typename T>
-    inline Vector3<T> Vector3<T>::One()
-    {
-        return {1, 1, 1};
-    }
+    Vector3<T> Vector3<T>::One()
+    { return {1, 1, 1}; }
 
     template<typename T>
     inline Vector3<T> Vector3<T>::operator+(const Vector3<T> &v2) const
@@ -195,5 +203,7 @@ namespace Maths
     {
         return {this->x * f, this->y * f, this->z * f};
     }
-}
+
+
+} // namespace Maths
 #endif // QUACKENGINE_VECTOR3_HPP

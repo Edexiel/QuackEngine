@@ -2,11 +2,9 @@
 
 #include <cstdio>
 
-#include "Scene/Core/Ecs.hpp"
+#include "Scene/Core/Types.hpp"
 #include "Scene/Component/Transform.hpp"
-#include "Scene/Core/Entity.hpp"
 
-extern Ecs ecs;
 
 void Renderer::RenderSystem::Init()
 {

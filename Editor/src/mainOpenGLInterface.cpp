@@ -1,5 +1,6 @@
 //#include "glad/gl.h"
 #include "GLFW/glfw3.h"
+#include "Maths/Quaternion.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shader.hpp"
@@ -19,7 +20,6 @@
 #include "Debug/Log.hpp"
 
 
-#include "Scene/Core/Ecs.hpp"
 #include "Maths/Vector3.hpp"
 #include "Maths/Quaternion.hpp"
 #include "Scene/Component/Transform.hpp"
@@ -157,12 +157,6 @@ int main()
     light.outerSpotAngle = 10.5;
     light.spotAngle = 8.5;
 
-
-
-    Debug::assertLevel = Debug::AssertLevel::A_RELEASE;
-
-    Ecs ecs{};
-    ecs.Init();
 
     ecs.RegisterComponent<Transform>();
     auto testSystem = ecs.RegisterSystem<TestSystem>();
