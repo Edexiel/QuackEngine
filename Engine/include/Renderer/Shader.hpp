@@ -3,10 +3,13 @@
 
 #include "Maths/Matrix4.hpp"
 
-namespace Renderer
+namespace Component
 {
     class Light;
+}
 
+namespace Renderer
+{
     struct ShaderConstructData
     {
       bool hasLight {false};
@@ -37,11 +40,14 @@ namespace Renderer
         void Use();
         void SetFloat(const char* name, float value);
         void SetMatrix4(const char* name, const Maths::Matrix4& mat);
-        void SetVector3f(const char* name, const Maths::Vector3f vec);
-        void SetVector4f(const char* name, const Maths::Vector4f vec);
+        void SetVector3f(const char* name, const Maths::Vector3f& vec);
+        void SetVector4f(const char* name, const Maths::Vector4f& vec);
         void SetUint(const char* name, unsigned int value);
         void SetSampler(const char* name, int sampler);
-        void SetLight(const Light& light, unsigned int index);
+        void SetLight(Component::Light& light, unsigned int index);
+        void SetPointLight(Component::Light& light, unsigned int index);
+        void SetDirectionalLight(Component::Light& light, unsigned int index);
+        void SetSpotLight(Component::Light& light, unsigned int index);
 
         static Shader LoadShader(const char* vertexPath, const char* fragmentPath);
         static Shader LoadObjectShader(const ShaderConstructData& shaderData);

@@ -1,6 +1,8 @@
 #include "Renderer/Material.hpp"
 #include "Scene/Core/World.hpp"
 
+#include "Debug/Log.hpp"
+
 using namespace Renderer;
 
 void Material::GenerateShader()

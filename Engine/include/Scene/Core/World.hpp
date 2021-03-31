@@ -14,6 +14,7 @@
 #include "Scene/Component/Name.hpp"
 #include "Resources/ResourcesManager.hpp"
 #include "Audio/SoundManager.hpp"
+#include "Renderer/RendererManager.hpp"
 
 class World
 {
@@ -24,6 +25,7 @@ private:
 
     Resources::ResourcesManager _resourcesManager;
     Audio::SoundManager _soundManager;
+    Renderer::RendererManager _rendererManager;
 
     std::unique_ptr<ComponentManager> _componentManager;
     std::unique_ptr<EntityManager> _entityManager;
@@ -35,6 +37,7 @@ public:
     static World &Instance();
 
     void Init();
+    void Clear();
 
     // Entity methods
     Entity CreateEntity(std::string name);
@@ -66,6 +69,7 @@ public:
 
     Resources::ResourcesManager& GetResourcesManager();
     Audio::SoundManager& GetSoundManager();
+    Renderer::RendererManager& GetRendererManager();
 };
 
 inline World World::_instance = World();
@@ -77,14 +81,21 @@ inline World &World::Instance()
 
 inline void World::Init()
 {
-    _resourcesManager.SetWorld(this);
-    _soundManager.SetWorld(this);
-
     _componentManager = std::make_unique<ComponentManager>();
     _entityManager = std::make_unique<EntityManager>();
     _systemManager = std::make_unique<SystemManager>();
 
+    _resourcesManager.Init(this);
+    _soundManager.Init(this);
+
+    _rendererManager.Init(this);
+
     //_componentManager->RegisterComponent<Name>();
+}
+
+inline void World::Clear()
+{
+    _rendererManager.Clear();
 }
 
 inline Entity World::CreateEntity(std::string name)
@@ -163,6 +174,11 @@ inline Resources::ResourcesManager& World::GetResourcesManager()
 inline Audio::SoundManager& World::GetSoundManager()
 {
     return _soundManager;
+}
+
+inline Renderer::RendererManager& World::GetRendererManager()
+{
+    return _rendererManager;
 }
 
 #endif //QUACKENGINE_WORLD_HPP

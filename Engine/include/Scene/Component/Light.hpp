@@ -8,19 +8,17 @@
 #include "Maths/Vector3.hpp"
 #include "Maths/Matrix4.hpp"
 
-namespace Renderer
+namespace Component
 {
     enum class Light_Type{L_POINT, L_DIRECTIONAL, L_SPOT};
 
     class Light
     {
     public:
+      Light_Type type {Light_Type::L_POINT};
 
-      Light(Light_Type lightType);
-
-      Light_Type type = Light_Type::L_POINT;
-
-      Maths::Matrix4 model = Maths::Matrix4::Identity();
+      Maths::Vector3f position {0.f, 0.f, 0.f};
+      Maths::Vector3f direction {0.f, 0.f, 0.f};
 
       Maths::Color3f ambient   {0,0,0}; // colors of the lights
       Maths::Color3f diffuse   {0,0,0};
@@ -33,8 +31,8 @@ namespace Renderer
       float spotAngle             {0.0f}; // angle of the spot
       float outerSpotAngle        {0.0f}; // angle of the spot
 
-      Maths::Vector3f GetDirection() const;
-      Maths::Vector3f GetPosition () const;
+      //Maths::Vector3f GetDirection() const;
+      //Maths::Vector3f GetPosition () const;
 
   };
 }

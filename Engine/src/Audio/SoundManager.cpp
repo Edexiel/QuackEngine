@@ -18,11 +18,6 @@
 
 using namespace Audio;
 
-void SoundManager::SetWorld(World* world)
-{
-    _world = world;
-}
-
 std::mutex AudioMutex;
 
 float SoundManagerData::GetVolume(SoundType soundType)
@@ -109,8 +104,10 @@ SoundManager::~SoundManager()
     }
 }
 
-void SoundManager::Init()
+void SoundManager::Init(World* world)
 {
+    _world = world;
+
     _device = new ma_device;
 
     ma_device_config deviceConfig;// = new ma_device_config;

@@ -1,5 +1,7 @@
 #include "Resources/ResourcesManager.hpp"
 
+#include "Scene/Core/World.hpp"
+
 #include "Renderer/RendererPlatform.hpp"
 
 #include "Audio/SoundManager.hpp"
@@ -24,7 +26,7 @@ using namespace Renderer;
 using namespace Component;
 
 
-void ResourcesManager::SetWorld(World* world)
+void ResourcesManager::Init(World* world)
 {
     _world = world;
 }
@@ -113,6 +115,16 @@ Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const ch
     return shader;
 }
 
+Renderer::Shader ResourcesManager::LoadObjectShader(const char* vertexShader, const char* fragmentShader)
+{
+    Shader shader = LoadShader(vertexShader, fragmentShader);
+
+    _world->GetRendererManager().AddShaderToUpdate(shader);
+
+    return shader;
+}
+
+
 Renderer::Shader  ResourcesManager::LoadObjectShader(const Renderer::ShaderConstructData& constructData)
 {
   // Check if the Shader already exist
@@ -126,6 +138,8 @@ Renderer::Shader  ResourcesManager::LoadObjectShader(const Renderer::ShaderConst
 
   Shader shader = Shader::LoadObjectShader(constructData);
   mapDynamicShader.insert({constructData.GetKey(), shader});
+
+  _world->GetRendererManager().AddShaderToUpdate(shader);
 
   return shader;
 }
@@ -155,5 +169,11 @@ Audio::Sound ResourcesManager::LoadSound(const char* path, Audio::SoundType soun
   mapSound.insert({path, sound});
 
   return sound;
+}
+
+Mesh& ResourcesManager::AddShape(Renderer::Mesh& mesh)
+{
+    listLoadedShape.push_back(mesh);
+    return listLoadedShape[listLoadedShape.size() - 1];
 }
 

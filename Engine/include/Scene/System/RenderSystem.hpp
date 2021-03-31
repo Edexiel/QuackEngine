@@ -7,7 +7,7 @@ class RenderSystem : public System
 {
 public:
     void Init();
-    void Draw(float deltaTime);
+    void Draw();
 
 };
 

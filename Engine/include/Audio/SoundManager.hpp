@@ -61,8 +61,7 @@ namespace Audio
         SoundManager() = default;
         ~SoundManager();
 
-        void Init();
-        void SetWorld(World* world);
+        void Init(World* world);
 
         /*Volume Function*/
 

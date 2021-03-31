@@ -1,5 +1,5 @@
 #include "Renderer/Shader.hpp"
-#include "Renderer/Light.hpp"
+#include "Scene/Component/Light.hpp"
 #include "Renderer/RendererPlatform.hpp"
 
 #include "Debug/Assertion.hpp"
@@ -8,6 +8,7 @@
 #include <sstream>
 
 using namespace Renderer;
+using namespace Component;
 
 Shader::Shader(unsigned int ID) : _ID {ID} {}
 
@@ -36,12 +37,12 @@ void Shader::SetMatrix4(const char *name, const Maths::Matrix4& mat)
   RendererPlatform::SetMatrix4(_ID, name, mat);
 }
 
-void Shader::SetVector3f(const char* name, const Maths::Vector3f vec)
+void Shader::SetVector3f(const char* name, const Maths::Vector3f& vec)
 {
     RendererPlatform::SetVector3f(_ID, name, vec);
 }
 
-void Shader::SetVector4f(const char* name, const Maths::Vector4f vec)
+void Shader::SetVector4f(const char* name, const Maths::Vector4f& vec)
 {
     RendererPlatform::SetVector4f(_ID, name, vec);
 }
@@ -56,7 +57,7 @@ void Shader::SetSampler(const char* name, int sampler)
     RendererPlatform::SetSampler(_ID, name, sampler);
 }
 
-void Shader::SetLight(const Light& light, unsigned int index)
+void Shader::SetLight(Component::Light& light, unsigned int index)
 {
   switch (light.type) 
   {
@@ -64,6 +65,21 @@ void Shader::SetLight(const Light& light, unsigned int index)
     case Light_Type::L_SPOT : return RendererPlatform::SetSpotLight(_ID, index, light);
     default : return RendererPlatform::SetPointLight(_ID, index, light);
   }
+}
+
+void Shader::SetPointLight(Component::Light &light, unsigned int index)
+{
+    RendererPlatform::SetPointLight(_ID, index, light);
+}
+
+void Shader::SetDirectionalLight(Component::Light &light, unsigned int index)
+{
+    RendererPlatform::SetDirectionalLight(_ID, index, light);
+}
+
+void Shader::SetSpotLight(Component::Light &light, unsigned int index)
+{
+    RendererPlatform::SetSpotLight(_ID, index, light);
 }
 
 Shader Shader::LoadShader(const char* vertexPath, const char* fragmentPath)
@@ -88,7 +104,6 @@ Shader Shader::LoadShader(const char* vertexPath, const char* fragmentPath)
     }
 
     // Read the Fragment Shader code from the file
-    //std::string FragmentShaderCode;
     std::ifstream FragmentShaderStream(fragmentPath, std::ios::in);
     if (FragmentShaderStream.is_open())
     {
@@ -123,12 +138,12 @@ Shader Shader::LoadObjectShader(const ShaderConstructData& shaderData)
                           std::to_string(MAX_SPOT_LIGHT_NB) + "\n";
 
     FragmentShaderCode +=
-        LoadStringFromFile("../../Engine/Shader/Light/FragmentStartLight.fs");
+        LoadStringFromFile("../../Engine/Shader/Object/Light/FragmentStartLight.fs");
   }
   else
   {
       FragmentShaderCode +=
-              LoadStringFromFile("../../Engine/Shader/Base/FragmentStart.fs");
+              LoadStringFromFile("../../Engine/Shader/Object/Base/FragmentStart.fs");
   }
 
   FragmentShaderCode += CreateMaterial(shaderData);
@@ -140,31 +155,31 @@ Shader Shader::LoadObjectShader(const ShaderConstructData& shaderData)
     if (shaderData.hasNormalMap)
     {
       FragmentShaderCode +=
-          LoadStringFromFile("../../Engine/Shader/Light/FragmentNormalMapLight.fs");
+          LoadStringFromFile("../../Engine/Shader/Object/Light/FragmentNormalMapLight.fs");
       FragmentShaderCode += LoadStringFromFile(
-          "../../Engine/Shader/Light/FragmentMainLightNormal.fs");
+          "../../Engine/Shader/Object/Light/FragmentMainLightNormal.fs");
     }
     else
     {
       FragmentShaderCode +=
-          LoadStringFromFile("../../Engine/Shader/Light/FragmentBasicLight.fs");
+          LoadStringFromFile("../../Engine/Shader/Object/Light/FragmentBasicLight.fs");
       FragmentShaderCode += LoadStringFromFile(
-          "../../Engine/Shader/Light/FragmentMainLight.fs");
+          "../../Engine/Shader/Object/Light/FragmentMainLight.fs");
     }
   }
   else
-    FragmentShaderCode += LoadStringFromFile("../../Engine/Shader/Base/FragmentMain.fs");
+    FragmentShaderCode += LoadStringFromFile("../../Engine/Shader/Object/Base/FragmentMain.fs");
 
-  std::cout << FragmentShaderCode << std::endl;
+  //std::cout << FragmentShaderCode << std::endl;
 
 
   std::string VertexShaderCode;
 
   // Read the Vertex Shader code from the file
   if (shaderData.hasNormalMap)
-    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/Light/vertexNormalMap.vs");
+    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Light/vertexNormalMap.vs");
   else
-    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/Base/Vertex.vs");
+    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Base/Vertex.vs");
 
 
   return RendererPlatform::CreateShader(VertexShaderCode.c_str(), FragmentShaderCode.c_str());
@@ -199,20 +214,22 @@ std::string Shader::CreateColorFunctions(const ShaderConstructData& shaderData)
   std::string frag;
 
   if (shaderData.hasColorTexture)
-    frag += LoadStringFromFile("../../Engine/Shader/FragmentColor/FragmentTextureColor.fs");
+    frag += LoadStringFromFile("../../Engine/Shader/Object/FragmentColor/FragmentTextureColor.fs");
   else
-    frag += LoadStringFromFile("../../Engine/Shader/FragmentColor/FragmentColor.fs");
+    frag += LoadStringFromFile("../../Engine/Shader/Object/FragmentColor/FragmentColor.fs");
 
-  if (shaderData.hasDiffuseTexture)
-    frag += LoadStringFromFile("../../Engine/Shader/Light/Texture/FragmentAmbientDiffuseColor.fs");
-  else
-    frag += LoadStringFromFile("../../Engine/Shader/Light/Color/FragmentAmbientDiffuseColor.fs");
+  if (shaderData.hasLight)
+  {
+      if (shaderData.hasDiffuseTexture)
+          frag += LoadStringFromFile("../../Engine/Shader/Object/Light/Texture/FragmentAmbientDiffuseColor.fs");
+      else
+          frag += LoadStringFromFile("../../Engine/Shader/Object/Light/Color/FragmentAmbientDiffuseColor.fs");
 
-  if (shaderData.hasSpecularTexture)
-    frag += LoadStringFromFile("../../Engine/Shader/Light/Texture/FragmentSpecularColor.fs");
-  else
-    frag += LoadStringFromFile("../../Engine/Shader/Light/Color/FragmentSpecularColor.fs");
-
+      if (shaderData.hasSpecularTexture)
+          frag += LoadStringFromFile("../../Engine/Shader/Object/Light/Texture/FragmentSpecularColor.fs");
+      else
+          frag += LoadStringFromFile("../../Engine/Shader/Object/Light/Color/FragmentSpecularColor.fs");
+  }
     return frag;
 }
 

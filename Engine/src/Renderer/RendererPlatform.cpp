@@ -14,11 +14,51 @@
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
-#include "Renderer/Light.hpp"
+#include "Scene/Component/Light.hpp"
 
 #include "Maths/Vector3.hpp"
 
+#include "Debug/Assertion.hpp"
+
 using namespace Renderer;
+using namespace Component;
+
+void* RendererPlatform::LoadScreen(unsigned int width, unsigned int height, const char* name)
+{
+    GLFWwindow* window;
+
+    /* Initialize the library */
+    if (!glfwInit())
+    {
+        Assert_Fatal_Error(true, "GLFW Can't load");
+        return nullptr;
+    }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    /* Create a windowed mode window and its OpenGL context */
+    window = glfwCreateWindow(width, height, name, NULL, NULL);
+    if (!window)
+    {
+        glfwTerminate();
+        Assert_Fatal_Error(true, "Window can't be created");
+    }
+
+    return window;
+}
+
+void RendererPlatform::CloseWindow()
+{
+    glfwTerminate();
+}
+
+void Display(void* window)
+{
+    glfwSwapBuffers((GLFWwindow*)window);
+}
 
 int RendererPlatform::LoadGL()
 {
@@ -62,7 +102,7 @@ void RendererPlatform::EnableDepthBuffer(bool isEnable)
 
 Mesh RendererPlatform::CreateMesh(const Vertex *vertices, unsigned int verticesSize, const unsigned int *indices, unsigned int indicesSize)
 {
-  unsigned int vao, vbo;
+  unsigned int vao{0}, vbo{0};
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
 
@@ -324,19 +364,15 @@ void RendererPlatform::SetTextureImage2D(unsigned char *image, unsigned int nrCh
 }
 
 
-void RendererPlatform::SetSpotLight(const unsigned int shaderID, const unsigned int index, const Light& light)
+void RendererPlatform::SetSpotLight(unsigned int shaderID, unsigned int index, Component::Light& light)
 {
     std::string set             = "spotLights[" + std::to_string(index);
 
-    Maths::Vector3f positionVect = light.GetPosition();
-    Maths::Vector3f directionVect = light.GetDirection();
-
-
     int location = glGetUniformLocation(shaderID, (set + "].position").c_str());
-    glUniform3f(location, positionVect.x, positionVect.y, positionVect.z);
+    glUniform3f(location, light.position.x, light.position.y, light.position.z);
 
     location = glGetUniformLocation(shaderID, (set + "].direction").c_str());
-    glUniform3f(location, directionVect.x, directionVect.y, directionVect.z);
+    glUniform3f(location, light.direction.x, light.direction.y, light.direction.z);
 
     location = glGetUniformLocation(shaderID, (set + "].ambient").c_str());
     glUniform3f(location, light.ambient.x, light.ambient.y, light.ambient.z);
@@ -363,15 +399,12 @@ void RendererPlatform::SetSpotLight(const unsigned int shaderID, const unsigned 
     glUniform1f(location, light.quadratic);
 }
 
-void RendererPlatform::SetDirectionalLight(const unsigned int shaderID, const unsigned int index, const Light &light)
+void RendererPlatform::SetDirectionalLight(unsigned int shaderID, unsigned int index, Component::Light &light)
 {
   std::string set = "directionalLights[" + std::to_string(index);
 
-  Maths::Vector3f directionVect = light.GetDirection();
-
-
   int location = glGetUniformLocation(shaderID, (set + "].direction").c_str());
-  glUniform3f(location, directionVect.x, directionVect.y, directionVect.z);
+  glUniform3f(location, light.direction.x, light.direction.y, light.direction.z);
 
   location = glGetUniformLocation(shaderID, (set + "].ambient").c_str());
   glUniform3f(location, light.ambient.x, light.ambient.y, light.ambient.z);
@@ -384,14 +417,12 @@ void RendererPlatform::SetDirectionalLight(const unsigned int shaderID, const un
 
 }
 
-void RendererPlatform::SetPointLight(const unsigned int shaderID, const unsigned int index, const Light &light)
+void RendererPlatform::SetPointLight(unsigned int shaderID, unsigned int index, Light &light)
 {
   std::string set  = "pointLights[" + std::to_string(index);
 
-  Maths::Vector3f positionVect = light.GetPosition();
-
   int location = glGetUniformLocation(shaderID, (set + "].position").c_str());
-  glUniform3f(location, positionVect.x, positionVect.y, positionVect.z);
+  glUniform3f(location, light.position.x, light.position.y, light.position.z);
 
   location = glGetUniformLocation(shaderID, (set + "].ambient").c_str());
   glUniform3f(location, light.ambient.x, light.ambient.y, light.ambient.z);
@@ -545,3 +576,5 @@ Mesh RendererPlatform::CreateSphere(int sectorCount, int stackCount)
 
   return CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
 }
+
+

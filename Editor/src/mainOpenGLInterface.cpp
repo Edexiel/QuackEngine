@@ -8,7 +8,7 @@
 #include "Renderer/Texture.hpp"
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Mesh.hpp"
-#include "Renderer/Light.hpp"
+#include "Scene/Component/Light.hpp"
 #include "Resources/ResourcesManager.hpp"
 #include "Renderer/Material.hpp"
 
@@ -73,7 +73,7 @@ struct MyHero
 
 int main()
 {
-  GLFWwindow* window;
+  GLFWwindow* window    {nullptr};
   unsigned int width = 1280, height = 720;
   /* Initialize the library */
   if (!glfwInit())
@@ -83,7 +83,7 @@ int main()
   glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  /* Create a windowed mode window and its OpenGL context */
+   /* Create a windowed mode window and its OpenGL context */
   window = glfwCreateWindow(width, height, "RendererPlatform", NULL, NULL);
   if (!window)
   {
@@ -91,6 +91,7 @@ int main()
     return -1;
   }
   glfwMakeContextCurrent(window);
+
   {
     // loadGL
     RendererPlatform::LoadGL();
@@ -142,7 +143,7 @@ int main()
     RendererPlatform::VerticesReading();
 
 
-    Renderer::Light light(Renderer::Light_Type::L_POINT);
+    Component::Light light(Component::Light_Type::L_POINT);
 
     light.model = Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Translate({0,0, 0});
     light.ambient = {0.0f, 0.1f, 0.0f};
@@ -155,7 +156,7 @@ int main()
     light.outerSpotAngle = 10.5;
     light.spotAngle = 8.5;
 
-      Renderer::Light light2(Renderer::Light_Type::L_POINT);
+      Component::Light light2(Component::Light_Type::L_POINT);
 
       light2.model = Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Translate({0,0, 0});
       light2.ambient = {0.0f, 0.1f, 0.0f};
@@ -206,19 +207,19 @@ int main()
       World &ecs=World::Instance();
       ecs.Init();
 
-      ecs.RegisterComponent<Transform>();
-      ecs.RegisterComponent<Component::Model>();
-      auto testSystem = ecs.RegisterSystem<TestSystem>();
-      auto renderSystem = ecs.RegisterSystem<RenderSystem>();
+      //ecs.RegisterComponent<Transform>();
+      //ecs.RegisterComponent<Component::Model>();
+      //auto testSystem = ecs.RegisterSystem<TestSystem>();
+      //auto renderSystem = ecs.RegisterSystem<RenderSystem>();
 
-      Signature signature;
-      signature.set(ecs.GetComponentType<Transform>());
-      ecs.SetSystemSignature<TestSystem>(signature);
+      //Signature signature;
+      //signature.set(ecs.GetComponentType<Transform>());
+      //ecs.SetSystemSignature<TestSystem>(signature);
 
-      Signature signatureRender;
-      signatureRender.set(ecs.GetComponentType<Component::Model>());
-      signatureRender.set(ecs.GetComponentType<Transform>());
-      ecs.SetSystemSignature<RenderSystem>(signatureRender);
+      //Signature signatureRender;
+      //signatureRender.set(ecs.GetComponentType<Component::Model>());
+      //signatureRender.set(ecs.GetComponentType<Transform>());
+      //ecs.SetSystemSignature<RenderSystem>(signatureRender);
 
 
       Entity id = ecs.CreateEntity("Test");
@@ -232,6 +233,20 @@ int main()
       md.AddMaterial(material);
       ecs.AddComponent(idRenderTest, t2);
       ecs.AddComponent(idRenderTest, md);
+
+      {
+          //Entity CameraEntity = ecs.CreateEntity("Camera");
+
+          Component::Camera camera(1280,
+                                    720,
+                                   1000, -1, 20 * 3.1415/180);
+
+          //Transform cameraTrs;
+          //ecs.AddComponent(CameraEntity, camera);
+          //ecs.AddComponent(CameraEntity, cameraTrs);
+
+          //camera.GetFramebuffer().Bind();
+      }
 
     float count = 0;
 
@@ -304,7 +319,7 @@ int main()
         shader.SetLight(light2, 1);
 
         //model.Draw();
-        renderSystem->Draw(0);
+        ecs.GetRendererManager().Update();
 
 
         RendererPlatform::BindFramebuffer(0);
