@@ -17,7 +17,10 @@ namespace Audio
 
     public:
 
+        Sound() = default;
         Sound(SoundManager* soundManager, unsigned int index);
+
+        unsigned int GetID();
 
         void Play();
         void Stop();
@@ -27,7 +30,8 @@ namespace Audio
         float SetVolume(float newVolume);
 
 
-        SoundType& Type();
+        SoundType GetType();
+        void      SetType(SoundType soundType);
 
     };
 }

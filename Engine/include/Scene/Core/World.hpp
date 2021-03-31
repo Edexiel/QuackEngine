@@ -12,6 +12,8 @@
 #include "Scene/Core/SystemManager.hpp"
 #include "Scene/Core/ComponentManager.hpp"
 #include "Scene/Component/Name.hpp"
+#include "Resources/ResourcesManager.hpp"
+#include "Audio/SoundManager.hpp"
 
 class World
 {
@@ -19,6 +21,9 @@ private:
     World()=default;
 
     static World _instance;
+
+    Resources::ResourcesManager _resourcesManager;
+    Audio::SoundManager _soundManager;
 
     std::unique_ptr<ComponentManager> _componentManager;
     std::unique_ptr<EntityManager> _entityManager;
@@ -58,6 +63,9 @@ public:
 
     template<typename T>
     void SetSystemSignature(Signature signature);
+
+    Resources::ResourcesManager& GetResourcesManager();
+    Audio::SoundManager& GetSoundManager();
 };
 
 inline World World::_instance = World();
@@ -69,6 +77,9 @@ inline World &World::Instance()
 
 inline void World::Init()
 {
+    _resourcesManager.SetWorld(this);
+    _soundManager.SetWorld(this);
+
     _componentManager = std::make_unique<ComponentManager>();
     _entityManager = std::make_unique<EntityManager>();
     _systemManager = std::make_unique<SystemManager>();
@@ -144,5 +155,14 @@ inline void World::SetSystemSignature(Signature signature)
     _systemManager->SetSignature<T>(signature);
 }
 
+inline Resources::ResourcesManager& World::GetResourcesManager()
+{
+    return _resourcesManager;
+}
+
+inline Audio::SoundManager& World::GetSoundManager()
+{
+    return _soundManager;
+}
 
 #endif //QUACKENGINE_WORLD_HPP

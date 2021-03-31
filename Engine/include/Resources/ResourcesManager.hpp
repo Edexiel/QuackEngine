@@ -9,6 +9,10 @@
 #include "Scene/Component/Model.hpp"
 #include "Renderer/Texture.hpp"
 
+#include "Audio/Sound.hpp"
+
+
+class World;
 
 namespace Resources
 {
@@ -23,17 +27,31 @@ namespace Resources
     class ResourcesManager
     {
     private:
-        std::unordered_map<std::string, Component::Model   >  mapModel;
-        std::unordered_map<std::string, Renderer::Texture >  mapTexture;
-        std::vector<ReferenceShader >                        listShader;
 
-    public: 
-        ResourcesManager()  = default;
-        ~ResourcesManager() = default;
+      World* _world;
 
-        Component::Model   LoadModel     (const char* path);
-        Renderer::Texture LoadTexture   (const char* path);
-        Renderer::Shader  LoadShader    (const char* vertexShader, const char* fragmentShader);
+      std::unordered_map<std::string, Component::Model   > mapModel;
+      std::unordered_map<std::string, Renderer::Texture > mapTexture;
+      std::vector<ReferenceShader >                       listShader;
+      std::unordered_map<unsigned int, Renderer::Shader>  mapDynamicShader;
+      std::unordered_map<std::string, Audio::Sound>       mapSound;
+
+      Audio::SoundManager* _soundManager;
+
+    public:
+
+      ResourcesManager() = default;
+      ResourcesManager(Audio::SoundManager* soundManager) : _soundManager{soundManager} {}; // To redo when the scene is complete
+      ~ResourcesManager() = default;
+
+      void SetWorld(World* world);
+
+      Component::Model  LoadModel     (const char* path);
+      Renderer::Texture LoadTexture   (const char* path);
+      Renderer::Shader  LoadShader    (const char* vertexShader, const char* fragmentShader);
+      Renderer::Shader  LoadObjectShader    (const Renderer::ShaderConstructData& constructData);
+
+      Audio::Sound      LoadSound     (const char* path, Audio::SoundType soundType);
 
     };
 }

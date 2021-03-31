@@ -25,15 +25,15 @@ namespace Renderer
 
     class Shader
     {
-        unsigned int _ID;
+      unsigned int _ID {0};
 
       public:
+
         Shader() = default;
-        Shader(const unsigned int& _ID);
+        Shader(unsigned int ID);
         ~Shader();
 
         unsigned int GetID() const;
-
         void Use();
         void SetFloat(const char* name, float value);
         void SetMatrix4(const char* name, const Maths::Matrix4& mat);
@@ -44,7 +44,7 @@ namespace Renderer
         void SetLight(const Light& light, unsigned int index);
 
         static Shader LoadShader(const char* vertexPath, const char* fragmentPath);
-        static Shader LoadShader(const ShaderConstructData& shaderData);
+        static Shader LoadObjectShader(const ShaderConstructData& shaderData);
 
       private:
         static std::string CreateMaterial(const ShaderConstructData& shaderData);

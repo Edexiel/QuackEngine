@@ -73,11 +73,6 @@ struct MyHero
 
 int main()
 {
-
-  //Audio::SoundManager sd;
-  //Audio::Sound sound = sd.CreateSound("../../../inactive.ogg");
-
-
   GLFWwindow* window;
   unsigned int width = 1280, height = 720;
   /* Initialize the library */
@@ -128,7 +123,10 @@ int main()
         1, 2, 3  // second triangle
     };
 
-    Resources::ResourcesManager rm;
+    Audio::SoundManager sd;
+    Resources::ResourcesManager rm(&sd);
+
+    Audio::Sound sound = rm.LoadSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC); //sd.CreateSound("../../../inactive.ogg");
 
     // Shader fb
     Shader shaderFb(Renderer::RendererPlatform::CreateShader(
@@ -176,7 +174,7 @@ int main()
 
     //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
-    Shader shader = Shader::LoadShader(shd);
+    Shader shader = rm.LoadObjectShader(shd);
 
     RendererPlatform::UseShader(shader.GetID());
     shader.SetMatrix4
@@ -228,11 +226,12 @@ int main()
       ecs.AddComponent(id, t);
 
       Entity idRenderTest = ecs.CreateEntity("Test");
-      Transform t2 = {Maths::Vector3f{0,1,0}, Maths::Vector3f::One(), Maths::Quaternion{}};
-      Component::Model md;
+      Transform t2 = {Maths::Vector3f{0,0,10}, Maths::Vector3f::One(), Maths::Quaternion{}};
+      Component::Model md = rm.LoadModel("../../../eyeball.fbx");
+      //material.checkLight = false;
       md.AddMaterial(material);
       ecs.AddComponent(idRenderTest, t2);
-      ecs.AddComponent(idRenderTest, model);
+      ecs.AddComponent(idRenderTest, md);
 
     float count = 0;
 
@@ -240,36 +239,8 @@ int main()
 
     //glfwSetWindowShouldClose(window, 1);
 
-    //test inputManager
-    Input::PlatformInputGLFW platformInput(window);
-    Input::InputManager inputManager(platformInput);
-
-    inputManager.BindEvent("Hero", Input::MouseButton::MOUSE_BUTTON_1);
-    inputManager.BindEvent("Hero", Input::MouseButton::MOUSE_BUTTON_2);
-    inputManager.BindEventAxis("Axis", Input::Key::KEY_W, 1.0f);
-    inputManager.BindEventAxis("Axis", Input::Key::KEY_S, -1.0f);
-    MyHero hero;
-    inputManager.RegisterEvent("Hero",Input::Action::PRESS, &hero, &MyHero::IsPressed);
-    inputManager.RegisterEvent("Hero",Input::Action::RELEASE, &hero, &MyHero::IsReleased);
-    inputManager.RegisterEventAxis("Axis",&hero, &MyHero::TestAxis);
-
     while (!glfwWindowShouldClose(window))
     {
-        /*frameNB++;
-
-        std::cout << "Freq : " << glfwGetTime() - lastFrameTime << std::endl;
-        lastFrameTime = glfwGetTime();
-
-        if (frameNB == 99)
-        {
-            start = glfwGetTime();
-        }
-        if (frameNB >= 100) {
-            avg = (glfwGetTime() - start) / (frameNB - 99);
-            std::cout << "average = " << avg << std::endl;
-        }*/
-
-      inputManager.Update();
 
       count += 0.0001f;
 
@@ -282,26 +253,26 @@ int main()
 
         if (glfwGetKey(window, GLFW_KEY_R))
         {
-            //sound.Restart();
+            sound.Restart();
         }
         if (glfwGetKey(window, GLFW_KEY_P))
         {
-            //sound.Play();
+            sound.Play();
         }
         if (glfwGetKey(window, GLFW_KEY_S))
         {
-            //sound.Stop();
+            sound.Stop();
         }
 
           if (glfwGetKey(window, GLFW_KEY_K))
           {
               //sound.SetVolume(sound.GetVolume() + 0.01);
-              //sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) + 0.01);
+              sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) + 0.01);
           }
           if (glfwGetKey(window, GLFW_KEY_M))
           {
               //sound.SetVolume(sound.GetVolume() - 0.01);
-              //sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) - 0.01);
+              sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) - 0.01);
           }
 
 
@@ -348,8 +319,6 @@ int main()
       glfwSwapBuffers(window);
       glfwPollEvents();
     }
-    //ma_device_uninit(&device);
-    //ma_decoder_uninit(&decoder);
   }
   glfwTerminate();
   return 0;

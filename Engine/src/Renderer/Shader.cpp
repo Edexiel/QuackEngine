@@ -9,16 +9,16 @@
 
 using namespace Renderer;
 
-Shader::Shader(const unsigned int& ID) : _ID {ID} {}
+Shader::Shader(unsigned int ID) : _ID {ID} {}
 
 Shader::~Shader()
 {
-  //RendererPlatform::DeleteShader(ID);
+  //RendererPlatform::DeleteShader(_ID);
 }
 
 unsigned int Shader::GetID() const
 {
-    return _ID;
+  return _ID;
 }
 
 void Shader::Use()
@@ -104,13 +104,13 @@ Shader Shader::LoadShader(const char* vertexPath, const char* fragmentPath)
         return {0};
     }
 
-    std::cout << FragmentShaderCode << std::endl;
+    //std::cout << VertexShaderCode << std::endl;
 
     return RendererPlatform::CreateShader(VertexShaderCode.c_str(), FragmentShaderCode.c_str());
 
 }
 
-Shader Shader::LoadShader(const ShaderConstructData& shaderData)
+Shader Shader::LoadObjectShader(const ShaderConstructData& shaderData)
 {
   std::string FragmentShaderCode = "#version 330 core\n";
   if (shaderData.hasLight)
@@ -128,7 +128,7 @@ Shader Shader::LoadShader(const ShaderConstructData& shaderData)
   else
   {
       FragmentShaderCode +=
-              LoadStringFromFile("../../Engine/Shader/FragmentStart.fs");
+              LoadStringFromFile("../../Engine/Shader/Base/FragmentStart.fs");
   }
 
   FragmentShaderCode += CreateMaterial(shaderData);
@@ -230,7 +230,6 @@ std::string Shader::LoadStringFromFile(const char* path)
     else
     {
         Assert_Error(true, (std::string("Impossible to open %s.\n") + path).c_str());
-        getchar();
         return {0};
     }
     return fileData;

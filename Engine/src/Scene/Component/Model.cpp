@@ -182,7 +182,7 @@ unsigned int Model::AddMaterial(const Renderer::Material& newMaterial)
 {
     _materialList.push_back(newMaterial);
 
-    if (_materialList[_materialList.size() - 1].shader.GetID() == 0)
+    if (newMaterial.shader.GetID() == 0)
     {
         _materialList[_materialList.size() - 1].GenerateShader();
     }

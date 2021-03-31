@@ -1,5 +1,5 @@
 #include "Renderer/Material.hpp"
-//#include "Renderer/RendererPlatform.hpp"
+#include "Scene/Core/World.hpp"
 
 using namespace Renderer;
 
@@ -11,7 +11,7 @@ void Material::GenerateShader()
                             specularTexture.GetID() != 0,
                             normalMap.GetID() != 0};
 
-    shader = Shader::LoadShader(scd);
+    shader = World::Instance().GetResourcesManager().LoadObjectShader(scd);
 }
 
 void Material::Apply()
