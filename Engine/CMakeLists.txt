@@ -24,6 +24,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Scene/Camera.cpp
         src/Audio/Sound.cpp
         src/Audio/SoundManager.cpp
+        src/Physics/PhysicsSystem.cpp
         )
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

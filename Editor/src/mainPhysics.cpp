@@ -55,6 +55,14 @@ const char* fragmentShaderFb =
     };
 
 
+class TestCollision: public rp3d::EventListener
+{
+    virtual void onContact(const CallbackData& callbackData) override
+    {
+        std::cout << "Bonjour\n";
+    }
+};
+
 int main()
 {
   GLFWwindow* window;
@@ -88,9 +96,10 @@ int main()
     Renderer::Framebuffer framebuffer =
         Renderer::RendererPlatform::CreateFramebuffer(width, height);
 
-    Mesh quad   = RendererPlatform::CreateQuad();
-    Mesh sphere = RendererPlatform::CreateSphere();
-    Mesh cube   = RendererPlatform::CreateCube();
+    Mesh quad    = RendererPlatform::CreateQuad();
+    Mesh sphere  = RendererPlatform::CreateSphere();
+    Mesh floor   = RendererPlatform::CreateCube();
+    Mesh trigger = RendererPlatform::CreateCube();
 
     RendererPlatform::VerticesReading();
 
@@ -133,45 +142,63 @@ int main()
     RendererPlatform::EnableDepthBuffer(true);
 
 // reactphysics3d
-    reactphysics3d::PhysicsWorld::WorldSettings settings;
+    rp3d::PhysicsWorld::WorldSettings settings;
     settings.defaultVelocitySolverNbIterations = 20;
     settings.isSleepingEnabled = false;
     settings.gravity = reactphysics3d::Vector3(0, -9.81, 0);
 
-    reactphysics3d::PhysicsCommon physicsCommon;
-    reactphysics3d::PhysicsWorld* world = physicsCommon.createPhysicsWorld(settings);
-    reactphysics3d::Vector3 positionSphere{0,1,10};
-    reactphysics3d::Quaternion rotationSphere = reactphysics3d::Quaternion::identity();
+    rp3d::PhysicsCommon physicsCommon;
+    rp3d::PhysicsWorld* world = physicsCommon.createPhysicsWorld(settings);
 
-    reactphysics3d::Vector3 positionCube{0,-1,10};
-    reactphysics3d::Quaternion rotationCube = reactphysics3d::Quaternion::identity();
+    rp3d::Vector3 positionSphere{0,10,10};
+    rp3d::Quaternion rotationSphere = reactphysics3d::Quaternion::identity();
 
-    reactphysics3d::Transform transformSphere(positionSphere, rotationSphere);
-    reactphysics3d::Transform transformCube(positionCube, rotationCube);
+    rp3d::Vector3 positionFloor{0, -1, 10};
+    rp3d::Quaternion rotationFloor = reactphysics3d::Quaternion::identity();
 
-    reactphysics3d::RigidBody * rbSphere = world->createRigidBody(transformSphere);
-    reactphysics3d::RigidBody * rbCube = world->createRigidBody(transformCube);
+    rp3d::Vector3 positionTrigger{0, 1, 10};
+    rp3d::Quaternion rotationTrigger = reactphysics3d::Quaternion::identity();
+
+    rp3d::Transform transformSphere(positionSphere, rotationSphere);
+    rp3d::Transform transformFloor(positionFloor, rotationFloor);
+    rp3d::Transform transformTrigger(positionTrigger, rotationTrigger);
+
+    rp3d::RigidBody * rbSphere = world->createRigidBody(transformSphere);
+    rp3d::RigidBody * rbFloor = world->createRigidBody(transformFloor);
+    rp3d::RigidBody * rbTrigger = world->createRigidBody(transformTrigger);
 
     rbSphere->setType(reactphysics3d::BodyType::DYNAMIC);
-    rbCube->setType(reactphysics3d::BodyType::STATIC);
+    rbFloor->setType(reactphysics3d::BodyType::STATIC);
+    rbTrigger->setType(reactphysics3d::BodyType::STATIC);
 
-    reactphysics3d::SphereShape* sphereShape = physicsCommon.createSphereShape(1.f);
-    Maths::Vector3f scaleCube{1, 1, 1};
-    reactphysics3d::BoxShape* cubeShape = physicsCommon.createBoxShape({scaleCube.x * 0.5f, scaleCube.y * 0.5f, scaleCube.z * 0.5f});
+    rp3d::SphereShape* sphereShape = physicsCommon.createSphereShape(1.f);
+    Maths::Vector3f scaleFloor{5, 0.25, 5};
+    rp3d::BoxShape* floorShape = physicsCommon.createBoxShape({scaleFloor.x, scaleFloor.y, scaleFloor.z});
 
-    reactphysics3d::Collider* colliderSphere = rbSphere->addCollider(sphereShape, transformSphere);
-    reactphysics3d::Collider* colliderCube = rbCube->addCollider(cubeShape, transformCube);
+    Maths::Vector3f scaleTrigger{1.0f, 1.0f, 1.0f};
+    rp3d::BoxShape* triggerShape = physicsCommon.createBoxShape({scaleTrigger.x, scaleTrigger.y, scaleTrigger.z});
+
+    rp3d::Collider* colliderSphere = rbSphere->addCollider(sphereShape, rp3d::Transform::identity());
+    rp3d::Collider* colliderFloor = rbFloor->addCollider(floorShape, rp3d::Transform::identity());
+    rp3d::Collider* colliderTrigger = rbFloor->addCollider(triggerShape, rp3d::Transform::identity());
+
+    rp3d::Material& materialFloor = colliderFloor->getMaterial();
+    materialFloor.setBounciness(0.2f);
 
     while (!glfwWindowShouldClose(window))
     {
       world->update(1.f/144.f);
-      reactphysics3d::Transform ts = rbSphere->getTransform();
+      rp3d::Transform ts = rbSphere->getTransform();
       Maths::Vector3f posSphere {ts.getPosition().x, ts.getPosition().y, ts.getPosition().z};
       Maths::Quaternion rotSphere {ts.getOrientation().w, ts.getOrientation().x, ts.getOrientation().y, ts.getOrientation().z};
 
-      reactphysics3d::Transform tc = rbCube->getTransform();
-      Maths::Vector3f posCube {tc.getPosition().x, tc.getPosition().y, tc.getPosition().z};
-      Maths::Quaternion rotCube {tc.getOrientation().w, tc.getOrientation().x, tc.getOrientation().y, tc.getOrientation().z};
+      rp3d::Transform tf = rbFloor->getTransform();
+      Maths::Vector3f posFloor {tf.getPosition().x, tf.getPosition().y, tf.getPosition().z};
+      Maths::Quaternion rotFloor {tf.getOrientation().w, tf.getOrientation().x, tf.getOrientation().y, tf.getOrientation().z};
+
+      rp3d::Transform tt = rbTrigger->getTransform();
+      Maths::Vector3f posTrigger {tt.getPosition().x, tt.getPosition().y, tt.getPosition().z};
+      Maths::Quaternion rotTrigger {tt.getOrientation().w, tt.getOrientation().x, tt.getOrientation().y, tt.getOrientation().z};
 
       count += 0.01f;
 
@@ -192,13 +219,17 @@ int main()
 
         material.shader.SetMatrix4("projection", Maths::Matrix4::Perspective(width, height, -1, 10000, 20 * 3.1415/180));
         material.shader.SetMatrix4("view", Maths::Matrix4::Translate({0, -5, 0}) * Maths::Quaternion({1,0,0}, -3.14f/6.f).ToMatrix());
-        material.shader.SetMatrix4("model", Maths::Matrix4::Translate(posSphere) * rotSphere.ToMatrix() * Maths::Matrix4::Scale({1,1,1}));
 
         shader.SetLight(light, 0);
 
+        material.shader.SetMatrix4("model", Maths::Matrix4::Translate(posSphere) * rotSphere.ToMatrix() * Maths::Matrix4::Scale({1,1,1}));
         sphere.Draw();
-        material.shader.SetMatrix4("model", Maths::Matrix4::Translate(posCube) * rotCube.ToMatrix() * Maths::Matrix4::Scale(scaleCube));
-        cube.Draw();
+
+        material.shader.SetMatrix4("model", Maths::Matrix4::Translate(posFloor) * rotFloor.ToMatrix() * Maths::Matrix4::Scale(scaleFloor));
+        floor.Draw();
+
+        material.shader.SetMatrix4("model", Maths::Matrix4::Translate(posTrigger) * rotTrigger.ToMatrix() * Maths::Matrix4::Scale(scaleTrigger));
+        trigger.Draw();
 
         RendererPlatform::BindFramebuffer(0);
       }
