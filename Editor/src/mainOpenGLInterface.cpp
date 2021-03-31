@@ -20,6 +20,7 @@
 
 #include "Debug/Log.hpp"
 
+
 //#define MINIAUDIO_IMPLEMENTATION
 //#include "miniaudio.h"
 
@@ -65,11 +66,6 @@ const char* fragmentShaderFb =
 
 int main()
 {
-
-  //Audio::SoundManager sd;
-  //Audio::Sound sound = sd.CreateSound("../../../inactive.ogg");
-
-
   GLFWwindow* window;
   unsigned int width = 1280, height = 720;
   /* Initialize the library */
@@ -91,7 +87,39 @@ int main()
   {
     // loadGL
     RendererPlatform::LoadGL();
-    Resources::ResourcesManager rm;
+
+
+    const Renderer::Vertex quad[] = {
+        // positions          // texture coords
+        {{1.0f, 1.0f, 0.0f}, {0, 0, 1}, {1.0f, 1.0f}},   // top right
+        {{1.0f, -1.0f, 0.0f}, {0, 0, 1}, {1.0f, 0.0f}},  // bottom right
+        {{-1.0f, -1.0f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
+        {{-1.0f, 1.0f, 0.0f}, {0, 0, 1}, {0.0f, 1.0f}}   // top left
+    };
+    const Renderer::Vertex triangle[] = {
+        // positions          // texture coords
+        {{0.0f, 1.0f, 0.0f}, {0, 0, 1}, {1.0f, 1.0f}},   // top right
+        {{1.0f, -1.0f, 0.0f}, {0, 0, 1}, {1.0f, 0.0f}},  // bottom right
+        {{-1.0f, -1.0f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
+    };
+
+    const Renderer::Vertex quad2[] = {
+        // positions          // texture coords
+        {{0.5f, 0.8f, 0.0f}, {0, 0, 1}, {1.0f, 1.0f}},   // top right
+        {{0.9f, -0.4f, 0.0f}, {0, 0, 1}, {1.0f, 0.0f}},  // bottom right
+        {{-0.75f, -0.6f, 0.0f}, {0, 0, 1}, {0.0f, 0.0f}}, // bottom left
+        {{-0.5f, 0.58f, 0.0f}, {0, 0, 1}, {0.0f, 1.0f}}   // top left
+    };
+
+    unsigned int quadIndices[] = {
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
+    };
+
+    Audio::SoundManager sd;
+    Resources::ResourcesManager rm(&sd);
+
+    Audio::Sound sound = rm.LoadSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC); //sd.CreateSound("../../../inactive.ogg");
 
     // Shader fb
     Shader shaderFb(Renderer::RendererPlatform::CreateShader(
@@ -121,13 +149,13 @@ int main()
 
 
 
-    ShaderConstructData shd = {1,1,0, 0, 0, 0, 0, 0};
+    ShaderConstructData shd = {1,1,0, 0, 0, 1, 0, 1};
 
     //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
-    Shader shader = Shader::LoadShader(shd);
+    Shader shader = rm.LoadShader(shd);
 
-    RendererPlatform::UseShader(shader.ID);
+    RendererPlatform::UseShader(shader.GetID());
     shader.SetMatrix4
         (
             "projection",
@@ -135,10 +163,10 @@ int main()
         );
     shader.SetMatrix4("view", Maths::Matrix4::Identity());
 
-    Model model =  Model::LoadModel("../../../eyeball.fbx", VertexType::V_NORMALMAP);
-    //Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
-    //Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
-    //Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
+    Model model =  Model::LoadModel("../../../SphereHeavy.fbx", VertexType::V_NORMALMAP);
+    Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
+    Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
+    Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
 
     Material material;
     material.shader = shader;
@@ -149,34 +177,19 @@ int main()
     material.shininess = 256;
 
     //material.colorTexture = texture;
-    //material.diffuseTexture = textureDiffuse;
-    //material.specularTexture = textureSpecular;
-    //material.normalMap = rm.LoadTexture("../../../Dragon_Nor_mirror2.jpg");
+    material.diffuseTexture = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");;
+    material.specularTexture = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");;
+    material.normalMap = rm.LoadTexture("../../../Dragon_Nor_mirror2.jpg");
 
 
     float count = 0;
 
     RendererPlatform::EnableDepthBuffer(true);
 
-    //test inputManager
-    Input::PlatformInputGLFW platformInput(window);
-    Input::InputManager inputManager(platformInput);
+    //glfwSetWindowShouldClose(window, 1);
 
     while (!glfwWindowShouldClose(window))
     {
-        /*frameNB++;
-
-        std::cout << "Freq : " << glfwGetTime() - lastFrameTime << std::endl;
-        lastFrameTime = glfwGetTime();
-
-        if (frameNB == 99)
-        {
-            start = glfwGetTime();
-        }
-        if (frameNB >= 100) {
-            avg = (glfwGetTime() - start) / (frameNB - 99);
-            std::cout << "average = " << avg << std::endl;
-        }*/
 
       inputManager.Update();
 
@@ -191,26 +204,26 @@ int main()
 
         if (glfwGetKey(window, GLFW_KEY_R))
         {
-            //sound.Restart();
+            sound.Restart();
         }
         if (glfwGetKey(window, GLFW_KEY_P))
         {
-            //sound.Play();
+            sound.Play();
         }
         if (glfwGetKey(window, GLFW_KEY_S))
         {
-            //sound.Stop();
+            sound.Stop();
         }
 
           if (glfwGetKey(window, GLFW_KEY_K))
           {
               //sound.SetVolume(sound.GetVolume() + 0.01);
-              //sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) + 0.01);
+              sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) + 0.01);
           }
           if (glfwGetKey(window, GLFW_KEY_M))
           {
               //sound.SetVolume(sound.GetVolume() - 0.01);
-              //sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) - 0.01);
+              sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) - 0.01);
           }
 
 

@@ -80,7 +80,7 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
 
     MA_ASSERT(pDevice->playback.format == SAMPLE_FORMAT);   /* <-- Importsant for this example. */
 
-    for (std::pair<sUint, SoundData> element : soundManagerData->soundMap)
+    for (std::pair<soundIndex, SoundData> element : soundManagerData->soundMap)
     {
         if(element.second.isActive)
             soundManagerData->ReadAndMixPcmFramesF32(element.second, pOutputF32, frameCount);
@@ -110,7 +110,7 @@ SoundManager::SoundManager()
 
 SoundManager::~SoundManager()
 {
-    for (std::pair<sUint, SoundData> element : _soundManagerData.soundMap)
+    for (std::pair<soundIndex, SoundData> element : _soundManagerData.soundMap)
     {
         ma_decoder_uninit(element.second.decoder);
         delete element.second.decoder;
@@ -120,7 +120,7 @@ SoundManager::~SoundManager()
     delete _device;
 }
 
-Sound SoundManager::CreateSound(const char *path)
+Sound SoundManager::CreateSound(const char *path, SoundType soundType)
 {
     ma_decoder_config decoderConfig;
 
@@ -171,29 +171,29 @@ float SoundManager::SetVolume(SoundType soundType, float newVolume)
     }
 }
 
-void SoundManager::StartSound(sUint soundIndex)
+void SoundManager::StartSound(soundIndex soundIndex)
 {
     _soundManagerData.soundMap.find(soundIndex)->second.isActive = true;
 }
 
-void SoundManager::StopSound(sUint soundIndex)
+void SoundManager::StopSound(soundIndex soundIndex)
 {
     _soundManagerData.soundMap.find(soundIndex)->second.isActive = false;
 }
 
-void SoundManager::RestartSound(sUint soundIndex)
+void SoundManager::RestartSound(soundIndex soundIndex)
 {
     AudioMutex.lock();
     ma_decoder_seek_to_pcm_frame(_soundManagerData.soundMap.find(soundIndex)->second.decoder, 0);
     AudioMutex.unlock();
 }
 
-float& SoundManager::SoundVolume(sUint soundIndex)
+float& SoundManager::SoundVolume(soundIndex soundIndex)
 {
     return _soundManagerData.soundMap.find(soundIndex)->second.volume;
 }
 
-SoundType& SoundManager::Sound_SoundType(sUint soundIndex)
+SoundType& SoundManager::Sound_SoundType(soundIndex soundIndex)
 {
     return _soundManagerData.soundMap.find(soundIndex)->second.soundType;
 }

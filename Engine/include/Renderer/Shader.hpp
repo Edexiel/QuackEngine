@@ -29,12 +29,15 @@ namespace Renderer
 
     class Shader
     {
+      unsigned int _ID;
+
       public:
-        unsigned int ID;// TO DO: put the variable in private
+
         Shader() = default;
-        Shader(const unsigned int& _ID);
+        Shader(unsigned int ID);
         ~Shader();
 
+        unsigned int GetID() const;
         void Use();
         void SetFloat(const char* name, float value);
         void SetMatrix4(const char* name, const Maths::Matrix4& mat);
