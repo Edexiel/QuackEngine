@@ -37,11 +37,6 @@ public:
 
 };
 
-inline void Widget::Draw()
-{
-
-}
-
 inline bool Widget::IsVisible() const
 {
     return _visible;
@@ -50,6 +45,11 @@ inline bool Widget::IsVisible() const
 inline void Widget::SetVisible(bool visible)
 {
     _visible = visible;
+}
+
+inline void Widget::Draw()
+{
+
 }
 
 #endif //QUACKENGINE_WIDGET_HPP
