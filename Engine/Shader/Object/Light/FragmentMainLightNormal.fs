@@ -5,15 +5,15 @@ void main()
     vec3 normalMap = texture(material.normalMap, TexCoord).rgb;
     normalMap = normalize(TBN * (normalMap * 2.0 - 1.0));
 
-    for (int i = 0 ; i < nbDirectionalLights ; i++)
+    for (uint i = 0u ; i < nbDirectionalLights ; i++)
     {
       fragmentColor += GetColorAfterDirectionalLight(directionalLights[i], vec3(Position), normalMap, TexCoord);
     }
-    for (int i = 0 ; i < nbPointLights ; i++)
+    for (uint i = 0u ; i < nbPointLights ; i++)
     {
       fragmentColor += GetColorAfterPointLight(pointLights[i], vec3(Position), normalMap, TexCoord);
     }
-    for (int i = 0 ; i < nbSpotLights ; i++)
+    for (uint i = 0u ; i < nbSpotLights ; i++)
     {
       fragmentColor += GetColorAfterSpotLight(spotLights[i], vec3(Position), normalMap, TexCoord);
     }
