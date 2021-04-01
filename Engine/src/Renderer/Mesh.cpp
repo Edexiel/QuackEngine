@@ -12,7 +12,6 @@ Mesh::~Mesh()
 
 void Mesh::Draw(VertexType vertexType)
 {
-
     switch (vertexType)
     {
         case VertexType::V_NORMALMAP : return RendererPlatform::DrawMeshNormalMap(_vao, _vbo, _ebo, _nbIndices);

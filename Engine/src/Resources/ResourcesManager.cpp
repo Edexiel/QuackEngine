@@ -1,5 +1,7 @@
 #include "Resources/ResourcesManager.hpp"
 
+#include "Scene/Core/World.hpp"
+
 #include "Renderer/RendererPlatform.hpp"
 
 #include "Audio/SoundManager.hpp"
@@ -21,10 +23,12 @@
 
 using namespace Resources;
 using namespace Renderer;
+using namespace Component;
 
-ResourcesManager &ResourcesManager::Instance()
+
+void ResourcesManager::Init(World* world)
 {
-    return _instance;
+    _world = world;
 }
 
 Model ResourcesManager::LoadModel(const char* path)
@@ -111,19 +115,31 @@ Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const ch
     return shader;
 }
 
-Renderer::Shader  ResourcesManager::LoadShader(const Renderer::ShaderConstructData& constructData)
+Renderer::Shader ResourcesManager::LoadObjectShader(const char* vertexShader, const char* fragmentShader)
+{
+    Shader shader = LoadShader(vertexShader, fragmentShader);
+
+    _world->GetRendererManager().AddShaderToUpdate(shader);
+
+    return shader;
+}
+
+
+Renderer::Shader  ResourcesManager::LoadObjectShader(const Renderer::ShaderConstructData& constructData)
 {
   // Check if the Shader already exist
 
-  std::unordered_map<unsigned int, Renderer::Shader>::iterator it = mapDynamicShader.find(constructData.GetKey());
+  auto it = mapDynamicShader.find(constructData.GetKey());
 
   if (it != mapDynamicShader.end())
   {
     return Shader(it->second.GetID());
   }
 
-  Shader shader = Shader::LoadShader(constructData);
+  Shader shader = Shader::LoadObjectShader(constructData);
   mapDynamicShader.insert({constructData.GetKey(), shader});
+
+  _world->GetRendererManager().AddShaderToUpdate(shader);
 
   return shader;
 }
@@ -132,7 +148,7 @@ Audio::Sound ResourcesManager::LoadSound(const char* path, Audio::SoundType soun
 {
   // Check if the Texture already exist
 
-  std::unordered_map<std::string, Audio::Sound>::iterator it = mapSound.find(path);
+  auto it = mapSound.find(path);
 
   // Check if the texture already exist
   if (it != mapSound.end())
@@ -153,5 +169,11 @@ Audio::Sound ResourcesManager::LoadSound(const char* path, Audio::SoundType soun
   mapSound.insert({path, sound});
 
   return sound;
+}
+
+Mesh& ResourcesManager::AddShape(Renderer::Mesh& mesh)
+{
+    listLoadedShape.push_back(mesh);
+    return listLoadedShape[listLoadedShape.size() - 1];
 }
 
