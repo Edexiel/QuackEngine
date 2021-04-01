@@ -21,6 +21,9 @@ void TestSystem::Init()
 
 void TestSystem::FixedUpdate(float fixedUpdate)
 {
+
+
+
     std::printf("FixedUpdate");
 
 }

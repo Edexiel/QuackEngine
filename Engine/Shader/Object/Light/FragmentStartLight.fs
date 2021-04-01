@@ -47,11 +47,15 @@ struct SpotLight
   float outerSpotAngle;
 };
 
-#define NB_MAX_DIRECTIONAL_LIGHT 16
+//#define NB_MAX_DIRECTIONAL_LIGHT 16
 uniform DirectionalLight directionalLights[NB_MAX_DIRECTIONAL_LIGHT];
 
-#define NB_MAX_POINT_LIGHT 16
+//#define NB_MAX_POINT_LIGHT 16
 uniform PointLight pointLights[NB_MAX_POINT_LIGHT];
 
-#define NB_MAX_SPOT_LIGHT 16
+//#define NB_MAX_SPOT_LIGHT 16
 uniform SpotLight spotLights[NB_MAX_SPOT_LIGHT];
+
+uniform uint nbDirectionalLights = 0;
+uniform uint nbPointLights = 0;
+uniform uint nbSpotLights = 0;

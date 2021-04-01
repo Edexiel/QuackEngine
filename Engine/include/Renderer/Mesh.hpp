@@ -16,6 +16,9 @@ namespace Renderer
     unsigned int _nbVertices {0};
     unsigned int _nbIndices {0};
   public:
+
+     unsigned int materialIndex {0};
+
     Mesh() = default;
     Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbVertices, unsigned int nbIndices)
             : _vao{vao},_vbo{vbo}, _ebo{ebo}, _nbVertices{nbVertices}, _nbIndices{nbIndices} {}
