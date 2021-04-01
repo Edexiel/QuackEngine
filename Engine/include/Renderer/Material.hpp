@@ -16,9 +16,9 @@ namespace Renderer
     bool checkLight {true};
 
     Maths::Color4f  color    {1,1,1,1};
-    Maths::Vector3f ambient  {1,1,1};
-    Maths::Vector3f diffuse  {1,1,1};
-    Maths::Vector3f specular {1,1,1};
+    Maths::Color3f ambient  {1,1,1};
+    Maths::Color3f diffuse  {1,1,1};
+    Maths::Color3f specular {1,1,1};
 
     float shininess {128};
 

@@ -8,7 +8,6 @@
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Shader.hpp"
 
-#include "Renderer/Window.hpp"
 
 #include <memory>
 
@@ -33,17 +32,12 @@ namespace Renderer
         Shader _shader;
         Mesh _quadMesh;
 
-        Window _window;
-
     public:
         RendererManager() = default;
 
         void Init(World* world);
-        void InitWindow(unsigned int width, unsigned int height, const char* name);
 
         void Clear();
-
-        Window GetWindow() const;
 
         void Update();
 

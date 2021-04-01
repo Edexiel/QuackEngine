@@ -23,7 +23,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Scene/Component/Camera.cpp
         src/Audio/Sound.cpp
         src/Audio/SoundManager.cpp
-        src/Scene/System/RenderSystem.cpp src/Renderer/RendererManager.cpp src/Renderer/Window.cpp src/Renderer/Shape.cpp src/Scene/System/CameraSystem.cpp src/Scene/System/LightSystem.cpp)
+        src/Scene/System/RenderSystem.cpp src/Renderer/RendererManager.cpp src/Renderer/Shape.cpp src/Scene/System/CameraSystem.cpp src/Scene/System/LightSystem.cpp)
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
