@@ -13,6 +13,8 @@ namespace Renderer
 
     Shader shader;
 
+    bool checkLight {true};
+
     Maths::Color4f  color    {1,1,1,1};
     Maths::Vector3f ambient  {1,1,1};
     Maths::Vector3f diffuse  {1,1,1};
@@ -25,6 +27,7 @@ namespace Renderer
     Texture specularTexture;
     Texture normalMap;
 
+    void GenerateShader();
     void Apply();
   };
 }

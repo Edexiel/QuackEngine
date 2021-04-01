@@ -35,15 +35,15 @@
 namespace Debug
 {
 
-    enum class LogLevel
+    enum class LOG_LEVEL
     {
         L_RELEASE, L_ERROR, L_WARNING, L_INFO, L_DEBUG
     };
 
-    static LogLevel logLevel = LogLevel::L_DEBUG;
+    static LOG_LEVEL logLevel = LOG_LEVEL::L_DEBUG;
 
-    void Log(const char *message, const char *file, const char *function, unsigned int line,
-             LogLevel logLvl = LogLevel::L_DEBUG)
+    inline void Log(const char *message, const char *file, const char *function, unsigned int line,
+                    LOG_LEVEL logLvl = LOG_LEVEL::L_DEBUG)
     {
 
         if (logLvl > logLevel)
@@ -57,20 +57,20 @@ namespace Debug
         std::ostringstream oss;
         oss << std::put_time(&localTime, "%H:%M:%S");
 
-        char *levelString;
+        const char *levelString;
 
         switch (logLvl)
         {
-            case LogLevel::L_RELEASE:
+            case LOG_LEVEL::L_RELEASE:
                 levelString = "RELEASE";
                 break;
-            case LogLevel::L_ERROR:
+            case LOG_LEVEL::L_ERROR:
                 levelString = "ERROR";
                 break;
-            case LogLevel::L_WARNING:
+            case LOG_LEVEL::L_WARNING:
                 levelString = "WARNING";
                 break;
-            case LogLevel::L_INFO:
+            case LOG_LEVEL::L_INFO:
                 levelString = "INFO";
                 break;
             default:

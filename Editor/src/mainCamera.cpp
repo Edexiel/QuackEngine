@@ -6,12 +6,12 @@
 #include "Renderer/Texture.hpp"
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Mesh.hpp"
-#include "Renderer/Light.hpp"
+#include "Scene/Component/Light.hpp"
 #include "Renderer/Material.hpp"
 
 #include "Resources/ResourcesManager.hpp"
 
-#include "Scene/Camera.hpp"
+#include "Scene/Component/Camera.hpp"
 #include "Input/InputManager.hpp"
 #include "Input/PlatformInputGLFW.hpp"
 

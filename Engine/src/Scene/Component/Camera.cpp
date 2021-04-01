@@ -1,35 +1,50 @@
-#include "Scene/Camera.hpp"
+#include "Scene/Component/Camera.hpp"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <algorithm>
+
 #include "Input/InputManager.hpp"
 
-using namespace Scene;
+#include "Scene/Core/World.hpp"
+
+using namespace Component;
 using namespace Maths;
+
+/*Camera::Camera()
+{
+    _framebuffer = Renderer::Framebuffer::LoadFramebuffer(_width, _height);
+}*/
 
 Camera::Camera(const unsigned int width, const unsigned int height,
                       const float far, const float near, const float fov)
-:_width{width}, _height{height},_far{far},_near{near},_fov{fov},_isPerspective{true}
+:_width{width}, _height{height},_far{far},_near{near},_fov{fov},_isPerspective{true}, _framebuffer{Renderer::Framebuffer::LoadFramebuffer(width, height)}
 {
-  _projection = Matrix4::Perspective(_width,_height, _near, _far, _fov);
-  _view = Matrix4::Identity();
+    _projection = Matrix4::Perspective(_width,_height, _near, _far, _fov);
+    _view = Matrix4::Identity();
 }
 
 Camera::Camera(const unsigned int width, const unsigned int height,
                       const float far, const float near)
-:_width{width}, _height{height},_far{far},_near{near},_fov{0},_isPerspective{false}
+:_width{width}, _height{height},_far{far},_near{near},_fov{0},_isPerspective{false}, _framebuffer{Renderer::Framebuffer::LoadFramebuffer(width, height)}
 {
   _projection = Matrix4::OrthoMatrix(_width,_height, _near, _far);
   _view = Matrix4::Identity();
 }
 
-Matrix4 Camera::GetProjection() const
+Camera::~Camera(){}
+
+Renderer::Framebuffer Camera::GetFramebuffer() const
+{
+    return _framebuffer;
+}
+
+const Matrix4& Camera::GetProjection() const
 {
   return _projection;
 }
 
-Maths::Matrix4 Camera::GetView() const
+const Maths::Matrix4& Camera::GetView() const
 {
   return _view;
 }

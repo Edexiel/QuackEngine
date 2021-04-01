@@ -3,13 +3,18 @@
 
 #include <Maths/Quaternion.hpp>
 #include <Maths/Vector3.hpp>
-
+#include "Scene/Core/System.hpp"
 
 struct Transform
 {
-    Maths::Vector3f position;
-    Maths::Vector3f scale;
-    Maths::Quaternion rotation;
+    Maths::Vector3f position {0,0,0};
+    Maths::Vector3f scale {1,1,1};
+    Maths::Quaternion rotation {1,0,0,0};
+
+    inline Maths::Matrix4 GetMatrix() const
+    {
+        return Maths::Matrix4::Translate(position) * rotation.ToMatrix() * Maths::Matrix4::Scale(scale);
+    };
 };
 //struct Transform : public Component
 //{

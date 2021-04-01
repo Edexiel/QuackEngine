@@ -5,18 +5,24 @@ using namespace Renderer;
 
 Framebuffer::Framebuffer(unsigned int id, unsigned int rbo, unsigned int texture,
                          unsigned int width, unsigned int height) :
-        _Id{id}, _rbo{rbo}, _texture{texture},
+        _id{id}, _rbo{rbo}, _texture{texture},
         _width{width}, _height{height}
 {}
 
-Framebuffer::~Framebuffer()
+Framebuffer Framebuffer::LoadFramebuffer(unsigned int width, unsigned int height)
 {
-    RendererPlatform::DeleteFramebuffer(_Id, _rbo, _texture);
+    Framebuffer framebuffer = RendererPlatform::CreateFramebuffer(width, height);
+    return framebuffer;
+}
+
+void Framebuffer::Delete() const
+{
+    RendererPlatform::DeleteFramebuffer(_id, _rbo, _texture);
 }
 
 unsigned int Renderer::Framebuffer::GetId() const
 {
-    return _Id;
+    return _id;
 }
 
 unsigned int Renderer::Framebuffer::GetTexture() const
@@ -29,10 +35,9 @@ unsigned int Framebuffer::GetRbo() const
     return _rbo;
 }
 
-
 void Framebuffer::Bind() const
 {
-    RendererPlatform::BindFramebuffer(_Id);
+    RendererPlatform::BindFramebuffer(_id);
 }
 
 void Framebuffer::BindTexture() const

@@ -12,17 +12,29 @@
 #include "Scene/Core/SystemManager.hpp"
 #include "Scene/Core/ComponentManager.hpp"
 #include "Scene/Component/Name.hpp"
+#include "Resources/ResourcesManager.hpp"
+#include "Audio/SoundManager.hpp"
+#include "Renderer/RendererManager.hpp"
+
+#include "reactphysics3d/reactphysics3d.h"
+
 
 class World
 {
 private:
-    World()=default;
+    World() = default;
 
     static World _instance;
+
+    Resources::ResourcesManager _resourcesManager;
+    Audio::SoundManager _soundManager;
+    Renderer::RendererManager _rendererManager;
 
     std::unique_ptr<ComponentManager> _componentManager;
     std::unique_ptr<EntityManager> _entityManager;
     std::unique_ptr<SystemManager> _systemManager;
+    std::unique_ptr<rp3d::PhysicsCommon> _physicsManager;
+    rp3d::PhysicsWorld *_physicsWorld;
 
 public:
 
@@ -30,6 +42,7 @@ public:
     static World &Instance();
 
     void Init();
+    void Clear();
 
     // Entity methods
     Entity CreateEntity(std::string name);
@@ -58,6 +71,13 @@ public:
 
     template<typename T>
     void SetSystemSignature(Signature signature);
+
+    rp3d::PhysicsWorld *GetPhysicsWorld() const;
+
+    const std::unique_ptr<rp3d::PhysicsCommon> &GetPhysicsManager() const;
+    Resources::ResourcesManager& GetResourcesManager();
+    Audio::SoundManager& GetSoundManager();
+    Renderer::RendererManager& GetRendererManager();
 };
 
 inline World World::_instance = World();
@@ -72,8 +92,31 @@ inline void World::Init()
     _componentManager = std::make_unique<ComponentManager>();
     _entityManager = std::make_unique<EntityManager>();
     _systemManager = std::make_unique<SystemManager>();
+    _physicsManager = std::make_unique<rp3d::PhysicsCommon>();
+
+    _physicsWorld = _physicsManager->createPhysicsWorld();
+
+    _resourcesManager.Init(this);
+    _soundManager.Init(this);
+
+    _rendererManager.Init(this);
 
     //_componentManager->RegisterComponent<Name>();
+}
+
+inline rp3d::PhysicsWorld *World::GetPhysicsWorld() const
+{
+    return _physicsWorld;
+}
+
+inline const std::unique_ptr<rp3d::PhysicsCommon> &World::GetPhysicsManager() const
+{
+    return _physicsManager;
+}
+
+inline void World::Clear()
+{
+    _rendererManager.Clear();
 }
 
 inline Entity World::CreateEntity(std::string name)
@@ -144,5 +187,19 @@ inline void World::SetSystemSignature(Signature signature)
     _systemManager->SetSignature<T>(signature);
 }
 
+inline Resources::ResourcesManager& World::GetResourcesManager()
+{
+    return _resourcesManager;
+}
+
+inline Audio::SoundManager& World::GetSoundManager()
+{
+    return _soundManager;
+}
+
+inline Renderer::RendererManager& World::GetRendererManager()
+{
+    return _rendererManager;
+}
 
 #endif //QUACKENGINE_WORLD_HPP

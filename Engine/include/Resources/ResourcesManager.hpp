@@ -6,9 +6,13 @@
 #include <unordered_map>
 
 #include "Renderer/Shader.hpp"
-#include "Renderer/Model.hpp"
+#include "Scene/Component/Model.hpp"
 #include "Renderer/Texture.hpp"
 
+#include "Audio/Sound.hpp"
+
+
+class World;
 
 namespace Resources
 {
@@ -23,17 +27,36 @@ namespace Resources
     class ResourcesManager
     {
     private:
-        std::unordered_map<std::string, Renderer::Model   >  mapModel;
-        std::unordered_map<std::string, Renderer::Texture >  mapTexture;
-        std::vector<ReferenceShader >                        listShader;
 
-    public: 
-        ResourcesManager()  = default;
-        ~ResourcesManager() = default;
+      World* _world;
 
-        Renderer::Model   LoadModel     (const char* path);
-        Renderer::Texture LoadTexture   (const char* path);
-        Renderer::Shader  LoadShader    (const char* vertexShader, const char* fragmentShader);
+      std::unordered_map<std::string, Component::Model   > mapModel;
+      std::unordered_map<std::string, Renderer::Texture > mapTexture;
+      std::vector<ReferenceShader >                       listShader;
+      std::unordered_map<unsigned int, Renderer::Shader>  mapDynamicShader;
+      std::unordered_map<std::string, Audio::Sound>       mapSound;
+
+      std::vector<Renderer::Mesh> listLoadedShape; //keep loaded shape saved for GPU memory management
+
+      Audio::SoundManager* _soundManager;
+
+    public:
+
+      ResourcesManager() = default;
+      ResourcesManager(Audio::SoundManager* soundManager) : _soundManager{soundManager} {}; // To redo when the scene is complete
+      ~ResourcesManager() = default;
+
+      void Init(World* world);
+
+      Component::Model  LoadModel     (const char* path);
+      Renderer::Texture LoadTexture   (const char* path);
+      Renderer::Shader  LoadShader    (const char* vertexShader, const char* fragmentShader);
+      Renderer::Shader  LoadObjectShader    (const char* vertexShader, const char* fragmentShader);
+      Renderer::Shader  LoadObjectShader    (const Renderer::ShaderConstructData& constructData);
+
+      Audio::Sound      LoadSound     (const char* path, Audio::SoundType soundType);
+
+      Renderer::Mesh& AddShape(Renderer::Mesh& mesh);
 
     };
 }

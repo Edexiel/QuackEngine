@@ -8,7 +8,7 @@
 #include "Renderer/Texture.hpp"
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Mesh.hpp"
-#include "Renderer/Light.hpp"
+#include "Scene/Component/Light.hpp"
 #include "Resources/ResourcesManager.hpp"
 #include "Renderer/Material.hpp"
 
@@ -16,12 +16,14 @@
 #include "Input/InputManager.hpp"
 
 #include "Audio/SoundManager.hpp"
-#include "Audio/Sound.hpp"
 
-#include "Debug/Log.hpp"
 
-//#define MINIAUDIO_IMPLEMENTATION
-//#include "miniaudio.h"
+#include "Scene/Component/Transform.hpp"
+#include "Scene/System/TestSystem.hpp"
+
+
+#include "Scene/Core/World.hpp"
+#include "Scene/System/RenderSystem.hpp"
 
 #include <cmath>
 
@@ -62,21 +64,10 @@ const char* fragmentShaderFb =
                      )GLSL"
     };
 
-struct MyHero
-{
-  void IsPressed(){std::cout << "IsPressed\n";};
-  void IsReleased(){std::cout << "IsReleased\n";};
-  void TestAxis(float bonsoir){std::cout<< bonsoir<< std::endl;};
-};
 
 int main()
 {
-
-  //Audio::SoundManager sd;
-  //Audio::Sound sound = sd.CreateSound("../../../inactive.ogg");
-
-
-  GLFWwindow* window;
+  GLFWwindow* window    {nullptr};
   unsigned int width = 1280, height = 720;
   /* Initialize the library */
   if (!glfwInit())
@@ -86,7 +77,7 @@ int main()
   glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  /* Create a windowed mode window and its OpenGL context */
+   /* Create a windowed mode window and its OpenGL context */
   window = glfwCreateWindow(width, height, "RendererPlatform", NULL, NULL);
   if (!window)
   {
@@ -94,6 +85,7 @@ int main()
     return -1;
   }
   glfwMakeContextCurrent(window);
+
   {
     // loadGL
     RendererPlatform::LoadGL();
@@ -126,7 +118,10 @@ int main()
         1, 2, 3  // second triangle
     };
 
-    Resources::ResourcesManager rm;
+    Audio::SoundManager sd;
+    Resources::ResourcesManager rm(&sd);
+
+    Audio::Sound sound = rm.LoadSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC); //sd.CreateSound("../../../inactive.ogg");
 
     // Shader fb
     Shader shaderFb(Renderer::RendererPlatform::CreateShader(
@@ -137,12 +132,11 @@ int main()
 
 
 
-    Renderer::Mesh quadMesh = Renderer::RendererPlatform::CreateMesh(
-        quad, sizeof(quad) / sizeof (float ), quadIndices, sizeof(quadIndices) / sizeof(unsigned int));
+    Renderer::Mesh quadMesh = RendererPlatform::CreateQuad();
     RendererPlatform::VerticesReading();
 
 
-    Renderer::Light light(Renderer::Light_Type::L_POINT);
+    Component::Light light(Component::Light_Type::L_POINT);
 
     light.model = Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Translate({0,0, 0});
     light.ambient = {0.0f, 0.1f, 0.0f};
@@ -155,15 +149,28 @@ int main()
     light.outerSpotAngle = 10.5;
     light.spotAngle = 8.5;
 
+      Component::Light light2(Component::Light_Type::L_POINT);
+
+      light2.model = Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Translate({0,0, 0});
+      light2.ambient = {0.0f, 0.1f, 0.0f};
+      light2.diffuse = {0.7f, 0.7f, 0.7f};
+      light2.specular = {1.0f, 1.0f, 1.0f};
+      light2.constant = 1.0f;
+      light2.linear = 0.0014f;
+      light2.quadratic = 0.000007f;
+
+      light2.outerSpotAngle = 10.5;
+      light2.spotAngle = 8.5;
 
 
-    ShaderConstructData shd = {1,1,0, 0, 0, 0, 0, 0};
+
+    ShaderConstructData shd = {1, 0, 0, 0, 0};
 
     //Shader shader = rm.LoadShader("../../Game/Asset/Shader/vertex.vs", "../../Game/Asset/Shader/fragment.fs");
 
-    Shader shader = Shader::LoadShader(shd);
+    Shader shader = rm.LoadObjectShader(shd);
 
-    RendererPlatform::UseShader(shader.ID);
+    RendererPlatform::UseShader(shader.GetID());
     shader.SetMatrix4
         (
             "projection",
@@ -171,7 +178,7 @@ int main()
         );
     shader.SetMatrix4("view", Maths::Matrix4::Identity());
 
-    Model model =  Model::LoadModel("../../../eyeball.fbx", VertexType::V_NORMALMAP);
+    Component::Model model =  Component::Model::LoadModel("../../../eyeball.fbx", VertexType::V_NORMALMAP);
     //Texture texture = rm.LoadTexture("../../../Dragon_Bump_Col2.jpg");
     //Texture textureDiffuse = rm.LoadTexture("../../../Dragon_Bump_Col2Diffuse.jpg");
     //Texture textureSpecular = rm.LoadTexture("../../../Dragon_Bump_Col2Specular.jpg");
@@ -187,8 +194,52 @@ int main()
     //material.colorTexture = texture;
     //material.diffuseTexture = textureDiffuse;
     //material.specularTexture = textureSpecular;
-    //material.normalMap = rm.LoadTexture("../../../Dragon_Nor_mirror2.jpg");
+    material.normalMap = rm.LoadTexture("../../../DirtCube.jpg");
 
+
+      World &ecs=World::Instance();
+      ecs.Init();
+
+      //ecs.RegisterComponent<Transform>();
+      //ecs.RegisterComponent<Component::Model>();
+      //auto testSystem = ecs.RegisterSystem<TestSystem>();
+      //auto renderSystem = ecs.RegisterSystem<RenderSystem>();
+
+      //Signature signature;
+      //signature.set(ecs.GetComponentType<Transform>());
+      //ecs.SetSystemSignature<TestSystem>(signature);
+
+      //Signature signatureRender;
+      //signatureRender.set(ecs.GetComponentType<Component::Model>());
+      //signatureRender.set(ecs.GetComponentType<Transform>());
+      //ecs.SetSystemSignature<RenderSystem>(signatureRender);
+
+
+      Entity id = ecs.CreateEntity("Test");
+      Transform t = {Maths::Vector3f::One(), Maths::Vector3f::One(), Maths::Quaternion{}};
+      ecs.AddComponent(id, t);
+
+      Entity idRenderTest = ecs.CreateEntity("Test");
+      Transform t2 = {Maths::Vector3f{0,0,10}, Maths::Vector3f::One(), Maths::Quaternion{}};
+      Component::Model md = rm.LoadModel("../../../eyeball.fbx");
+      //material.checkLight = false;
+      md.AddMaterial(material);
+      ecs.AddComponent(idRenderTest, t2);
+      ecs.AddComponent(idRenderTest, md);
+
+      {
+          //Entity CameraEntity = ecs.CreateEntity("Camera");
+
+          Component::Camera camera(1280,
+                                    720,
+                                   1000, -1, 20 * 3.1415/180);
+
+          //Transform cameraTrs;
+          //ecs.AddComponent(CameraEntity, camera);
+          //ecs.AddComponent(CameraEntity, cameraTrs);
+
+          //camera.GetFramebuffer().Bind();
+      }
 
     float count = 0;
 
@@ -196,38 +247,10 @@ int main()
 
     //glfwSetWindowShouldClose(window, 1);
 
-    //test inputManager
-    Input::PlatformInputGLFW platformInput(window);
-    Input::InputManager inputManager(platformInput);
-
-    inputManager.BindEvent("Hero", Input::MouseButton::MOUSE_BUTTON_1);
-    inputManager.BindEvent("Hero", Input::MouseButton::MOUSE_BUTTON_2);
-    inputManager.BindEventAxis("Axis", Input::Key::KEY_W, 1.0f);
-    inputManager.BindEventAxis("Axis", Input::Key::KEY_S, -1.0f);
-    MyHero hero;
-    inputManager.RegisterEvent("Hero",Input::Action::PRESS, &hero, &MyHero::IsPressed);
-    inputManager.RegisterEvent("Hero",Input::Action::RELEASE, &hero, &MyHero::IsReleased);
-    inputManager.RegisterEventAxis("Axis",&hero, &MyHero::TestAxis);
-
     while (!glfwWindowShouldClose(window))
     {
-        /*frameNB++;
 
-        std::cout << "Freq : " << glfwGetTime() - lastFrameTime << std::endl;
-        lastFrameTime = glfwGetTime();
-
-        if (frameNB == 99)
-        {
-            start = glfwGetTime();
-        }
-        if (frameNB >= 100) {
-            avg = (glfwGetTime() - start) / (frameNB - 99);
-            std::cout << "average = " << avg << std::endl;
-        }*/
-
-      inputManager.Update();
-
-      count += 0.01f;
+      count += 0.0001f;
 
       // framebuffer
       {
@@ -238,26 +261,26 @@ int main()
 
         if (glfwGetKey(window, GLFW_KEY_R))
         {
-            //sound.Restart();
+            sound.Restart();
         }
         if (glfwGetKey(window, GLFW_KEY_P))
         {
-            //sound.Play();
+            sound.Play();
         }
         if (glfwGetKey(window, GLFW_KEY_S))
         {
-            //sound.Stop();
+            sound.Stop();
         }
 
           if (glfwGetKey(window, GLFW_KEY_K))
           {
               //sound.SetVolume(sound.GetVolume() + 0.01);
-              //sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) + 0.01);
+              sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) + 0.01);
           }
           if (glfwGetKey(window, GLFW_KEY_M))
           {
               //sound.SetVolume(sound.GetVolume() - 0.01);
-              //sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) - 0.01);
+              sd.SetVolume(Audio::SoundType::S_EFFECT, sd.GetVolume(Audio::SoundType::S_EFFECT) - 0.01);
           }
 
 
@@ -267,6 +290,7 @@ int main()
 
         //quadMesh.Draw();
         light.model = Maths::Matrix4::Translate({cosf(count) * 30, sinf(count) * 30, 0});
+        light2.model = Maths::Matrix4::Translate({-cosf(count) * 30, -sinf(count) * 30, 0});
         //light.model = Maths::Matrix4::RotateY(count);
 
         material.Apply();
@@ -278,12 +302,17 @@ int main()
         material.shader.SetMatrix4("view", Maths::Matrix4::Translate({0, 0, 0}));
         material.shader.SetMatrix4("model", Maths::Matrix4::Translate({0,0,10}) * Maths::Matrix4::RotateY(count) * Maths::Matrix4::RotateX(-3.1415 / 2) * Maths::Matrix4::Scale({1,1,1}));
 
+        material.shader.SetUint("nbPointLight", 2);
+
         //RendererPlatform::SetPointLight(shader.ID, 0, light);
         //RendererPlatform::SetDirectionalLight(shader.ID, 0, light);
 
+        material.shader.SetUint("nbPointLights", 2);
         shader.SetLight(light, 0);
+        shader.SetLight(light2, 1);
 
-        model.Draw();
+        //model.Draw();
+        ecs.GetRendererManager().Update();
 
 
         RendererPlatform::BindFramebuffer(0);
@@ -298,8 +327,6 @@ int main()
       glfwSwapBuffers(window);
       glfwPollEvents();
     }
-    //ma_device_uninit(&device);
-    //ma_decoder_uninit(&decoder);
   }
   glfwTerminate();
   return 0;

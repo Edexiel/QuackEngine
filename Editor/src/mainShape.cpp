@@ -6,7 +6,7 @@
 #include "Renderer/Texture.hpp"
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Mesh.hpp"
-#include "Renderer/Light.hpp"
+#include "Scene/Component/Light.hpp"
 
 #include "Resources/ResourcesManager.hpp"
 
