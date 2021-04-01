@@ -76,7 +76,7 @@ void RendererManager::Update()
     RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
     RendererPlatform::Clear();
 
-    _renderSystem->Draw();
+    _renderSystem->Draw(camera.GetProjection(), camera.GetView());
 
     RendererPlatform::BindFramebuffer(0);
 
