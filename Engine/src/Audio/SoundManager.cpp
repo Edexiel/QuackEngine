@@ -89,8 +89,25 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
     (void)pInput;
 }
 
-SoundManager::SoundManager()
+SoundManager::~SoundManager()
 {
+    for (std::pair<soundIndex, SoundData> element : _soundManagerData.soundMap)
+    {
+        ma_decoder_uninit(element.second.decoder);
+        delete element.second.decoder;
+    }
+
+    if (_device)
+    {
+        ma_device_uninit(_device);
+        delete _device;
+    }
+}
+
+void SoundManager::Init(World* world)
+{
+    _world = world;
+
     _device = new ma_device;
 
     ma_device_config deviceConfig;// = new ma_device_config;
@@ -103,21 +120,9 @@ SoundManager::SoundManager()
     deviceConfig.pUserData         = &_soundManagerData;
 
     Assert_Fatal_Error((ma_device_init(NULL, &deviceConfig, _device) != MA_SUCCESS),
-        "Failed to open playback device.\n");
+                       "Failed to open playback device.\n");
 
     Assert_Fatal_Error((ma_device_start(_device) != MA_SUCCESS), "Failed to open playback device.\n");
-}
-
-SoundManager::~SoundManager()
-{
-    for (std::pair<soundIndex, SoundData> element : _soundManagerData.soundMap)
-    {
-        ma_decoder_uninit(element.second.decoder);
-        delete element.second.decoder;
-    }
-
-    ma_device_uninit(_device);
-    delete _device;
 }
 
 Sound SoundManager::CreateSound(const char *path, SoundType soundType)
