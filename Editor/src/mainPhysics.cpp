@@ -56,7 +56,7 @@ int main()
 
         Entity idRenderTest = ecs.CreateEntity("Test");
         Transform t2 = {Maths::Vector3f{0,0,10}, Maths::Vector3f::One(), Maths::Quaternion{}};
-        Component::Model md = ecs.GetResourcesManager().LoadModel("../../../eyeball.fbx");
+        Component::Model md = ecs.GetResourcesManager().LoadModel("../../../Dragon_Baked_Actions_fbx_7.4_binary.fbx");
 
         Material material;
 

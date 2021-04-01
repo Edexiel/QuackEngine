@@ -56,6 +56,6 @@ uniform PointLight pointLights[NB_MAX_POINT_LIGHT];
 //#define NB_MAX_SPOT_LIGHT 16
 uniform SpotLight spotLights[NB_MAX_SPOT_LIGHT];
 
-uniform uint nbDirectionalLights = 0;
-uniform uint nbPointLights = 0;
-uniform uint nbSpotLights = 0;
+uniform uint nbDirectionalLights = 0u;
+uniform uint nbPointLights = 0u;
+uniform uint nbSpotLights = 0u;
