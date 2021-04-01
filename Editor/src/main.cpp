@@ -2,28 +2,26 @@
 // Created by g.nisi on 03/02/2021.
 //
 
-//#include "GLFW/glfw3.h"
-//#include "glad/gl.h"
-//
-//#include "Input/InputManager.hpp"
-//#include "Input/PlatformInputGLFW.hpp"
-//#include "Resources/ResourcesManager.hpp"
-//#include "backends/imgui_impl_glfw.h"
-//#include "backends/imgui_impl_opengl3.h"
-//#include "imgui.h"
-//
-//#include "Renderer/Model.hpp"
-//#include "Renderer/Shader.hpp"
-//#include "Renderer/Texture.hpp"
+#include "glad/gl.h"
+#include "GLFW/glfw3.h"
 
+#include "Input/InputManager.hpp"
+#include "Input/PlatformInputGLFW.hpp"
+#include "Resources/ResourcesManager.hpp"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
+#include "imgui.h"
+
+#include "Renderer/Model.hpp"
+#include "Renderer/Shader.hpp"
+#include "Renderer/Texture.hpp"
 #include <cstdio>
-/*
+
 void debugGLCallback(GLenum source, GLenum type, GLuint id, GLenum severity,
-                     GLsizei length, const char *message,
+                     GLsizei length, const GLchar *message,
                      const void *userParam) {
   printf("OpenGL error = %s\n", message);
 }
-*/
 
 /*static void HelpMarker(const char* desc)
 {
@@ -39,13 +37,9 @@ void debugGLCallback(GLenum source, GLenum type, GLuint id, GLenum severity,
 }*/
 
 int main(void) {
-
-  printf("Work in progress!\n");
-  return 0;
-  /*
   GLFWwindow *window;
 
-  /* Initialize the library *//*
+  /* Initialize the library */
   if (!glfwInit())
     return -1;
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -53,17 +47,17 @@ int main(void) {
   glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  *//* Create a windowed mode window and its OpenGL context *//*
+  /* Create a windowed mode window and its OpenGL context */
   window = glfwCreateWindow(1280, 720, "QuackEngine", NULL, NULL);
   if (!window) {
     glfwTerminate();
     return -1;
   }
 
-  *//* Make the window's context current *//*
+  /* Make the window's context current */
   glfwMakeContextCurrent(window);
 
-  *//* load Glad OpenGL *//*
+  /* load Glad OpenGL */
   int version = gladLoadGL(glfwGetProcAddress);
   // printf("OpenGL version : %d.%d\n", GLAD_VERSION_MAJOR(version),
   // GLAD_VERSION_MINOR(version));
@@ -74,14 +68,12 @@ int main(void) {
     return -1;
   }
 
-
-
   printf("GL_VENDOR = %s\n", glGetString(GL_VENDOR));
   printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
   printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
 
   // todo : debug output
-  *//*if (GLAD_GL_KHR_debug)
+  /*if (GLAD_GL_KHR_debug)
   {
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -89,7 +81,7 @@ int main(void) {
     glDebugMessageControl(GL_DONT_CARE, GL_DEBUG_TYPE_PERFORMANCE, GL_DONT_CARE,
   0, nullptr, GL_FALSE); glDebugMessageControl(GL_DONT_CARE,
   GL_DEBUG_TYPE_OTHER, GL_DONT_CARE, 0, nullptr, GL_FALSE);
-  }*//*
+  }*/
   //--------------------------------------------------------------- imgui config
 
   // Init ImGui
@@ -147,7 +139,7 @@ int main(void) {
 
   while (!glfwWindowShouldClose(window)) {
 
-    *//* Poll for and process events *//*
+    /* Poll for and process events */
     glfwPollEvents();
     // resourcesManager
 
@@ -163,7 +155,7 @@ int main(void) {
           //        ImGuiWindowFlags window_flags=0;
           //          window_flags |= ImGuiWindowFlags_Popup ;
 
-          // ImGuiID dockspace_id = ImGui::GetID("DockSpace");
+          // ImGuiID dockspace_id = ImGui::GetId("DockSpace");
           // ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
           ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 
@@ -264,7 +256,7 @@ int main(void) {
       }
     }
 
-    *//* Swap front and back buffers *//*
+    /* Swap front and back buffers */
     glfwSwapBuffers(window);
   }
 
@@ -275,6 +267,4 @@ int main(void) {
   glfwDestroyWindow(window);
   glfwTerminate();
   return 0;
-*/
-
 }
