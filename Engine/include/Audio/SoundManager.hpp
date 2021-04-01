@@ -18,6 +18,8 @@ struct ma_device;
 
 typedef unsigned int soundIndex;
 
+class World;
+
 namespace Audio
 {
     class Sound;
@@ -50,16 +52,18 @@ namespace Audio
     {
         unsigned int _index {0};
 
-        ma_device* _device;
+        ma_device* _device {nullptr};
         SoundManagerData _soundManagerData;
 
+        World* _world {nullptr};
+
     public:
-        SoundManager();
+        SoundManager() = default;
         ~SoundManager();
 
+        void Init(World* world);
+
         /*Volume Function*/
-        float GetMasterVolume();
-        float SetMasterVolume(float newVolume);
 
         float GetVolume(SoundType soundType);
         float SetVolume(SoundType soundType, float newVolume);

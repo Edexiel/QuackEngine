@@ -1,4 +1,4 @@
-#include "../include/Renderer/Model.hpp"
+#include "Scene/Component/Model.hpp"
 
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
@@ -8,6 +8,7 @@
 
 #include <iostream>
 
+using namespace Component;
 using namespace Renderer;
 
 Model::Model(VertexType vertexType) : _vertexType{vertexType} {}
@@ -46,7 +47,7 @@ Model Model::LoadClassicModel(const void* loadedScene)
   const aiScene* scene = (aiScene*)loadedScene;
 
   Model model(VertexType::V_CLASSIC);
-  model.meshList.resize(scene->mNumMeshes);
+  model._meshList.resize(scene->mNumMeshes);
 
   unsigned int count;
 
@@ -97,7 +98,7 @@ Model Model::LoadClassicModel(const void* loadedScene)
     }
 
     // Put loaded data in buffers
-    model.meshList[i] = Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
+    model._meshList[i] = Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
     RendererPlatform::VerticesReading();
   }
   return model;
@@ -109,7 +110,7 @@ Model Model::LoadNormalMapModel(const void* loadedScene)
   const aiScene* scene = (aiScene*)loadedScene;
 
   Model model(VertexType::V_NORMALMAP);
-  model.meshList.resize(scene->mNumMeshes);
+  model._meshList.resize(scene->mNumMeshes);
 
   unsigned int count;
   
@@ -169,19 +170,56 @@ Model Model::LoadNormalMapModel(const void* loadedScene)
     }
 
     // Put loaded data in buffers
-    model.meshList[i] = Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
+    model._meshList[i] = Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
     RendererPlatform::VerticesReadingNormalMapping();
   }
-
 
   return model;
 }
 
 
-void Model::Draw()
+unsigned int Model::AddMaterial(const Renderer::Material& newMaterial)
 {
-  for (unsigned int i = 0 ; i < meshList.size() ; i++)
+    _materialList.push_back(newMaterial);
+
+    if (newMaterial.shader.GetID() == 0)
+    {
+        _materialList[_materialList.size() - 1].GenerateShader();
+    }
+
+    return _materialList.size() - 1;
+}
+
+void Model::RemoveMaterial(unsigned int index)
+{
+    _materialList.erase(_materialList.cbegin() + index);
+
+    for (unsigned int i = 0; i < _meshList.size() ; i++)
+    {
+        if (_meshList[i].materialIndex >= _meshList.size())
+        {
+            _meshList[i].materialIndex = 0;
+        }
+    }
+}
+
+Renderer::Material& Model::GetMaterial(unsigned int index)
+{
+    return _materialList[index];
+}
+
+void Model::Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view, const Maths::Matrix4& transform)
+{
+  for (unsigned int i = 0 ; i < _meshList.size() ; i++)
   {
-    meshList[i].Draw(_vertexType);
+     Renderer::Material& material = _materialList[_meshList[i].materialIndex];
+     material.shader.Use();
+
+     material.shader.SetMatrix4("projection", projection);
+     material.shader.SetMatrix4("view", view);
+     material.shader.SetMatrix4("model", transform);
+     material.Apply();
+
+     _meshList[i].Draw(_vertexType);
   }
 }

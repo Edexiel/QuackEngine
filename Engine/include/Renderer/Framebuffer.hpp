@@ -4,6 +4,7 @@
 
 namespace Renderer
 {
+
 class Framebuffer
 {
 private:
@@ -17,6 +18,10 @@ public:
   Framebuffer(unsigned int ID, unsigned int rbo, unsigned int texture,
               unsigned int width, unsigned int height);
   ~Framebuffer();
+
+  void Delete();
+
+  static Framebuffer LoadFramebuffer(unsigned int width, unsigned int height);
 
 
   unsigned int GetID() const;
