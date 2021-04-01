@@ -18,6 +18,8 @@ void RendererManager::Init(World *world)
     world->RegisterComponent<Transform>(); //todo create a manager or a place to add Transform as a component
 
 
+    //todo generate the component elsewhere
+
     world->RegisterComponent<Component::Model>();
     world->RegisterComponent<Component::Camera>();
     world->RegisterComponent<Component::Light>();
@@ -41,10 +43,9 @@ void RendererManager::Init(World *world)
     signatureLight.set(world->GetComponentType<Transform>());
     world->SetSystemSignature<LightSystem>(signatureLight);
 
-    _quadMesh = Renderer::Shape::CreateQuad();
-    _shader = World::Instance().GetResourcesManager().LoadShader(
-            "../../Engine/Shader/Framebuffer/BasicVertex.vs",
-            "../../Engine/Shader/Framebuffer/BasicFragment.fs");
+
+    _renderSystem->Init();
+
 }
 
 void RendererManager::Clear()
@@ -52,43 +53,11 @@ void RendererManager::Clear()
     _cameraSystem->Clear();
 }
 
-
-void RendererManager::InitWindow(unsigned int width, unsigned int height, const char* name)
-{
-    //_window.Init(width, height, name);
-    //RendererPlatform::LoadGL();
-}
-
-Window RendererManager::GetWindow() const
-{
-    return _window;
-}
-
 void RendererManager::Update()
 {
-    _lightSystem->ApplyLightsToShdaer();
-
+    _lightSystem->Update();
     Component::Camera& camera = _cameraSystem->GetActiveCamera();
-
-    //RendererPlatform::EnableDepthBuffer(true);
-
-    camera.GetFramebuffer().Bind();
-    RendererPlatform::ClearColor({0.0f, 0.5f, 0.5f, 1.f});
-    RendererPlatform::Clear();
-
-    _renderSystem->Draw(camera.GetProjection(), camera.GetView());
-
-    RendererPlatform::BindFramebuffer(0);
-
-    RendererPlatform::ClearColor({0.2f, 0.2f, 0.2f, 1.f});
-    RendererPlatform::Clear();
-
-    _shader.Use();
-    _shader.SetMatrix4("view", Maths::Matrix4::Identity());
-    camera.GetFramebuffer().BindTexture();
-
-    _quadMesh.Draw();
-
+    _renderSystem->Update(camera);
 }
 
 Framebuffer RendererManager::GetCameraFrame(Component::Camera &camera)
