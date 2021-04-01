@@ -64,12 +64,6 @@ const char* fragmentShaderFb =
                      )GLSL"
     };
 
-struct MyHero
-{
-  void IsPressed(){std::cout << "IsPressed\n";};
-  void IsReleased(){std::cout << "IsReleased\n";};
-  void TestAxis(float bonsoir){std::cout<< bonsoir<< std::endl;};
-};
 
 int main()
 {
@@ -138,8 +132,7 @@ int main()
 
 
 
-    Renderer::Mesh quadMesh = Renderer::RendererPlatform::CreateMesh(
-        quad, sizeof(quad) / sizeof (float ), quadIndices, sizeof(quadIndices) / sizeof(unsigned int));
+    Renderer::Mesh quadMesh = RendererPlatform::CreateQuad();
     RendererPlatform::VerticesReading();
 
 
