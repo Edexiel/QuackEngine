@@ -5,7 +5,7 @@
 
 using namespace Component;
 
-void LightSystem::Update()
+void LightSystem::ApplyLightsToShdaer()
 {
     unsigned int pointNb{0}, directionalNb{0}, spotNb{0};
 

@@ -16,7 +16,7 @@ public:
     LightSystem() = default;
     ~LightSystem() = default;
 
-    void Update();
+    void ApplyLightsToShdaer();
 
     void AddShaderToUpdate(const Renderer::Shader& shader);
     void RemoveShaderFromUpdate(const Renderer::Shader& shader);

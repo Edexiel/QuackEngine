@@ -66,7 +66,7 @@ Window RendererManager::GetWindow() const
 
 void RendererManager::Update()
 {
-    _lightSystem->Update();
+    _lightSystem->ApplyLightsToShdaer();
 
     Component::Camera& camera = _cameraSystem->GetActiveCamera();
 
