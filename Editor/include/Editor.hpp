@@ -41,7 +41,7 @@ private:
 
 public:
 
-    Editor(Engine &engine);
+    explicit Editor(Engine &engine);
 
     ~Editor();
 

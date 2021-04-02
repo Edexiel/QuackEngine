@@ -5,6 +5,9 @@
 #ifndef QUACKENGINE_ENGINE_HPP
 #define QUACKENGINE_ENGINE_HPP
 
+#include "Input/PlatformInput.hpp"
+
+class GLFWwindow;
 
 class Engine
 {
@@ -15,7 +18,7 @@ public:
 
     ~Engine() = default;
 
-    void Init();
+    void Init(Input::PlatformInput& input);
 
     void Update();
 };

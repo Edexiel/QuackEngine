@@ -14,7 +14,7 @@ int main()
 {
     Engine engine;
     Editor editor{engine};
-    World& world = World::Instance();
+    World &world = World::Instance();
 
     EngineSettings settings{
             true,
@@ -23,19 +23,16 @@ int main()
             WINDOW_MODE::WINDOWED,
             0
     };
-
     editor.Init(settings);
-    engine.Init();
-    while (!glfwWindowShouldClose(editor.GetWindow()))
+    GLFWwindow * window = editor.GetWindow();
+    Input::PlatformInputGLFW input{window};
+    engine.Init(input);
+
+    while (!glfwWindowShouldClose(window))
     {
-        glfwPollEvents();
-
         editor.Draw();
+        //engine.Update();
 
-
-
-
-        /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
     }

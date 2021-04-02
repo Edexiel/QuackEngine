@@ -44,7 +44,7 @@ void Editor::Init(const EngineSettings &settings)
 
 void Editor::InitGlfw(const EngineSettings &settings)
 {
-    Assert_Fatal_Error(glfwInit(), "GLFW was not correctly initialized, aborting");
+    Assert_Fatal_Error(!glfwInit(), "GLFW was not correctly initialized, aborting");
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -112,9 +112,6 @@ void Editor::InitGlfw(const EngineSettings &settings)
         Assert_Fatal_Error(true, "Failed to initialize OpenGL context");
     }
 
-    printf("GL_VENDOR = %s\n", glGetString(GL_VENDOR));
-    printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
-    printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
 }
 
 //todo : init from config.ini

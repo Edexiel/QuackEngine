@@ -10,7 +10,6 @@ ExplorerWidget::ExplorerWidget()
 }
 void ExplorerWidget::UpdateVisible()
 {
-    Widget::UpdateVisible();
 }
 
 
