@@ -14,9 +14,9 @@ void Engine::Init(Input::PlatformInput &input)
 {
 
     World &ecs = World::Instance();
-    ecs.Init(input);
 
     World::Instance().GetInputManager();
+    ecs.Init(input);
 
 
     ecs.RegisterComponent<Transform>();
