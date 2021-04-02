@@ -33,6 +33,10 @@ namespace Renderer
         void Bind() const;
 
         void BindTexture() const;
+
+        unsigned int GetWidth();
+
+        unsigned int GetHeight();
     };
 }
 #endif // QUACKENGINE_FRAMEBUFFER_HPP

@@ -44,3 +44,13 @@ void Framebuffer::BindTexture() const
 {
     RendererPlatform::BindTexture(_texture);
 }
+
+unsigned int Framebuffer::GetWidth()
+{
+    return _width;
+}
+
+unsigned int Framebuffer::GetHeight()
+{
+    return _height;
+}
