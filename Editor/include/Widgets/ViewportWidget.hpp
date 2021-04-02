@@ -11,6 +11,8 @@
 class ViewportWidget : public Widget
 {
 public:
+    ViewportWidget();
+
     void UpdateAlways() override;
 
     void UpdateVisible() override;

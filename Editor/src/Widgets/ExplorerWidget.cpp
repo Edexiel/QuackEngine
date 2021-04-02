@@ -4,22 +4,13 @@
 
 #include "Widgets/ExplorerWidget.hpp"
 
-void ExplorerWidget::UpdateAlways()
+ExplorerWidget::ExplorerWidget()
 {
-
+    _title="Explorer";
 }
-
 void ExplorerWidget::UpdateVisible()
 {
-
+    Widget::UpdateVisible();
 }
 
-void ExplorerWidget::OnShow()
-{
 
-}
-
-void ExplorerWidget::OnHide()
-{
-
-}

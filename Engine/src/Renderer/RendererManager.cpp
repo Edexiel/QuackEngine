@@ -56,7 +56,7 @@ void RendererManager::Clear()
 void RendererManager::InitWindow(unsigned int width, unsigned int height, const char* name)
 {
     //_window.Init(width, height, name);
-    //RendererPlatform::LoadGL();
+    //RendererPlatform::LoadGl();
 }
 
 Window RendererManager::GetWindow() const

@@ -7,29 +7,35 @@
 
 
 #include <string>
+#include <imgui.h>
 
 class Widget
 {
-private:
+protected:
+    std::string _title;
     bool _visible{true};
-
-private:
-    std::string _title{"Empty"};
     float _position[2]{0.f, 0.f};
     float _size[2]{0.f, 0.f};
-    int _flags;
+    ImGuiWindowFlags _flags = 0;
+
+    Widget() = default;
 
 public:
+    virtual ~Widget() = default;
 
     void Draw();
 
-    virtual void UpdateAlways() = 0;
+    virtual void UpdateBefore()
+    {};
 
     virtual void UpdateVisible() = 0;
 
-    virtual void OnShow() = 0;
-
-    virtual void OnHide() = 0;
+    //todo
+//    virtual void OnShow()
+//    {};
+//
+//    virtual void OnHide()
+//    {};
 
     bool IsVisible() const;
 
@@ -49,7 +55,19 @@ inline void Widget::SetVisible(bool visible)
 
 inline void Widget::Draw()
 {
+    UpdateBefore();
+
+    if (!_visible)
+        return;
+
+    if (ImGui::Begin(_title.c_str(), &_visible, _flags))
+    {
+        UpdateVisible();
+    }
+
+    ImGui::End();
 
 }
+
 
 #endif //QUACKENGINE_WIDGET_HPP

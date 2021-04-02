@@ -10,14 +10,10 @@
 class ExplorerWidget : public Widget
 {
 public:
-
-    void UpdateAlways() final;
+    ExplorerWidget();
 
     void UpdateVisible() final;
 
-    void OnShow() final;
-
-    void OnHide() final;
 };
 
 

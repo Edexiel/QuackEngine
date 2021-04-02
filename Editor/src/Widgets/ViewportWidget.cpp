@@ -5,9 +5,9 @@
 #include "Widgets/ViewportWidget.hpp"
 
 
-void ViewportWidget::UpdateAlways()
+ViewportWidget::ViewportWidget()
 {
-
+    _title="Viewport";
 }
 
 void ViewportWidget::UpdateVisible()
@@ -15,12 +15,3 @@ void ViewportWidget::UpdateVisible()
 
 }
 
-void ViewportWidget::OnShow()
-{
-
-}
-
-void ViewportWidget::OnHide()
-{
-
-}

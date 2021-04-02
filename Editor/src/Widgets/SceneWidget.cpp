@@ -4,22 +4,13 @@
 
 #include "Widgets/SceneWidget.hpp"
 
-void SceneWidget::UpdateAlways()
-{
 
+SceneWidget::SceneWidget()
+{
+    _title="Scene";
 }
 
 void SceneWidget::UpdateVisible()
-{
-
-}
-
-void SceneWidget::OnShow()
-{
-
-}
-
-void SceneWidget::OnHide()
 {
 
 }

@@ -11,13 +11,11 @@
 class LogWidget: public Widget
 {
 public:
-    void UpdateAlways() final;
+    LogWidget();
 
     void UpdateVisible() final;
 
-    void OnShow() final;
 
-    void OnHide() final;
 };
 
 

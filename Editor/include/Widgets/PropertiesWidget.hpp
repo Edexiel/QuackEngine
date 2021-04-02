@@ -11,13 +11,10 @@
 class PropertiesWidget : public Widget
 {
 public:
-    void UpdateAlways() final;
+    PropertiesWidget();
 
     void UpdateVisible() final;
 
-    void OnShow() final;
-
-    void OnHide() final;
 };
 
 

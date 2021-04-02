@@ -1,7 +1,7 @@
 #include "Renderer/RendererPlatform.hpp"
 
 #define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
 
 #include <vector>
 
@@ -23,44 +23,12 @@
 using namespace Renderer;
 using namespace Component;
 
-void* RendererPlatform::LoadScreen(unsigned int width, unsigned int height, const char* name)
-{
-    GLFWwindow* window;
-
-    /* Initialize the library */
-    if (!glfwInit())
-    {
-        Assert_Fatal_Error(true, "GLFW Can't load");
-        return nullptr;
-    }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(width, height, name, NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        Assert_Fatal_Error(true, "Window can't be created");
-    }
-
-    return window;
-}
-
 void RendererPlatform::CloseWindow()
 {
     glfwTerminate();
 }
 
-void Display(void* window)
-{
-    glfwSwapBuffers((GLFWwindow*)window);
-}
-
-int RendererPlatform::LoadGL()
+int RendererPlatform::LoadGl()
 {
   int version = gladLoadGL(glfwGetProcAddress);
 

@@ -88,7 +88,7 @@ int main()
 
   {
     // loadGL
-    RendererPlatform::LoadGL();
+      RendererPlatform::LoadGl();
 
 
     const Renderer::Vertex quad[] = {

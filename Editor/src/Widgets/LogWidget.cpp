@@ -4,9 +4,10 @@
 
 #include "Widgets/LogWidget.hpp"
 
-void LogWidget::UpdateAlways()
-{
 
+LogWidget::LogWidget()
+{
+    _title="Logs"
 }
 
 void LogWidget::UpdateVisible()
@@ -14,12 +15,4 @@ void LogWidget::UpdateVisible()
 
 }
 
-void LogWidget::OnShow()
-{
 
-}
-
-void LogWidget::OnHide()
-{
-
-}

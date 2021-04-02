@@ -2,25 +2,54 @@
 #define QUACKENGINE_EDITOR_HPP
 
 #include <vector>
+#include <memory>
+#include <string>
 
 #include "Widgets/Widget.hpp"
 #include "GLFW/glfw3.h"
-#include <memory>
+#include "Engine.hpp"
+
+enum class WINDOW_MODE
+{
+    WINDOWED,
+    FULLSCREEN,
+    WINDOWED_FULLSCREEN,
+};
+struct EngineSettings
+{
+    bool debug{};
+    std::string windowTitle{};
+    int windowSize[2]{};
+    WINDOW_MODE mode{};
+    int monitor = 0;
+};
 
 class Editor
 {
 private:
-    GLFWwindow *window= nullptr;
+    Engine &_engine;
+
+    GLFWwindow *_window = nullptr;
 
     std::vector<std::unique_ptr<Widget>> _widgets;
-public:
-    Editor() = default;
-    ~Editor() = default;
+
+    void InitGlfw(const EngineSettings &settings);
 
     void InitWidgets();
-    void InitImGUI();
-    void Update();
+
+    void InitImGui();
+
+public:
+
+    Editor(Engine &engine);
+
+    ~Editor();
+
+    void Init(const EngineSettings &settings);
+
     void Draw();
+
+    GLFWwindow *GetWindow() const;
 };
 
 

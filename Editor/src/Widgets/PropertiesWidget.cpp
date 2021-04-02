@@ -5,22 +5,12 @@
 #include "Widgets/PropertiesWidget.hpp"
 
 
-void PropertiesWidget::UpdateAlways()
+PropertiesWidget::PropertiesWidget()
 {
-
+    _title="Properties";
 }
 
 void PropertiesWidget::UpdateVisible()
-{
-
-}
-
-void PropertiesWidget::OnShow()
-{
-
-}
-
-void PropertiesWidget::OnHide()
 {
 
 }

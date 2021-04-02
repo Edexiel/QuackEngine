@@ -8,16 +8,13 @@
 #include "Widgets/Widget.hpp"
 
 
-class SceneWidget: public Widget
+class SceneWidget : public Widget
 {
 public:
-    void UpdateAlways() final;
+    SceneWidget();
 
     void UpdateVisible() final;
 
-    void OnShow() final;
-
-    void OnHide() final;
 };
 
 

@@ -89,7 +89,7 @@ int main()
     glfwMakeContextCurrent(window);
     {
         // loadGL
-        RendererPlatform::LoadGL();
+        RendererPlatform::LoadGl();
 
         Resources::ResourcesManager rm;
 
