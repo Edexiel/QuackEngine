@@ -33,25 +33,20 @@ private:
     Renderer::RendererManager _rendererManager;
 
 
+    rp3d::PhysicsWorld *_physicsWorld;
     std::unique_ptr<ComponentManager> _componentManager;
     std::unique_ptr<EntityManager> _entityManager;
     std::unique_ptr<SystemManager> _systemManager;
     std::unique_ptr<rp3d::PhysicsCommon> _physicsManager;
     std::unique_ptr<Input::InputManager> _inputManager;
+
 public:
     std::unique_ptr<Input::InputManager> &GetInputManager();
 
-private:
-
-    rp3d::PhysicsWorld *_physicsWorld;
-
-
-public:
-
-
     static World &Instance();
 
-    void Init(Input::PlatformInput& platformInput);
+    void Init(Input::PlatformInput &platformInput);
+
     void Clear();
 
     // Entity methods
@@ -85,9 +80,12 @@ public:
     rp3d::PhysicsWorld *GetPhysicsWorld() const;
 
     const std::unique_ptr<rp3d::PhysicsCommon> &GetPhysicsManager() const;
-    Resources::ResourcesManager& GetResourcesManager();
-    Audio::SoundManager& GetSoundManager();
-    Renderer::RendererManager& GetRendererManager();
+
+    Resources::ResourcesManager &GetResourcesManager();
+
+    Audio::SoundManager &GetSoundManager();
+
+    Renderer::RendererManager &GetRendererManager();
 };
 
 inline World World::_instance = World();
@@ -97,7 +95,7 @@ inline World &World::Instance()
     return _instance;
 }
 
-inline void World::Init(Input::PlatformInput& platformInput)
+inline void World::Init(Input::PlatformInput &platformInput)
 {
     _componentManager = std::make_unique<ComponentManager>();
     _entityManager = std::make_unique<EntityManager>();
@@ -199,17 +197,17 @@ inline void World::SetSystemSignature(Signature signature)
     _systemManager->SetSignature<T>(signature);
 }
 
-inline Resources::ResourcesManager& World::GetResourcesManager()
+inline Resources::ResourcesManager &World::GetResourcesManager()
 {
     return _resourcesManager;
 }
 
-inline Audio::SoundManager& World::GetSoundManager()
+inline Audio::SoundManager &World::GetSoundManager()
 {
     return _soundManager;
 }
 
-inline Renderer::RendererManager& World::GetRendererManager()
+inline Renderer::RendererManager &World::GetRendererManager()
 {
     return _rendererManager;
 }

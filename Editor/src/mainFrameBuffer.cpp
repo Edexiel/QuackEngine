@@ -152,7 +152,7 @@ int main()
 
   while (!glfwWindowShouldClose(window))
   {
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.GetID());
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.GetId());
     glClearColor(0.5f, 0.5f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
