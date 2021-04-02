@@ -175,6 +175,8 @@ void Editor::Draw()
     // glViewport(0, 0, display_w, display_h);
     // glClearColor(1.f,0.f,0.f,0.f);
     // glClear(GL_COLOR_BUFFER_BIT);
+    Renderer::RendererPlatform::ClearColor({0.7f,0.7f,0.7f,0.f});
+    Renderer::RendererPlatform::Clear();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     const ImGuiIO &io = ImGui::GetIO();

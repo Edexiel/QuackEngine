@@ -26,14 +26,17 @@ int main()
     editor.Init(settings);
     GLFWwindow * window = editor.GetWindow();
     Input::PlatformInputGLFW input{window};
-    engine.Init(input);
+    world.Init(input);
+    //engine.Init(input);
 
     while (!glfwWindowShouldClose(window))
     {
+        world.GetInputManager()->Update();
         editor.Draw();
         //engine.Update();
 
         glfwSwapBuffers(window);
+
 
     }
 }
