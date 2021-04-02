@@ -13,6 +13,8 @@
 #include "Scene/Component/Transform.hpp"
 #include "Renderer/RendererInterface.hpp"
 #include "Renderer/RendererPlatform.hpp"
+#include "Scene/Component/RigidBody.hpp"
+#include "Scene/System/PhysicsSystem.hpp"
 
 using namespace Renderer;
 int main()
@@ -32,6 +34,16 @@ int main()
     GLFWwindow *window = editor.GetWindow();
     Input::PlatformInputGLFW input{window};
     engine.Init(input);
+
+    world.RegisterComponent<Component::RigidBody>();
+    auto physicsSystem = world.RegisterSystem<PhysicsSystem>();
+
+    Signature signature;
+    signature.set(world.GetComponentType<Transform>());
+    signature.set(world.GetComponentType<Component::RigidBody>());
+    world.SetSystemSignature<PhysicsSystem>(signature);
+
+    physicsSystem->Init();
 
 
     {
@@ -58,11 +70,12 @@ int main()
     material.checkLight = true;
     md.AddMaterial(material);
 
-    for (float x = 0; x < 10; x++)
+
+    for (int x = 0; x < 10; x++)
     {
-        for (float  y = 0; y < 10; y++)
+        for (int  y = 0; y < 10; y++)
         {
-            for (float  z = 0; z < 10; z++)
+            for (int  z = 0; z < 10; z++)
             {
                 t.position.x = 10 - x * 2;
                 t.position.y = 10 - y * 2;
@@ -70,8 +83,15 @@ int main()
 
                 Entity id = world.CreateEntity("Test");
 
+                Component::RigidBody rb;
+
                 world.AddComponent(id, t);
                 world.AddComponent(id, md);
+                world.AddComponent(id, rb);
+
+                physicsSystem->Init();
+
+                //physicsSystem->AddSphereCollider(id, 1.0f);
             }
         }
     }
@@ -144,6 +164,9 @@ int main()
                 frames = 0;
                 time_acc = 0.;
             }
+
+            physicsSystem->FixedUpdate(deltaTime);
+
         }
 
         Renderer::RendererPlatform::ClearColor({0.7f,0.7f,0.7f,0.f});
