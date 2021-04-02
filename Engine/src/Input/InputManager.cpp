@@ -3,11 +3,11 @@
 using namespace Input;
 
 InputManager::InputManager(PlatformInput& platformInput)
-	: platformInput(platformInput)
+	: _platformInput(platformInput)
 {
-	platformInput.keyEvent = std::bind(&InputManager::OnKeyEvent, std::ref(*this), std::placeholders::_1, std::placeholders::_2);
-	platformInput.MouseButtonEvent = std::bind(&InputManager::OnMouseButtonEvent, std::ref(*this), std::placeholders::_1, std::placeholders::_2);
-	platformInput.UpdateMousePosition = std::bind(&InputManager::OnUpdateMousePositionEvent, std::ref(*this), std::placeholders::_1, std::placeholders::_2);
+    _platformInput.keyEvent = std::bind(&InputManager::OnKeyEvent, std::ref(*this), std::placeholders::_1, std::placeholders::_2);
+	_platformInput.MouseButtonEvent = std::bind(&InputManager::OnMouseButtonEvent, std::ref(*this), std::placeholders::_1, std::placeholders::_2);
+	_platformInput.UpdateMousePosition = std::bind(&InputManager::OnUpdateMousePositionEvent, std::ref(*this), std::placeholders::_1, std::placeholders::_2);
 
         InitInput();
 }
@@ -59,7 +59,7 @@ void InputManager::OnMouseButtonEvent(Action action, MouseButton button)
   }
 }
 
-void InputManager::OnUpdateMousePositionEvent(const double xPos, const double yPos)
+void InputManager::OnUpdateMousePositionEvent(double xPos, double yPos)
 {
   //todo: Delete this function or make a boolean to choose between update each frame or update when the mouse move
 }
@@ -91,15 +91,15 @@ void InputManager::BindEvent(const std::string& event, MouseButton button)
         _eventMouseButtons[event].push_back(button);
 }
 
-void InputManager::BindEventAxis(const std::string& event, Key key, const float scale)
+void InputManager::BindEventAxis(const std::string& event, Key key, float scale)
 {
   _eventKeysAxis[event].push_back(std::pair<Key, float>(key, scale));
 }
 
 void InputManager::Update()
 {
-  platformInput.PollEvents();
-  platformInput.UpdateCursorPosition(mousePosition);
+ _platformInput.PollEvents();
+  _platformInput.UpdateCursorPosition(mousePosition);
 }
 /**
  * Bind event. have to be replace by serialization.
