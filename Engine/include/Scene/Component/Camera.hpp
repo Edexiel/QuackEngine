@@ -33,8 +33,8 @@ namespace Component
 
         //todo create a component that move the camera instead of it being inside the class
 
-        float _speedRotation{0};
-        float _speedTranslation{0};
+        float _speedRotation{0.01};
+        float _speedTranslation{0.01};
 
         double _pitch{0};
         double _yaw{0};
@@ -48,6 +48,10 @@ namespace Component
         Maths::Matrix4 _view;
 
         Maths::Vector3f _position;
+    public:
+        const Maths::Vector3f &GetPosition() const;
+
+    private:
         Maths::Vector3f _forward{0, 0, -1};
         Maths::Vector3f _right{-1, 0, 0};
 

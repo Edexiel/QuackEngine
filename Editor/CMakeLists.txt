@@ -17,4 +17,4 @@ add_executable(${PROJECT_NAME}
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw imgui Engine)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw imgui reactphysics3d Engine)

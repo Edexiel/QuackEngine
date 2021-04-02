@@ -2,17 +2,26 @@
 #define _RENDER_SYSTEM_
 
 #include "Scene/Core/System.hpp"
+#include "Scene/Component/Model.hpp"
 
 namespace Maths
 {
     class Matrix4;
 }
+namespace Component
+{
+    class Camera;
+}
 
 class RenderSystem : public System
 {
+    Renderer::Shader _shader;
+    Renderer::Mesh _quadMesh;
+
 public:
     void Init();
-    void Draw(const Maths::Matrix4& perspective,const Maths::Matrix4& view);
+    void Update(Component::Camera& camera);
+    void Draw(Component::Camera& camera);
 
 };
 

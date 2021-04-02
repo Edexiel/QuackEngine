@@ -7,7 +7,7 @@
 
 LogWidget::LogWidget()
 {
-    _title="Logs"
+    _title="Logs";
 }
 
 void LogWidget::UpdateVisible()

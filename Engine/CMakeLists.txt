@@ -21,7 +21,6 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/Framebuffer.cpp
         src/Renderer/IcoSphere.cpp
         src/Renderer/RendererManager.cpp
-        src/Renderer/Window.cpp
         src/Renderer/Shape.cpp
 
         src/Scene/Component/Light.cpp

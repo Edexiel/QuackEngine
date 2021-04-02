@@ -13,13 +13,13 @@ class ViewportWidget : public Widget
 public:
     ViewportWidget();
 
-    void UpdateAlways() override;
+//    void UpdateAlways() override;
 
     void UpdateVisible() override;
 
-    void OnShow() override;
+//    void OnShow() override;
 
-    void OnHide() override;
+//    void OnHide() override;
 };
 
 

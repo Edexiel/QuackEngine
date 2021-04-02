@@ -15,8 +15,10 @@
 #include "Resources/ResourcesManager.hpp"
 #include "Audio/SoundManager.hpp"
 #include "Renderer/RendererManager.hpp"
-
 #include "reactphysics3d/reactphysics3d.h"
+
+#include "Input/PlatformInput.hpp"
+#include "Input/InputManager.hpp"
 
 
 class World
@@ -30,18 +32,26 @@ private:
     Audio::SoundManager _soundManager;
     Renderer::RendererManager _rendererManager;
 
+
     std::unique_ptr<ComponentManager> _componentManager;
     std::unique_ptr<EntityManager> _entityManager;
     std::unique_ptr<SystemManager> _systemManager;
     std::unique_ptr<rp3d::PhysicsCommon> _physicsManager;
+    std::unique_ptr<Input::InputManager> _inputManager;
+public:
+    std::unique_ptr<Input::InputManager> &GetInputManager();
+
+private:
+
     rp3d::PhysicsWorld *_physicsWorld;
+
 
 public:
 
 
     static World &Instance();
 
-    void Init();
+    void Init(Input::PlatformInput& platformInput);
     void Clear();
 
     // Entity methods
@@ -87,7 +97,7 @@ inline World &World::Instance()
     return _instance;
 }
 
-inline void World::Init()
+inline void World::Init(Input::PlatformInput& platformInput)
 {
     _componentManager = std::make_unique<ComponentManager>();
     _entityManager = std::make_unique<EntityManager>();
@@ -100,6 +110,8 @@ inline void World::Init()
     _soundManager.Init(this);
 
     _rendererManager.Init(this);
+
+    _inputManager = std::make_unique<Input::InputManager>(platformInput);
 
     //_componentManager->RegisterComponent<Name>();
 }
@@ -200,6 +212,11 @@ inline Audio::SoundManager& World::GetSoundManager()
 inline Renderer::RendererManager& World::GetRendererManager()
 {
     return _rendererManager;
+}
+
+inline std::unique_ptr<Input::InputManager> &World::GetInputManager()
+{
+    return _inputManager;
 }
 
 #endif //QUACKENGINE_WORLD_HPP
