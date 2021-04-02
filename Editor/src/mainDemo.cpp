@@ -17,7 +17,8 @@
 
 
 #include "Scene/Component/Transform.hpp"
-#include "Scene/System/TestSystem.hpp"
+#include "Scene/Component/RigidBody.hpp"
+#include "Scene/System/PhysicsSystem.hpp"
 
 
 #include "Scene/Core/World.hpp"
@@ -51,6 +52,24 @@ int main()
         World &ecs=World::Instance();
         ecs.Init(platformInput);
 
+        ecs.RegisterComponent<Transform>();
+        ecs.RegisterComponent<Component::RigidBody>();
+        auto physicsSystem = ecs.RegisterSystem<PhysicsSystem>();
+
+        Signature signature;
+        signature.set(ecs.GetComponentType<Transform>());
+        signature.set(ecs.GetComponentType<Component::RigidBody>());
+        ecs.SetSystemSignature<PhysicsSystem>(signature);
+
+        Entity rigidBodyID = ecs.CreateEntity("RigidBody");
+        Transform tRigidBody = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{}};
+        Component::RigidBody rb;
+        ecs.AddComponent(rigidBodyID, tRigidBody);
+        ecs.AddComponent(rigidBodyID, rb);
+
+        physicsSystem->Init();
+        physicsSystem->AddSphereCollider(rigidBodyID, 1.0f);
+
         Entity id = ecs.CreateEntity("Test");
         Transform t = {Maths::Vector3f::One(), Maths::Vector3f::One(), Maths::Quaternion{}};
         ecs.AddComponent(id, t);
@@ -58,7 +77,6 @@ int main()
         Entity idRenderTest = ecs.CreateEntity("Test");
         Transform t2 = {Maths::Vector3f{0,0,10}, Maths::Vector3f::One(), Maths::Quaternion{}};
         Component::Model md = ecs.GetResourcesManager().LoadModel("../../../Dragon_Baked_Actions_fbx_7.4_binary.fbx");
-//        Component::Model box = ecs.GetResourcesManager().
 
         Material material;
 
@@ -75,6 +93,10 @@ int main()
         Entity lightID3 = ecs.CreateEntity("Light");
 
         Component::Light light;
+
+
+
+
 
 
         light.type = Component::Light_Type::L_SPOT;
@@ -111,6 +133,7 @@ int main()
         ecs.AddComponent(lightID3, light);
         ecs.AddComponent(lightID3, tl3);
 
+
         {
             Entity cameraEntity = ecs.CreateEntity("Camera");
 
@@ -134,6 +157,7 @@ int main()
 
         while (!glfwWindowShouldClose(window))
         {
+            physicsSystem->FixedUpdate(1.f/60.f);
             count += 0.0001f;
             ecs.GetInputManager()->Update();
 
