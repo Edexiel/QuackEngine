@@ -21,10 +21,9 @@ namespace Renderer
     {
     public:
 
-        static void* LoadScreen(unsigned int width, unsigned int height, const char* name);
         static void CloseWindow();
 
-        static int LoadGL();
+        static int LoadGl();
         static void ClearColor(const Maths::Vector4f &color);
         static void Clear();
         static void EnableDepthBuffer(bool isEnable);
@@ -71,11 +70,6 @@ namespace Renderer
         static void SetSpotLight(unsigned int shaderID, unsigned int index, Component::Light &light);
         static void SetDirectionalLight(unsigned int shaderID, unsigned int index, Component::Light &light);
         static void SetPointLight(unsigned int shaderID, unsigned int index,  Component::Light &light);
-
-        //Shape
-        static Mesh CreateQuad();
-        static Mesh CreateCube();
-        static Mesh CreateSphere(int sectorCount = 36, int stackCount = 18);
     };
 }
 

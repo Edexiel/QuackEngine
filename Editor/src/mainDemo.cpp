@@ -9,7 +9,6 @@
 #include "Renderer/Mesh.hpp"
 #include "Scene/Component/Light.hpp"
 #include "Resources/ResourcesManager.hpp"
-#include "Renderer/Material.hpp"
 
 #include "Input/PlatformInputGLFW.hpp"
 #include "Input/InputManager.hpp"
@@ -22,9 +21,6 @@
 
 
 #include "Scene/Core/World.hpp"
-#include "Scene/System/RenderSystem.hpp"
-
-#include <cmath>
 
 using namespace Renderer;
 
@@ -48,11 +44,12 @@ int main()
         return -1;
     }
     glfwMakeContextCurrent(window);
-    RendererPlatform::LoadGl();
+    RendererPlatform::LoadGL();
 
     {
+        Input::PlatformInputGLFW platformInput(window);
         World &ecs=World::Instance();
-        ecs.Init();
+        ecs.Init(platformInput);
 
         Entity id = ecs.CreateEntity("Test");
         Transform t = {Maths::Vector3f::One(), Maths::Vector3f::One(), Maths::Quaternion{}};
@@ -60,7 +57,8 @@ int main()
 
         Entity idRenderTest = ecs.CreateEntity("Test");
         Transform t2 = {Maths::Vector3f{0,0,10}, Maths::Vector3f::One(), Maths::Quaternion{}};
-        Component::Model md = ecs.GetResourcesManager().LoadModel("../../../eyeball.fbx");
+        Component::Model md = ecs.GetResourcesManager().LoadModel("../../../Dragon_Baked_Actions_fbx_7.4_binary.fbx");
+//        Component::Model box = ecs.GetResourcesManager().
 
         Material material;
 
@@ -114,17 +112,18 @@ int main()
         ecs.AddComponent(lightID3, tl3);
 
         {
-            Entity CameraEntity = ecs.CreateEntity("Camera");
+            Entity cameraEntity = ecs.CreateEntity("Camera");
 
             Component::Camera camera(1280,
                                      720,
                                      1000, -1, 20 * 3.1415/180);
 
             Transform cameraTrs;
-            ecs.AddComponent(CameraEntity, camera);
-            ecs.AddComponent(CameraEntity, cameraTrs);
+            ecs.AddComponent(cameraEntity, camera);
+            ecs.AddComponent(cameraEntity, cameraTrs);
 
             camera.GetFramebuffer().Bind();
+
         }
 
         float count = 0;
@@ -135,8 +134,8 @@ int main()
 
         while (!glfwWindowShouldClose(window))
         {
-
             count += 0.0001f;
+            ecs.GetInputManager()->Update();
 
             // framebuffer
             {
@@ -144,12 +143,10 @@ int main()
                 {
                     glfwSetWindowShouldClose(window, 1);
                 }
-
                 ecs.GetRendererManager().Update();
             }
 
             glfwSwapBuffers(window);
-            glfwPollEvents();
         }
     }
     glfwTerminate();
