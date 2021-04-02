@@ -47,8 +47,8 @@ void PhysicsSystem::Init()
         auto &r = World::Instance().GetComponent<Component::RigidBody>(entity);
 
         if (!r.rb)
-            r.rb = World::Instance().GetPhysicsWorld()->createRigidBody({{t.position.x, t.position.y, t.position.z},
-                                                                         {t.rotation.x, t.rotation.y, t.rotation.z, t.rotation.w}});
+        r.rb = World::Instance().GetPhysicsWorld()->createRigidBody({{t.position.x, t.position.y, t.position.z},
+                                                                     {t.rotation.x, t.rotation.y, t.rotation.z, t.rotation.w}});
     }
 }
 
@@ -57,16 +57,14 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
     //todo: faire l'update
     //todo: faire classe de traduction (transform, position, etc)
     World::Instance().GetPhysicsWorld()->update(fixedDeltaTime);
-    std::printf("nb entities: %d \n", _entities.size());
-    for (Entity entity: _entities)
-    {
+    for (Entity entity: _entities) {
         auto &t = World::Instance().GetComponent<Transform>(entity);
         auto &r = World::Instance().GetComponent<Component::RigidBody>(entity);
         const rp3d::Transform &transform = r.rb->getTransform();
         t.position = {transform.getPosition().x, transform.getPosition().y, transform.getPosition().z};
         t.rotation = {transform.getOrientation().x, transform.getOrientation().y, transform.getOrientation().z,
                       transform.getOrientation().w};
-    }
+        }
 
 }
 
