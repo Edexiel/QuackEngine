@@ -8,11 +8,12 @@
 #include "Input/PlatformInputGLFW.hpp"
 #include "Editor.hpp"
 #include "Engine.hpp"
+#include "Renderer/Material.hpp"
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/Transform.hpp"
 #include "Renderer/RendererInterface.hpp"
 
-
+using namespace Renderer;
 int main()
 {
     Engine engine;
@@ -31,10 +32,69 @@ int main()
     Input::PlatformInputGLFW input{window};
     engine.Init(input);
 
+
+    Entity id = world.CreateEntity("Test");
+    Transform t = {Maths::Vector3f::One(), Maths::Vector3f::One(), Maths::Quaternion{}};
+    world.AddComponent(id, t);
+
+    Entity idRenderTest = world.CreateEntity("Test");
+    Transform t2 = {Maths::Vector3f{0,0,10}, Maths::Vector3f::One(), Maths::Quaternion{}};
+    Component::Model md = world.GetResourcesManager().LoadModel("../../../eyeball.fbx");
+
+    Material material;
+
+    material.ambient = {1, 1, 1};
+    material.diffuse = {1, 1, 1};
+    material.specular = {1, 1, 1};
+    material.checkLight = true;
+    md.AddMaterial(material);
+    world.AddComponent(idRenderTest, t2);
+    world.AddComponent(idRenderTest, md);
+
+    Entity lightID = world.CreateEntity("Light");
+    Entity lightID2 = world.CreateEntity("Light");
+    Entity lightID3 = world.CreateEntity("Light");
+
+    Component::Light light;
+
+
+    light.type = Component::Light_Type::L_SPOT;
+    light.ambient = {0.0f, 0.1f, 0.0f};
+    light.diffuse = {1,0,0};
+    light.specular = {1, 0, 0};
+    light.constant = 1.0f;
+    light.linear = 0.0014f;
+    light.quadratic = 0.000007f;
+
+    light.outerSpotAngle = 10.5;
+    light.spotAngle = 8.5;
+
+
+    Transform tl1 = {Maths::Vector3f::One(), Maths::Vector3f::One(), Maths::Quaternion{}};
+
+    world.AddComponent(lightID, light);
+    world.AddComponent(lightID, tl1);
+
+    light.type = Component::Light_Type::L_POINT;
+    light.diffuse = {0,1,0};
+    light.specular = {0, 1, 0};
+    Transform tl2 = {Maths::Vector3f::One() * -100, Maths::Vector3f::One(), Maths::Quaternion{}};
+
+    world.AddComponent(lightID2, light);
+    world.AddComponent(lightID2, tl2);
+
+    light.type = Component::Light_Type::L_DIRECTIONAL;
+    light.diffuse = {0,0,1};
+    light.specular = {0, 0, 1};
+    Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
+
+
+    world.AddComponent(lightID3, light);
+    world.AddComponent(lightID3, tl3);
+
     while (!glfwWindowShouldClose(window))
     {
-        //editor.Draw();
-        //engine.Update();
+        editor.Draw();
 
         if (glfwGetKey(window, GLFW_KEY_ESCAPE))
         {
