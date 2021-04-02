@@ -33,6 +33,19 @@ int main()
     engine.Init(input);
 
 
+    {
+        Entity CameraEntity = world.CreateEntity("Camera");
+
+        Component::Camera camera(1280,
+                                 720,
+                                 1000, -1, 20 * 3.1415/180);
+
+        Transform cameraTrs;
+        world.AddComponent(CameraEntity, camera);
+        world.AddComponent(CameraEntity, cameraTrs);
+
+    }
+
     Entity id = world.CreateEntity("Test");
     Transform t = {Maths::Vector3f::One(), Maths::Vector3f::One(), Maths::Quaternion{}};
     world.AddComponent(id, t);
@@ -95,6 +108,11 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         editor.Draw();
+
+        //Renderer::Framebuffer f = world.GetRendererInterface().GetSceneUpdatedFramebuffer();
+        //world.GetRendererInterface().renderSystem->DrawTextureInFramebuffer(0, f.GetTexture());
+
+
 
         if (glfwGetKey(window, GLFW_KEY_ESCAPE))
         {

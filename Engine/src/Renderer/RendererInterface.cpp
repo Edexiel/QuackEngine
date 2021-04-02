@@ -1,16 +1,17 @@
 #include "Renderer/RendererInterface.hpp"
 
 #include "Scene/Core/World.hpp"
+#include "Renderer/RendererPlatform.hpp"
 
 using namespace Renderer;
 
-void RendererInterface::Set(std::shared_ptr<RenderSystem> renderSystem,
-                                     std::shared_ptr<CameraSystem> cameraSystem,
-                                     std::shared_ptr<LightSystem> lightSystem)
+void RendererInterface::Set(std::shared_ptr<RenderSystem> _renderSystem,
+                                     std::shared_ptr<CameraSystem> _cameraSystem,
+                                     std::shared_ptr<LightSystem> _lightSystem)
 {
-    renderSystem = renderSystem;
-    cameraSystem = cameraSystem;
-    lightSystem = lightSystem;
+    renderSystem = _renderSystem;
+    cameraSystem = _cameraSystem;
+    lightSystem = _lightSystem;
 }
 
 Framebuffer RendererInterface::GetSceneUpdatedFramebuffer()
@@ -18,6 +19,9 @@ Framebuffer RendererInterface::GetSceneUpdatedFramebuffer()
     lightSystem->Update();
     Component::Camera& camera = cameraSystem->GetActiveCamera();
     renderSystem->Draw(camera);
+
+    RendererPlatform::BindTexture(0);
+
     return camera.GetFramebuffer();
 }
 
