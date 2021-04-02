@@ -19,9 +19,12 @@ class RenderSystem : public System
     Renderer::Mesh _quadMesh;
 
 public:
-    void Init();
-    void Update(Component::Camera& camera);
+
+    RenderSystem();
+    ~RenderSystem() = default;
+
     void Draw(Component::Camera& camera);
+    void DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex);
 
 };
 

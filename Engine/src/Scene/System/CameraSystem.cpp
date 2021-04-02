@@ -2,10 +2,6 @@
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/Transform.hpp"
 
-void CameraSystem::Init()
-{
-
-}
 
 Component::Camera& CameraSystem::GetActiveCamera()
 {
@@ -15,7 +11,7 @@ Component::Camera& CameraSystem::GetActiveCamera()
             return t;
     }
     Assert_Fatal_Error(true, "No Camera Active");
-    //exit(-1);
+    exit(-1);
 }
 
 void CameraSystem::Clear()

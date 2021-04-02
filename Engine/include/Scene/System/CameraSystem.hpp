@@ -14,7 +14,6 @@ public:
     void Init();
     Component::Camera& GetActiveCamera();
     void Update();
-    void Init();
     void Clear();
 };
 
