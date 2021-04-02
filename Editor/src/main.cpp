@@ -9,6 +9,9 @@
 #include "Editor.hpp"
 #include "Engine.hpp"
 #include "Scene/Core/World.hpp"
+#include "Scene/Component/Transform.hpp"
+#include "Renderer/RendererInterface.hpp"
+
 
 int main()
 {
@@ -30,11 +33,16 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
-        editor.Draw();
+        //editor.Draw();
         //engine.Update();
 
-        glfwSwapBuffers(window);
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE))
+        {
+            glfwSetWindowShouldClose(window, 1);
+        }
 
+        glfwSwapBuffers(window);
+        glfwPollEvents();
     }
 }
 
