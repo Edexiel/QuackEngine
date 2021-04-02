@@ -89,9 +89,10 @@ int main()
                 world.AddComponent(id, md);
                 world.AddComponent(id, rb);
 
-                physicsSystem->Init();
+                physicsSystem->SetRigidBody(id);
+                physicsSystem->SetType(id, BodyType::STATIC);
 
-                //physicsSystem->AddSphereCollider(id, 1.0f);
+                physicsSystem->AddSphereCollider(id, 1.0f);
             }
         }
     }
