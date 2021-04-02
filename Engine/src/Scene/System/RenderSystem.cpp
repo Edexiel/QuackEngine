@@ -20,11 +20,10 @@ RenderSystem::RenderSystem()
 
 void RenderSystem::Draw( Component::Camera& camera)
 {
-    RendererPlatform::ClearColor({0.0f, 0.0f, 0.0f, 1.f});
-    RendererPlatform::Clear();
-
     camera.GetFramebuffer().Bind();
 
+    RendererPlatform::ClearColor({0.0f, 0.0f, 0.0f, 1.f});
+    RendererPlatform::Clear();
 
     for (Entity entity: _entities)
     {

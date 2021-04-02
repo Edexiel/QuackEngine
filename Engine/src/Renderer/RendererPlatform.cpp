@@ -294,6 +294,18 @@ void RendererPlatform::DeleteTexture(unsigned int texture)
   glDeleteTextures(1, &texture);
 }
 
+void RendererPlatform::ResizeFramebuffer(unsigned int fbo, unsigned int rbo, unsigned int texture, unsigned int width, unsigned int height)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+
 void RendererPlatform::DeleteFramebuffer(unsigned int fbo, unsigned int rbo,
                                          unsigned int texture)
 {
@@ -411,3 +423,4 @@ void RendererPlatform::SetPointLight(unsigned int shaderID, unsigned int index, 
   glUniform1f(location, light.quadratic);
 
 }
+
