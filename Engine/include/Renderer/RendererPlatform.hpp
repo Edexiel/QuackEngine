@@ -71,11 +71,6 @@ namespace Renderer
         static void SetSpotLight(unsigned int shaderID, unsigned int index, Component::Light &light);
         static void SetDirectionalLight(unsigned int shaderID, unsigned int index, Component::Light &light);
         static void SetPointLight(unsigned int shaderID, unsigned int index,  Component::Light &light);
-
-        //Shape
-        static Mesh CreateQuad();
-        static Mesh CreateCube();
-        static Mesh CreateSphere(int sectorCount = 36, int stackCount = 18);
     };
 }
 

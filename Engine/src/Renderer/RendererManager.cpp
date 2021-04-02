@@ -56,6 +56,7 @@ void RendererManager::Clear()
 void RendererManager::Update()
 {
     _lightSystem->Update();
+//    _cameraSystem->Update();
     Component::Camera& camera = _cameraSystem->GetActiveCamera();
     _renderSystem->Update(camera);
 }
