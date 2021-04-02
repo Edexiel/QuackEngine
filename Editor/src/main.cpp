@@ -13,6 +13,7 @@
 #include "Scene/Component/Transform.hpp"
 #include "Renderer/RendererInterface.hpp"
 #include "Renderer/RendererPlatform.hpp"
+#include "Renderer/Shape.hpp"
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
 
@@ -73,9 +74,9 @@ int main()
 
     for (int x = 0; x < 10; x++)
     {
-        for (int  y = 0; y < 10; y++)
+        for (int  y = 0; y < 1; y++)
         {
-            for (int  z = 0; z < 10; z++)
+            for (int  z = 0; z < 1; z++)
             {
                 t.position.x = 10 - x * 2;
                 t.position.y = 10 - y * 2;
@@ -90,12 +91,31 @@ int main()
                 world.AddComponent(id, rb);
 
                 physicsSystem->SetRigidBody(id);
-                physicsSystem->SetType(id, BodyType::STATIC);
+//                physicsSystem->SetType(id, BodyType::STATIC);
 
                 physicsSystem->AddSphereCollider(id, 1.0f);
             }
         }
     }
+
+    Entity idFloor = world.CreateEntity("Floor");
+
+    Maths::Vector3f scale{20,0.25,20};
+    Transform tFloor = {Maths::Vector3f{0, -5, 10}, scale, Maths::Quaternion{}};
+
+
+    Component::RigidBody rbFloor;
+    Component::Model mdFloor = world.GetResourcesManager().LoadModel("../../../Cube.fbx");
+    mdFloor.AddMaterial(material);
+
+    world.AddComponent(idFloor, tFloor);
+    world.AddComponent(idFloor, mdFloor);
+    world.AddComponent(idFloor, rbFloor);
+
+    physicsSystem->SetRigidBody(idFloor);
+    physicsSystem->SetType(idFloor, BodyType::STATIC);
+    physicsSystem->AddBoxCollider(idFloor, scale);
+
 
     Entity lightID = world.CreateEntity("Light");
     Entity lightID2 = world.CreateEntity("Light");
