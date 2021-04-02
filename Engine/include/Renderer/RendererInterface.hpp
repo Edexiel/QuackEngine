@@ -33,7 +33,7 @@ namespace Renderer
         RendererInterface() = default;
         ~RendererInterface() = default;
 
-        void Set(std::shared_ptr<RenderSystem> renderSystem, std::shared_ptr<CameraSystem> cameraSystem, std::shared_ptr<LightSystem> lightSystem);
+        void Set(std::shared_ptr<RenderSystem> _renderSystem, std::shared_ptr<CameraSystem> _cameraSystem, std::shared_ptr<LightSystem> _lightSystem);
 
         Framebuffer GetSceneUpdatedFramebuffer();
         void DrawFramebufferinFrambuffer(const Framebuffer& framebufferDrawIn, const Framebuffer& framebuffer2DrawOut);
