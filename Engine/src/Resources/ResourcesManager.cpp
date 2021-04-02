@@ -119,7 +119,7 @@ Renderer::Shader ResourcesManager::LoadObjectShader(const char* vertexShader, co
 {
     Shader shader = LoadShader(vertexShader, fragmentShader);
 
-    _world->GetRendererManager().AddShaderToUpdate(shader);
+    _world->GetRendererInterface().AddShaderToUpdate(shader);
 
     return shader;
 }
@@ -139,7 +139,7 @@ Renderer::Shader  ResourcesManager::LoadObjectShader(const Renderer::ShaderConst
   Shader shader = Shader::LoadObjectShader(constructData);
   mapDynamicShader.insert({constructData.GetKey(), shader});
 
-  _world->GetRendererManager().AddShaderToUpdate(shader);
+  _world->GetRendererInterface().AddShaderToUpdate(shader);
 
   return shader;
 }
