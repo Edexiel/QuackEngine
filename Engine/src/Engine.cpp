@@ -19,30 +19,33 @@ void Engine::Init(Input::PlatformInput &input)
     World::Instance().GetInputManager();
 
 
-    //ecs.RegisterComponent<Transform>();
-    //ecs.RegisterComponent<Component::Model>();
-    auto testSystem = ecs.RegisterSystem<TestSystem>();
-    auto renderSystem = ecs.RegisterSystem<RenderSystem>();
+    ecs.RegisterComponent<Transform>();
 
-    Signature signature;
-    signature.set(ecs.GetComponentType<Transform>());
-    ecs.SetSystemSignature<TestSystem>(signature);
+    ecs.RegisterComponent<Component::Model>();
+    ecs.RegisterComponent<Component::Camera>();
+    ecs.RegisterComponent<Component::Light>();
+
+    auto renderSystem = ecs.RegisterSystem<RenderSystem>();
+    auto cameraSystem = ecs.RegisterSystem<CameraSystem>();
+    auto lightSystem  = ecs.RegisterSystem<LightSystem>();
 
     Signature signatureRender;
     signatureRender.set(ecs.GetComponentType<Component::Model>());
     signatureRender.set(ecs.GetComponentType<Transform>());
     ecs.SetSystemSignature<RenderSystem>(signatureRender);
 
+    Signature signatureCamera;
+    signatureCamera.set(ecs.GetComponentType<Component::Camera>());
+    signatureCamera.set(ecs.GetComponentType<Transform>());
+    ecs.SetSystemSignature<CameraSystem>(signatureCamera);
 
-    Entity id = ecs.CreateEntity("Test");
-    Transform t = {Vector3f::One(), Vector3f::One(), Quaternion{}};
-    ecs.AddComponent(id, t);
+    Signature signatureLight;
+    signatureLight.set(ecs.GetComponentType<Component::Light>());
+    signatureLight.set(ecs.GetComponentType<Transform>());
+    ecs.SetSystemSignature<LightSystem>(signatureLight);
 
-    Entity idRenderTest = ecs.CreateEntity("Test");
-    Transform t2 = {Vector3f{0, 1, 0}, Vector3f::One(), Quaternion{}};
-    Component::Model md;
-    ecs.AddComponent(idRenderTest, t2);
-    ecs.AddComponent(idRenderTest, md);
+    ecs.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
+
 }
 
 
