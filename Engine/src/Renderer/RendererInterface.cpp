@@ -20,7 +20,7 @@ Framebuffer RendererInterface::GetSceneUpdatedFramebuffer()
     Component::Camera& camera = cameraSystem->GetActiveCamera();
     renderSystem->Draw(camera);
 
-    RendererPlatform::BindTexture(0);
+    RendererPlatform::BindFramebuffer(0);
 
     return camera.GetFramebuffer();
 }
