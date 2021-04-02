@@ -58,34 +58,34 @@ namespace Component
 
         void FreeFly();
 
-        void SetAxisScaleX(const float scale);
-        void SetAxisScaleY(const float scale);
-        void SetAxisScaleZ(const float scale);
+        void SetAxisScaleX(float scale);
+        void SetAxisScaleY(float scale);
+        void SetAxisScaleZ(float scale);
 
 
     public:
         //Camera();
-        Camera(const unsigned int width, const unsigned int height, const float far, const float near, const float fov);
-        Camera(const unsigned int width, const unsigned int height, const float far, const float near);
+        Camera(unsigned int width, unsigned int height, float far, float near, float fov);
+        Camera(unsigned int width, unsigned int height, float far, float near);
 
         ~Camera();
 
         Renderer::Framebuffer GetFramebuffer() const;
 
-        Maths::Matrix4 GetProjection() const;
-        Maths::Matrix4 GetView() const;
+        const Maths::Matrix4& GetProjection() const;
+        const Maths::Matrix4& GetView() const;
 
-        void SetProjection(const unsigned int width, const unsigned int height, const float far, const float near,
-                           const float fov);
-        void SetProjection(const unsigned int width, const unsigned int height, const float far, const float near);
+        void SetProjection(unsigned int width, unsigned int height, float far, float near,
+                           float fov);
+        void SetProjection(unsigned int width, unsigned int height, float far, float near);
         void CreateProjection();
         void CreateView();
 
         void SetPosition(const Maths::Vector3f &pos);
         void SetRotation(const Maths::Quaternion &rot);
-        void SetRotationSpeed(const float speed);
+        void SetRotationSpeed(float speed);
 
-        void SetTranslationSpeed(const float speed);
+        void SetTranslationSpeed(float speed);
         void MouseMovement(const Maths::Vector2d &currentPos, const Maths::Vector2d &oldPos);
         void SetInput(Input::InputManager &inputManager);
 

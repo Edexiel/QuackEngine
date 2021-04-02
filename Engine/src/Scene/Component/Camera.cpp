@@ -43,12 +43,12 @@ Renderer::Framebuffer Camera::GetFramebuffer() const
     return _framebuffer;
 }
 
-Matrix4 Camera::GetProjection() const
+const Matrix4& Camera::GetProjection() const
 {
     return _projection;
 }
 
-Maths::Matrix4 Camera::GetView() const
+const Maths::Matrix4& Camera::GetView() const
 {
     return _view;
 }

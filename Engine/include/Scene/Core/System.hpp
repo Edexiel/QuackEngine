@@ -11,8 +11,6 @@
 
 class System
 {
-protected:
-    //World& _ecs;
 public:
     std::set<Entity> _entities;
 

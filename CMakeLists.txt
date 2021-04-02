@@ -3,6 +3,7 @@ project(QuackEngine VERSION 0.1.0 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(OpenGL REQUIRED)
 
@@ -101,6 +102,12 @@ add_subdirectory(Editor)
 
 #Engine
 add_subdirectory(Engine)
+
+#Game
+add_subdirectory(Game)
+
+#Runner
+#add_subdirectory(Runner)
 
 #if(debug)
 #{
