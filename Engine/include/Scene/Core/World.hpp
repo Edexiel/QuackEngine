@@ -40,6 +40,7 @@ private:
     std::unique_ptr<rp3d::PhysicsCommon> _physicsManager;
     std::unique_ptr<Input::InputManager> _inputManager;
 
+
 public:
     std::unique_ptr<Input::InputManager> &GetInputManager();
 
@@ -106,6 +107,8 @@ inline void World::Init(Input::PlatformInput &platformInput)
 
     _resourcesManager.Init(this);
     _soundManager.Init(this);
+
+    _inputManager = std::make_unique<Input::InputManager>(platformInput);
 
     _inputManager = std::make_unique<Input::InputManager>(platformInput);
 

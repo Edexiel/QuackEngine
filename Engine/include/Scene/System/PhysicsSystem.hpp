@@ -14,9 +14,10 @@ namespace reactphysics3d
     class PhysicsWorld;
 
     class PhysicsCommon;
-
-//    class Collider;
 }
+
+enum class BodyType {STATIC, KINEMATIC, DYNAMIC};
+
 
 namespace Component
 {
@@ -28,8 +29,11 @@ class PhysicsSystem : public System
 public:
 
     void Init();
+    void SetRigidBody(Entity id);
 
     void FixedUpdate(float fixedDeltaTime);
+
+    void SetType(Entity id, const BodyType& type);
 
     void AddBoxCollider(Entity id, const Maths::Vector3f &halfExtend, const Maths::Vector3f &position = {0, 0, 0},
                         const Maths::Quaternion &rotation = {1, 0, 0, 0});

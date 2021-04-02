@@ -2,7 +2,6 @@
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/Transform.hpp"
 
-
 Component::Camera& CameraSystem::GetActiveCamera()
 {
     for (Entity entity: _entities) {

@@ -5,7 +5,7 @@
 #include "Scene/Component/RigidBody.hpp"
 
 #include "Scene/Component/Transform.hpp"
-
+#include "reactphysics3d/reactphysics3d.h"
 
 void PhysicsSystem::AddBoxCollider(Entity id, const Maths::Vector3f &halfExtend, const Maths::Vector3f &position,
                                    const Maths::Quaternion &rotation)
@@ -41,7 +41,8 @@ PhysicsSystem::AddCapsuleCollider(Entity id, float radius, float height, const M
 
 void PhysicsSystem::Init()
 {
-    for (Entity entity: _entities) {
+    for (Entity entity: _entities)
+    {
         auto &t = World::Instance().GetComponent<Transform>(entity);
         auto &r = World::Instance().GetComponent<Component::RigidBody>(entity);
 
@@ -65,4 +66,21 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
                       transform.getOrientation().w};
         }
 
+}
+
+void PhysicsSystem::SetType(Entity id, const BodyType &type)
+{
+    World::Instance().GetComponent<Component::RigidBody>(id).rb->setType((rp3d::BodyType) type);
+}
+
+void PhysicsSystem::SetRigidBody(Entity id)
+{
+    auto &r = World::Instance().GetComponent<Component::RigidBody>(id);
+
+    if (r.rb)
+        return;
+
+    auto &t = World::Instance().GetComponent<Transform>(id);
+    r.rb = World::Instance().GetPhysicsWorld()->createRigidBody({{t.position.x, t.position.y, t.position.z},
+                                                                 {t.rotation.x, t.rotation.y, t.rotation.z, t.rotation.w}});
 }
