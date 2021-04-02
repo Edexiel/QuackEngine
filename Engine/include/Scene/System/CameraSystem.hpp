@@ -3,11 +3,18 @@
 
 #include "Scene/Core/System.hpp"
 #include "Scene/Component/Camera.hpp"
+#include <vector>
+
+namespace Renderer
+{
+    class Shader;
+}
 
 class CameraSystem : public System
 {
 private:
-    
+    std::vector<Renderer::Shader> _listShaderToUpdate;
+
 public:
     CameraSystem() = default;
 
@@ -15,6 +22,9 @@ public:
     Component::Camera& GetActiveCamera();
     void Update();
     void Clear();
+
+    void AddShaderToUpdate(const Renderer::Shader& shader);
+    void RemoveShaderFromUpdate(const Renderer::Shader& shader);
 };
 
 

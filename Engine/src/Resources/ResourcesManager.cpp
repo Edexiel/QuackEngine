@@ -31,7 +31,7 @@ void ResourcesManager::Init(World* world)
     _world = world;
 }
 
-Model ResourcesManager::LoadModel(const char* path)
+Model ResourcesManager::LoadModel(const char* path, VertexType vertexType)
 {
     // Check if the Model already exist
 
@@ -50,7 +50,7 @@ Model ResourcesManager::LoadModel(const char* path)
     }
 
     // Create a new Model
-    Model model = Model::LoadModel(path);
+    Model model = Model::LoadModel(path, vertexType);
     mapModel.insert({path, model});
 
     return model;
@@ -119,7 +119,8 @@ Renderer::Shader ResourcesManager::LoadObjectShader(const char* vertexShader, co
 {
     Shader shader = LoadShader(vertexShader, fragmentShader);
 
-    _world->GetRendererInterface().AddShaderToUpdate(shader);
+    //_world->GetRendererInterface().cameraSystem->AddShaderToUpdate(shader);
+    _world->GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
 
     return shader;
 }
@@ -139,7 +140,10 @@ Renderer::Shader  ResourcesManager::LoadObjectShader(const Renderer::ShaderConst
   Shader shader = Shader::LoadObjectShader(constructData);
   mapDynamicShader.insert({constructData.GetKey(), shader});
 
-  _world->GetRendererInterface().AddShaderToUpdate(shader);
+  //_world->GetRendererInterface().cameraSystem->AddShaderToUpdate(shader);
+
+  if(constructData.hasLight)
+      _world->GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
 
   return shader;
 }

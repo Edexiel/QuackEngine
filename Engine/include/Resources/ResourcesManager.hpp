@@ -48,7 +48,7 @@ namespace Resources
 
       void Init(World* world);
 
-      Component::Model  LoadModel     (const char* path);
+      Component::Model  LoadModel     (const char* path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
       Renderer::Texture LoadTexture   (const char* path);
       Renderer::Shader  LoadShader    (const char* vertexShader, const char* fragmentShader);
       Renderer::Shader  LoadObjectShader    (const char* vertexShader, const char* fragmentShader);
