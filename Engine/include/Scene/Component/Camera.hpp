@@ -70,6 +70,8 @@ namespace Component
 
         ~Camera();
 
+        void Resize(unsigned int width, unsigned int height);
+
         Renderer::Framebuffer GetFramebuffer() const;
 
         const Maths::Matrix4& GetProjection() const;
