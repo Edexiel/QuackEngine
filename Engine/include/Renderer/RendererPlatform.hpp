@@ -21,10 +21,9 @@ namespace Renderer
     {
     public:
 
-        static void* LoadScreen(unsigned int width, unsigned int height, const char* name);
         static void CloseWindow();
 
-        static int LoadGL();
+        static int LoadGl();
         static void ClearColor(const Maths::Vector4f &color);
         static void Clear();
         static void EnableDepthBuffer(bool isEnable);
@@ -57,6 +56,7 @@ namespace Renderer
 
         static Framebuffer CreateFramebuffer(unsigned int width, unsigned int height);
         static void BindFramebuffer(unsigned int ID);
+        static void ResizeFramebuffer(unsigned int fbo, unsigned int rbo, unsigned int texture, unsigned int width, unsigned int height);
         static void DeleteFramebuffer(unsigned int fbo, unsigned int rbo, unsigned int texture);
 
         static Texture CreateTexture();

@@ -10,6 +10,7 @@ Component::Camera& CameraSystem::GetActiveCamera()
             return t;
     }
     Assert_Fatal_Error(true, "No Camera Active");
+    exit(-1);
 }
 
 void CameraSystem::Clear()

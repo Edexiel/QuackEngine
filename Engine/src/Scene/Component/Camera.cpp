@@ -43,12 +43,14 @@ Renderer::Framebuffer Camera::GetFramebuffer() const
     return _framebuffer;
 }
 
-Matrix4 Camera::GetProjection() const
+
+
+const Matrix4& Camera::GetProjection() const
 {
     return _projection;
 }
 
-Maths::Matrix4 Camera::GetView() const
+const Maths::Matrix4& Camera::GetView() const
 {
     return _view;
 }
@@ -170,4 +172,17 @@ void Camera::SetAxisScaleZ(const float scale)
 const Vector3f &Camera::GetPosition() const
 {
     return _position;
+}
+
+void Camera::Resize(unsigned int width, unsigned int height)
+{
+    _width = width;
+    _height = height;
+
+    //_framebuffer.Resize(width, height);
+
+    if (_isPerspective)
+        _projection = Matrix4::Perspective(_width, _height, _near, _far, _fov);
+    else
+        _projection = Matrix4::OrthoMatrix(_width, _height, _near, _far);
 }

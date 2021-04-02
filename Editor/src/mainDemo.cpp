@@ -1,178 +1,223 @@
+//
+// Created by g.nisi on 03/02/2021.
+//
+
 #include "GLFW/glfw3.h"
-#include "Maths/Quaternion.hpp"
 
-#include "Renderer/RendererPlatform.hpp"
-#include "Renderer/Shader.hpp"
-#include "Renderer/Framebuffer.hpp"
-#include "Renderer/Texture.hpp"
-#include "Renderer/Vertex.hpp"
-#include "Renderer/Mesh.hpp"
-#include "Scene/Component/Light.hpp"
-#include "Resources/ResourcesManager.hpp"
-
-#include "Input/PlatformInputGLFW.hpp"
 #include "Input/InputManager.hpp"
-
-#include "Audio/SoundManager.hpp"
-
-
-#include "Scene/Component/Transform.hpp"
-#include "Scene/Component/RigidBody.hpp"
-#include "Scene/System/PhysicsSystem.hpp"
-
-
+#include "Input/PlatformInputGLFW.hpp"
+#include "Editor.hpp"
+#include "Engine.hpp"
+#include "Renderer/Material.hpp"
 #include "Scene/Core/World.hpp"
+#include "Scene/Component/Transform.hpp"
+#include "Renderer/RendererInterface.hpp"
+#include "Renderer/RendererPlatform.hpp"
 
 using namespace Renderer;
-
 int main()
 {
-    GLFWwindow* window    {nullptr};
-    unsigned int width = 1280, height = 720;
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    Engine engine;
+    Editor editor{engine};
+    World &world = World::Instance();
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(width, height, "RendererPlatform", NULL, NULL);
-    if (!window)
+    EngineSettings settings{
+            true,
+            "QuackEditor",
+            {1280, 720},
+            WINDOW_MODE::WINDOWED,
+            0
+    };
+    editor.Init(settings);
+    GLFWwindow *window = editor.GetWindow();
+    Input::PlatformInputGLFW input{window};
+    engine.Init(input);
+
+
     {
-        glfwTerminate();
-        return -1;
+        Entity CameraEntity = world.CreateEntity("Camera");
+
+        Component::Camera camera(1280,
+                                 720,
+                                 1000, -1, 20 * 3.1415 / 180);
+
+        Transform cameraTrs;
+        world.AddComponent(CameraEntity, camera);
+        world.AddComponent(CameraEntity, cameraTrs);
+
     }
-    glfwMakeContextCurrent(window);
-    RendererPlatform::LoadGL();
 
+    Transform t = {Maths::Vector3f{0, 0, 10}, Maths::Vector3f::One(), Maths::Quaternion{}};
+    Component::Model md = world.GetResourcesManager().LoadModel("../../../eyeball.fbx");
+
+    Material material;
+
+    material.ambient = {1, 1, 1};
+    material.diffuse = {1, 1, 1};
+    material.specular = {1, 1, 1};
+    material.checkLight = true;
+    md.AddMaterial(material);
+
+    for (float x = 0; x < 10; x++)
     {
-        Input::PlatformInputGLFW platformInput(window);
-        World &ecs=World::Instance();
-        ecs.Init(platformInput);
-
-        ecs.RegisterComponent<Transform>();
-        ecs.RegisterComponent<Component::RigidBody>();
-        auto physicsSystem = ecs.RegisterSystem<PhysicsSystem>();
-
-        Signature signature;
-        signature.set(ecs.GetComponentType<Transform>());
-        signature.set(ecs.GetComponentType<Component::RigidBody>());
-        ecs.SetSystemSignature<PhysicsSystem>(signature);
-
-        Entity rigidBodyID = ecs.CreateEntity("RigidBody");
-        Transform tRigidBody = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{}};
-        Component::RigidBody rb;
-        ecs.AddComponent(rigidBodyID, tRigidBody);
-        ecs.AddComponent(rigidBodyID, rb);
-
-        physicsSystem->Init();
-        physicsSystem->AddSphereCollider(rigidBodyID, 1.0f);
-
-        Entity id = ecs.CreateEntity("Test");
-        Transform t = {Maths::Vector3f::One(), Maths::Vector3f::One(), Maths::Quaternion{}};
-        ecs.AddComponent(id, t);
-
-        Entity idRenderTest = ecs.CreateEntity("Test");
-        Transform t2 = {Maths::Vector3f{0,0,10}, Maths::Vector3f::One(), Maths::Quaternion{}};
-        Component::Model md = ecs.GetResourcesManager().LoadModel("../../../Dragon_Baked_Actions_fbx_7.4_binary.fbx");
-
-        Material material;
-
-        material.ambient = {1, 1, 1};
-        material.diffuse = {1, 1, 1};
-        material.specular = {1, 1, 1};
-        material.checkLight = true;
-        md.AddMaterial(material);
-        ecs.AddComponent(idRenderTest, t2);
-        ecs.AddComponent(idRenderTest, md);
-
-        Entity lightID = ecs.CreateEntity("Light");
-        Entity lightID2 = ecs.CreateEntity("Light");
-        Entity lightID3 = ecs.CreateEntity("Light");
-
-        Component::Light light;
-
-
-
-
-
-
-        light.type = Component::Light_Type::L_SPOT;
-        light.ambient = {0.0f, 0.1f, 0.0f};
-        light.diffuse = {1,0,0};
-        light.specular = {1, 0, 0};
-        light.constant = 1.0f;
-        light.linear = 0.0014f;
-        light.quadratic = 0.000007f;
-
-        light.outerSpotAngle = 10.5;
-        light.spotAngle = 8.5;
-
-
-        Transform tl1 = {Maths::Vector3f::One(), Maths::Vector3f::One(), Maths::Quaternion{}};
-
-        ecs.AddComponent(lightID, light);
-        ecs.AddComponent(lightID, tl1);
-
-        light.type = Component::Light_Type::L_POINT;
-        light.diffuse = {0,1,0};
-        light.specular = {0, 1, 0};
-        Transform tl2 = {Maths::Vector3f::One() * -100, Maths::Vector3f::One(), Maths::Quaternion{}};
-
-        ecs.AddComponent(lightID2, light);
-        ecs.AddComponent(lightID2, tl2);
-
-        light.type = Component::Light_Type::L_DIRECTIONAL;
-        light.diffuse = {0,0,1};
-        light.specular = {0, 0, 1};
-        Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
-
-
-        ecs.AddComponent(lightID3, light);
-        ecs.AddComponent(lightID3, tl3);
-
-
+        for (float  y = 0; y < 10; y++)
         {
-            Entity cameraEntity = ecs.CreateEntity("Camera");
-
-            Component::Camera camera(1280,
-                                     720,
-                                     1000, -1, 20 * 3.1415/180);
-
-            Transform cameraTrs;
-            ecs.AddComponent(cameraEntity, camera);
-            ecs.AddComponent(cameraEntity, cameraTrs);
-
-            camera.GetFramebuffer().Bind();
-
-        }
-
-        float count = 0;
-
-        RendererPlatform::EnableDepthBuffer(true);
-
-        //glfwSetWindowShouldClose(window, 1);
-
-        while (!glfwWindowShouldClose(window))
-        {
-            physicsSystem->FixedUpdate(1.f/60.f);
-            count += 0.0001f;
-            ecs.GetInputManager()->Update();
-
-            // framebuffer
+            for (float  z = 0; z < 10; z++)
             {
-                if (glfwGetKey(window, GLFW_KEY_ESCAPE))
-                {
-                    glfwSetWindowShouldClose(window, 1);
-                }
-                ecs.GetRendererManager().Update();
-            }
+                t.position.x = 10 - x * 2;
+                t.position.y = 10 - y * 2;
+                t.position.z = 20 + z * 2;
 
-            glfwSwapBuffers(window);
+                Entity id = world.CreateEntity("Test");
+
+                world.AddComponent(id, t);
+                world.AddComponent(id, md);
+            }
         }
     }
-    glfwTerminate();
-    return 0;
+
+    Entity lightID = world.CreateEntity("Light");
+    Entity lightID2 = world.CreateEntity("Light");
+    Entity lightID3 = world.CreateEntity("Light");
+
+    Component::Light light;
+
+
+    light.type = Component::Light_Type::L_SPOT;
+    light.ambient = {0.0f, 0.1f, 0.0f};
+    light.diffuse = {1,0,0};
+    light.specular = {1, 0, 0};
+    light.constant = 1.0f;
+    light.linear = 0.0014f;
+    light.quadratic = 0.000007f;
+
+    light.outerSpotAngle = 10.5;
+    light.spotAngle = 8.5;
+
+
+    Transform tl1 = {Maths::Vector3f::One(), Maths::Vector3f::One(), Maths::Quaternion{}};
+
+    world.AddComponent(lightID, light);
+    world.AddComponent(lightID, tl1);
+
+    light.type = Component::Light_Type::L_POINT;
+    light.diffuse = {0,1,0};
+    light.specular = {0, 1, 0};
+    Transform tl2 = {Maths::Vector3f::One() * -100, Maths::Vector3f::One(), Maths::Quaternion{}};
+
+    world.AddComponent(lightID2, light);
+    world.AddComponent(lightID2, tl2);
+
+    light.type = Component::Light_Type::L_DIRECTIONAL;
+    light.diffuse = {0,0,1};
+    light.specular = {0, 0, 1};
+    Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
+
+
+    world.AddComponent(lightID3, light);
+    world.AddComponent(lightID3, tl3);
+
+    Renderer::RendererPlatform::EnableDepthBuffer(true);
+
+    float dt = 0;
+
+    // Time && fps
+    double temp_time{0.0};
+    double time{0.0};
+    double deltaTime{0.0};
+    unsigned int frames{0};
+    double time_acc{0.0};
+
+    while (!glfwWindowShouldClose(window))
+    {
+        { // DeltaTime
+            temp_time = glfwGetTime();
+            deltaTime = temp_time - time;
+            time = temp_time;
+
+            time_acc += deltaTime;
+            frames++;
+
+            if (time_acc >= 1.0f)
+            {
+                std::cout << "FPS: " << round(1 / (time_acc / frames)) << std::endl;
+                frames = 0;
+                time_acc = 0.;
+            }
+        }
+
+        Renderer::RendererPlatform::ClearColor({0.7f,0.7f,0.7f,0.f});
+        Renderer::RendererPlatform::Clear();
+        editor.Draw();
+
+        //Renderer::Framebuffer f = world.GetRendererInterface().GetSceneUpdatedFramebuffer();
+        //world.GetRendererInterface().renderSystem->DrawTextureInFramebuffer(0, f.GetTexture());
+
+
+
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE))
+        {
+            glfwSetWindowShouldClose(window, 1);
+        }
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
 }
+
+//{
+//if (ImGui::BeginMainMenuBar())
+//{
+//if (ImGui::BeginMenu("Files"))
+//{
+//if (ImGui::MenuItem("New scene"))
+//{
+//}
+//if (ImGui::MenuItem("Save scene"))
+//{
+//}
+//
+//ImGui::Separator();
+//if (ImGui::MenuItem("Import object"))
+//{
+//}
+//
+//ImGui::EndMenu();
+//}
+//
+//if (ImGui::BeginMenu("Edit"))
+//{
+//if (ImGui::MenuItem("Undo", "CTRL+Z"))
+//{
+//}
+//if (ImGui::MenuItem("Redo", "CTRL+Y"))
+//{
+//} // Disabled item
+//ImGui::Separator();
+//if (ImGui::MenuItem("Cut", "CTRL+X"))
+//{
+//}
+//if (ImGui::MenuItem("Copy", "CTRL+C"))
+//{
+//}
+//if (ImGui::MenuItem("Paste", "CTRL+V"))
+//{
+//}
+//ImGui::EndMenu();
+//}
+//
+//if (ImGui::BeginMenu("Windows"))
+//{
+//if (ImGui::MenuItem("Viewport", NULL, window_viewport))
+//{
+//window_viewport = !window_viewport;
+//}
+//if (ImGui::MenuItem("Logs", NULL, window_log))
+//{
+//window_log = !window_log;
+//}
+//ImGui::EndMenu();
+//}
+//}
+//ImGui::EndMainMenuBar();
+//}

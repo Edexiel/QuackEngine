@@ -1,7 +1,7 @@
 #include "Renderer/RendererPlatform.hpp"
 
 #define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
 
 #include <vector>
 
@@ -23,44 +23,12 @@
 using namespace Renderer;
 using namespace Component;
 
-void* RendererPlatform::LoadScreen(unsigned int width, unsigned int height, const char* name)
-{
-    GLFWwindow* window;
-
-    /* Initialize the library */
-    if (!glfwInit())
-    {
-        Assert_Fatal_Error(true, "GLFW Can't load");
-        return nullptr;
-    }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(width, height, name, NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        Assert_Fatal_Error(true, "Window can't be created");
-    }
-
-    return window;
-}
-
 void RendererPlatform::CloseWindow()
 {
     glfwTerminate();
 }
 
-void Display(void* window)
-{
-    glfwSwapBuffers((GLFWwindow*)window);
-}
-
-int RendererPlatform::LoadGL()
+int RendererPlatform::LoadGl()
 {
   int version = gladLoadGL(glfwGetProcAddress);
 
@@ -326,6 +294,18 @@ void RendererPlatform::DeleteTexture(unsigned int texture)
   glDeleteTextures(1, &texture);
 }
 
+void RendererPlatform::ResizeFramebuffer(unsigned int fbo, unsigned int rbo, unsigned int texture, unsigned int width, unsigned int height)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+
 void RendererPlatform::DeleteFramebuffer(unsigned int fbo, unsigned int rbo,
                                          unsigned int texture)
 {
@@ -443,3 +423,4 @@ void RendererPlatform::SetPointLight(unsigned int shaderID, unsigned int index, 
   glUniform1f(location, light.quadratic);
 
 }
+

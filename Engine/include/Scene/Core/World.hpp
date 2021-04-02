@@ -14,7 +14,7 @@
 #include "Scene/Component/Name.hpp"
 #include "Resources/ResourcesManager.hpp"
 #include "Audio/SoundManager.hpp"
-#include "Renderer/RendererManager.hpp"
+#include "Renderer/RendererInterface.hpp"
 #include "reactphysics3d/reactphysics3d.h"
 
 #include "Input/PlatformInput.hpp"
@@ -30,28 +30,24 @@ private:
 
     Resources::ResourcesManager _resourcesManager;
     Audio::SoundManager _soundManager;
-    Renderer::RendererManager _rendererManager;
+    Renderer::RendererInterface _rendererInterface;
 
 
+    rp3d::PhysicsWorld *_physicsWorld;
     std::unique_ptr<ComponentManager> _componentManager;
     std::unique_ptr<EntityManager> _entityManager;
     std::unique_ptr<SystemManager> _systemManager;
     std::unique_ptr<rp3d::PhysicsCommon> _physicsManager;
     std::unique_ptr<Input::InputManager> _inputManager;
+
+
 public:
     std::unique_ptr<Input::InputManager> &GetInputManager();
 
-private:
-
-    rp3d::PhysicsWorld *_physicsWorld;
-
-
-public:
-
-
     static World &Instance();
 
-    void Init(Input::PlatformInput& platformInput);
+    void Init(Input::PlatformInput &platformInput);
+
     void Clear();
 
     // Entity methods
@@ -85,9 +81,12 @@ public:
     rp3d::PhysicsWorld *GetPhysicsWorld() const;
 
     const std::unique_ptr<rp3d::PhysicsCommon> &GetPhysicsManager() const;
-    Resources::ResourcesManager& GetResourcesManager();
-    Audio::SoundManager& GetSoundManager();
-    Renderer::RendererManager& GetRendererManager();
+
+    Resources::ResourcesManager &GetResourcesManager();
+
+    Audio::SoundManager &GetSoundManager();
+
+    Renderer::RendererInterface &GetRendererInterface();
 };
 
 inline World World::_instance = World();
@@ -97,7 +96,7 @@ inline World &World::Instance()
     return _instance;
 }
 
-inline void World::Init(Input::PlatformInput& platformInput)
+inline void World::Init(Input::PlatformInput &platformInput)
 {
     _componentManager = std::make_unique<ComponentManager>();
     _entityManager = std::make_unique<EntityManager>();
@@ -109,7 +108,7 @@ inline void World::Init(Input::PlatformInput& platformInput)
     _resourcesManager.Init(this);
     _soundManager.Init(this);
 
-    _rendererManager.Init(this);
+    _inputManager = std::make_unique<Input::InputManager>(platformInput);
 
     _inputManager = std::make_unique<Input::InputManager>(platformInput);
 
@@ -128,7 +127,7 @@ inline const std::unique_ptr<rp3d::PhysicsCommon> &World::GetPhysicsManager() co
 
 inline void World::Clear()
 {
-    _rendererManager.Clear();
+
 }
 
 inline Entity World::CreateEntity(std::string name)
@@ -199,19 +198,19 @@ inline void World::SetSystemSignature(Signature signature)
     _systemManager->SetSignature<T>(signature);
 }
 
-inline Resources::ResourcesManager& World::GetResourcesManager()
+inline Resources::ResourcesManager &World::GetResourcesManager()
 {
     return _resourcesManager;
 }
 
-inline Audio::SoundManager& World::GetSoundManager()
+inline Audio::SoundManager &World::GetSoundManager()
 {
     return _soundManager;
 }
 
-inline Renderer::RendererManager& World::GetRendererManager()
+inline Renderer::RendererInterface &World::GetRendererInterface()
 {
-    return _rendererManager;
+    return _rendererInterface;
 }
 
 inline std::unique_ptr<Input::InputManager> &World::GetInputManager()
