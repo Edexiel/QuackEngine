@@ -213,12 +213,13 @@ void Model::Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view, c
   for (unsigned int i = 0 ; i < _meshList.size() ; i++)
   {
      Renderer::Material& material = _materialList[_meshList[i].materialIndex];
-     material.shader.Use();
+
+     material.Apply();
 
      material.shader.SetMatrix4("projection", projection);
      material.shader.SetMatrix4("view", view);
      material.shader.SetMatrix4("model", transform);
-     material.Apply();
+
 
      _meshList[i].Draw(_vertexType);
   }

@@ -2,6 +2,7 @@
 // Created by g.nisi on 03/02/2021.
 //
 
+#include "glad/gl.h"
 #include "GLFW/glfw3.h"
 
 #include "Input/InputManager.hpp"
@@ -60,7 +61,7 @@ int main()
     }
 
     Transform t = {Maths::Vector3f{0, 0, 10}, Maths::Vector3f::One(), Maths::Quaternion{}};
-    Component::Model md = world.GetResourcesManager().LoadModel("../../../eyeball.fbx");
+    Component::Model md = world.GetResourcesManager().LoadModel("../../../Cube.fbx");
 
     Material material;
 
@@ -83,13 +84,13 @@ int main()
 
                 Entity id = world.CreateEntity("Test");
 
-                Component::RigidBody rb;
+                //Component::RigidBody rb;
 
                 world.AddComponent(id, t);
                 world.AddComponent(id, md);
-                world.AddComponent(id, rb);
+                //world.AddComponent(id, rb);
 
-                physicsSystem->Init();
+                //physicsSystem->Init();
 
                 //physicsSystem->AddSphereCollider(id, 1.0f);
             }
@@ -97,13 +98,13 @@ int main()
     }
 
     Entity lightID = world.CreateEntity("Light");
-    Entity lightID2 = world.CreateEntity("Light");
-    Entity lightID3 = world.CreateEntity("Light");
+    //Entity lightID2 = world.CreateEntity("Light");
+    //Entity lightID3 = world.CreateEntity("Light");
 
     Component::Light light;
 
 
-    light.type = Component::Light_Type::L_SPOT;
+    light.type = Component::Light_Type::L_DIRECTIONAL;
     light.ambient = {0.0f, 0.1f, 0.0f};
     light.diffuse = {1,0,0};
     light.specular = {1, 0, 0};
@@ -120,7 +121,7 @@ int main()
     world.AddComponent(lightID, light);
     world.AddComponent(lightID, tl1);
 
-    light.type = Component::Light_Type::L_POINT;
+    /*light.type = Component::Light_Type::L_POINT;
     light.diffuse = {0,1,0};
     light.specular = {0, 1, 0};
     Transform tl2 = {Maths::Vector3f::One() * -100, Maths::Vector3f::One(), Maths::Quaternion{}};
@@ -135,9 +136,12 @@ int main()
 
 
     world.AddComponent(lightID3, light);
-    world.AddComponent(lightID3, tl3);
+    world.AddComponent(lightID3, tl3);*/
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
 
     float dt = 0;
 
@@ -148,8 +152,11 @@ int main()
     unsigned int frames{0};
     double time_acc{0.0};
 
+    world.GetRendererInterface().lightSystem->Update();
+
     while (!glfwWindowShouldClose(window))
     {
+
         { // DeltaTime
             temp_time = glfwGetTime();
             deltaTime = temp_time - time;
@@ -165,17 +172,14 @@ int main()
                 time_acc = 0.;
             }
 
-            physicsSystem->FixedUpdate(deltaTime);
+            //physicsSystem->FixedUpdate(deltaTime);
 
         }
 
         Renderer::RendererPlatform::ClearColor({0.7f,0.7f,0.7f,0.f});
         Renderer::RendererPlatform::Clear();
+
         editor.Draw();
-
-        //Renderer::Framebuffer f = world.GetRendererInterface().GetSceneUpdatedFramebuffer();
-        //world.GetRendererInterface().renderSystem->DrawTextureInFramebuffer(0, f.GetTexture());
-
 
 
         if (glfwGetKey(window, GLFW_KEY_ESCAPE))

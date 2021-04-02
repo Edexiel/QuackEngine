@@ -56,7 +56,6 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
     //todo: faire l'update
     //todo: faire classe de traduction (transform, position, etc)
     World::Instance().GetPhysicsWorld()->update(fixedDeltaTime);
-    std::printf("nb entities: %d \n", _entities.size());
     for (Entity entity: _entities) {
         auto &t = World::Instance().GetComponent<Transform>(entity);
         auto &r = World::Instance().GetComponent<Component::RigidBody>(entity);
@@ -64,8 +63,6 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
         t.position = {transform.getPosition().x, transform.getPosition().y, transform.getPosition().z};
         t.rotation = {transform.getOrientation().x, transform.getOrientation().y, transform.getOrientation().z,
                       transform.getOrientation().w};
-
-        std::printf("x: %f y: %f z:%f\n", t.position.x, t.position.y, t.position.z);
-    }
+        }
 
 }

@@ -19,7 +19,7 @@ void ViewportWidget::UpdateVisible()
     ImVec2 wsize = ImGui::GetWindowSize();
     // Because I use the texture from OpenGL, I need to invert the V from the UV.
 
-    World::Instance().GetRendererInterface().cameraSystem->GetActiveCamera().Resize(wsize.x, wsize.y);
+    //World::Instance().GetRendererInterface().cameraSystem->GetActiveCamera().Resize(wsize.x, wsize.y);
 
     Framebuffer f = World::Instance().GetRendererInterface().GetSceneUpdatedFramebuffer();
 
