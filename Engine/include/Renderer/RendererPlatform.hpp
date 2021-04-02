@@ -56,6 +56,7 @@ namespace Renderer
 
         static Framebuffer CreateFramebuffer(unsigned int width, unsigned int height);
         static void BindFramebuffer(unsigned int ID);
+        static void ResizeFramebuffer(unsigned int fbo, unsigned int rbo, unsigned int texture, unsigned int width, unsigned int height);
         static void DeleteFramebuffer(unsigned int fbo, unsigned int rbo, unsigned int texture);
 
         static Texture CreateTexture();
