@@ -7,7 +7,7 @@ namespace Component
 {
     struct RigidBody
     {
-        rp3d::RigidBody *rb = nullptr;
+        rp3d::RigidBody *rb {nullptr};
     };
 }
 #endif //QUACKENGINE_RIGIDBODY_HPP

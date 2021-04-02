@@ -21,7 +21,7 @@ namespace Maths
       float e[4]{ 0 };
     };
 
-    Quaternion():w{0}, x{0},y{0},z{0}{};
+    Quaternion():w{1}, x{0},y{0},z{0}{};
     Quaternion(float _w,
                float _x,
                float _y,
