@@ -35,7 +35,7 @@ void RenderSystem::Update(Component::Camera& camera)
     _quadMesh.Draw();
 }
 
-void RenderSystem::Draw(Component::Camera& camera)
+void RenderSystem::Draw( Component::Camera& camera)
 {
     RendererPlatform::ClearColor({0.0f, 0.0f, 0.0f, 1.f});
     RendererPlatform::Clear();

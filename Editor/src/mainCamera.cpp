@@ -44,7 +44,7 @@ int main()
   {
 
     // loadGL
-    RendererPlatform::LoadGL();
+      RendererPlatform::LoadGl();
 
     Resources::ResourcesManager rm;
 

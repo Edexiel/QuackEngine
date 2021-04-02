@@ -21,10 +21,9 @@ namespace Renderer
     {
     public:
 
-        static void* LoadScreen(unsigned int width, unsigned int height, const char* name);
         static void CloseWindow();
 
-        static int LoadGL();
+        static int LoadGl();
         static void ClearColor(const Maths::Vector4f &color);
         static void Clear();
         static void EnableDepthBuffer(bool isEnable);

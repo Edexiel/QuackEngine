@@ -48,7 +48,7 @@ int main()
         return -1;
     }
     glfwMakeContextCurrent(window);
-    RendererPlatform::LoadGL();
+    RendererPlatform::LoadGl();
 
     {
         World &ecs=World::Instance();
