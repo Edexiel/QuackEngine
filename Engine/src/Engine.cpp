@@ -14,7 +14,6 @@ void Engine::Init(Input::PlatformInput &input)
 {
 
     World &ecs = World::Instance();
-    ecs.Init(input);
 
     World::Instance().GetInputManager();
 
@@ -46,6 +45,7 @@ void Engine::Init(Input::PlatformInput &input)
 
     ecs.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
 
+    ecs.Init(input);
 }
 
 
