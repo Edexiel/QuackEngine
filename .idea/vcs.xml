@@ -5,8 +5,14 @@
     <mapping directory="$PROJECT_DIR$/Vendor/assimp" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/flatbuffers" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/glfw" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Vendor/googletest" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/imgui" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/reactphysics3d" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Vendor/stb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Vendor/reactphysics3d/testbed/extern/nanogui" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Vendor/reactphysics3d/testbed/extern/nanogui/ext/glfw" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Vendor/reactphysics3d/testbed/extern/nanogui/ext/nanovg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Vendor/reactphysics3d/testbed/extern/nanogui/ext/nanovg_metal" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Vendor/reactphysics3d/testbed/extern/nanogui/ext/pybind11" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Vendor/reactphysics3d/testbed/extern/nanogui/ext/pybind11/tools/clang" vcs="Git" />
   </component>
 </project>
