@@ -31,7 +31,7 @@ void ResourcesManager::Init(World* world)
     _world = world;
 }
 
-Model ResourcesManager::LoadModel(const char* path)
+Model ResourcesManager::LoadModel(const char* path, VertexType vertexType)
 {
     // Check if the Model already exist
 
@@ -50,7 +50,7 @@ Model ResourcesManager::LoadModel(const char* path)
     }
 
     // Create a new Model
-    Model model = Model::LoadModel(path);
+    Model model = Model::LoadModel(path, vertexType);
     mapModel.insert({path, model});
 
     return model;
