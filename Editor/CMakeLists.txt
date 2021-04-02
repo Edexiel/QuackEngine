@@ -6,7 +6,7 @@ project(Editor VERSION 0.1.0 LANGUAGES CXX C)
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
 
 add_executable(${PROJECT_NAME}
-        src/mainDemo.cpp
+        src/main.cpp
         src/Editor.cpp
         src/Widgets/SceneWidget.cpp
         src/Widgets/ViewportWidget.cpp
