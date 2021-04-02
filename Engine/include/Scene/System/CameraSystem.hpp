@@ -11,6 +11,7 @@ private:
 public:
     CameraSystem() = default;
 
+    void Init();
     Component::Camera& GetActiveCamera();
     void Clear();
 };

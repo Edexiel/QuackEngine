@@ -1,6 +1,11 @@
 #include "Scene/System/CameraSystem.hpp"
 #include "Scene/Core/World.hpp"
 
+void CameraSystem::Init()
+{
+
+}
+
 Component::Camera& CameraSystem::GetActiveCamera()
 {
     for (Entity entity: _entities) {
@@ -9,6 +14,7 @@ Component::Camera& CameraSystem::GetActiveCamera()
             return t;
     }
     Assert_Fatal_Error(true, "No Camera Active");
+    //exit(-1);
 }
 
 void CameraSystem::Clear()

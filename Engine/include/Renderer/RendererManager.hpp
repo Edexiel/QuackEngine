@@ -25,14 +25,16 @@ namespace Renderer
     class RendererManager
     {
         World* _world {nullptr};
-        std::shared_ptr<RenderSystem>   _renderSystem;
-        std::shared_ptr<CameraSystem>   _cameraSystem;
-        std::shared_ptr<LightSystem>    _lightSystem;
 
         Shader _shader;
         Mesh _quadMesh;
 
     public:
+
+        std::shared_ptr<RenderSystem>   _renderSystem;
+        std::shared_ptr<CameraSystem>   _cameraSystem;
+        std::shared_ptr<LightSystem>    _lightSystem;
+
         RendererManager() = default;
 
         void Init(World* world);
