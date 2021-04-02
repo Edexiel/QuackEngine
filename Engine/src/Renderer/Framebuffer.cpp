@@ -54,3 +54,11 @@ unsigned int Framebuffer::GetHeight()
 {
     return _height;
 }
+
+void Framebuffer::Resize(unsigned int width, unsigned int height)
+{
+    _width = width;
+    _height = height;
+
+    RendererPlatform::ResizeFramebuffer(_id, _rbo, _texture, width, height);
+}

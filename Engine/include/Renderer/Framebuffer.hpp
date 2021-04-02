@@ -37,6 +37,8 @@ namespace Renderer
         unsigned int GetWidth();
 
         unsigned int GetHeight();
+
+        void Resize(unsigned int width, unsigned int height);
     };
 }
 #endif // QUACKENGINE_FRAMEBUFFER_HPP
