@@ -17,6 +17,7 @@ void RendererInterface::Set(std::shared_ptr<RenderSystem> _renderSystem,
 Framebuffer RendererInterface::GetSceneUpdatedFramebuffer()
 {
     Component::Camera& camera = cameraSystem->GetActiveCamera();
+    cameraSystem->Update();
     renderSystem->Draw(camera);
 
     RendererPlatform::BindFramebuffer(0);

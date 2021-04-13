@@ -31,6 +31,8 @@ void CameraSystem::Update()
         {
             for (unsigned int i = 0; i < _listShaderToUpdate.size() ; i++)
             {
+                _listShaderToUpdate[i].Use();
+
                 _listShaderToUpdate[i].SetMatrix4("projection", c.GetProjection());
                 _listShaderToUpdate[i].SetMatrix4("view", c.GetView());;
             }

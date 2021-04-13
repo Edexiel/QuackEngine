@@ -6,6 +6,8 @@
 
 #include "Renderer/RendererPlatform.hpp"
 
+#include "Debug/Assertion.hpp"
+
 #include <iostream>
 
 using namespace Component;
@@ -178,14 +180,15 @@ Model Model::LoadNormalMapModel(const void* loadedScene)
 }
 
 
-unsigned int Model::AddMaterial(const Renderer::Material& newMaterial)
+unsigned int Model::AddMaterial(const MaterialInterface& newMaterial)
 {
-    _materialList.push_back(newMaterial);
-
-    if (newMaterial.shader.GetID() == 0)
+    for (unsigned int i = 0; i < _materialList.size(); i++)
     {
-        _materialList[_materialList.size() - 1].GenerateShader();
+        if (newMaterial == _materialList[i])
+            return i;
     }
+
+    _materialList.push_back(newMaterial);
 
     return _materialList.size() - 1;
 }
@@ -203,7 +206,7 @@ void Model::RemoveMaterial(unsigned int index)
     }
 }
 
-Renderer::Material& Model::GetMaterial(unsigned int index)
+Renderer::MaterialInterface& Model::GetMaterial(unsigned int index)
 {
     return _materialList[index];
 }
@@ -212,15 +215,61 @@ void Model::Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view, c
 {
   for (unsigned int i = 0 ; i < _meshList.size() ; i++)
   {
-     Renderer::Material& material = _materialList[_meshList[i].materialIndex];
+     Renderer::MaterialInterface& material = _materialList[_meshList[i].materialIndex];
 
-     material.Apply();
+     material->Apply();
 
-     material.shader.SetMatrix4("projection", projection);
-     material.shader.SetMatrix4("view", view);
-     material.shader.SetMatrix4("model", transform);
+     //material->shader.SetMatrix4("projection", projection);
+     //material->shader.SetMatrix4("view", view);
+     material->shader.SetMatrix4("model", transform);
 
 
      _meshList[i].Draw(_vertexType);
   }
+}
+
+unsigned int Model::ChangeMaterial(const MaterialInterface &newMaterial, unsigned int index)
+{
+    if ((index >= _materialList.size()))
+    {
+        Assert_Warning(true, "The material index in model is invalid");
+        return 0;
+    }
+
+    _materialList[index] = newMaterial;
+    return index;
+}
+
+void Model::SetMeshMaterial(unsigned int meshIndex, unsigned int materialIndex)
+{
+    if (meshIndex >= _meshList.size())
+    {
+        Assert_Warning(true, "Mesh index invalid");
+    }
+    if (materialIndex >= _materialList.size())
+    {
+        Assert_Warning(true, "Material index invalid");
+    }
+
+    _meshList[meshIndex].materialIndex = materialIndex;
+}
+
+Renderer::Mesh Model::GetMesh(unsigned int index)
+{
+    if (index >= _meshList.size())
+    {
+        Assert_Error(true, "Invalid mesh index");
+        return Mesh();
+    }
+    return _meshList[index];
+}
+
+unsigned int Model::GetNumberMesh()
+{
+    return _meshList.size();
+}
+
+Renderer::VertexType Model::GetVertexType()
+{
+    return _vertexType;
 }

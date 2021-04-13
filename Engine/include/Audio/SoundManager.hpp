@@ -55,13 +55,11 @@ namespace Audio
         ma_device* _device {nullptr};
         SoundManagerData _soundManagerData;
 
-        World* _world {nullptr};
-
     public:
         SoundManager() = default;
         ~SoundManager();
 
-        void Init(World* world);
+        void Init();
 
         /*Volume Function*/
 
