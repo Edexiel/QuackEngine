@@ -154,7 +154,7 @@ int main()
     light.specular = {0, 0, 1};
     Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
 
-    Audio::Sound sound = world.GetSoundManager().CreateSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC);
+    Audio::Sound sound = world.GetSoundManager().CreateSound("../../Asset/inactive.ogg", Audio::SoundType::S_MUSIC);
     sound.Play();
     sound.SetVolume(0.5f);
 
