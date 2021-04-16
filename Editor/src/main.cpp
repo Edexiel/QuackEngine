@@ -177,9 +177,6 @@ int main()
     unsigned int frames{0};
     double time_acc{0.0};
 
-    world.GetRendererInterface().lightSystem->Update();
-    //world.GetRendererInterface().renderSystem->SetMaterials();
-
     while (!glfwWindowShouldClose(window))
     {
         { // DeltaTime

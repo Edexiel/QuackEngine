@@ -11,6 +11,7 @@ class LightSystem : public System
 {
 private:
     std::vector<Renderer::Shader> _listShaderToUpdate;
+    unsigned int _lastEntitiesSize {0};
 
 public:
     LightSystem() = default;
