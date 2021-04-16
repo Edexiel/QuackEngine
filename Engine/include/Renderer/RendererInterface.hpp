@@ -40,8 +40,8 @@ namespace Renderer
         void DrawTextureinFramebuffer(const Framebuffer& framebufferDrawIn, const Texture& textureDrawOut);
 
 
-        void AddShaderToUpdate(const Renderer::Shader& shader);
-        void RemoveShaderFromUpdate(const Renderer::Shader& shader);
+        //void AddShaderToUpdate(const Renderer::Shader& shader);
+        //void RemoveShaderFromUpdate(const Renderer::Shader& shader);
 
     };
 }

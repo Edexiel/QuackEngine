@@ -17,10 +17,8 @@ void ViewportWidget::UpdateVisible()
     ImGui::BeginChild("ViewportRender");
     // Get the size of the child (i.e. the whole draw size of the windows).
     ImVec2 wsize = ImGui::GetWindowSize();
-    // Because I use the texture from OpenGL, I need to invert the V from the UV.
 
-    //World::Instance().GetRendererInterface().cameraSystem->GetActiveCamera().Resize(wsize.x, wsize.y);
-
+    World::Instance().GetRendererInterface().cameraSystem->GetActiveCamera().Resize(wsize.x, wsize.y);
     Framebuffer f = World::Instance().GetRendererInterface().GetSceneUpdatedFramebuffer();
 
     ImGui::Image((ImTextureID)(size_t)f.GetTexture(), wsize, ImVec2(0, 1), ImVec2(1, 0));

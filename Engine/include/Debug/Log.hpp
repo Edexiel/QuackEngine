@@ -24,23 +24,22 @@
 #define Log_Info(message)
 #define Log_Debug(message)
 #else
-#define Log_Release(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LogLevel::L_RELEASE))
-#define Log_Error(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LogLevel::L_ERROR))
-#define Log_Warning(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LogLevel::L_WARNING))
-#define Log_Info(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LogLevel::L_INFO))
-#define Log_Debug(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LogLevel::L_DEBUG))
+#define Log_Release(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LOG_LEVEL::L_RELEASE))
+#define Log_Error(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LOG_LEVEL::L_ERROR))
+#define Log_Warning(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LOG_LEVEL::L_WARNING))
+#define Log_Info(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LOG_LEVEL::L_INFO))
+#define Log_Debug(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LOG_LEVEL::L_DEBUG))
 #endif
 
 
 namespace Debug
 {
-
     enum class LOG_LEVEL
     {
         L_RELEASE, L_ERROR, L_WARNING, L_INFO, L_DEBUG
     };
 
-    static LOG_LEVEL logLevel = LOG_LEVEL::L_DEBUG;
+    inline static LOG_LEVEL logLevel = LOG_LEVEL::L_DEBUG;
 
     inline void Log(const char *message, const char *file, const char *function, unsigned int line,
                     LOG_LEVEL logLvl = LOG_LEVEL::L_DEBUG)

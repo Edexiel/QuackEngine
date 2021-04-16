@@ -67,7 +67,10 @@ int main()
     material.specular = {1, 1, 1};
     material.checkLight = true;
     material.normalMap = world.GetResourcesManager().LoadTexture("../../Asset/Floor_N.jpg");
-    md.AddMaterial(material);
+
+    MaterialInterface materialInterface = world.GetResourcesManager().GenerateMaterial("base", material);
+
+    md.AddMaterial(materialInterface);
 
 
     for (int x = 0; x < 1; x++)
@@ -76,8 +79,8 @@ int main()
         {
             for (int  z = 0; z < 1; z++)
             {
-                t.position.x = Random::Range(0.f, 20.0f);
-                t.position.y = 10 - y * 2;
+                t.position.x = 0;
+                t.position.y = 5 - y * 2;
                 t.position.z = 20 + z * 2;
 
                 Entity id = world.CreateEntity("Test");
@@ -107,7 +110,9 @@ int main()
 
     material.colorTexture = world.GetResourcesManager().LoadTexture("../../Asset/Floor_C.jpg");
 
-    mdFloor.AddMaterial(material);
+    MaterialInterface materialInterface2 = world.GetResourcesManager().GenerateMaterial("mat2", material);
+
+    mdFloor.AddMaterial(materialInterface2);
 
     world.AddComponent(idFloor, tFloor);
     world.AddComponent(idFloor, mdFloor);
@@ -154,9 +159,9 @@ int main()
     light.specular = {0, 0, 1};
     Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
 
-    /*Audio::Sound sound = world.GetSoundManager().CreateSound("../../Asset/inactive.ogg", Audio::SoundType::S_MUSIC);
-    sound.Play();
-    sound.SetVolume(0.5f);*/
+    //Audio::Sound sound = world.GetSoundManager().CreateSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC);
+    //sound.Play();
+    //sound.SetVolume(0.05f);
 
     world.AddComponent(lightID3, light);
     world.AddComponent(lightID3, tl3);
@@ -173,6 +178,7 @@ int main()
     double time_acc{0.0};
 
     world.GetRendererInterface().lightSystem->Update();
+    //world.GetRendererInterface().renderSystem->SetMaterials();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -191,7 +197,7 @@ int main()
                 time_acc = 0.;
             }
 
-            physicsSystem->FixedUpdate(deltaTime);
+            //physicsSystem->FixedUpdate(deltaTime);
 
         }
 
