@@ -14,6 +14,7 @@
 #include "Widgets/PropertiesWidget.hpp"
 #include "Widgets/SceneWidget.hpp"
 #include "Widgets/ViewportWidget.hpp"
+#include "Widgets/ViewerWidget.hpp"
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -87,7 +88,7 @@ void Editor::InitGlfw(const EngineSettings &settings)
         case WINDOW_MODE::WINDOWED_FULLSCREEN:
         {
             //todo: stuff
-            //flemme, je verrais plus tard
+            //flemme, je verrais plus tard //... Mais enfin Guigui! ça dépasse l'entendement!
             monitor = nullptr;
             break;
         }
@@ -122,6 +123,7 @@ void Editor::InitWidgets()
     _widgets.emplace_back(std::make_unique<PropertiesWidget>());
     _widgets.emplace_back(std::make_unique<SceneWidget>());
     _widgets.emplace_back(std::make_unique<ViewportWidget>());
+    _widgets.emplace_back(std::make_unique<ViewerWidget>());
 }
 
 void Editor::InitImGui()

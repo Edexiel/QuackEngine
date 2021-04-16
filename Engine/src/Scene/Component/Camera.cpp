@@ -35,9 +35,6 @@ Camera::Camera(const unsigned int width, const unsigned int height,
     _view = Matrix4::Identity();
 }
 
-Camera::~Camera()
-{}
-
 Renderer::Framebuffer Camera::GetFramebuffer() const
 {
     return _framebuffer;

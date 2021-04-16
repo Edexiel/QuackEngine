@@ -70,11 +70,11 @@ int main()
     md.AddMaterial(material);
 
 
-    for (int x = 0; x < 10; x++)
+    for (int x = 0; x < 1; x++)
     {
         for (int  y = 0; y < 1; y++)
         {
-            for (int  z = 0; z < 5; z++)
+            for (int  z = 0; z < 1; z++)
             {
                 t.position.x = Random::Range(0.f, 20.0f);
                 t.position.y = 10 - y * 2;
@@ -89,7 +89,7 @@ int main()
                 world.AddComponent(id, rb);
 
                 physicsSystem->SetRigidBody(id);
-//                physicsSystem->SetType(id, BodyType::STATIC);
+                physicsSystem->SetType(id, BodyType::STATIC);
 
                 physicsSystem->AddSphereCollider(id, 1.5f);
             }
@@ -154,9 +154,9 @@ int main()
     light.specular = {0, 0, 1};
     Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
 
-    Audio::Sound sound = world.GetSoundManager().CreateSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC);
+    /*Audio::Sound sound = world.GetSoundManager().CreateSound("../../Asset/inactive.ogg", Audio::SoundType::S_MUSIC);
     sound.Play();
-    sound.SetVolume(0.5f);
+    sound.SetVolume(0.5f);*/
 
     world.AddComponent(lightID3, light);
     world.AddComponent(lightID3, tl3);

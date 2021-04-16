@@ -12,7 +12,9 @@ add_executable(${PROJECT_NAME}
         src/Widgets/ViewportWidget.cpp
         src/Widgets/PropertiesWidget.cpp
         src/Widgets/LogWidget.cpp
-        src/Widgets/ExplorerWidget.cpp)
+        src/Widgets/ExplorerWidget.cpp
+        src/Widgets/ViewerWidget.cpp
+        )
 
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

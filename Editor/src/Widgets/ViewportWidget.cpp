@@ -28,4 +28,3 @@ void ViewportWidget::UpdateVisible()
     ImGui::EndChild();
 
 }
-

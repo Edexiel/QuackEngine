@@ -64,11 +64,10 @@ namespace Component
 
 
     public:
-        //Camera();
+//        Camera();
         Camera(unsigned int width, unsigned int height, float far, float near, float fov);
         Camera(unsigned int width, unsigned int height, float far, float near);
 
-        ~Camera();
 
         void Resize(unsigned int width, unsigned int height);
 
