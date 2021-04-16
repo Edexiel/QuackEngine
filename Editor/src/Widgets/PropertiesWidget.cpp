@@ -32,12 +32,10 @@ void PropertiesWidget::TransformReader() const
 
     ImGui::DragFloat3("Position", transform.position.e);
     ImGui::DragFloat3("Scale", transform.scale.e);
-    ImGui::DragFloat4("Rotation", transform.rotation.e);
-
-//    for(int i = 0; i < 3; i++)
-//    {
-//        std::cout << e[i] << std::endl;
-//    }
+    Maths::Vector3f v = transform.rotation.ToEuler();
+    ImGui::DragFloat3("Rotation", v.e);
+    v = v * (M_PI / 180.f);
+    transform.rotation = Maths::Quaternion::EulerToQuaternion(v);
 }
 
 void PropertiesWidget::AddComponent()
