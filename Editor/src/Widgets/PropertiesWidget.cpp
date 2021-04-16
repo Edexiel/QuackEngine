@@ -30,9 +30,9 @@ void PropertiesWidget::TransformReader() const
     if (ImGui::CollapsingHeader("Transform"))
         return;
 
-    ImGui::InputFloat3("Position", transform.position.e);
-    ImGui::InputFloat3("Scale", transform.scale.e);
-    ImGui::InputFloat4("Rotation", transform.rotation.e);
+    ImGui::DragFloat3("Position", transform.position.e);
+    ImGui::DragFloat3("Scale", transform.scale.e);
+    ImGui::DragFloat4("Rotation", transform.rotation.e);
 
 //    for(int i = 0; i < 3; i++)
 //    {
