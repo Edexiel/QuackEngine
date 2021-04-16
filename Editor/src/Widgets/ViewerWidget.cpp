@@ -25,6 +25,7 @@ void ViewerWidget::UpdateVisible()
         n++;
     }
     AddEntity();
+    DestroyEntity();
 }
 
 void ViewerWidget::AddEntity()
@@ -36,6 +37,13 @@ void ViewerWidget::AddEntity()
         _selected = _entity;
         Transform t;
         world.AddComponent(_entity, t);
+    }
+}
 
+void ViewerWidget::DestroyEntity()
+{
+    if(ImGui::Button("Destroy entity"))
+    {
+        World::Instance().DestroyEntity(_entity);
     }
 }
