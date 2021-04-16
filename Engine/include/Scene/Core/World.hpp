@@ -106,8 +106,7 @@ inline void World::Init(Input::PlatformInput &platformInput)
 
     _physicsWorld = _physicsManager->createPhysicsWorld();
 
-    _resourcesManager.Init(this);
-    _soundManager.Init(this);
+    _soundManager.Init();
 
     _inputManager = std::make_unique<Input::InputManager>(platformInput);
 

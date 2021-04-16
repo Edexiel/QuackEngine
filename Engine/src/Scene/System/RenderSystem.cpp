@@ -1,12 +1,10 @@
 #include "Scene/System/RenderSystem.hpp"
 
-#include "Scene/Component/Transform.hpp"
-#include "Scene/Component/Model.hpp"
-
 #include "Scene/Core/World.hpp"
 #include "Renderer/RendererPlatform.hpp"
-#include "Scene/Component/Camera.hpp"
 #include "Renderer/Shape.hpp"
+
+#include "Debug/Log.hpp"
 
 using namespace Renderer;
 
@@ -18,20 +16,14 @@ RenderSystem::RenderSystem()
             "../../Engine/Shader/Framebuffer/BasicFragment.fs");
 }
 
-void RenderSystem::Draw( Component::Camera& camera)
+void RenderSystem::Draw(Component::Camera& camera)
 {
     camera.GetFramebuffer().Bind();
 
     RendererPlatform::ClearColor({0.0f, 0.0f, 0.0f, 1.f});
     RendererPlatform::Clear();
 
-    for (Entity entity: _entities)
-    {
-        auto &t = World::Instance().GetComponent<Transform>(entity);
-        auto &m = World::Instance().GetComponent<Component::Model>(entity);
-
-        m.Draw(camera.GetProjection(), camera.GetView(), t.GetMatrix());
-    }
+    DrawMaterials(camera);
 }
 
 void RenderSystem::DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex)
@@ -46,4 +38,60 @@ void RenderSystem::DrawTextureInFramebuffer(unsigned int framebufferIndex, unsig
     RendererPlatform::BindTexture(textureIndex, 0);
 
     _quadMesh.Draw();
+}
+
+void RenderSystem::AddMesh(Renderer::MaterialInterface materialInterface, const Renderer::Mesh& mesh, Entity entity)
+{
+    auto it = _mapMaterial.find(materialInterface);
+
+    if (it == _mapMaterial.end())
+    {
+        _mapMaterial.insert({materialInterface, std::vector<std::pair<Renderer::Mesh, Entity>>()});
+        it = _mapMaterial.find(materialInterface);
+    }
+
+    it->second.push_back({mesh, entity});
+}
+
+void RenderSystem::SetMaterials()
+{
+    MaterialInterface material;
+
+    for (Entity entity: _entities)
+    {
+        auto &t = World::Instance().GetComponent<Transform>(entity);
+        auto &m = World::Instance().GetComponent<Component::Model>(entity);
+
+        for (unsigned int i = 0; i < m.GetNumberMesh(); i++)
+        {
+            material = m.GetMaterial(m.GetMesh(i).materialIndex);
+            AddMesh(material, m.GetMesh(i), entity);
+        }
+    }
+}
+
+void RenderSystem::DrawMaterials(Component::Camera& camera)
+{
+    if (_lastLinkEntitiesNumbers != _entities.size() || _lastLinkEntitiesNumbers == 0)
+    {
+        _lastLinkEntitiesNumbers = _entities.size();
+        _mapMaterial.erase(_mapMaterial.cbegin(), _mapMaterial.cend());
+        SetMaterials();
+    }
+
+    World &world = World::Instance();
+
+    for (auto material : _mapMaterial)
+    {
+        material.first->Apply();
+        material.first->shader.SetMatrix4("projection", camera.GetProjection());
+        material.first->shader.SetMatrix4("view", camera.GetView());
+
+        for (unsigned int i = 0; i < material.second.size(); i++)
+        {
+            material.first->shader.SetMatrix4("model", world.GetComponent<Transform>(material.second[i].second).GetMatrix());
+            material.second[i].first.Draw();
+
+        }
+    }
 }

@@ -24,7 +24,7 @@ Mesh Shape::CreateQuad()
 
     Mesh quadMesh = Renderer::RendererPlatform::CreateMesh(
             quad, sizeof(quad) / sizeof (float ),
-            quadIndices, sizeof(quadIndices) / sizeof(unsigned int));
+            quadIndices, sizeof(quadIndices) / sizeof(unsigned int), VertexType::V_CLASSIC);
 
     RendererPlatform::VerticesReading();
 
@@ -91,7 +91,7 @@ Mesh Shape::CreateCube()
             21, 22, 23
     };
 
-    return RendererPlatform::CreateMesh(vertices, sizeof (vertices)/sizeof (vertices[0]), indices, sizeof(indices)/sizeof(indices[0]));
+    return RendererPlatform::CreateMesh(vertices, sizeof (vertices)/sizeof (vertices[0]), indices, sizeof(indices)/sizeof(indices[0]), VertexType::V_CLASSIC);
 }
 
 Mesh Shape::CreateSphere(int sectorCount, int stackCount)
@@ -147,5 +147,5 @@ Mesh Shape::CreateSphere(int sectorCount, int stackCount)
         }
     }
 
-    return RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
+    return RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size(), VertexType::V_CLASSIC);
 }

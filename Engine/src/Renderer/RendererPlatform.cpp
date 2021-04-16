@@ -8,7 +8,6 @@
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
 
-#include "Renderer/Vertex.hpp"
 #include "Renderer/Framebuffer.hpp"
 
 #include "Renderer/Mesh.hpp"
@@ -68,7 +67,7 @@ void RendererPlatform::EnableDepthBuffer(bool isEnable)
   }
 }
 
-Mesh RendererPlatform::CreateMesh(const Vertex *vertices, unsigned int verticesSize, const unsigned int *indices, unsigned int indicesSize)
+Mesh RendererPlatform::CreateMesh(const Vertex *vertices, unsigned int verticesSize, const unsigned int *indices, unsigned int indicesSize, VertexType vertexType)
 {
   unsigned int vao{0}, vbo{0};
   glGenVertexArrays(1, &vao);
@@ -83,10 +82,10 @@ Mesh RendererPlatform::CreateMesh(const Vertex *vertices, unsigned int verticesS
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
-  return Mesh(vao, vbo, ebo, verticesSize, indicesSize);
+  return Mesh(vao, vbo, ebo, verticesSize, indicesSize, vertexType);
 }
 
-Mesh RendererPlatform::CreateMesh(const float *vertices, unsigned int verticesSize, const unsigned int *indices, unsigned int indicesSize)
+Mesh RendererPlatform::CreateMesh(const float *vertices, unsigned int verticesSize, const unsigned int *indices, unsigned int indicesSize, VertexType vertexType)
 {
   unsigned int vao, vbo, ebo;
 
@@ -105,7 +104,7 @@ Mesh RendererPlatform::CreateMesh(const float *vertices, unsigned int verticesSi
 
   //VerticesReading();
 
-  return Mesh(vao, vbo, ebo, verticesSize, indicesSize);
+  return Mesh(vao, vbo, ebo, verticesSize, indicesSize, vertexType);
 }
 
 void RendererPlatform::DrawMesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbIndices)
