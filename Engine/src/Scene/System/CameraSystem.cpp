@@ -22,24 +22,6 @@ void CameraSystem::Clear()
     }
 }
 
-void CameraSystem::Update()
-{
-    for (Entity entity: _entities)
-    {
-        auto &c = World::Instance().GetComponent<Component::Camera>(entity);
-        if (c.isActive)
-        {
-            for (unsigned int i = 0; i < _listShaderToUpdate.size() ; i++)
-            {
-                _listShaderToUpdate[i].Use();
-
-                _listShaderToUpdate[i].SetMatrix4("projection", c.GetProjection());
-                _listShaderToUpdate[i].SetMatrix4("view", c.GetView());;
-            }
-        }
-    }
-}
-
 void CameraSystem::Init()
 {
     for (Entity entity: _entities)
@@ -53,19 +35,3 @@ void CameraSystem::Init()
     }
 }
 
-void CameraSystem::AddShaderToUpdate(const Renderer::Shader& shader)
-{
-    _listShaderToUpdate.push_back(shader);
-}
-
-void CameraSystem::RemoveShaderFromUpdate(const Renderer::Shader& shader)
-{
-    for (unsigned int i = 0; i < _listShaderToUpdate.size(); i++)
-    {
-        if (_listShaderToUpdate[i].GetID() == shader.GetID())
-        {
-            _listShaderToUpdate.erase(_listShaderToUpdate.cbegin() + i);
-            return;
-        }
-    }
-}

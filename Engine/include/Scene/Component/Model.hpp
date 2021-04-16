@@ -43,9 +43,9 @@ namespace Component
 
         void Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view, const Maths::Matrix4& transform);
 
-        Renderer::Mesh GetMesh(unsigned int index);
-        unsigned int GetNumberMesh();
-        Renderer::VertexType GetVertexType();
+        const Renderer::Mesh& GetMesh(unsigned int index) const;
+        unsigned int GetNumberMesh() const;
+        Renderer::VertexType GetVertexType() const;
 
     };
 }

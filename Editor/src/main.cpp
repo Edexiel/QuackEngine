@@ -73,13 +73,13 @@ int main()
     md.AddMaterial(materialInterface);
 
 
-    for (int x = 0; x < 20; x++)
+    for (int x = 0; x < 10; x++)
     {
-        for (int  y = 0; y < 1; y++)
+        for (int  y = 0; y < 10; y++)
         {
-            for (int  z = 0; z < 50; z++)
+            for (int  z = 0; z < 10; z++)
             {
-                t.position.x = Random::Range(0.f, 20.0f);
+                t.position.x = -10 + Random::Range(0, 20);
                 t.position.y = 5 - y * 2;
                 t.position.z = 20 + z * 2;
 
@@ -178,7 +178,7 @@ int main()
     double time_acc{0.0};
 
     world.GetRendererInterface().lightSystem->Update();
-    world.GetRendererInterface().renderSystem->SetMaterials();
+    //world.GetRendererInterface().renderSystem->SetMaterials();
 
     while (!glfwWindowShouldClose(window))
     {

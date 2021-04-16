@@ -100,7 +100,7 @@ Model Model::LoadClassicModel(const void* loadedScene)
     }
 
     // Put loaded data in buffers
-    model._meshList[i] = Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
+    model._meshList[i] = Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size(), VertexType::V_CLASSIC);
     RendererPlatform::VerticesReading();
   }
   return model;
@@ -172,7 +172,7 @@ Model Model::LoadNormalMapModel(const void* loadedScene)
     }
 
     // Put loaded data in buffers
-    model._meshList[i] = Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
+    model._meshList[i] = Renderer::RendererPlatform::CreateMesh(vertices.data(), vertices.size(), indices.data(), indices.size(), Renderer::VertexType::V_NORMALMAP);
     RendererPlatform::VerticesReadingNormalMapping();
   }
 
@@ -254,7 +254,7 @@ void Model::SetMeshMaterial(unsigned int meshIndex, unsigned int materialIndex)
     _meshList[meshIndex].materialIndex = materialIndex;
 }
 
-Renderer::Mesh Model::GetMesh(unsigned int index)
+const Renderer::Mesh& Model::GetMesh(unsigned int index) const
 {
     if (index >= _meshList.size())
     {
@@ -264,12 +264,12 @@ Renderer::Mesh Model::GetMesh(unsigned int index)
     return _meshList[index];
 }
 
-unsigned int Model::GetNumberMesh()
+unsigned int Model::GetNumberMesh() const
 {
     return _meshList.size();
 }
 
-Renderer::VertexType Model::GetVertexType()
+Renderer::VertexType Model::GetVertexType() const
 {
     return _vertexType;
 }

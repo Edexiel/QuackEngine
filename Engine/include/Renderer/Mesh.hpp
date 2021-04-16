@@ -23,12 +23,13 @@ namespace Renderer
       unsigned int materialIndex {0};
 
     Mesh() = default;
-    Mesh(VertexType vertexType){};
-    Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbVertices, unsigned int nbIndices)
-            : _vao{vao},_vbo{vbo}, _ebo{ebo}, _nbVertices{nbVertices}, _nbIndices{nbIndices} {}
+    Mesh(VertexType vertexType);
+    Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbVertices, unsigned int nbIndices, VertexType vertexType)
+            : _vao{vao},_vbo{vbo}, _ebo{ebo}, _nbVertices{nbVertices}, _nbIndices{nbIndices}, _vertexType{vertexType} {}
     ~Mesh();
 
-    void Draw(VertexType vertexType = VertexType::V_CLASSIC);
+    void Draw() const;
+    void Draw(VertexType vertexType) const;
   };
 }
 

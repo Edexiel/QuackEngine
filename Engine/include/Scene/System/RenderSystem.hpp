@@ -22,25 +22,27 @@ class RenderSystem : public System
     Renderer::Shader _shader;
     Renderer::Mesh _quadMesh;
 
-    std::vector<Renderer::MaterialInterface> _listMaterial;
-
     std::unordered_map<Renderer::MaterialInterface, std::vector<std::pair<Renderer::Mesh, Entity>>> _mapMaterial;
+    unsigned int _lastLinkEntitiesNumbers {0};
 
 public:
 
     RenderSystem();
     ~RenderSystem() = default;
 
-    void SetMaterials();
-    void DrawMaterials();
-
+    /**
+     * @brief Draw the scene from the camera point of view
+     * @param camera
+     */
     void Draw(Component::Camera& camera);
     void DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex);
 
-    void AddMaterial(Renderer::MaterialInterface materialInterface);
-    void RemoveMaterial(Renderer::MaterialInterface materialInterface);
+private:
 
-    void AddMesh(Renderer::MaterialInterface materialInterface, Renderer::Mesh mesh, Entity entity);
+    void SetMaterials();
+    void DrawMaterials(Component::Camera& camera);
+
+    void AddMesh(Renderer::MaterialInterface materialInterface, const Renderer::Mesh& mesh, Entity entity);
 
 
 };

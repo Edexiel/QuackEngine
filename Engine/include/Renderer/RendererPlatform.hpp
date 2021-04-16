@@ -4,6 +4,8 @@
 #include "Maths/Matrix4.hpp"
 #include <vector>
 
+#include "Renderer/Vertex.hpp"
+
 namespace Component
 {
     class Light;
@@ -29,9 +31,9 @@ namespace Renderer
         static void EnableDepthBuffer(bool isEnable);
 
         static Mesh CreateMesh(const Vertex *vertices, unsigned int verticesSize, const unsigned int *indices,
-                               unsigned int indicesSize);
+                               unsigned int indicesSize, Renderer::VertexType vertexType);
         static Mesh CreateMesh(const float *vertices, unsigned int verticesSize, const unsigned int *indices,
-                               unsigned int indicesSize);
+                               unsigned int indicesSize, Renderer::VertexType vertexType);
         static void DrawMesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbIndices);
         static void DrawMeshNormalMap(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbIndices);
         static void DeleteMesh(unsigned int vao, unsigned int vbo, unsigned int ebo);

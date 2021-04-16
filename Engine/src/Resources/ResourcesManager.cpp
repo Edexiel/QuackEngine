@@ -114,8 +114,6 @@ Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const ch
 Renderer::Shader ResourcesManager::LoadObjectShader(const char* vertexShader, const char* fragmentShader)
 {
     Shader shader = LoadShader(vertexShader, fragmentShader);
-
-    World::Instance().GetRendererInterface().cameraSystem->AddShaderToUpdate(shader);
     World::Instance().GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
 
     return shader;
@@ -135,8 +133,6 @@ Renderer::Shader  ResourcesManager::LoadObjectShader(const Renderer::ShaderConst
 
   Shader shader = Shader::LoadObjectShader(constructData);
   _mapDynamicShader.insert({constructData.GetKey(), shader});
-
-    World::Instance().GetRendererInterface().cameraSystem->AddShaderToUpdate(shader);
 
   if(constructData.hasLight)
       World::Instance().GetRendererInterface().lightSystem->AddShaderToUpdate(shader);

@@ -12,9 +12,8 @@ namespace Component
 {
     enum class Light_Type{L_POINT, L_DIRECTIONAL, L_SPOT};
 
-    class Light
+    struct Light
     {
-    public:
       Light_Type type {Light_Type::L_POINT};
 
       Maths::Vector3f position {0.f, 0.f, 0.f};
@@ -29,10 +28,7 @@ namespace Component
       float quadratic             {0.0f};
         
       float spotAngle             {0.0f}; // angle of the spot
-      float outerSpotAngle        {0.0f}; // angle of the spot
-
-      //Maths::Vector3f GetDirection() const;
-      //Maths::Vector3f GetPosition () const;
+      float outerSpotAngle        {0.0f};
 
   };
 }
