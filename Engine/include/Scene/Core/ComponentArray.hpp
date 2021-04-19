@@ -85,9 +85,7 @@ T &ComponentArray<T>::GetData(Entity id)
 template<typename T>
 bool ComponentArray<T>::HasData(Entity id)
 {
-    if (_entityToIndex.find(id) == _entityToIndex.end())
-        return false;
-    return true;
+    return (_entityToIndex.find(id) != _entityToIndex.end());
 }
 
 template<typename T>
