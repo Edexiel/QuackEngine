@@ -20,6 +20,8 @@ void PropertiesWidget::UpdateVisible()
     Name();
     TransformReader();
     AddComponent();
+
+
 }
 
 void PropertiesWidget::TransformReader() const
