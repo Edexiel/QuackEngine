@@ -3,17 +3,18 @@
 
 
 #include <map>
+#include <memory>
 #include <iostream>
 #include <functional>
 #include <vector>
-#include"PlatformInput.hpp"
+#include "PlatformInput.hpp"
 
 namespace Input
 {
     class InputManager
     {
     private:
-        PlatformInput &_platformInput;
+        PlatformInput *_platformInput = nullptr;
 
         std::unordered_map<std::string, std::vector<std::pair<std::function<void()>, Action>>> _eventFuncs;
         std::unordered_map<std::string, std::vector<std::function<void(float)>>> _eventFuncsAxis;
@@ -23,22 +24,16 @@ namespace Input
         std::unordered_map<std::string, std::vector<MouseButton>> _eventMouseButtons;
 
         void OnKeyEvent(Action action, Key key);
-
         void OnMouseButtonEvent(Action action, MouseButton button);
-
         void OnUpdateMousePositionEvent(double xPos, double yPos);
-
         void InitInput();// todo: Remove this function by serialisation of BindEvent
 
     public:
-        explicit InputManager(PlatformInput &platformInput);
+        InputManager() = default;
 
-        ~InputManager() = default;
-
+        void Init(PlatformInput *platformInput);
         void BindEvent(const std::string &event, Key key);
-
         void BindEvent(const std::string &event, MouseButton key);
-
         void BindEventAxis(const std::string &event, Key key, float scale);
 
         template<typename C, typename F>
@@ -46,7 +41,6 @@ namespace Input
 
         template<typename C, typename F>
         void RegisterEventAxis(const std::string &event, C *classObject, F &&function);
-
         void Update();
 
         MousePosition mousePosition;
