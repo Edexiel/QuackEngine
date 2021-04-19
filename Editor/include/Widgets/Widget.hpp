@@ -8,6 +8,7 @@
 
 #include <string>
 #include <imgui.h>
+#include "Scene/Core/Types.hpp"
 
 class Widget
 {
@@ -19,6 +20,8 @@ protected:
     ImGuiWindowFlags _flags = 0;
 
     Widget() = default;
+
+    static Entity _entity;
 
 public:
     virtual ~Widget() = default;
@@ -68,6 +71,6 @@ inline void Widget::Draw()
     ImGui::End();
 
 }
-
+inline Entity Widget::_entity = 0;
 
 #endif //QUACKENGINE_WIDGET_HPP

@@ -9,7 +9,7 @@ InputManager::InputManager(PlatformInput& platformInput)
 	_platformInput.MouseButtonEvent = std::bind(&InputManager::OnMouseButtonEvent, std::ref(*this), std::placeholders::_1, std::placeholders::_2);
 	_platformInput.UpdateMousePosition = std::bind(&InputManager::OnUpdateMousePositionEvent, std::ref(*this), std::placeholders::_1, std::placeholders::_2);
 
-        InitInput();
+    InitInput();
 }
 
 
@@ -106,10 +106,10 @@ void InputManager::Update()
  */
 void InputManager::InitInput()
 {
-  BindEventAxis("CameraMovementForwardAxis", Input::Key::KEY_W, -1.0f);
-  BindEventAxis("CameraMovementForwardAxis", Input::Key::KEY_S, 1.0f);
-  BindEventAxis("CameraMovementRightAxis", Input::Key::KEY_D, -1.0f);
-  BindEventAxis("CameraMovementRightAxis", Input::Key::KEY_A, 1.0f);
-  BindEventAxis("CameraMovementUpAxis", Input::Key::KEY_SPACE, -1.0f);
-  BindEventAxis("CameraMovementUpAxis", Input::Key::KEY_LEFT_CONTROL, 1.0f);
+  BindEventAxis("CameraEditorMovementForward", Input::Key::KEY_W, -1.0f);
+  BindEventAxis("CameraEditorMovementForward", Input::Key::KEY_S, 1.0f);
+  BindEventAxis("CameraEditorMovementRight", Input::Key::KEY_D, -1.0f);
+  BindEventAxis("CameraEditorMovementRight", Input::Key::KEY_A, 1.0f);
+  BindEventAxis("CameraEditorMovementUp", Input::Key::KEY_SPACE, -1.0f);
+  BindEventAxis("CameraEditorMovementUp", Input::Key::KEY_LEFT_CONTROL, 1.0f);
 }
