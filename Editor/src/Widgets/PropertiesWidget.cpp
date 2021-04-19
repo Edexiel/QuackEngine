@@ -26,10 +26,6 @@ void PropertiesWidget::UpdateVisible()
 void PropertiesWidget::TransformReader() const
 {
     Transform &transform = World::Instance().GetComponent<Transform>(_entity);
-    //Component::Model& model = World::Instance().GetComponent<Component::Model>(_entity);
-
-    std::cout << World::Instance().HasComponent<Component::Model>(_entity) << std::endl;
-
 
     if (ImGui::CollapsingHeader("Transform"))
         return;
