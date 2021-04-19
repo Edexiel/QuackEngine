@@ -10,13 +10,14 @@
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+
 #include "imgui.h"
 
 
-Editor::Editor()
+Editor::Editor(GLFWwindow * window)
 {
     InitWidgets();
-    InitImGui();
+    InitImGui(window);
 }
 
 Editor::~Editor()
@@ -36,7 +37,7 @@ void Editor::InitWidgets()
     _widgets.emplace_back(std::make_unique<ViewportWidget>());
 }
 
-void Editor::InitImGui()
+void Editor::InitImGui(GLFWwindow * window)
 {
     // Init ImGui
     IMGUI_CHECKVERSION();
@@ -63,7 +64,7 @@ void Editor::InitImGui()
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
-    ImGui_ImplGlfw_InitForOpenGL(Engine::Instance().GetWindow(), true);
+    ImGui_ImplGlfw_InitForOpenGL(window,true);
     ImGui_ImplOpenGL3_Init("#version 460");
 }
 

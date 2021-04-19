@@ -1,7 +1,5 @@
 #include "GLFW/glfw3.h"
 
-#include "Input/InputManager.hpp"
-#include "Input/PlatformInputGLFW.hpp"
 #include "Editor.hpp"
 #include "Engine.hpp"
 #include "Renderer/Material.hpp"
@@ -210,11 +208,10 @@ int main()
     Engine& engine = Engine::Instance();
     engine.InitWindow(settings);
 
-    Editor editor{};
+    Editor editor{engine.GetWindow()};
 
     loadScene();
 
-    float dt = 0;
     // Time && fps
     double temp_time{0.0};
     double time{0.0};
@@ -226,8 +223,8 @@ int main()
 
     while (!engine.WindowShouldClose())
     {
+        // DeltaTime
         {
-            // DeltaTime
             temp_time = glfwGetTime();
             deltaTime = temp_time - time;
             time = temp_time;
@@ -242,17 +239,23 @@ int main()
                 time_acc = 0.;
             }
         }
+
+        /** POLL INPUT **/
+        engine.GetInputManager().Update();
+        engine.TestWindowShouldClose();
+
+
         Renderer::RendererPlatform::ClearColor({0.7f, 0.7f, 0.7f, 0.f});
         Renderer::RendererPlatform::Clear();
+
+        /** Editor draw **/
+        editor.Draw();
 
         /** UPDATE **/
         //physicsSystem->FixedUpdate(deltaTime);
 
-        editor.Draw();
-        engine.GetInputManager().Update();
-
-        /** DRAW **/
-        engine.TestWindowShouldClose();
         engine.SwapBuffers();
     }
+
+    return 0;
 }

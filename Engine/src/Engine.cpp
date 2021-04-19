@@ -13,7 +13,6 @@
 
 Engine::~Engine()
 {
-    glfwDestroyWindow(_window);
     glfwTerminate();
 }
 

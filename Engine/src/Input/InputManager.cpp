@@ -99,7 +99,7 @@ void InputManager::BindEventAxis(const std::string &event, Key key, float scale)
 
 void InputManager::Update()
 {
-    Assert_Fatal_Error(_platformInput, "Plateform input not initialized");
+    Assert_Error(!_platformInput, "Plateform input not initialized");
 
     _platformInput->PollEvents();
     _platformInput->UpdateCursorPosition(mousePosition);
