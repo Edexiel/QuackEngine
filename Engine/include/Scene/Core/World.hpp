@@ -66,6 +66,9 @@ public:
     rp3d::PhysicsWorld *GetPhysicsWorld() const;
 
     const std::string &GetName() const;
+
+    const std::unique_ptr<EntityManager> &GetEntityManager() const;
+
 };
 
 inline rp3d::PhysicsWorld *World::GetPhysicsWorld() const
@@ -99,7 +102,7 @@ inline void World::RegisterComponent()
 }
 
 template<typename T>
-inline void World::AddComponent(Entity id, T component)
+inline void World::AddComponent(Entity id, T component) //todo: maybe pass by const ref
 {
     _componentManager->AddComponent<T>(id, component);
 

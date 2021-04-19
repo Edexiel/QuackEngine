@@ -1,12 +1,11 @@
 #include "Editor.hpp"
-#include "Engine.hpp"
 
-#include "Widgets/Widget.hpp"
 #include "Widgets/ExplorerWidget.hpp"
 #include "Widgets/LogWidget.hpp"
 #include "Widgets/PropertiesWidget.hpp"
 #include "Widgets/SceneWidget.hpp"
 #include "Widgets/ViewportWidget.hpp"
+#include "Widgets/ViewerWidget.hpp"
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"

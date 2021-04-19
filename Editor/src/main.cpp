@@ -10,11 +10,14 @@
 #include "Renderer/Shape.hpp"
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
+#include "Resources/ResourcesManager.hpp"
 
 #include "Tools/Random.hpp"
 #include "CameraEditor.hpp"
 
 using namespace Renderer;
+using namespace Component;
+using namespace Resources;
 
 void loadScene()
 {
@@ -24,11 +27,12 @@ void loadScene()
 
     //Register
     {
+        world.RegisterComponent<Name>();
         world.RegisterComponent<Transform>();
-        world.RegisterComponent<Component::Model>();
-        world.RegisterComponent<Component::Camera>();
-        world.RegisterComponent<Component::Light>();
-        world.RegisterComponent<Component::RigidBody>();
+        world.RegisterComponent<Model>();
+        world.RegisterComponent<Camera>();
+        world.RegisterComponent<Light>();
+        world.RegisterComponent<RigidBody>();
     }
 
     auto renderSystem = world.RegisterSystem<RenderSystem>();
@@ -36,8 +40,7 @@ void loadScene()
     auto lightSystem = world.RegisterSystem<LightSystem>();
     auto physicsSystem = world.RegisterSystem<PhysicsSystem>();
 
-
-    Engine& engine = Engine::Instance();
+    Engine &engine = Engine::Instance();
 
     engine.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
 
@@ -89,10 +92,11 @@ void loadScene()
         world.AddComponent(CameraEntity, cameraTrs);
 
     }
+    ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
 
     Transform t = {Maths::Vector3f{0, 0, 10}, Maths::Vector3f::One() * 1.5f, Maths::Quaternion{}};
-    Component::Model md = engine.GetResourcesManager().LoadModel("../../Asset/Sphere.fbx",
-                                                                             Renderer::VertexType::V_NORMALMAP);
+    Component::Model md = resourcesManager.LoadModel("../../Asset/Sphere.fbx",
+                                                                 Renderer::VertexType::V_NORMALMAP);
 
     Material material;
 
@@ -100,10 +104,9 @@ void loadScene()
     material.diffuse = {1, 1, 1};
     material.specular = {1, 1, 1};
     material.checkLight = true;
-    material.normalMap = engine.GetResourcesManager().LoadTexture("../../Asset/Floor_N.jpg");
+    material.normalMap = resourcesManager.LoadTexture("../../Asset/Floor_N.jpg");
 
-    MaterialInterface materialInterface = world.GetResourcesManager().GenerateMaterial("base", material);
-    md.AddMaterial(material);
+    MaterialInterface materialInterface = resourcesManager.GenerateMaterial("base", material);
 
     md.AddMaterial(materialInterface);
 
@@ -112,7 +115,7 @@ void loadScene()
     {
         for (int y = 0; y < 1; y++)
         {
-            for (int  z = 0; z < 1; z++)
+            for (int z = 0; z < 1; z++)
             {
                 t.position.x = Random::Range(0.f, 20.0f);
                 t.position.y = 5 - y * 2;
@@ -141,11 +144,12 @@ void loadScene()
 
 
     Component::RigidBody rbFloor;
-    Component::Model mdFloor = world.GetResourcesManager().LoadModel("../../Asset/Cube.fbx", Renderer::VertexType::V_NORMALMAP);
+    Component::Model mdFloor = resourcesManager.LoadModel("../../Asset/Cube.fbx",
+                                                                     Renderer::VertexType::V_NORMALMAP);
 
-    material.colorTexture = world.GetResourcesManager().LoadTexture("../../Asset/Floor_C.jpg");
+    material.colorTexture = resourcesManager.LoadTexture("../../Asset/Floor_C.jpg");
 
-    MaterialInterface materialInterface2 = world.GetResourcesManager().GenerateMaterial("mat2", material);
+    MaterialInterface materialInterface2 = resourcesManager.GenerateMaterial("mat2", material);
 
     mdFloor.AddMaterial(materialInterface2);
 
@@ -166,7 +170,7 @@ void loadScene()
 
     light.type = Component::Light_Type::L_SPOT;
     light.ambient = {0.1f, 0.1f, 0.1f};
-    light.diffuse = {1,0,0};
+    light.diffuse = {1, 0, 0};
     light.specular = {1, 0, 0};
     light.constant = 1.0f;
     light.linear = 0.0014f;
@@ -191,13 +195,13 @@ void loadScene()
     light.type = Component::Light_Type::L_DIRECTIONAL;
     light.diffuse = {0, 0, 1};
     light.specular = {0, 0, 1};
-    Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
 
     //Audio::Sound sound = world.GetSoundManager().CreateSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC);
     //sound.Play();
     //sound.SetVolume(0.05f);
 
     Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
+
     world.AddComponent(lightID3, light);
     world.AddComponent(lightID3, tl3);
 
@@ -215,7 +219,7 @@ int main()
             INPUT_MODE::GLFW
     };
 
-    Engine& engine = Engine::Instance();
+    Engine &engine = Engine::Instance();
     engine.InitWindow(settings);
 
     Editor editor{engine.GetWindow()};
@@ -223,11 +227,11 @@ int main()
     loadScene();
 
     // Time && fps
-    double temp_time{0.0};
+    double tempTime{0.0};
     double time{0.0};
     double deltaTime{0.0};
     unsigned int frames{0};
-    double time_acc{0.0};
+    double timeAcc{0.0};
 
     engine.GetRendererInterface().lightSystem->Update();
 
@@ -235,25 +239,24 @@ int main()
     {
         // DeltaTime
         {
-            temp_time = glfwGetTime();
-            deltaTime = temp_time - time;
-            time = temp_time;
+            tempTime = glfwGetTime();
+            deltaTime = tempTime - time;
+            time = tempTime;
 
-            time_acc += deltaTime;
+            timeAcc += deltaTime;
             frames++;
 
-            if (time_acc >= 1.0f)
+            if (timeAcc >= 1.0f)
             {
-                std::cout << "FPS: " << round(1 / (time_acc / frames)) << std::endl;
+                std::cout << "FPS: " << round(1 / (timeAcc / frames)) << std::endl;
                 frames = 0;
-                time_acc = 0.;
+                timeAcc = 0.;
             }
         }
 
         /** POLL INPUT **/
         engine.GetInputManager().Update();
         engine.TestWindowShouldClose();
-
 
 
         Renderer::RendererPlatform::ClearColor({0.7f, 0.7f, 0.7f, 0.f});

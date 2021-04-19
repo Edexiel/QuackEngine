@@ -7,6 +7,8 @@
 
 #include "reactphysics3d/reactphysics3d.h"
 
+using namespace Component;
+
 void PhysicsSystem::Init()
 {
     //todo : lol, gros bug possible si on change de world, supprime un world et qu'on reviens sur celui la
