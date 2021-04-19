@@ -55,7 +55,8 @@ namespace Input
     template<typename C, typename F>
     inline void InputManager::RegisterEvent(const std::string &event, Action action, C *classObject, F &&function)
     {
-        _eventFuncs[event].push_back(std::pair<std::function<void()>, Action>(std::bind(function, classObject), action));
+        _eventFuncs[event].push_back(
+                std::pair<std::function<void()>, Action>(std::bind(function, classObject), action));
     }
 
     template<typename C, typename F>
