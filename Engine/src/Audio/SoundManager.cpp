@@ -104,9 +104,8 @@ SoundManager::~SoundManager()
     }
 }
 
-void SoundManager::Init(World* world)
+void SoundManager::Init()
 {
-    _world = world;
 
     _device = new ma_device;
 

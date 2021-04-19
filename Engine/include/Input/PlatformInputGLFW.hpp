@@ -4,6 +4,7 @@
 #include "Input/PlatformInput.hpp"
 
 struct GLFWwindow;
+
 namespace Input
 {
   class PlatformInputGLFW : public PlatformInput
@@ -15,8 +16,7 @@ namespace Input
     void OnScrollCallback(double xoffset, double yoffset);
     GLFWwindow* _window;
   public:
-    PlatformInputGLFW(GLFWwindow* window);
-    ~PlatformInputGLFW() = default;
+    explicit PlatformInputGLFW(GLFWwindow* window);
 
     void PollEvents() override;
     void UpdateCursorPosition(MousePosition& mousePosition) override;

@@ -46,8 +46,6 @@ namespace Resources
       ResourcesManager(Audio::SoundManager* soundManager) : _soundManager{soundManager} {}; // To redo when the scene is complete
       ~ResourcesManager() = default;
 
-      void Init(World* world);
-
       Component::Model  LoadModel     (const char* path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
       Renderer::Texture LoadTexture   (const char* path);
       Renderer::Shader  LoadShader    (const char* vertexShader, const char* fragmentShader);

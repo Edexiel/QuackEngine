@@ -1,6 +1,6 @@
 #include "Resources/ResourcesManager.hpp"
 
-#include "Scene/Core/World.hpp"
+#include "Engine.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
 
@@ -26,16 +26,11 @@ using namespace Renderer;
 using namespace Component;
 
 
-void ResourcesManager::Init(World* world)
-{
-    _world = world;
-}
-
 Model ResourcesManager::LoadModel(const char* path, VertexType vertexType)
 {
     // Check if the Model already exist
 
-    std::unordered_map<std::string, Model>::iterator it = mapModel.find(path);
+    auto it = mapModel.find(path);
 
     if (it != mapModel.end())
     {
@@ -60,7 +55,7 @@ Texture ResourcesManager::LoadTexture(const char* path)
 {
     // Check if the Texture already exist
 
-    std::unordered_map<std::string, Renderer::Texture>::iterator it = mapTexture.find(path);
+    auto it = mapTexture.find(path);
 
     // Check if the texture already exist
     if (it != mapTexture.end())
@@ -99,11 +94,11 @@ Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const ch
 
     // find if the Shader already exist
 
-    for (unsigned int i = 0; i < listShader.size(); i++)
+    for (auto & i : listShader)
     {
-        if (listShader[i].fragmentShader == fragmentShader && listShader[i].vertexShader == vertexShader)
+        if (i.fragmentShader == fragmentShader && i.vertexShader == vertexShader)
         {
-            return listShader[i].shader;
+            return i.shader;
         }
     }
 
@@ -120,7 +115,7 @@ Renderer::Shader ResourcesManager::LoadObjectShader(const char* vertexShader, co
     Shader shader = LoadShader(vertexShader, fragmentShader);
 
     //_world->GetRendererInterface().cameraSystem->AddShaderToUpdate(shader);
-    _world->GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
+    Engine::Instance().GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
 
     return shader;
 }
@@ -143,7 +138,7 @@ Renderer::Shader  ResourcesManager::LoadObjectShader(const Renderer::ShaderConst
   //_world->GetRendererInterface().cameraSystem->AddShaderToUpdate(shader);
 
   if(constructData.hasLight)
-      _world->GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
+      Engine::Instance().GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
 
   return shader;
 }

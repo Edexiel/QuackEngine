@@ -16,23 +16,38 @@
 #include "Tools/Random.hpp"
 
 using namespace Renderer;
-int main()
-{
-    Engine engine;
-    Editor editor{engine};
-    World &world = World::Instance();
 
-    EngineSettings settings{
-            true,
-            "QuackEditor",
-            {1280, 720},
-            WINDOW_MODE::WINDOWED,
-            0
-    };
-    editor.Init(settings);
-    GLFWwindow *window = editor.GetWindow();
-    Input::PlatformInputGLFW input{window};
-    engine.Init(input);
+void loadScene()
+{
+
+    World &world = Engine::Instance().CreateWorld("Main");
+
+    world.Init();
+
+    world.RegisterComponent<Transform>();
+
+    world.RegisterComponent<Component::Model>();
+    world.RegisterComponent<Component::Camera>();
+    world.RegisterComponent<Component::Light>();
+
+    auto renderSystem = world.RegisterSystem<RenderSystem>();
+    auto cameraSystem = world.RegisterSystem<CameraSystem>();
+    auto lightSystem = world.RegisterSystem<LightSystem>();
+
+    Signature signatureRender;
+    signatureRender.set(world.GetComponentType<Component::Model>());
+    signatureRender.set(world.GetComponentType<Transform>());
+    world.SetSystemSignature<RenderSystem>(signatureRender);
+
+    Signature signatureCamera;
+    signatureCamera.set(world.GetComponentType<Component::Camera>());
+    signatureCamera.set(world.GetComponentType<Transform>());
+    world.SetSystemSignature<CameraSystem>(signatureCamera);
+
+    Signature signatureLight;
+    signatureLight.set(world.GetComponentType<Component::Light>());
+    signatureLight.set(world.GetComponentType<Transform>());
+    world.SetSystemSignature<LightSystem>(signatureLight);
 
     world.RegisterComponent<Component::RigidBody>();
     auto physicsSystem = world.RegisterSystem<PhysicsSystem>();
@@ -58,7 +73,8 @@ int main()
     }
 
     Transform t = {Maths::Vector3f{0, 0, 10}, Maths::Vector3f::One() * 1.5f, Maths::Quaternion{}};
-    Component::Model md = world.GetResourcesManager().LoadModel("../../Asset/Sphere.fbx", Renderer::VertexType::V_NORMALMAP);
+    Component::Model md = Engine::Instance().GetResourcesManager().LoadModel("../../Asset/Sphere.fbx",
+                                                                             Renderer::VertexType::V_NORMALMAP);
 
     Material material;
 
@@ -66,15 +82,15 @@ int main()
     material.diffuse = {1, 1, 1};
     material.specular = {1, 1, 1};
     material.checkLight = true;
-    material.normalMap = world.GetResourcesManager().LoadTexture("../../Asset/Floor_N.jpg");
+    material.normalMap = Engine::Instance().GetResourcesManager().LoadTexture("../../Asset/Floor_N.jpg");
     md.AddMaterial(material);
 
 
     for (int x = 0; x < 10; x++)
     {
-        for (int  y = 0; y < 1; y++)
+        for (int y = 0; y < 1; y++)
         {
-            for (int  z = 0; z < 5; z++)
+            for (int z = 0; z < 5; z++)
             {
                 t.position.x = Random::Range(0.f, 20.0f);
                 t.position.y = 10 - y * 2;
@@ -98,14 +114,15 @@ int main()
 
     Entity idFloor = world.CreateEntity("Floor");
 
-    Maths::Vector3f scale{20,0.25,20};
+    Maths::Vector3f scale{20, 0.25, 20};
     Transform tFloor = {Maths::Vector3f{0, -5, 20}, scale, Maths::Quaternion{}};
 
 
     Component::RigidBody rbFloor;
-    Component::Model mdFloor = world.GetResourcesManager().LoadModel("../../Asset/Cube.fbx", Renderer::VertexType::V_NORMALMAP);
+    Component::Model mdFloor = Engine::Instance().GetResourcesManager().LoadModel("../../Asset/Cube.fbx",
+                                                                     Renderer::VertexType::V_NORMALMAP);
 
-    material.colorTexture = world.GetResourcesManager().LoadTexture("../../Asset/Floor_C.jpg");
+    material.colorTexture = Engine::Instance().GetResourcesManager().LoadTexture("../../Asset/Floor_C.jpg");
 
     mdFloor.AddMaterial(material);
 
@@ -126,7 +143,7 @@ int main()
 
     light.type = Component::Light_Type::L_SPOT;
     light.ambient = {0.1f, 0.1f, 0.1f};
-    light.diffuse = {1,0,0};
+    light.diffuse = {1, 0, 0};
     light.specular = {1, 0, 0};
     light.constant = 1.0f;
     light.linear = 0.0014f;
@@ -142,7 +159,7 @@ int main()
     world.AddComponent(lightID, tl1);
 
     light.type = Component::Light_Type::L_POINT;
-    light.diffuse = {1,1,1};
+    light.diffuse = {1, 1, 1};
     light.specular = {1, 1, 1};
     Transform tl2 = {Maths::Vector3f::One() * -100, Maths::Vector3f::One(), Maths::Quaternion{}};
 
@@ -150,11 +167,11 @@ int main()
     world.AddComponent(lightID2, tl2);
 
     light.type = Component::Light_Type::L_DIRECTIONAL;
-    light.diffuse = {0,0,1};
+    light.diffuse = {0, 0, 1};
     light.specular = {0, 0, 1};
     Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
 
-    Audio::Sound sound = world.GetSoundManager().CreateSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC);
+    Audio::Sound sound = Engine::Instance().GetSoundManager().CreateSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC);
     sound.Play();
     sound.SetVolume(0.5f);
 
@@ -162,6 +179,26 @@ int main()
     world.AddComponent(lightID3, tl3);
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
+
+    Engine::Instance().GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
+}
+
+int main()
+{
+    //Engine engine;
+    Editor editor{};
+
+    EngineSettings settings{
+            true,
+            "QuackEditor",
+            {1280, 720},
+            WINDOW_MODE::WINDOWED,
+            0
+    };
+    Engine::Instance().InitWindow(settings);
+    //Engine::Instance().;
+    loadScene();
+
 
     float dt = 0;
 
@@ -172,9 +209,9 @@ int main()
     unsigned int frames{0};
     double time_acc{0.0};
 
-    world.GetRendererInterface().lightSystem->Update();
+    Engine::Instance().GetRendererInterface().lightSystem->Update();
 
-    while (!glfwWindowShouldClose(window))
+    while (!Engine::Instance().WindowShouldClose())
     {
         { // DeltaTime
             temp_time = glfwGetTime();
@@ -191,21 +228,17 @@ int main()
                 time_acc = 0.;
             }
 
-            physicsSystem->FixedUpdate(deltaTime);
+            //physicsSystem->FixedUpdate(deltaTime);
 
         }
 
-        Renderer::RendererPlatform::ClearColor({0.7f,0.7f,0.7f,0.f});
+        Renderer::RendererPlatform::ClearColor({0.7f, 0.7f, 0.7f, 0.f});
         Renderer::RendererPlatform::Clear();
         editor.Draw();
 
 
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE))
-        {
-            glfwSetWindowShouldClose(window, 1);
-        }
 
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+
+
     }
 }

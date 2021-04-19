@@ -5,6 +5,7 @@
 #include "Widgets/ViewportWidget.hpp"
 #include "Scene/Core/World.hpp"
 #include "Renderer/Framebuffer.hpp"
+#include "Engine.hpp"
 
 using namespace Renderer;
 ViewportWidget::ViewportWidget()
@@ -21,7 +22,7 @@ void ViewportWidget::UpdateVisible()
 
     //World::Instance().GetRendererInterface().cameraSystem->GetActiveCamera().Resize(wsize.x, wsize.y);
 
-    Framebuffer f = World::Instance().GetRendererInterface().GetSceneUpdatedFramebuffer();
+    Framebuffer f = Engine::Instance().GetRendererInterface().GetSceneUpdatedFramebuffer();
 
     ImGui::Image((ImTextureID)(size_t)f.GetTexture(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 

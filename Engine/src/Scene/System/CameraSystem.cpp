@@ -1,11 +1,12 @@
 #include "Scene/System/CameraSystem.hpp"
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/Transform.hpp"
+#include "Engine.hpp"
 
 Component::Camera& CameraSystem::GetActiveCamera()
 {
     for (Entity entity: _entities) {
-        auto &t = World::Instance().GetComponent<Component::Camera>(entity);
+        auto &t = Engine::Instance().GetCurrentWorld().GetComponent<Component::Camera>(entity);
         if (t.isActive)
             return t;
     }
@@ -17,7 +18,7 @@ void CameraSystem::Clear()
 {
     for (Entity entity: _entities)
     {
-        auto &t = World::Instance().GetComponent<Component::Camera>(entity);
+        auto &t = Engine::Instance().GetCurrentWorld().GetComponent<Component::Camera>(entity);
         t.GetFramebuffer().Delete();
     }
 }
@@ -26,7 +27,7 @@ void CameraSystem::Update()
 {
     for (Entity entity: _entities)
     {
-        auto &c = World::Instance().GetComponent<Component::Camera>(entity);
+        auto &c = Engine::Instance().GetCurrentWorld().GetComponent<Component::Camera>(entity);
         if (c.isActive)
         {
             for (unsigned int i = 0; i < _listShaderToUpdate.size() ; i++)
@@ -42,10 +43,10 @@ void CameraSystem::Init()
 {
     for (Entity entity: _entities)
     {
-        auto &c = World::Instance().GetComponent<Component::Camera>(entity);
+        auto &c = Engine::Instance().GetCurrentWorld().GetComponent<Component::Camera>(entity);
         if(c.isActive)
         {
-            c.SetInput(*World::Instance().GetInputManager().get());
+            c.SetInput(Engine::Instance().GetInputManager());
             return;
         }
     }

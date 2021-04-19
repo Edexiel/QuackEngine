@@ -1,18 +1,18 @@
 #include "Scene/System/LightSystem.hpp"
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/Transform.hpp"
-
+#include "Engine.hpp"
 
 using namespace Component;
 
 void LightSystem::Update()
 {
     unsigned int pointNb{0}, directionalNb{0}, spotNb{0};
-
+    World& world = Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)
     {
-        auto &t = World::Instance().GetComponent<Transform>(entity);
-        auto &l = World::Instance().GetComponent<Component::Light>(entity);
+        auto &t = world.GetComponent<Transform>(entity);
+        auto &l = world.GetComponent<Component::Light>(entity);
 
         l.position = t.position;
         Maths::Vector4f direction = t.GetMatrix() * Maths::Vector4f{0,0,1,0};

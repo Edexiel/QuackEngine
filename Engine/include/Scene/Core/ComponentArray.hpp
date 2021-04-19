@@ -65,8 +65,8 @@ void ComponentArray<T>::DeleteData(Entity id)
     _entityToIndex[entityEnd] = indexDelete;
     _indexToEntity[indexDelete] = entityEnd;
 
-    (void) _entityToIndex.erase(id);
-    (void) _indexToEntity.erase(indexEnd);
+    _entityToIndex.erase(id);
+    _indexToEntity.erase(indexEnd);
 
     _components.pop_back();
 

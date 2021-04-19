@@ -1,6 +1,6 @@
 #include "Renderer/Shape.hpp"
 #include "Renderer/RendererPlatform.hpp"
-#include "Scene/Core/World.hpp"
+#include "Engine.hpp"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -28,7 +28,7 @@ Mesh Shape::CreateQuad()
 
     RendererPlatform::VerticesReading();
 
-    return World::Instance().GetResourcesManager().AddShape(quadMesh);
+    return Engine::Instance().GetResourcesManager().AddShape(quadMesh);
 }
 
 Mesh Shape::CreateCube()
