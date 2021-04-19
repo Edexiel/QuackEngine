@@ -177,7 +177,7 @@ Shader Shader::LoadObjectShader(const ShaderConstructData& shaderData)
 
   // Read the Vertex Shader code from the file
   if (shaderData.hasNormalMap)
-    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Light/vertexNormalMap.vs");
+    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Light/VertexNormalMap.vs");
   else
     VertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Base/Vertex.vs");
 

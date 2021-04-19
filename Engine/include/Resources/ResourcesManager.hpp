@@ -8,6 +8,7 @@
 #include "Renderer/Shader.hpp"
 #include "Scene/Component/Model.hpp"
 #include "Renderer/Texture.hpp"
+#include "Renderer/Material.hpp"
 
 #include "Audio/Sound.hpp"
 
@@ -28,31 +29,28 @@ namespace Resources
     {
     private:
 
-      World* _world;
-
-      std::unordered_map<std::string, Component::Model   > mapModel;
-      std::unordered_map<std::string, Renderer::Texture > mapTexture;
-      std::vector<ReferenceShader >                       listShader;
-      std::unordered_map<unsigned int, Renderer::Shader>  mapDynamicShader;
-      std::unordered_map<std::string, Audio::Sound>       mapSound;
+      std::unordered_map<std::string, Component::Model   >  _mapModel;
+      std::unordered_map<std::string, Renderer::Texture >   _mapTexture;
+      std::vector<ReferenceShader >                         _listShader;
+      std::unordered_map<unsigned int, Renderer::Shader>    _mapDynamicShader;
+      std::unordered_map<std::string, Audio::Sound>         _mapSound;
+      std::unordered_map<std::string, Renderer::MaterialInterface>   _mapMaterial;
 
       std::vector<Renderer::Mesh> listLoadedShape; //keep loaded shape saved for GPU memory management
-
-      Audio::SoundManager* _soundManager;
 
     public:
 
       ResourcesManager() = default;
-      ResourcesManager(Audio::SoundManager* soundManager) : _soundManager{soundManager} {}; // To redo when the scene is complete
       ~ResourcesManager() = default;
-
-      void Init(World* world);
 
       Component::Model  LoadModel     (const char* path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
       Renderer::Texture LoadTexture   (const char* path);
       Renderer::Shader  LoadShader    (const char* vertexShader, const char* fragmentShader);
       Renderer::Shader  LoadObjectShader    (const char* vertexShader, const char* fragmentShader);
       Renderer::Shader  LoadObjectShader    (const Renderer::ShaderConstructData& constructData);
+
+      Renderer::MaterialInterface LoadMaterial(const char* path);
+      Renderer::MaterialInterface GenerateMaterial(const char* name, const Renderer::Material& material); // Should be used to load a material from scratch
 
       Audio::Sound      LoadSound     (const char* path, Audio::SoundType soundType);
 
