@@ -8,6 +8,7 @@
 #include "Scene/Component/Name.hpp"
 #include "Scene/Component/Camera.hpp"
 #include "Scene/Component/Light.hpp"
+#include "Scene/Component/Model.hpp"
 
 
 PropertiesWidget::PropertiesWidget()
@@ -20,14 +21,11 @@ void PropertiesWidget::UpdateVisible()
     Name();
     TransformReader();
     AddComponent();
-
-
 }
 
 void PropertiesWidget::TransformReader() const
 {
     Transform &transform = World::Instance().GetComponent<Transform>(_entity);
-
 
     if (ImGui::CollapsingHeader("Transform"))
         return;
