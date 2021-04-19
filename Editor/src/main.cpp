@@ -180,6 +180,8 @@ int main()
     world.GetRendererInterface().lightSystem->Update();
     //world.GetRendererInterface().renderSystem->SetMaterials();
 
+    world.GetResourcesManager().LoadFolder("../../Game/Asset/");
+
     while (!glfwWindowShouldClose(window))
     {
         { // DeltaTime
