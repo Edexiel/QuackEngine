@@ -18,11 +18,10 @@ void ViewportWidget::UpdateVisible()
     // Get the size of the child (i.e. the whole draw size of the windows).
     ImVec2 wsize = ImGui::GetWindowSize();
 
+    World::Instance().GetRendererInterface().cameraSystem->GetActiveCamera().Resize(wsize.x, wsize.y);
     Framebuffer f = World::Instance().GetRendererInterface().GetSceneUpdatedFramebuffer();
 
     ImGui::Image((ImTextureID)(size_t)f.GetTexture(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 
     ImGui::EndChild();
-
 }
-

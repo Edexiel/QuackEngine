@@ -2,7 +2,8 @@
 #define QUACKENGINE_QUATERNION_HPP
 
 #include "Matrix4.hpp"
-#include <cmath>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 namespace Maths
 {
@@ -36,6 +37,8 @@ namespace Maths
     Quaternion GetNormalized() const;
     static void Normalize(Quaternion& q);
     Matrix4 ToMatrix() const;
+    Vector3f ToEuler() const;
+    static Quaternion EulerToQuaternion(Vector3f rot);
 
     static float DotProduct(const Quaternion& q1, const Quaternion& q);
     static Quaternion Slerp(const Quaternion& q1,
@@ -133,6 +136,47 @@ inline Maths::Matrix4 Quaternion::ToMatrix() const
 
     return result;
 }
+
+inline Vector3f Quaternion::ToEuler() const
+{
+    Vector3f result;
+
+    // roll (x-axis rotation)
+    float x0 = 2.0f*(w * x + y * z);
+    float x1 = 1.0f - 2.0f * ( x * x + y * y);
+    result.x = atan2f(x0, x1) * (180.f / M_PI);
+
+    // pitch (y-axis rotation)
+    float y0 = 2.0f*(w * y - z * x);
+    y0 = y0 > 1.0f ? 1.0f : y0;
+    y0 = y0 < -1.0f ? -1.0f : y0;
+    result.y = asinf(y0)* (180.f / M_PI);
+
+    // yaw (z-axis rotation)
+    float z0 = 2.0f*(w * z + x * y);
+    float z1 = 1.0f - 2.0f*(y * y + z * z);
+    result.z = atan2f(z0, z1)* (180.f / M_PI);
+
+    return result;
+}
+
+    inline Quaternion Quaternion::EulerToQuaternion(Vector3f rot)
+    {
+        Quaternion q;
+
+        float x0 = cosf(rot.x * 0.5f);
+        float x1 = sinf(rot.x * 0.5f);
+        float y0 = cosf(rot.y * 0.5f);
+        float y1 = sinf(rot.y * 0.5f);
+        float z0 = cosf(rot.z * 0.5f);
+        float z1 = sinf(rot.z * 0.5f);
+
+        q.x = x1*y0*z0 - x0*y1*z1;
+        q.y = x0*y1*z0 + x1*y0*z1;
+        q.z = x0*y0*z1 - x1*y1*z0;
+        q.w = x0*y0*z0 + x1*y1*z1;
+        return q;
+    }
 
 inline float Quaternion::DotProduct(const Quaternion& q1, const Quaternion& q)
 {

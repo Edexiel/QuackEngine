@@ -4,10 +4,16 @@
 
 Component::Camera& CameraSystem::GetActiveCamera()
 {
+    World& world = World::Instance();
     for (Entity entity: _entities) {
-        auto &t = World::Instance().GetComponent<Component::Camera>(entity);
+        auto &t = world.GetComponent<Component::Camera>(entity);
         if (t.isActive)
+        {
+            Transform trs = world.GetComponent<Transform>(entity);
+            trs.position = trs.position * -1;
+            t.SetView(trs.GetMatrix());
             return t;
+        }
     }
     Assert_Fatal_Error(true, "No Camera Active");
     exit(-1);
@@ -21,17 +27,3 @@ void CameraSystem::Clear()
         t.GetFramebuffer().Delete();
     }
 }
-
-void CameraSystem::Init()
-{
-    for (Entity entity: _entities)
-    {
-        auto &c = World::Instance().GetComponent<Component::Camera>(entity);
-        if(c.isActive)
-        {
-            c.SetInput(*World::Instance().GetInputManager().get());
-            return;
-        }
-    }
-}
-

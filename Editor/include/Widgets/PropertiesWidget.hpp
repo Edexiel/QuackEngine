@@ -7,6 +7,7 @@
 
 #include "Widgets/Widget.hpp"
 
+struct Transform;
 
 class PropertiesWidget : public Widget
 {
@@ -14,6 +15,8 @@ public:
     PropertiesWidget();
 
     void UpdateVisible() final;
+    void TransformReader() const;
+    void AddComponent();
 
 };
 
