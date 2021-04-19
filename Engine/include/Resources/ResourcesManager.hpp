@@ -52,9 +52,15 @@ namespace Resources
       Renderer::MaterialInterface LoadMaterial(const char* path);
       Renderer::MaterialInterface GenerateMaterial(const char* name, const Renderer::Material& material); // Should be used to load a material from scratch
 
+
       Audio::Sound      LoadSound     (const char* path, Audio::SoundType soundType);
 
       Renderer::Mesh& AddShape(Renderer::Mesh& mesh);
+
+      void LoadFolder(const char* path);
+
+    private:
+        static std::string GetFileType(const std::string& file);
 
     };
 }

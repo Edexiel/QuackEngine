@@ -8,6 +8,8 @@
 #include "Audio/Sound.hpp"
 
 #include "Debug/Log.hpp"
+
+#include <filesystem>
 #include <iostream>
 
 #define F_OK 0
@@ -159,8 +161,6 @@ Audio::Sound ResourcesManager::LoadSound(const char* path, Audio::SoundType soun
     return Audio::Sound();
   }
 
-  // Create a new Texture
-
   Audio::Sound sound = World::Instance().GetSoundManager().CreateSound(path, soundType);
   _mapSound.insert({path, sound});
 
@@ -211,4 +211,33 @@ Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const char* name,
     std::cout << "materialLoading : " << name << std::endl;
 
     return materialInterface;
+}
+
+void ResourcesManager::LoadFolder(const char *path)
+{
+    std::vector<std::string> r;
+    for(auto& p : std::filesystem::recursive_directory_iterator(path))
+    {
+        if (!p.is_directory())
+            r.push_back(p.path().string());
+    }
+
+    std::string type;
+
+    for (unsigned int i = 0; i < r.size() ; i++)
+    {
+        std::cout << r[i] << std::endl;
+        type = GetFileType(r[i]);
+        if (type == "fbx")
+            LoadModel(r[i].c_str(), VertexType::V_NORMALMAP);
+        else if (type == "ogg" || type == "mp3" || type == "wav")
+            LoadSound(r[i].c_str(), Audio::SoundType::S_MASTER);
+        else if (type == "png" || type == "jpg" || type == "epg")
+            LoadTexture(r[i].c_str());
+    }
+}
+
+std::string ResourcesManager::GetFileType(const std::string& file)
+{
+    return file.substr(file.size() - 3);
 }
