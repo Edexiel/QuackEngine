@@ -35,6 +35,7 @@ void Editor::InitWidgets()
     _widgets.emplace_back(std::make_unique<PropertiesWidget>());
     _widgets.emplace_back(std::make_unique<SceneWidget>());
     _widgets.emplace_back(std::make_unique<ViewportWidget>());
+    _widgets.emplace_back(std::make_unique<ViewerWidget>());
 }
 
 void Editor::InitImGui(GLFWwindow * window)

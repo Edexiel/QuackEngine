@@ -55,8 +55,6 @@ namespace Audio
         ma_device* _device {nullptr};
         SoundManagerData _soundManagerData;
 
-        World* _world {nullptr};
-
     public:
         SoundManager() = default;
         ~SoundManager();

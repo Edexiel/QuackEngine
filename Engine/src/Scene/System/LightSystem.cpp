@@ -7,6 +7,11 @@ using namespace Component;
 
 void LightSystem::Update()
 {
+    if (_lastEntitiesSize == _entities.size())
+        return;
+
+    _lastEntitiesSize = _entities.size();
+
     unsigned int pointNb{0}, directionalNb{0}, spotNb{0};
     World& world = Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)

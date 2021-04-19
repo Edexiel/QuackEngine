@@ -17,23 +17,13 @@ void RendererInterface::Set(std::shared_ptr<RenderSystem> _renderSystem,
 
 Framebuffer RendererInterface::GetSceneUpdatedFramebuffer()
 {
+    lightSystem->Update();
     Component::Camera& camera = cameraSystem->GetActiveCamera();
     renderSystem->Draw(camera);
 
     RendererPlatform::BindFramebuffer(0);
 
     return camera.GetFramebuffer();
-}
-
-
-void RendererInterface::AddShaderToUpdate(const Shader &shader)
-{
-    lightSystem->AddShaderToUpdate(shader);
-}
-
-void RendererInterface::RemoveShaderFromUpdate(const Shader &shader)
-{
-    lightSystem->RemoveShaderFromUpdate(shader);
 }
 
 void RendererInterface::DrawFramebufferinFrambuffer(const Framebuffer& framebufferDrawIn, const Framebuffer& framebuffer2DrawOut)

@@ -33,6 +33,7 @@ public:
     void DeleteData(Entity id);
 
     T &GetData(Entity id);
+    bool HasData(Entity id);
 
     void EntityDestroyed(Entity id) override;
 
@@ -54,7 +55,7 @@ void ComponentArray<T>::AddData(Entity id, T data)
 template<typename T>
 void ComponentArray<T>::DeleteData(Entity id)
 {
-    Assert_Fatal_Error(_entityToIndex.find(id) != _entityToIndex.end(), "Removing non-existent component.");
+//    Assert_Fatal_Error(_entityToIndex.find(id) != _entityToIndex.end(), "Removing non-existent component.");
 
     size_t indexDelete = _entityToIndex[id];
     size_t indexEnd = _components.size() - 1;
@@ -75,9 +76,16 @@ void ComponentArray<T>::DeleteData(Entity id)
 template<typename T>
 T &ComponentArray<T>::GetData(Entity id)
 {
-    Assert_Fatal_Error(_entityToIndex.find(id) == _entityToIndex.end(), "Retrieving non-existent component.");
+//    if (_entityToIndex.find(id) == _entityToIndex.end())
+//    Assert_Fatal_Error(_entityToIndex.find(id) == _entityToIndex.end(), "Retrieving non-existent component.");
 
     return _components[_entityToIndex[id]];
+}
+
+template<typename T>
+bool ComponentArray<T>::HasData(Entity id)
+{
+    return (_entityToIndex.find(id) != _entityToIndex.end());
 }
 
 template<typename T>

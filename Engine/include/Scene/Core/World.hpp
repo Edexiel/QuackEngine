@@ -51,6 +51,9 @@ public:
     T &GetComponent(Entity id);
 
     template<typename T>
+    bool HasComponent(Entity id);
+
+    template<typename T>
     ComponentType GetComponentType();
 
     // System methods
@@ -78,7 +81,7 @@ inline void World::Clear()
 inline Entity World::CreateEntity(std::string name)
 {
     Entity id = _entityManager->Create();
-    //AddComponent(id, Name{std::move(name)});
+    AddComponent(id, Name{std::move(name)});
     return id;
 }
 
@@ -126,6 +129,12 @@ inline T &World::GetComponent(Entity id)
 }
 
 template<typename T>
+inline bool World::HasComponent(Entity id)
+{
+    return _componentManager->HasComponent<T>(id);
+}
+
+template<typename T>
 inline ComponentType World::GetComponentType()
 {
     return _componentManager->GetComponentType<T>();
@@ -148,5 +157,10 @@ inline const std::string &World::GetName() const
     return _name;
 }
 
+
+inline const std::unique_ptr<EntityManager> &World::GetEntityManager() const
+{
+    return _entityManager;
+}
 
 #endif //QUACKENGINE_WORLD_HPP

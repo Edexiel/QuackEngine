@@ -12,6 +12,7 @@
 #include "Scene/System/PhysicsSystem.hpp"
 
 #include "Tools/Random.hpp"
+#include "CameraEditor.hpp"
 
 using namespace Renderer;
 
@@ -73,6 +74,8 @@ void loadScene()
     }
 
     physicsSystem->Init();
+    CameraEditor cam;
+    cam.SetInput(engine.GetInputManager());
 
     {
         Entity CameraEntity = world.CreateEntity("Camera");
@@ -98,17 +101,21 @@ void loadScene()
     material.specular = {1, 1, 1};
     material.checkLight = true;
     material.normalMap = engine.GetResourcesManager().LoadTexture("../../Asset/Floor_N.jpg");
+
+    MaterialInterface materialInterface = world.GetResourcesManager().GenerateMaterial("base", material);
     md.AddMaterial(material);
 
+    md.AddMaterial(materialInterface);
 
-    for (int x = 0; x < 10; x++)
+
+    for (int x = 0; x < 1; x++)
     {
         for (int y = 0; y < 1; y++)
         {
-            for (int z = 0; z < 5; z++)
+            for (int  z = 0; z < 1; z++)
             {
                 t.position.x = Random::Range(0.f, 20.0f);
-                t.position.y = 10 - y * 2;
+                t.position.y = 5 - y * 2;
                 t.position.z = 20 + z * 2;
 
                 Entity id = world.CreateEntity("Test");
@@ -120,7 +127,7 @@ void loadScene()
                 world.AddComponent(id, rb);
 
                 physicsSystem->SetRigidBody(id);
-//                physicsSystem->SetType(id, BodyType::STATIC);
+                physicsSystem->SetType(id, BodyType::STATIC);
 
                 physicsSystem->AddSphereCollider(id, 1.5f);
             }
@@ -134,12 +141,13 @@ void loadScene()
 
 
     Component::RigidBody rbFloor;
-    Component::Model mdFloor = engine.GetResourcesManager().LoadModel("../../Asset/Cube.fbx",
-                                                                     Renderer::VertexType::V_NORMALMAP);
+    Component::Model mdFloor = world.GetResourcesManager().LoadModel("../../Asset/Cube.fbx", Renderer::VertexType::V_NORMALMAP);
 
-    material.colorTexture = engine.GetResourcesManager().LoadTexture("../../Asset/Floor_C.jpg");
+    material.colorTexture = world.GetResourcesManager().LoadTexture("../../Asset/Floor_C.jpg");
 
-    mdFloor.AddMaterial(material);
+    MaterialInterface materialInterface2 = world.GetResourcesManager().GenerateMaterial("mat2", material);
+
+    mdFloor.AddMaterial(materialInterface2);
 
     world.AddComponent(idFloor, tFloor);
     world.AddComponent(idFloor, mdFloor);
@@ -158,11 +166,12 @@ void loadScene()
 
     light.type = Component::Light_Type::L_SPOT;
     light.ambient = {0.1f, 0.1f, 0.1f};
-    light.diffuse = {1, 0, 0};
+    light.diffuse = {1,0,0};
     light.specular = {1, 0, 0};
     light.constant = 1.0f;
     light.linear = 0.0014f;
     light.quadratic = 0.000007f;
+
     light.outerSpotAngle = 10.5;
     light.spotAngle = 8.5;
 
@@ -182,10 +191,11 @@ void loadScene()
     light.type = Component::Light_Type::L_DIRECTIONAL;
     light.diffuse = {0, 0, 1};
     light.specular = {0, 0, 1};
+    Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
 
-    Audio::Sound sound = engine.GetSoundManager().CreateSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC);
-    sound.Play();
-    sound.SetVolume(0.5f);
+    //Audio::Sound sound = world.GetSoundManager().CreateSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC);
+    //sound.Play();
+    //sound.SetVolume(0.05f);
 
     Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
     world.AddComponent(lightID3, light);
@@ -243,6 +253,7 @@ int main()
         /** POLL INPUT **/
         engine.GetInputManager().Update();
         engine.TestWindowShouldClose();
+
 
 
         Renderer::RendererPlatform::ClearColor({0.7f, 0.7f, 0.7f, 0.f});
