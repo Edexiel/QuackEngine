@@ -2,6 +2,12 @@
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/Transform.hpp"
 
+#include "Maths/Matrix4.hpp"
+#include "Maths/Vector3.hpp"
+#include "Maths/Quaternion.hpp"
+
+using namespace Maths;
+
 Component::Camera& CameraSystem::GetActiveCamera()
 {
     for (Entity entity: _entities) {
@@ -29,9 +35,7 @@ void CameraSystem::Init()
         auto &c = World::Instance().GetComponent<Component::Camera>(entity);
         if(c.isActive)
         {
-            c.SetInput(*World::Instance().GetInputManager().get());
             return;
         }
     }
 }
-
