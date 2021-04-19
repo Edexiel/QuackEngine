@@ -14,6 +14,7 @@
 #include "Scene/System/PhysicsSystem.hpp"
 
 #include "Tools/Random.hpp"
+#include "CameraEditor.hpp"
 
 using namespace Renderer;
 int main()
@@ -43,6 +44,8 @@ int main()
     world.SetSystemSignature<PhysicsSystem>(signature);
 
     physicsSystem->Init();
+    CameraEditor cam;
+    cam.SetInput(*world.GetInputManager().get());
 
     {
         Entity CameraEntity = world.CreateEntity("Camera");
@@ -73,13 +76,13 @@ int main()
     md.AddMaterial(materialInterface);
 
 
-    for (int x = 0; x < 10; x++)
+    for (int x = 0; x < 1; x++)
     {
-        for (int  y = 0; y < 10; y++)
+        for (int  y = 0; y < 1; y++)
         {
-            for (int  z = 0; z < 10; z++)
+            for (int  z = 0; z < 1; z++)
             {
-                t.position.x = -10 + Random::Range(0, 20);
+                t.position.x = 0;
                 t.position.y = 5 - y * 2;
                 t.position.z = 20 + z * 2;
 
@@ -92,7 +95,7 @@ int main()
                 world.AddComponent(id, rb);
 
                 physicsSystem->SetRigidBody(id);
-//                physicsSystem->SetType(id, BodyType::STATIC);
+                physicsSystem->SetType(id, BodyType::STATIC);
 
                 physicsSystem->AddSphereCollider(id, 1.5f);
             }
@@ -177,11 +180,6 @@ int main()
     unsigned int frames{0};
     double time_acc{0.0};
 
-    world.GetRendererInterface().lightSystem->Update();
-    //world.GetRendererInterface().renderSystem->SetMaterials();
-
-    world.GetResourcesManager().LoadFolder("../../Game/Asset/");
-
     while (!glfwWindowShouldClose(window))
     {
         { // DeltaTime
@@ -214,6 +212,6 @@ int main()
         }
 
         glfwSwapBuffers(window);
-        glfwPollEvents();
+        world.GetInputManager()->Update();
     }
 }

@@ -87,6 +87,7 @@ public:
     Audio::SoundManager &GetSoundManager();
 
     Renderer::RendererInterface &GetRendererInterface();
+    const std::unique_ptr<EntityManager> &GetEntityManager() const;
 };
 
 inline World World::_instance = World();
@@ -109,9 +110,7 @@ inline void World::Init(Input::PlatformInput &platformInput)
 
     _inputManager = std::make_unique<Input::InputManager>(platformInput);
 
-    _inputManager = std::make_unique<Input::InputManager>(platformInput);
-
-    //_componentManager->RegisterComponent<Name>();
+    _componentManager->RegisterComponent<Name>();
 }
 
 inline rp3d::PhysicsWorld *World::GetPhysicsWorld() const
@@ -132,7 +131,7 @@ inline void World::Clear()
 inline Entity World::CreateEntity(std::string name)
 {
     Entity id = _entityManager->Create();
-    //AddComponent(id, Name{std::move(name)});
+    AddComponent(id, Name{std::move(name)});
     return id;
 }
 
@@ -215,6 +214,11 @@ inline Renderer::RendererInterface &World::GetRendererInterface()
 inline std::unique_ptr<Input::InputManager> &World::GetInputManager()
 {
     return _inputManager;
+}
+
+inline const std::unique_ptr<EntityManager> &World::GetEntityManager() const
+{
+    return _entityManager;
 }
 
 #endif //QUACKENGINE_WORLD_HPP
