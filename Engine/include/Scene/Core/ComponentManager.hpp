@@ -39,6 +39,9 @@ public:
 
     template<typename T>
     T &GetComponent(Entity id);
+    template<typename T>
+    bool HasComponent(Entity id);
+
 
     void EntityDestroyed(Entity id);
 };
@@ -98,6 +101,12 @@ inline T &ComponentManager::GetComponent(Entity id)
 {
     return GetComponentArray<T>()->GetData(id);
 }
+
+ template<typename T>
+ inline bool ComponentManager::HasComponent(Entity id)
+ {
+     return GetComponentArray<T>()->HasData(id);
+ }
 
 inline void ComponentManager::EntityDestroyed(Entity id)
 {

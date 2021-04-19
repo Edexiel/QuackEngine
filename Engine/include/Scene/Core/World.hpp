@@ -69,6 +69,9 @@ public:
     T &GetComponent(Entity id);
 
     template<typename T>
+    bool HasComponent(Entity id);
+
+    template<typename T>
     ComponentType GetComponentType();
 
     // System methods
@@ -176,6 +179,12 @@ template<typename T>
 inline T &World::GetComponent(Entity id)
 {
     return _componentManager->GetComponent<T>(id);
+}
+
+template<typename T>
+inline bool World::HasComponent(Entity id)
+{
+    return _componentManager->HasComponent<T>(id);
 }
 
 template<typename T>
