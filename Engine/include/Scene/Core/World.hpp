@@ -143,7 +143,7 @@ inline void World::SetSystemSignature(Signature signature)
     _systemManager->SetSignature<T>(signature);
 }
 
-const std::string &World::GetName() const
+inline const std::string &World::GetName() const
 {
     return _name;
 }

@@ -68,7 +68,7 @@ public:
     void SetWindowTitle(const std::string &title);
     void SetWindowSize(int width, int height);
     bool WindowShouldClose();
-    void testWindowShouldClose();
+    void TestWindowShouldClose();
     World &GetCurrentWorld();
     void SwapBuffers();
 

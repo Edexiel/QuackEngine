@@ -23,8 +23,9 @@ void RenderSystem::Draw( Component::Camera& camera)
 {
     camera.GetFramebuffer().Bind();
 
-    RendererPlatform::ClearColor({0.0f, 0.0f, 0.0f, 1.f});
+    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 1.f});
     RendererPlatform::Clear();
+
     World& world = Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)
     {

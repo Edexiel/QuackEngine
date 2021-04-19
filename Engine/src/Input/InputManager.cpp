@@ -6,6 +6,7 @@ using namespace Input;
 void InputManager::Init(PlatformInput* platformInput)
 {
     _platformInput = platformInput;
+
     _platformInput->keyEvent = std::bind(&InputManager::OnKeyEvent, std::ref(*this), std::placeholders::_1,std::placeholders::_2);
     _platformInput->MouseButtonEvent = std::bind(&InputManager::OnMouseButtonEvent, std::ref(*this),std::placeholders::_1, std::placeholders::_2);
     _platformInput->UpdateMousePosition = std::bind(&InputManager::OnUpdateMousePositionEvent, std::ref(*this),std::placeholders::_1, std::placeholders::_2);
@@ -45,8 +46,7 @@ void InputManager::OnKeyEvent(Action action, Key key)
 
 void InputManager::OnMouseButtonEvent(Action action, MouseButton button)
 {
-    for (const std::pair<const std::string, std::vector<MouseButton>> &eventMouseButton :
-            _eventMouseButtons)
+    for (const std::pair<const std::string, std::vector<MouseButton>> &eventMouseButton : _eventMouseButtons)
     {
         for (Input::MouseButton _button : eventMouseButton.second)
         {

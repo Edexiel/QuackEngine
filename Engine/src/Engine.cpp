@@ -92,10 +92,10 @@ void Engine::InitWindow(const EngineSettings &settings)
     switch (settings.inputMode)
     {
         case INPUT_MODE::GLFW:
-            _platformInput = std::make_unique<Input::PlatformInputGLFW>(_window);
             break;
     }
-    Assert_Fatal_Error(_platformInput, "Platform input not declared");
+    _platformInput = std::make_unique<Input::PlatformInputGLFW>(_window);
+    //Assert_Fatal_Error(_platformInput, "Platform input not declared");
     _inputManager.Init(_platformInput.get());
 }
 
@@ -174,7 +174,7 @@ void Engine::RemoveWorld(const std::string &name)
     _worldLut[back_name] = index;
 }
 
-void Engine::testWindowShouldClose()
+void Engine::TestWindowShouldClose()
 {
     if (glfwGetKey(_window, GLFW_KEY_ESCAPE))
     {

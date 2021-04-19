@@ -21,41 +21,58 @@ void loadScene()
 {
 
     World &world = Engine::Instance().CreateWorld("Main");
-
     world.Init();
 
-    world.RegisterComponent<Transform>();
-
-    world.RegisterComponent<Component::Model>();
-    world.RegisterComponent<Component::Camera>();
-    world.RegisterComponent<Component::Light>();
+    //Register
+    {
+        world.RegisterComponent<Transform>();
+        world.RegisterComponent<Component::Model>();
+        world.RegisterComponent<Component::Camera>();
+        world.RegisterComponent<Component::Light>();
+        world.RegisterComponent<Component::RigidBody>();
+    }
 
     auto renderSystem = world.RegisterSystem<RenderSystem>();
     auto cameraSystem = world.RegisterSystem<CameraSystem>();
     auto lightSystem = world.RegisterSystem<LightSystem>();
-
-    Signature signatureRender;
-    signatureRender.set(world.GetComponentType<Component::Model>());
-    signatureRender.set(world.GetComponentType<Transform>());
-    world.SetSystemSignature<RenderSystem>(signatureRender);
-
-    Signature signatureCamera;
-    signatureCamera.set(world.GetComponentType<Component::Camera>());
-    signatureCamera.set(world.GetComponentType<Transform>());
-    world.SetSystemSignature<CameraSystem>(signatureCamera);
-
-    Signature signatureLight;
-    signatureLight.set(world.GetComponentType<Component::Light>());
-    signatureLight.set(world.GetComponentType<Transform>());
-    world.SetSystemSignature<LightSystem>(signatureLight);
-
-    world.RegisterComponent<Component::RigidBody>();
     auto physicsSystem = world.RegisterSystem<PhysicsSystem>();
 
-    Signature signature;
-    signature.set(world.GetComponentType<Transform>());
-    signature.set(world.GetComponentType<Component::RigidBody>());
-    world.SetSystemSignature<PhysicsSystem>(signature);
+
+    Engine& engine = Engine::Instance();
+
+    engine.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
+
+    //Signature Renderer
+    {
+        Signature signatureRender;
+        signatureRender.set(world.GetComponentType<Component::Model>());
+        signatureRender.set(world.GetComponentType<Transform>());
+        world.SetSystemSignature<RenderSystem>(signatureRender);
+    }
+
+    //Signature Camera
+    {
+        Signature signatureCamera;
+        signatureCamera.set(world.GetComponentType<Component::Camera>());
+        signatureCamera.set(world.GetComponentType<Transform>());
+        world.SetSystemSignature<CameraSystem>(signatureCamera);
+    }
+
+    //Signature Light
+    {
+        Signature signatureLight;
+        signatureLight.set(world.GetComponentType<Component::Light>());
+        signatureLight.set(world.GetComponentType<Transform>());
+        world.SetSystemSignature<LightSystem>(signatureLight);
+    }
+
+    //Signature Physics
+    {
+        Signature signaturePhysics;
+        signaturePhysics.set(world.GetComponentType<Transform>());
+        signaturePhysics.set(world.GetComponentType<Component::RigidBody>());
+        world.SetSystemSignature<PhysicsSystem>(signaturePhysics);
+    }
 
     physicsSystem->Init();
 
@@ -73,7 +90,7 @@ void loadScene()
     }
 
     Transform t = {Maths::Vector3f{0, 0, 10}, Maths::Vector3f::One() * 1.5f, Maths::Quaternion{}};
-    Component::Model md = Engine::Instance().GetResourcesManager().LoadModel("../../Asset/Sphere.fbx",
+    Component::Model md = engine.GetResourcesManager().LoadModel("../../Asset/Sphere.fbx",
                                                                              Renderer::VertexType::V_NORMALMAP);
 
     Material material;
@@ -82,7 +99,7 @@ void loadScene()
     material.diffuse = {1, 1, 1};
     material.specular = {1, 1, 1};
     material.checkLight = true;
-    material.normalMap = Engine::Instance().GetResourcesManager().LoadTexture("../../Asset/Floor_N.jpg");
+    material.normalMap = engine.GetResourcesManager().LoadTexture("../../Asset/Floor_N.jpg");
     md.AddMaterial(material);
 
 
@@ -119,10 +136,10 @@ void loadScene()
 
 
     Component::RigidBody rbFloor;
-    Component::Model mdFloor = Engine::Instance().GetResourcesManager().LoadModel("../../Asset/Cube.fbx",
+    Component::Model mdFloor = engine.GetResourcesManager().LoadModel("../../Asset/Cube.fbx",
                                                                      Renderer::VertexType::V_NORMALMAP);
 
-    material.colorTexture = Engine::Instance().GetResourcesManager().LoadTexture("../../Asset/Floor_C.jpg");
+    material.colorTexture = engine.GetResourcesManager().LoadTexture("../../Asset/Floor_C.jpg");
 
     mdFloor.AddMaterial(material);
 
@@ -148,13 +165,11 @@ void loadScene()
     light.constant = 1.0f;
     light.linear = 0.0014f;
     light.quadratic = 0.000007f;
-
     light.outerSpotAngle = 10.5;
     light.spotAngle = 8.5;
 
 
     Transform tl1 = {Maths::Vector3f::One(), Maths::Vector3f::One(), Maths::Quaternion{}};
-
     world.AddComponent(lightID, light);
     world.AddComponent(lightID, tl1);
 
@@ -169,39 +184,37 @@ void loadScene()
     light.type = Component::Light_Type::L_DIRECTIONAL;
     light.diffuse = {0, 0, 1};
     light.specular = {0, 0, 1};
-    Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
 
-    Audio::Sound sound = Engine::Instance().GetSoundManager().CreateSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC);
+    Audio::Sound sound = engine.GetSoundManager().CreateSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC);
     sound.Play();
     sound.SetVolume(0.5f);
 
+    Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
     world.AddComponent(lightID3, light);
     world.AddComponent(lightID3, tl3);
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
-
-    Engine::Instance().GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
 }
 
 int main()
 {
-    //Engine engine;
-    Editor editor{};
-
     EngineSettings settings{
             true,
             "QuackEditor",
             {1280, 720},
             WINDOW_MODE::WINDOWED,
-            0
+            0,
+            INPUT_MODE::GLFW
     };
-    Engine::Instance().InitWindow(settings);
-    //Engine::Instance().;
+
+    Engine& engine = Engine::Instance();
+    engine.InitWindow(settings);
+
+    Editor editor{};
+
     loadScene();
 
-
     float dt = 0;
-
     // Time && fps
     double temp_time{0.0};
     double time{0.0};
@@ -209,11 +222,12 @@ int main()
     unsigned int frames{0};
     double time_acc{0.0};
 
-    Engine::Instance().GetRendererInterface().lightSystem->Update();
+    engine.GetRendererInterface().lightSystem->Update();
 
-    while (!Engine::Instance().WindowShouldClose())
+    while (!engine.WindowShouldClose())
     {
-        { // DeltaTime
+        {
+            // DeltaTime
             temp_time = glfwGetTime();
             deltaTime = temp_time - time;
             time = temp_time;
@@ -227,18 +241,18 @@ int main()
                 frames = 0;
                 time_acc = 0.;
             }
-
-            //physicsSystem->FixedUpdate(deltaTime);
-
         }
-
         Renderer::RendererPlatform::ClearColor({0.7f, 0.7f, 0.7f, 0.f});
         Renderer::RendererPlatform::Clear();
+
+        /** UPDATE **/
+        //physicsSystem->FixedUpdate(deltaTime);
+
         editor.Draw();
+        engine.GetInputManager().Update();
 
-
-
-
-
+        /** DRAW **/
+        engine.TestWindowShouldClose();
+        engine.SwapBuffers();
     }
 }
