@@ -1,52 +1,34 @@
-//
-// Created by gnisi on 22/03/2021.
-//
-
 #ifndef QUACKENGINE_WORLD_HPP
 #define QUACKENGINE_WORLD_HPP
 
-#include <utility>
-
 #include "Types.hpp"
+
 #include "Scene/Core/EntityManager.hpp"
 #include "Scene/Core/SystemManager.hpp"
 #include "Scene/Core/ComponentManager.hpp"
-#include "Scene/Component/Name.hpp"
-#include "Resources/ResourcesManager.hpp"
-#include "Audio/SoundManager.hpp"
-#include "Renderer/RendererInterface.hpp"
+
 #include "reactphysics3d/reactphysics3d.h"
 
-#include "Input/PlatformInput.hpp"
-#include "Input/InputManager.hpp"
-
+#include "Scene/Component/Name.hpp"
+#include <string>
 
 class World
 {
 private:
-    World() = default;
-
-    static World _instance;
-
-    Resources::ResourcesManager _resourcesManager;
-    Audio::SoundManager _soundManager;
-    Renderer::RendererInterface _rendererInterface;
-
-
-    rp3d::PhysicsWorld *_physicsWorld;
     std::unique_ptr<ComponentManager> _componentManager;
     std::unique_ptr<EntityManager> _entityManager;
     std::unique_ptr<SystemManager> _systemManager;
-    std::unique_ptr<rp3d::PhysicsCommon> _physicsManager;
-    std::unique_ptr<Input::InputManager> _inputManager;
+
+    rp3d::PhysicsWorld *_physicsWorld = nullptr;
+
+    std::string _name;
 
 
 public:
-    std::unique_ptr<Input::InputManager> &GetInputManager();
+    World() = delete;
+    explicit World(std::string &name);
 
-    static World &Instance();
-
-    void Init(Input::PlatformInput &platformInput);
+    void Init();
 
     void Clear();
 
@@ -83,52 +65,20 @@ public:
 
     rp3d::PhysicsWorld *GetPhysicsWorld() const;
 
-    const std::unique_ptr<rp3d::PhysicsCommon> &GetPhysicsManager() const;
+    const std::string &GetName() const;
 
-    Resources::ResourcesManager &GetResourcesManager();
-
-    Audio::SoundManager &GetSoundManager();
-
-    Renderer::RendererInterface &GetRendererInterface();
     const std::unique_ptr<EntityManager> &GetEntityManager() const;
+
 };
-
-inline World World::_instance = World();
-
-inline World &World::Instance()
-{
-    return _instance;
-}
-
-inline void World::Init(Input::PlatformInput &platformInput)
-{
-    _componentManager = std::make_unique<ComponentManager>();
-    _entityManager = std::make_unique<EntityManager>();
-    _systemManager = std::make_unique<SystemManager>();
-    _physicsManager = std::make_unique<rp3d::PhysicsCommon>();
-
-    _physicsWorld = _physicsManager->createPhysicsWorld();
-
-    _soundManager.Init();
-
-    _inputManager = std::make_unique<Input::InputManager>(platformInput);
-
-    _componentManager->RegisterComponent<Name>();
-}
 
 inline rp3d::PhysicsWorld *World::GetPhysicsWorld() const
 {
     return _physicsWorld;
 }
 
-inline const std::unique_ptr<rp3d::PhysicsCommon> &World::GetPhysicsManager() const
-{
-    return _physicsManager;
-}
-
 inline void World::Clear()
 {
-
+    //todo:
 }
 
 inline Entity World::CreateEntity(std::string name)
@@ -152,7 +102,7 @@ inline void World::RegisterComponent()
 }
 
 template<typename T>
-inline void World::AddComponent(Entity id, T component)
+inline void World::AddComponent(Entity id, T component) //todo: maybe pass by const ref
 {
     _componentManager->AddComponent<T>(id, component);
 
@@ -205,25 +155,11 @@ inline void World::SetSystemSignature(Signature signature)
     _systemManager->SetSignature<T>(signature);
 }
 
-inline Resources::ResourcesManager &World::GetResourcesManager()
+inline const std::string &World::GetName() const
 {
-    return _resourcesManager;
+    return _name;
 }
 
-inline Audio::SoundManager &World::GetSoundManager()
-{
-    return _soundManager;
-}
-
-inline Renderer::RendererInterface &World::GetRendererInterface()
-{
-    return _rendererInterface;
-}
-
-inline std::unique_ptr<Input::InputManager> &World::GetInputManager()
-{
-    return _inputManager;
-}
 
 inline const std::unique_ptr<EntityManager> &World::GetEntityManager() const
 {

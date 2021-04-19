@@ -1,12 +1,16 @@
 #include "Scene/System/CameraSystem.hpp"
-#include "Scene/Core/World.hpp"
+#include "Engine.hpp"
 #include "Scene/Component/Transform.hpp"
 
-Component::Camera& CameraSystem::GetActiveCamera()
+using namespace Component;
+
+Component::Camera &CameraSystem::GetActiveCamera()
 {
-    World& world = World::Instance();
-    for (Entity entity: _entities) {
-        auto &t = world.GetComponent<Component::Camera>(entity);
+    World &world = Engine::Instance().GetCurrentWorld();
+
+    for (Entity entity: _entities)
+    {
+        auto &t = world.GetComponent<Camera>(entity);
         if (t.isActive)
         {
             Transform trs = world.GetComponent<Transform>(entity);
@@ -21,9 +25,10 @@ Component::Camera& CameraSystem::GetActiveCamera()
 
 void CameraSystem::Clear()
 {
+    World &world = Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)
     {
-        auto &t = World::Instance().GetComponent<Component::Camera>(entity);
+        auto &t = world.GetComponent<Camera>(entity);
         t.GetFramebuffer().Delete();
     }
 }

@@ -1,8 +1,5 @@
-//
-// Created by g.nisi on 3/10/21.
-//
-
 #include "Widgets/PropertiesWidget.hpp"
+#include "Engine.hpp"
 #include "Scene/Component/Transform.hpp"
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/Name.hpp"
@@ -11,21 +8,23 @@
 #include "Scene/Component/Model.hpp"
 
 
+using namespace Component;
+
 PropertiesWidget::PropertiesWidget()
 {
-    _title="Properties";
+    _title = "Properties";
 }
 
 void PropertiesWidget::UpdateVisible()
 {
-    Name();
+    //NameReader();
     TransformReader();
     AddComponent();
 }
 
 void PropertiesWidget::TransformReader() const
 {
-    Transform &transform = World::Instance().GetComponent<Transform>(_entity);
+    auto &transform = Engine::Instance().GetCurrentWorld().GetComponent<Transform>(_entity);
 
     if (ImGui::CollapsingHeader("Transform"))
         return;
@@ -40,7 +39,7 @@ void PropertiesWidget::TransformReader() const
 
 void PropertiesWidget::AddComponent()
 {
-    World &world = World::Instance();
+    World &world = Engine::Instance().GetCurrentWorld();
     if (ImGui::Button("Add Component"))
     {
         ImGui::OpenPopup("##ComponentContextMenu_Add");
@@ -70,14 +69,14 @@ void PropertiesWidget::AddComponent()
             if (ImGui::MenuItem("Directional"))
             {
                 light.type = Component::Light_Type::L_DIRECTIONAL;
-                light.diffuse = {0,0,1};
+                light.diffuse = {0, 0, 1};
                 light.specular = {0, 0, 1};
                 world.AddComponent(_entity, light);
             }
             else if (ImGui::MenuItem("Point"))
             {
                 light.type = Component::Light_Type::L_POINT;
-                light.diffuse = {1,1,1};
+                light.diffuse = {1, 1, 1};
                 light.specular = {1, 1, 1};
 
                 world.AddComponent(_entity, light);
@@ -85,7 +84,7 @@ void PropertiesWidget::AddComponent()
             else if (ImGui::MenuItem("Spot"))
             {
                 light.type = Component::Light_Type::L_SPOT;
-                light.diffuse = {1,0,0};
+                light.diffuse = {1, 0, 0};
                 light.specular = {1, 0, 0};
                 world.AddComponent(_entity, light);
             }
