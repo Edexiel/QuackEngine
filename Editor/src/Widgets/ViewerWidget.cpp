@@ -9,7 +9,6 @@ ViewerWidget::ViewerWidget()
 
 void ViewerWidget::UpdateVisible()
 {
-    ImGui::ShowDemoWindow();
     World &world = World::Instance();
     int n = 0;
     for (Entity entity : world.GetEntityManager()->GetEntities())
@@ -42,7 +41,7 @@ void ViewerWidget::AddEntity()
 
 void ViewerWidget::DestroyEntity()
 {
-    if(ImGui::Button("Destroy entity"))
+    if(ImGui::Button("Destroy entity") && _selected > -1)
     {
         World::Instance().DestroyEntity(_entity);
     }

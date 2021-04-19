@@ -14,6 +14,7 @@
 #include "Scene/System/PhysicsSystem.hpp"
 
 #include "Tools/Random.hpp"
+#include "CameraEditor.hpp"
 
 using namespace Renderer;
 int main()
@@ -43,6 +44,8 @@ int main()
     world.SetSystemSignature<PhysicsSystem>(signature);
 
     physicsSystem->Init();
+    CameraEditor cam;
+    cam.SetInput(*world.GetInputManager().get());
 
     {
         Entity CameraEntity = world.CreateEntity("Camera");
@@ -209,6 +212,6 @@ int main()
         }
 
         glfwSwapBuffers(window);
-        glfwPollEvents();
+        world.GetInputManager()->Update();
     }
 }

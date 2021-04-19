@@ -14,6 +14,7 @@ add_executable(${PROJECT_NAME}
         src/Widgets/LogWidget.cpp
         src/Widgets/ExplorerWidget.cpp
         src/Widgets/ViewerWidget.cpp
+        src/CameraEditor.cpp
         )
 
 
