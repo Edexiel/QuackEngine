@@ -14,7 +14,6 @@
 #include "Scene/System/PhysicsSystem.hpp"
 
 #include "Tools/Random.hpp"
-#include "CameraEditor.hpp"
 
 using namespace Renderer;
 int main()
@@ -44,8 +43,6 @@ int main()
     world.SetSystemSignature<PhysicsSystem>(signature);
 
     physicsSystem->Init();
-    CameraEditor cam;
-    cam.SetInput(*world.GetInputManager().get());
 
     {
         Entity CameraEntity = world.CreateEntity("Camera");
@@ -83,8 +80,8 @@ int main()
             for (int  z = 0; z < 1; z++)
             {
                 t.position.x = 0;
-                t.position.y = 5 - y * 2;
-                t.position.z = 20 + z * 2;
+                t.position.y = 5.f - (float)y * 2;
+                t.position.z = 20.f + (float)z * 2;
 
                 Entity id = world.CreateEntity("Test");
 
@@ -179,6 +176,7 @@ int main()
     double deltaTime{0.0};
     unsigned int frames{0};
     double time_acc{0.0};
+
 
     while (!glfwWindowShouldClose(window))
     {

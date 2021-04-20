@@ -14,19 +14,16 @@ void CameraEditor::Update()
 void CameraEditor::SetScaleAxisX(float scale)
 {
     _scaleAxisX = scale;
-    std::cout << "SetScaleAxisX: "<< _scaleAxisX << std::endl;
 }
 
 void CameraEditor::SetScaleAxisY(float scale)
 {
     _scaleAxisY = scale;
-    std::cout << "SetScaleAxisY: "<< _scaleAxisY << std::endl;
 }
 
 void CameraEditor::SetScaleAxisZ(float scale)
 {
     _scaleAxisX = scale;
-    std::cout << "SetScaleAxisZ: "<< _scaleAxisZ << std::endl;
 }
 
 void CameraEditor::SetInput(Input::InputManager &inputManager)
@@ -49,8 +46,8 @@ void CameraEditor::FreeFly()
 void CameraEditor::MouseMovement(const Vector2d &currentPos, const Vector2d &oldPos)
 {
     Vector2d angleRotation = (oldPos - currentPos) * (_speedRotation * M_PI / 180.f);
-    _yaw += angleRotation.x;
-    _pitch = std::clamp(_pitch + angleRotation.y, -M_PI / 2.0, M_PI / 2.0);
+    _yaw += (float)angleRotation.x;
+    _pitch = (float)std::clamp(_pitch + angleRotation.y, -M_PI / 2.0, M_PI / 2.0);
 
     _rotation = (Quaternion({1, 0, 0}, _pitch) * Quaternion({0, 1, 0}, _yaw)).ToMatrix();
 }
