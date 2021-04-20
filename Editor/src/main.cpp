@@ -10,6 +10,7 @@
 #include "Renderer/Shape.hpp"
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
+#include "Scene/System/CameraSystem.hpp"
 #include "Resources/ResourcesManager.hpp"
 
 #include "Tools/Random.hpp"

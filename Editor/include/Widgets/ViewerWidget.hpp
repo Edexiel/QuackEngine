@@ -12,7 +12,7 @@ public:
 
     void UpdateVisible() final;
     void AddEntity();
-    void DestroyEntity() const;
+    void DestroyEntity();
 };
 
 #endif //QUACKENGINE_VIEWERWIDGET_HPP
