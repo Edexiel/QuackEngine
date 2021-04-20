@@ -35,9 +35,9 @@ void CameraEditor::SetInput(Input::InputManager &inputManager)
 
 void CameraEditor::FreeFly()
 {
-    _forward = (_rotation * Vector4f(Vector3f::Forward(), 0)).xyz * _scaleAxisZ;
-    _right = (_rotation * Vector4f(Vector3f::Right(), 0)).xyz * _scaleAxisX;
-    Vector3f up = Vector3f::Up() * _scaleAxisY;
+    _forward = (_rotation * Vector4f(Vector3f::Backward(), 0)).xyz * _scaleAxisZ;
+    _right = (_rotation * Vector4f(Vector3f::Left(), 0)).xyz * _scaleAxisX;
+    Vector3f up = Vector3f::Down() * _scaleAxisY;
     Vector3f direction = (_forward + _right + up).GetNormalized();
 
     _position = _position + (direction * _speedTranslation);
