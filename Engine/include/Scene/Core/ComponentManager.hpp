@@ -93,7 +93,7 @@ inline void ComponentManager::AddComponent(Entity id, T component)
 template<typename T>
 inline void ComponentManager::RemoveComponent(Entity id)
 {
-    GetComponentArray<T>()->RemoveData(id);
+    GetComponentArray<T>()->DeleteData(id);
 }
 
 template<typename T>

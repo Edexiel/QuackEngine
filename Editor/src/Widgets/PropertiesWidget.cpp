@@ -1,11 +1,8 @@
 #include "Widgets/PropertiesWidget.hpp"
 #include "Engine.hpp"
-#include "Scene/Component/Transform.hpp"
-#include "Scene/Core/World.hpp"
-#include "Scene/Component/Name.hpp"
-#include "Scene/Component/Camera.hpp"
-#include "Scene/Component/Light.hpp"
-#include "Scene/Component/Model.hpp"
+
+#include "Scene/Component/RigidBody.hpp"
+#include "misc/cpp/imgui_stdlib.h"
 
 
 using namespace Component;
@@ -18,10 +15,26 @@ PropertiesWidget::PropertiesWidget()
 void PropertiesWidget::UpdateVisible()
 {
     //NameReader();
-    TransformReader();
-    AddComponent();
-}
+    World &world = Engine::Instance().GetCurrentWorld();
+    if(world.HasComponent<Name>(_entity))
+        NameReader();
+    if(world.HasComponent<Transform>(_entity))
+        TransformReader();
+    if(world.HasComponent<Light>(_entity))
+        LightReader();
+    if(world.HasComponent<Camera>(_entity))
+        CameraReader();
+    if(world.HasComponent<RigidBody>(_entity))
+        RigidBodyReader();
 
+    AddComponent();
+    DeleteComponent();
+}
+void PropertiesWidget::NameReader() const
+{
+    auto &name = Engine::Instance().GetCurrentWorld().GetComponent<Name>(_entity);
+    ImGui::InputText("Name", &name.name);
+}
 void PropertiesWidget::TransformReader() const
 {
     auto &transform = Engine::Instance().GetCurrentWorld().GetComponent<Transform>(_entity);
@@ -35,6 +48,45 @@ void PropertiesWidget::TransformReader() const
     ImGui::DragFloat3("Rotation", v.e);
     v = v * (M_PI / 180.f);
     transform.rotation = Maths::Quaternion::EulerToQuaternion(v);
+}
+
+void PropertiesWidget::LightReader() const
+{
+    auto &light = Engine::Instance().GetCurrentWorld().GetComponent<Light>(_entity);
+    if (ImGui::CollapsingHeader("Light"))
+        return;
+
+    ImGui::DragFloat3("Direction", light.direction.e);
+
+    ImGui::ColorEdit3("Ambient", light.ambient.e);
+    ImGui::ColorEdit3("Diffuse", light.diffuse.e);
+    ImGui::ColorEdit3("Specular", light.specular.e);
+
+    ImGui::DragFloat("Constant", &light.constant);
+    ImGui::DragFloat("Linear", &light.linear);
+    ImGui::DragFloat("Quadratic", &light.quadratic);
+
+    ImGui::DragFloat("Spot angle", &light.spotAngle);
+    ImGui::DragFloat("Outer spot angle", &light.outerSpotAngle);
+}
+
+void PropertiesWidget::CameraReader() const
+{
+    auto &camera = Engine::Instance().GetCurrentWorld().GetComponent<Camera>(_entity);
+    if (ImGui::CollapsingHeader("Camera"))
+        return;
+
+    ImGui::Checkbox("Is perspective", &camera._isPerspective);
+    float fov = (camera._fov * 180.f) / (float)M_PI;
+    ImGui::DragFloat("FOV", &fov);
+    camera._fov = (fov * (float)M_PI) / 180.f;
+
+}
+
+void PropertiesWidget::RigidBodyReader() const
+{
+    if (ImGui::CollapsingHeader("RigidBody"))
+        return;
 }
 
 void PropertiesWidget::AddComponent()
@@ -91,8 +143,36 @@ void PropertiesWidget::AddComponent()
             ImGui::EndMenu();
         }
 
-
+        if (ImGui::MenuItem("RigidBody"))
+        {
+            world.AddComponent(_entity, RigidBody());
+        }
         ImGui::EndPopup();
     }
 
+}
+
+void PropertiesWidget::DeleteComponent()
+{
+    World &world = Engine::Instance().GetCurrentWorld();
+    if (ImGui::Button("Delete Component"))
+    {
+        ImGui::OpenPopup("##ComponentContextMenu_Delete");
+    }
+    if (ImGui::BeginPopup("##ComponentContextMenu_Delete"))
+    {
+        if (world.HasComponent<Camera>(_entity) && ImGui::MenuItem("Camera"))
+        {
+            world.RemoveComponent<Camera>(_entity);
+        }
+        if(world.HasComponent<Light>(_entity) && ImGui::MenuItem("Light"))
+        {
+            world.RemoveComponent<Light>(_entity);
+        }
+        if(world.HasComponent<RigidBody>(_entity) && ImGui::MenuItem("RigidBody"))
+        {
+            world.RemoveComponent<RigidBody>(_entity);
+        }
+        ImGui::EndPopup();
+    }
 }

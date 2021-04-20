@@ -77,8 +77,8 @@ void loadScene()
     }
 
     physicsSystem->Init();
-    CameraEditor cam;
-    cam.SetInput(engine.GetInputManager());
+//    CameraEditor cam;
+//    cam.SetInput(engine.GetInputManager());
 
     {
         Entity CameraEntity = world.CreateEntity("Camera");
@@ -130,7 +130,7 @@ void loadScene()
                 world.AddComponent(id, rb);
 
                 physicsSystem->SetRigidBody(id);
-                physicsSystem->SetType(id, BodyType::STATIC);
+                physicsSystem->SetType(id, BodyType::DYNAMIC);
 
                 physicsSystem->AddSphereCollider(id, 1.5f);
             }
@@ -234,7 +234,7 @@ int main()
     double timeAcc{0.0};
 
     engine.GetRendererInterface().lightSystem->Update();
-
+    engine.GetPhysicsManager();
     while (!engine.WindowShouldClose())
     {
         // DeltaTime
@@ -266,7 +266,7 @@ int main()
         editor.Draw();
 
         /** UPDATE **/
-        //physicsSystem->FixedUpdate(deltaTime);
+//        physicsSystem->FixedUpdate(deltaTime);
 
         engine.SwapBuffers();
     }

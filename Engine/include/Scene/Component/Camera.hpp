@@ -20,15 +20,15 @@ namespace Component
     public:
         bool isActive {true};
 
-        friend :: CameraSystem;
+        friend ::CameraSystem;
+        float _fov;
+        bool _isPerspective{true};
 
     private:
         unsigned int _width;
         unsigned int _height;
 
-        bool _isPerspective{true};
 
-        float _fov;
         float _far;
         float _near;
 
