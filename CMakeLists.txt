@@ -56,6 +56,7 @@ target_sources(imgui INTERFACE
         "${IMGUI_FOLDER}/imgui_tables.cpp"
         "${IMGUI_FOLDER}/backends/imgui_impl_glfw.cpp"
         "${IMGUI_FOLDER}/backends/imgui_impl_opengl3.cpp"
+        "${IMGUI_FOLDER}/misc/cpp/imgui_stdlib.cpp"
         )
 target_include_directories(imgui INTERFACE ${IMGUI_FOLDER})
 target_link_libraries(imgui INTERFACE glfw glad)

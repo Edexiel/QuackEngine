@@ -17,7 +17,7 @@ Camera::Camera(const unsigned int width, const unsigned int height,
         : _width{width}, _height{height}, _far{far}, _near{near}, _fov{fov}, _isPerspective{true},
           _framebuffer{Renderer::Framebuffer::LoadFramebuffer(width, height)}
 {
-    _projection = Matrix4::Perspective(_width, _height, _near, _far, _fov);
+    _projection = Matrix4::Perspective(_width, _height, _near, _far, fov);
     _view = Matrix4::Identity();
 }
 

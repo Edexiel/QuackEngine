@@ -78,7 +78,7 @@ public:
     void UnloadWorld(const std::string& name);
     void RemoveWorld(const std::string& name);
 
-    Input::InputManager &GetInputManager() ;
+    Input::InputManager &GetInputManager();
     Renderer::RendererInterface &GetRendererInterface();
     Resources::ResourcesManager &GetResourcesManager();
     Audio::SoundManager &GetSoundManager();

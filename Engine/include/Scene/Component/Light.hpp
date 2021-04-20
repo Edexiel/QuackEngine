@@ -29,7 +29,6 @@ namespace Component
         
       float spotAngle             {0.0f}; // angle of the spot
       float outerSpotAngle        {0.0f};
-
   };
 }
 
