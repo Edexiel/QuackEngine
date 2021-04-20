@@ -21,8 +21,9 @@ void InputManager::OnKeyEvent(Action action, Key key)
     {
         for (Input::Key _key : eventKey.second)
         {
-            for (const std::pair<std::function<void()>, Action> &function :
-                    _eventFuncs[eventKey.first])
+            if(_eventFuncs[eventKey.first].empty())
+                return;
+            for (const std::pair<std::function<void()>, Action> &function :_eventFuncs[eventKey.first])
             {
                 if (_key == key && function.second == action)
                     function.first();
@@ -33,6 +34,9 @@ void InputManager::OnKeyEvent(Action action, Key key)
     {
         for (std::pair<Key, float> _key : eventKeyAxis.second)
         {
+            if( _eventFuncsAxis[eventKeyAxis.first].empty())
+                return;
+
             for (const std::function<void(float)> &function : _eventFuncsAxis[eventKeyAxis.first])
             {
                 if (_key.first == key && action == Action::PRESS)
@@ -50,6 +54,9 @@ void InputManager::OnMouseButtonEvent(Action action, MouseButton button)
     {
         for (Input::MouseButton _button : eventMouseButton.second)
         {
+            if(_eventFuncs[eventMouseButton.first].empty())
+                return;
+
             for (const std::pair<std::function<void()>, Action> &function :
                     _eventFuncs[eventMouseButton.first])
             {
@@ -116,4 +123,11 @@ void InputManager::InitInput()
   BindEventAxis("CameraEditorMovementRight", Input::Key::KEY_A, 1.0f);
   BindEventAxis("CameraEditorMovementUp", Input::Key::KEY_SPACE, -1.0f);
   BindEventAxis("CameraEditorMovementUp", Input::Key::KEY_LEFT_CONTROL, 1.0f);
+
+  BindEventAxis("CameraMovementForward", Input::Key::KEY_W, -1.0f);
+  BindEventAxis("CameraMovementForward", Input::Key::KEY_S, 1.0f);
+  BindEventAxis("CameraMovementRight", Input::Key::KEY_D, -1.0f);
+  BindEventAxis("CameraMovementRight", Input::Key::KEY_A, 1.0f);
+  BindEventAxis("CameraMovementUp", Input::Key::KEY_SPACE, -1.0f);
+  BindEventAxis("CameraMovementUp", Input::Key::KEY_LEFT_CONTROL, 1.0f);
 }

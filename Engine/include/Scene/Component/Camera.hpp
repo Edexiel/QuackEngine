@@ -11,6 +11,7 @@ namespace Input
 {
     class InputManager;
 };
+class CameraSystem;
 
 namespace Component
 {
@@ -19,15 +20,27 @@ namespace Component
     public:
         bool isActive {true};
 
+        friend ::CameraSystem;
+        float _fov;
+        bool _isPerspective{true};
+
     private:
         unsigned int _width;
         unsigned int _height;
 
-        bool _isPerspective{true};
 
-        float _fov;
         float _far;
         float _near;
+
+        float _scaleAxisX = 0;
+        float _scaleAxisY = 0;
+        float _scaleAxisZ = 0;
+
+        float _yaw = 0;
+        float _pitch = 0;
+
+        float _speedTranslation = 0.01f;
+        float _speedRotation = 0.01f;
 
         Renderer::Framebuffer _framebuffer;
 
