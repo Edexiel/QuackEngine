@@ -21,12 +21,13 @@ void InputManager::OnKeyEvent(Action action, Key key)
     {
         for (Input::Key _key : eventKey.second)
         {
-            if(_eventFuncs[eventKey.first].empty())
-                return;
-            for (const std::pair<std::function<void()>, Action> &function :_eventFuncs[eventKey.first])
+            if(!_eventFuncs[eventKey.first].empty())
             {
-                if (_key == key && function.second == action)
-                    function.first();
+                for (const std::pair<std::function<void()>, Action> &function :_eventFuncs[eventKey.first])
+                {
+                    if (_key == key && function.second == action)
+                        function.first();
+                }
             }
         }
     }
@@ -34,15 +35,15 @@ void InputManager::OnKeyEvent(Action action, Key key)
     {
         for (std::pair<Key, float> _key : eventKeyAxis.second)
         {
-            if( _eventFuncsAxis[eventKeyAxis.first].empty())
-                return;
-
-            for (const std::function<void(float)> &function : _eventFuncsAxis[eventKeyAxis.first])
+            if(!_eventFuncsAxis[eventKeyAxis.first].empty())
             {
-                if (_key.first == key && action == Action::PRESS)
-                    function(_key.second);
-                else if (_key.first == key && action == Action::RELEASE)
-                    function(0);
+                for (const std::function<void(float)> &function : _eventFuncsAxis[eventKeyAxis.first])
+                {
+                    if (_key.first == key && action == Action::PRESS)
+                        function(_key.second);
+                    else if (_key.first == key && action == Action::RELEASE)
+                        function(0);
+                }
             }
         }
     }
@@ -54,14 +55,14 @@ void InputManager::OnMouseButtonEvent(Action action, MouseButton button)
     {
         for (Input::MouseButton _button : eventMouseButton.second)
         {
-            if(_eventFuncs[eventMouseButton.first].empty())
-                return;
-
-            for (const std::pair<std::function<void()>, Action> &function :
-                    _eventFuncs[eventMouseButton.first])
+            if(!_eventFuncs[eventMouseButton.first].empty())
             {
-                if (_button == button && function.second == action)
-                    function.first();
+                for (const std::pair<std::function<void()>, Action> &function :
+                        _eventFuncs[eventMouseButton.first])
+                {
+                    if (_button == button && function.second == action)
+                        function.first();
+                }
             }
         }
     }

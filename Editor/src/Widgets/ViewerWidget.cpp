@@ -43,10 +43,11 @@ void ViewerWidget::AddEntity()
     }
 }
 
-void ViewerWidget::DestroyEntity() const
+void ViewerWidget::DestroyEntity()
 {
     if (ImGui::Button("Destroy entity") && _selected > -1)
     {
         Engine::Instance().GetCurrentWorld().DestroyEntity(_entity);
+        _selected = -1;
     }
 }
