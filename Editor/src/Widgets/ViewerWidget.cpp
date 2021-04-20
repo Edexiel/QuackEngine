@@ -1,6 +1,9 @@
 #include "Widgets/ViewerWidget.hpp"
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/Transform.hpp"
+#include "Engine.hpp"
+
+using namespace Component;
 
 ViewerWidget::ViewerWidget()
 {
@@ -9,7 +12,8 @@ ViewerWidget::ViewerWidget()
 
 void ViewerWidget::UpdateVisible()
 {
-    World &world = World::Instance();
+    World &world = Engine::Instance().GetCurrentWorld();
+
     int n = 0;
     for (Entity entity : world.GetEntityManager()->GetEntities())
     {
@@ -29,9 +33,9 @@ void ViewerWidget::UpdateVisible()
 
 void ViewerWidget::AddEntity()
 {
-    if(ImGui::Button("Add entity"))
+    if (ImGui::Button("Add entity"))
     {
-        World &world = World::Instance();
+        World &world = Engine::Instance().GetCurrentWorld();
         _entity = world.CreateEntity("GameObject");
         _selected = _entity;
         Transform t;
@@ -39,10 +43,10 @@ void ViewerWidget::AddEntity()
     }
 }
 
-void ViewerWidget::DestroyEntity()
+void ViewerWidget::DestroyEntity() const
 {
-    if(ImGui::Button("Destroy entity") && _selected > -1)
+    if (ImGui::Button("Destroy entity") && _selected > -1)
     {
-        World::Instance().DestroyEntity(_entity);
+        Engine::Instance().GetCurrentWorld().DestroyEntity(_entity);
     }
 }

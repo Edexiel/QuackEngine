@@ -1,13 +1,4 @@
-//
-// Created by g.nisi on 2/26/21.
-//
-
-#include <cstdio>
-
 #include "Editor.hpp"
-#include "Engine.hpp"
-
-#include "Renderer/RendererPlatform.hpp"
 
 #include "Widgets/ExplorerWidget.hpp"
 #include "Widgets/LogWidget.hpp"
@@ -18,101 +9,21 @@
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+
 #include "imgui.h"
-#include "Debug/Assertion.hpp"
 
-Editor::Editor(Engine &engine) : _engine{engine}
-{}
 
+Editor::Editor(GLFWwindow * window)
+{
+    InitWidgets();
+    InitImGui(window);
+}
 
 Editor::~Editor()
 {
-    // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-
-    glfwDestroyWindow(_window);
-    glfwTerminate();
-}
-
-void Editor::Init(const EngineSettings &settings)
-{
-    InitGlfw(settings);
-    InitWidgets();
-    InitImGui();
-}
-
-void Editor::InitGlfw(const EngineSettings &settings)
-{
-    Assert_Fatal_Error(!glfwInit(), "GLFW was not correctly initialized, aborting");
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, settings.debug);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    GLFWmonitor *monitor;
-
-    /**
-     * Screen mode selection, can be
-     * WINDOWED
-     * FULLSCREEN
-     * WINDOWED FULLSCREEN
-     *
-     * If there are multiple monitors, we can select it and execute the screen mode in that screen
-     */
-    switch (settings.mode)
-    {
-        case WINDOW_MODE::WINDOWED:
-        {
-            monitor = nullptr;
-            break;
-        }
-
-        case WINDOW_MODE::FULLSCREEN:
-        {
-            int count;
-            GLFWmonitor **monitors = glfwGetMonitors(&count);
-
-            if (settings.monitor < count)
-            {
-                monitor = monitors[settings.monitor];
-                break;
-            }
-
-            monitor = glfwGetPrimaryMonitor();
-            break;
-        }
-
-        case WINDOW_MODE::WINDOWED_FULLSCREEN:
-        {
-            //todo: stuff
-            //flemme, je verrais plus tard //... Mais enfin Guigui! ça dépasse l'entendement!
-            monitor = nullptr;
-            break;
-        }
-    }
-
-    _window = glfwCreateWindow(settings.windowSize[0],
-                               settings.windowSize[1],
-                               settings.windowTitle.c_str(), monitor, nullptr);
-    if (!_window)
-    {
-        glfwTerminate();
-        Assert_Fatal_Error(true, "GLFW's window was not correctly initialized, aborting");
-    }
-
-    glfwMakeContextCurrent(_window);
-
-    int version = Renderer::RendererPlatform::LoadGl();
-
-    if (version == 0)
-    {
-        glfwTerminate();
-        Assert_Fatal_Error(true, "Failed to initialize OpenGL context");
-    }
-
 }
 
 //todo : init from config.ini
@@ -126,7 +37,7 @@ void Editor::InitWidgets()
     _widgets.emplace_back(std::make_unique<ViewerWidget>());
 }
 
-void Editor::InitImGui()
+void Editor::InitImGui(GLFWwindow * window)
 {
     // Init ImGui
     IMGUI_CHECKVERSION();
@@ -153,7 +64,7 @@ void Editor::InitImGui()
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
-    ImGui_ImplGlfw_InitForOpenGL(_window, true);
+    ImGui_ImplGlfw_InitForOpenGL(window,true);
     ImGui_ImplOpenGL3_Init("#version 460");
 }
 
@@ -180,22 +91,16 @@ void Editor::Draw()
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    const ImGuiIO &io = ImGui::GetIO();
-
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
-        GLFWwindow *backup_current_context = glfwGetCurrentContext();
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
-        glfwMakeContextCurrent(backup_current_context);
-    }
+//    const ImGuiIO &io = ImGui::GetIO();
+//
+//    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+//    {
+//        GLFWwindow *backup_current_context = glfwGetCurrentContext();
+//        ImGui::UpdatePlatformWindows();
+//        ImGui::RenderPlatformWindowsDefault();
+//        glfwMakeContextCurrent(backup_current_context);
+//    }
 }
-
-GLFWwindow *Editor::GetWindow() const
-{
-    return _window;
-}
-
 
 
 

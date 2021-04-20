@@ -1,9 +1,9 @@
 #include "Scene/System/CameraSystem.hpp"
-#include "Scene/Core/World.hpp"
+#include "Engine.hpp"
 #include "Scene/Component/Transform.hpp"
 
 using namespace Maths;
-
+using namespace Component;
 CameraSystem::CameraSystem()
 {
     InitInput();
@@ -11,7 +11,7 @@ CameraSystem::CameraSystem()
 
 Component::Camera& CameraSystem::GetActiveCamera()
 {
-    World& world = World::Instance();
+    World& world = Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities) {
         auto &t = world.GetComponent<Component::Camera>(entity);
         if (t.isActive)
@@ -29,9 +29,10 @@ Component::Camera& CameraSystem::GetActiveCamera()
 
 void CameraSystem::Clear()
 {
+    World &world = Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)
     {
-        auto &t = World::Instance().GetComponent<Component::Camera>(entity);
+        auto &t = world.GetComponent<Camera>(entity);
         t.GetFramebuffer().Delete();
     }
 }
@@ -41,7 +42,7 @@ void CameraSystem::SetScaleAxisX(float scale) const
     if(_activeCamera < 0)
         return;
 
-    auto &cam = World::Instance().GetComponent<Component::Camera>(_activeCamera);
+    auto &cam = Engine::Instance().GetCurrentWorld().GetComponent<Component::Camera>(_activeCamera);
     cam._scaleAxisX = scale;
 
     std::cout << "scaleAxisX = " << cam._scaleAxisX << std::endl;
@@ -52,7 +53,7 @@ void CameraSystem::SetScaleAxisY(float scale) const
     if(_activeCamera < 0)
         return;
 
-    auto &cam = World::Instance().GetComponent<Component::Camera>(_activeCamera);
+    auto &cam = Engine::Instance().GetCurrentWorld().GetComponent<Component::Camera>(_activeCamera);
     cam._scaleAxisY = scale;
 
     std::cout << "scaleAxisY = " << cam._scaleAxisY << std::endl;
@@ -63,7 +64,7 @@ void CameraSystem::SetScaleAxisZ(float scale) const
     if(_activeCamera < 0)
         return;
 
-    auto &cam = World::Instance().GetComponent<Component::Camera>(_activeCamera);
+    auto &cam =Engine::Instance().GetCurrentWorld().GetComponent<Component::Camera>(_activeCamera);
     cam._scaleAxisZ = scale;
 
     std::cout << "scaleAxisZ = " << cam._scaleAxisZ << std::endl;
@@ -71,10 +72,10 @@ void CameraSystem::SetScaleAxisZ(float scale) const
 
 void CameraSystem::InitInput()
 {
-    Input::InputManager *inputManager = World::Instance().GetInputManager().get();
-    inputManager->RegisterEventAxis("CameraEditorMovementForward",this, &CameraSystem::SetScaleAxisZ);
-    inputManager->RegisterEventAxis("CameraEditorMovementRight",this, &CameraSystem::SetScaleAxisX);
-    inputManager->RegisterEventAxis("CameraEditorMovementUp",this, &CameraSystem::SetScaleAxisY);
+    Input::InputManager &inputManager = Engine::Instance().GetInputManager();
+    inputManager.RegisterEventAxis("CameraEditorMovementForward",this, &CameraSystem::SetScaleAxisZ);
+    inputManager.RegisterEventAxis("CameraEditorMovementRight",this, &CameraSystem::SetScaleAxisX);
+    inputManager.RegisterEventAxis("CameraEditorMovementUp",this, &CameraSystem::SetScaleAxisY);
 }
 
 void CameraSystem::FreeFly()
@@ -82,7 +83,7 @@ void CameraSystem::FreeFly()
     if(_activeCamera < 0)
         return;
 
-    World &world = World::Instance();
+    World &world = Engine::Instance().GetCurrentWorld();
     auto &cam = world.GetComponent<Component::Camera>(_activeCamera);
     auto &transform = world.GetComponent<Transform>(_activeCamera);
 
@@ -97,8 +98,10 @@ void CameraSystem::FreeFly()
 
 void CameraSystem::MouseMovement()
 {
-    World &world = World::Instance();
-    Input::MousePosition &mousePosition = world.GetInputManager()->mousePosition;
+    Engine &engine = Engine::Instance();
+    World &world = engine.GetCurrentWorld();
+
+    Input::MousePosition &mousePosition = engine.GetInputManager().mousePosition;
     auto &cam = world.GetComponent<Component::Camera>(_activeCamera);
     auto &transform = world.GetComponent<Transform>(_activeCamera);
 
