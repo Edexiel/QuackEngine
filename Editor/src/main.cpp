@@ -35,6 +35,9 @@ int main()
     Input::PlatformInputGLFW input{window};
     engine.Init(input);
 
+    world.GetResourcesManager().Init();
+    world.GetResourcesManager().LoadFolder("..\\..\\Game\\Asset");
+
     world.RegisterComponent<Component::RigidBody>();
     auto physicsSystem = world.RegisterSystem<PhysicsSystem>();
 
@@ -61,7 +64,7 @@ int main()
     }
 
     Transform t = {Maths::Vector3f{0, 0, 10}, Maths::Vector3f::One() * 1.5f, Maths::Quaternion{}};
-    Component::Model md = world.GetResourcesManager().LoadModel("../../Asset/Sphere.fbx", Renderer::VertexType::V_NORMALMAP);
+    Component::Model md = world.GetResourcesManager().LoadModel("../../Game/Asset/Model/Sphere.fbx", Renderer::VertexType::V_NORMALMAP);
 
     Material material;
 
@@ -69,7 +72,7 @@ int main()
     material.diffuse = {1, 1, 1};
     material.specular = {1, 1, 1};
     material.checkLight = true;
-    material.normalMap = world.GetResourcesManager().LoadTexture("../../Asset/Floor_N.jpg");
+    material.normalMap = world.GetResourcesManager().LoadTexture("..\\..\\Game\\Asset\\Texture\\Floor_N.jpg");
 
     MaterialInterface materialInterface = world.GetResourcesManager().GenerateMaterial("base", material);
 
@@ -109,9 +112,9 @@ int main()
 
 
     Component::RigidBody rbFloor;
-    Component::Model mdFloor = world.GetResourcesManager().LoadModel("../../Asset/Cube.fbx", Renderer::VertexType::V_NORMALMAP);
+    Component::Model mdFloor = world.GetResourcesManager().LoadModel("../../Game/Asset/Model/Cube.fbx", Renderer::VertexType::V_NORMALMAP);
 
-    material.colorTexture = world.GetResourcesManager().LoadTexture("../../Asset/Floor_C.jpg");
+    material.colorTexture = world.GetResourcesManager().LoadTexture("../../Game/Asset/Texture/Floor_C.jpg");
 
     MaterialInterface materialInterface2 = world.GetResourcesManager().GenerateMaterial("mat2", material);
 

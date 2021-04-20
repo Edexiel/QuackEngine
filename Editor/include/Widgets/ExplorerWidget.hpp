@@ -9,6 +9,9 @@
 
 class ExplorerWidget : public Widget
 {
+private:
+    unsigned int _selected;
+
 public:
     ExplorerWidget();
 

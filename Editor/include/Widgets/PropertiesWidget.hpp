@@ -16,7 +16,12 @@ public:
 
     void UpdateVisible() final;
     void TransformReader() const;
+    void LightReader() const;
+    void ModelReader() const;
     void AddComponent();
+
+private:
+      void AddLight();
 
 };
 

@@ -27,7 +27,17 @@ using namespace Resources;
 using namespace Renderer;
 using namespace Component;
 
+void ResourcesManager::Init()
+{
+    Material material;
 
+    material.ambient = {1, 1, 1};
+    material.diffuse = {1, 1, 1};
+    material.specular = {1, 1, 1};
+    material.checkLight = true;
+
+    MaterialInterface materialInterface = GenerateMaterial("Default material", material);
+}
 
 Model ResourcesManager::LoadModel(const char* path, VertexType vertexType)
 {
@@ -202,7 +212,10 @@ Renderer::MaterialInterface ResourcesManager::LoadMaterial(const char *path)
 
 Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const char* name, const Material& material)
 {
+
     MaterialInterface materialInterface = std::make_shared<Material>(material);
+
+    materialInterface->name = name;
 
     _mapMaterial.insert({name, materialInterface});
 
@@ -240,4 +253,28 @@ void ResourcesManager::LoadFolder(const char *path)
 std::string ResourcesManager::GetFileType(const std::string& file)
 {
     return file.substr(file.size() - 3);
+}
+
+std::vector<std::string> ResourcesManager::GetModelNameList() const
+{
+    std::vector<std::string> list;
+
+    for (auto it : _mapModel)
+    {
+        list.emplace_back(it.first.c_str());
+    }
+
+    return list;
+}
+
+std::vector<std::string> ResourcesManager::GetMaterialNameList() const
+{
+    std::vector<std::string> list;
+
+    for (auto it : _mapMaterial)
+    {
+        list.emplace_back(it.first.c_str());
+    }
+
+    return list;
 }

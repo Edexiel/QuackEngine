@@ -24,6 +24,8 @@ void RenderSystem::Draw(Component::Camera& camera)
     RendererPlatform::Clear();
 
     DrawMaterials(camera);
+
+    RendererPlatform::BindFramebuffer(0);
 }
 
 void RenderSystem::DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex)
@@ -55,6 +57,8 @@ void RenderSystem::AddMesh(Renderer::MaterialInterface materialInterface, const 
 
 void RenderSystem::SetMaterials()
 {
+
+    _mapMaterial.erase(_mapMaterial.cbegin(), _mapMaterial.cend());
     MaterialInterface material;
 
     for (Entity entity: _entities)
@@ -75,7 +79,6 @@ void RenderSystem::DrawMaterials(Component::Camera& camera)
     if (_lastLinkEntitiesNumbers != _entities.size() || _lastLinkEntitiesNumbers == 0)
     {
         _lastLinkEntitiesNumbers = _entities.size();
-        _mapMaterial.erase(_mapMaterial.cbegin(), _mapMaterial.cend());
         SetMaterials();
     }
 

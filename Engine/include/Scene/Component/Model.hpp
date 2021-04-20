@@ -23,6 +23,8 @@ namespace Component
 
     public:
 
+        std::string name;
+
         Model() = default;
 
         Model(Renderer::VertexType vertexType);
@@ -44,7 +46,9 @@ namespace Component
         void Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view, const Maths::Matrix4& transform);
 
         const Renderer::Mesh& GetMesh(unsigned int index) const;
+        unsigned int* GetMeshMaterialIndex(unsigned int index);
         unsigned int GetNumberMesh() const;
+        unsigned int GetNumberMaterial() const;
         Renderer::VertexType GetVertexType() const;
 
     };

@@ -12,6 +12,8 @@
 
 #include "Audio/Sound.hpp"
 
+#define DEFAULT_MATERIAL_STRING "Default material"
+
 
 class World;
 
@@ -40,8 +42,10 @@ namespace Resources
 
     public:
 
-      ResourcesManager() = default;
+       ResourcesManager() = default;
       ~ResourcesManager() = default;
+
+      void Init();
 
       Component::Model  LoadModel     (const char* path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
       Renderer::Texture LoadTexture   (const char* path);
@@ -58,6 +62,9 @@ namespace Resources
       Renderer::Mesh& AddShape(Renderer::Mesh& mesh);
 
       void LoadFolder(const char* path);
+
+      std::vector<std::string> GetModelNameList() const;
+      std::vector<std::string> GetMaterialNameList() const;
 
     private:
         static std::string GetFileType(const std::string& file);
