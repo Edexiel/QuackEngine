@@ -120,8 +120,8 @@ void Editor::InitGlfw(const EngineSettings &settings)
 //todo : init from config.ini
 void Editor::InitWidgets()
 {
-    _widgets.emplace_back(std::make_unique<ExplorerWidget>());
     _widgets.emplace_back(std::make_unique<LogWidget>());
+    _widgets.emplace_back(std::make_unique<ExplorerWidget>());
     _widgets.emplace_back(std::make_unique<PropertiesWidget>());
     _widgets.emplace_back(std::make_unique<SceneWidget>());
     _widgets.emplace_back(std::make_unique<ViewportWidget>());

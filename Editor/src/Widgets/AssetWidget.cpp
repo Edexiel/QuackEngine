@@ -12,15 +12,27 @@ _camera{Component::Camera(1280,720,1000, -1, 20 * 3.1415 / 180)}
 
 void AssetWidget::UpdateVisible()
 {
+    World& world = World::Instance();
+
     ImGui::BeginChild("ViewportRender");
-    ImVec2 wsize = ImGui::GetWindowSize();
+    //ImVec2 wsize = ImGui::GetWindowSize();
 
-    _camera.Resize(wsize.x, wsize.x);
-    World::Instance().GetRendererInterface().renderSystem->Draw(_camera);
+    ImGui::Text("%s", _assetName.c_str());
 
-    ImGui::Image((ImTextureID)(size_t)_camera.GetFramebuffer().GetTexture(), {wsize.x, wsize.x}, ImVec2(0, 1), ImVec2(1, 0));
+    //std::string type =
+
+    //_camera.Resize(wsize.x, wsize.x);
+    //World::Instance().GetRendererInterface().renderSystem->Draw(_camera);
+    //ImGui::Image((ImTextureID)(size_t)_camera.GetFramebuffer().GetTexture(), {wsize.x, wsize.x}, ImVec2(0, 1), ImVec2(1, 0));
 
     ImGui::EndChild();
+
+}
+
+void AssetWidget::DisplayMaterial()
+{
+    Renderer::MaterialInterface material = World::Instance().GetResourcesManager().LoadMaterial(_assetName.c_str());
+
 
 }
 

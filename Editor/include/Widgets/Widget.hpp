@@ -22,6 +22,7 @@ protected:
     Widget() = default;
 
     static Entity _entity;
+    static std::string _assetName;
 
 public:
     virtual ~Widget() = default;
@@ -72,5 +73,6 @@ inline void Widget::Draw()
 
 }
 inline Entity Widget::_entity = 0;
+inline std::string Widget::_assetName = std::string();
 
 #endif //QUACKENGINE_WIDGET_HPP

@@ -20,6 +20,7 @@ void ExplorerWidget::UpdateVisible()
         if (ImGui::Selectable(listMaterialName[i].c_str(), _selected == i))
         {
             _selected = i;
+            _assetName = listMaterialName[i];
             std::cout << i << std::endl;
         }
     }

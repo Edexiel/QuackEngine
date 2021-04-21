@@ -66,7 +66,7 @@ namespace Resources
       std::vector<std::string> GetModelNameList() const;
       std::vector<std::string> GetMaterialNameList() const;
 
-    private:
+
         static std::string GetFileType(const std::string& file);
 
     };

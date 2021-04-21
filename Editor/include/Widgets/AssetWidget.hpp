@@ -13,6 +13,7 @@ public:
     AssetWidget();
 
     void UpdateVisible() final;
+    void DisplayMaterial();
 
 };
 
