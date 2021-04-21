@@ -10,7 +10,7 @@ using namespace Audio;
 
 Sound::Sound(SoundManager* soundManager, unsigned int indexSound) : _soundManager{soundManager}, _ID{indexSound} {}
 
-unsigned int Sound::GetID()
+unsigned int Sound::GetID() const
 {
   return _ID;
 }

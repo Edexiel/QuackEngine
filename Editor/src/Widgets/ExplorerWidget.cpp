@@ -9,22 +9,46 @@ ExplorerWidget::ExplorerWidget()
 }
 void ExplorerWidget::UpdateVisible()
 {
-    if (ImGui::CollapsingHeader("Material"))
-        return;
+    Engine &engine = Engine::Instance();
 
-    World &world = Engine::Instance().GetCurrentWorld();
+    std::vector<std::string> listMaterialName = engine.GetResourcesManager().GetMaterialNameList();
 
-    std::vector<std::string> listMaterialName = Engine::Instance().GetResourcesManager().GetMaterialNameList();
+    unsigned int offset = 0;
 
-    for (unsigned int i = 0; i < listMaterialName.size() ; i++)
+    if (!ImGui::CollapsingHeader("Material"))
     {
-        if (ImGui::Selectable(listMaterialName[i].c_str(), _selected == i))
+        offset += DisplayList(listMaterialName, offset);
+        if (!_newMaterial && ImGui::Button("Add Material"))
         {
-            _selected = i;
-            _assetName = listMaterialName[i];
-            std::cout << i << std::endl;
+            _newMaterial = true;
+        }
+        else if (_newMaterial)
+        {
+            ImGui::InputText("New Material Name", _newMaterialTextBuffer, 32);
+            if (_newMaterial && ImGui::Button("Create"))
+            {
+                engine.GetResourcesManager().GenerateMaterial(_newMaterialTextBuffer, Renderer::Material());
+                _newMaterial = false;
+            }
         }
     }
+    std::vector<std::string> listTextureName = engine.GetResourcesManager().GetTextureNameList();
+
+    if (!ImGui::CollapsingHeader("Texture"))
+        offset = DisplayList(listTextureName, offset);
 }
 
-
+unsigned int ExplorerWidget::DisplayList(std::vector<std::string> &listName, unsigned int offset)
+{
+    for (unsigned int i = 0; i < listName.size() ; i++)
+    {
+        if (ImGui::Selectable(listName[i].c_str(), _selected == i + offset))
+        {
+            _propertiesSwitch = PROPERTIES_SHOW_ASSET;
+            _selected = i + offset;
+            _assetName = listName[i];
+            std::cout << _selected << std::endl;
+        }
+    }
+    return listName.size();
+}

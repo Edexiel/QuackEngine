@@ -10,6 +10,10 @@
 #include <imgui.h>
 #include "Scene/Core/Types.hpp"
 
+#define PROPERTIES_SHOW_ENTITY true
+#define PROPERTIES_SHOW_ASSET false
+
+
 class Widget
 {
 protected:
@@ -21,6 +25,7 @@ protected:
 
     Widget() = default;
 
+    static bool _propertiesSwitch;
     static Entity _entity;
     static std::string _assetName;
 
@@ -72,6 +77,7 @@ inline void Widget::Draw()
     ImGui::End();
 
 }
+inline bool Widget::_propertiesSwitch = true;
 inline Entity Widget::_entity = 0;
 inline std::string Widget::_assetName = std::string();
 

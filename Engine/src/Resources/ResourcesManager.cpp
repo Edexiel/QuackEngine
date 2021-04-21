@@ -67,7 +67,6 @@ Model ResourcesManager::LoadModel(const char* path, VertexType vertexType)
 Texture ResourcesManager::LoadTexture(const char* path)
 {
     // Check if the Texture already exist
-
     auto it = _mapTexture.find(path);
 
     // Check if the texture already exist
@@ -87,6 +86,7 @@ Texture ResourcesManager::LoadTexture(const char* path)
 
     Texture texture = Texture::LoadTexture(path);
     _mapTexture.insert({path, texture});
+    _textureToName.insert({texture.GetID(), path});
 
     return texture;
 }
@@ -173,6 +173,7 @@ Audio::Sound ResourcesManager::LoadSound(const char* path, Audio::SoundType soun
 
   Audio::Sound sound = Engine::Instance().GetSoundManager().CreateSound(path, soundType);
   _mapSound.insert({path, sound});
+  _soundToName.insert({sound.GetID(), path});
 
   return sound;
 }
@@ -185,7 +186,6 @@ Mesh& ResourcesManager::AddShape(Renderer::Mesh& mesh)
 
 Renderer::MaterialInterface ResourcesManager::LoadMaterial(const char *path)
 {
-
     // Check if the Material already exist
 
     auto it = _mapMaterial.find(path);
@@ -252,6 +252,9 @@ void ResourcesManager::LoadFolder(const char *path)
 
 std::string ResourcesManager::GetFileType(const std::string& file)
 {
+    if (file.size() < 3)
+        return std::string(NO_TYPE_STRING);
+
     return file.substr(file.size() - 3);
 }
 
@@ -277,4 +280,32 @@ std::vector<std::string> ResourcesManager::GetMaterialNameList() const
     }
 
     return list;
+}
+
+std::vector<std::string> ResourcesManager::GetTextureNameList() const
+{
+    std::vector<std::string> list;
+
+    for (const auto& it : _mapTexture)
+    {
+        list.emplace_back(it.first.c_str());
+    }
+
+    return list;
+}
+
+std::string ResourcesManager::GetName(const Renderer::Texture& texture) const
+{
+    auto it = _textureToName.find(texture.GetID());
+    if(it == _textureToName.end())
+        return std::string(EMPTY_TEXTURE_STRING);
+    return it->second;
+}
+
+std::string ResourcesManager::GetName(const Audio::Sound& sound) const
+{
+    auto it = _soundToName.find(sound.GetID());
+    if(it == _soundToName.end())
+        return std::string(EMPTY_TEXTURE_STRING);
+    return it->second;
 }

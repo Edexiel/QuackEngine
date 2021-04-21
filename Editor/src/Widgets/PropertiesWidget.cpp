@@ -14,6 +14,9 @@ PropertiesWidget::PropertiesWidget()
 
 void PropertiesWidget::UpdateVisible()
 {
+    if (_propertiesSwitch == PROPERTIES_SHOW_ASSET)
+        return;
+
     //NameReader();
     World &world = Engine::Instance().GetCurrentWorld();
     if(world.HasComponent<Name>(_entity))
@@ -26,16 +29,18 @@ void PropertiesWidget::UpdateVisible()
         CameraReader();
     if(world.HasComponent<RigidBody>(_entity))
         RigidBodyReader();
+    if (world.HasComponent<Model>(_entity))
+        ModelReader();
 
     AddComponent();
     DeleteComponent();
 }
-void PropertiesWidget::NameReader() const
+void PropertiesWidget::NameReader()
 {
     auto &name = Engine::Instance().GetCurrentWorld().GetComponent<Name>(_entity);
     ImGui::InputText("Name", &name.name);
 }
-void PropertiesWidget::TransformReader() const
+void PropertiesWidget::TransformReader()
 {
     auto &transform = Engine::Instance().GetCurrentWorld().GetComponent<Transform>(_entity);
 
@@ -51,7 +56,7 @@ void PropertiesWidget::TransformReader() const
 
 }
 
-void PropertiesWidget::LightReader() const
+void PropertiesWidget::LightReader()
 {
     Component::Light &light = Engine::Instance().GetCurrentWorld().GetComponent<Component::Light>(_entity);
 
@@ -63,13 +68,13 @@ void PropertiesWidget::LightReader() const
     listLightType.emplace_back("Directional");
     listLightType.emplace_back("Spot");
 
-    if (ImGui::BeginCombo("##combo1", listLightType[(int) light.type].c_str()))
+    if (ImGui::BeginCombo("Light Type", listLightType[(int) light.type].c_str()))
     {
         for (int n = 0; n < listLightType.size(); n++)
         {
-            bool is_selected = (listLightType[(int) light.type].c_str() ==
+            bool isSelected = (listLightType[(int)light.type] ==
                                 listLightType[n]); // You can store your selection however you want, outside or inside your objects
-            if (ImGui::Selectable(listLightType[n].c_str(), is_selected))
+            if (ImGui::Selectable(listLightType[n].c_str(), isSelected))
             {
                 switch (n)
                 {
@@ -86,15 +91,11 @@ void PropertiesWidget::LightReader() const
                 }
                 Engine::Instance().GetRendererInterface().lightSystem->Update(true);
             }
-            if (is_selected)
+            if (isSelected)
                 ImGui::SetItemDefaultFocus();
         }
         ImGui::EndCombo();
     }
-
-    //ImGui::SliderFloat3("Ambient", light.ambient.e, 0, 1) ||
-    //ImGui::SliderFloat3("Diffuse", light.diffuse.e, 0, 1) ||
-    //ImGui::SliderFloat3("Specular", light.specular.e, 0, 1)
 
     if (ImGui::ColorEdit3("Ambient", light.ambient.e) ||
         ImGui::ColorEdit3("Diffuse", light.diffuse.e) ||
@@ -121,7 +122,7 @@ void PropertiesWidget::LightReader() const
 
 }
 
-void PropertiesWidget::ModelReader() const
+void PropertiesWidget::ModelReader()
 {
     if (ImGui::CollapsingHeader("Model"))
         return;
@@ -134,15 +135,15 @@ void PropertiesWidget::ModelReader() const
     {
         for (int n = 0; n < listModel.size(); n++)
         {
-            bool is_selected = (model.name == listModel[n]); // You can store your selection however you want, outside or inside your objects
-            if (ImGui::Selectable(listModel[n].c_str(), is_selected))
+            bool isSelected = (model.name == listModel[n]); // You can store your selection however you want, outside or inside your objects
+            if (ImGui::Selectable(listModel[n].c_str(), isSelected))
             {
                 model.name = listModel[n];
                 model = Engine::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(), Renderer::VertexType::V_NORMALMAP);
                 Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
             }
 
-            if (is_selected)
+            if (isSelected)
                 ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
         }
         ImGui::EndCombo();
@@ -185,7 +186,7 @@ void PropertiesWidget::ModelReader() const
     }
 }
 
-void PropertiesWidget::CameraReader() const
+void PropertiesWidget::CameraReader()
 {
     auto &camera = Engine::Instance().GetCurrentWorld().GetComponent<Camera>(_entity);
     if (ImGui::CollapsingHeader("Camera"))
@@ -198,7 +199,7 @@ void PropertiesWidget::CameraReader() const
 
 }
 
-void PropertiesWidget::RigidBodyReader() const
+void PropertiesWidget::RigidBodyReader()
 {
     if (ImGui::CollapsingHeader("RigidBody"))
         return;
