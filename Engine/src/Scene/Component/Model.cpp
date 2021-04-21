@@ -5,7 +5,7 @@
 #include <assimp/postprocess.h>     // Post processing flags
 
 #include "Renderer/RendererPlatform.hpp"
-#include "Scene/Core/World.hpp"
+#include "Engine.hpp"
 
 #include "Debug/Assertion.hpp"
 
@@ -212,9 +212,9 @@ Renderer::MaterialInterface& Model::GetMaterial(unsigned int index)
 {
     if (_materialList.size() <= index)
     {
-        if (_materialList.size() ==0)
+        if (_materialList.empty())
         {
-            MaterialInterface material = World::Instance().GetResourcesManager().LoadMaterial(DEFAULT_MATERIAL_STRING);
+            MaterialInterface material = Engine::Instance().GetResourcesManager().LoadMaterial(DEFAULT_MATERIAL_STRING);
             _materialList.push_back(material);
         }
         return _materialList[0];

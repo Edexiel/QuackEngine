@@ -1,38 +1,43 @@
-//
-// Created by g.nisi on 3/10/21.
-//
-
 #include "Widgets/PropertiesWidget.hpp"
-#include "Scene/Component/Transform.hpp"
-#include "Scene/Core/World.hpp"
-#include "Scene/Component/Name.hpp"
-#include "Scene/Component/Camera.hpp"
-#include "Scene/Component/Light.hpp"
-#include "Scene/Component/Model.hpp"
+#include "Engine.hpp"
 
+#include "Scene/Component/RigidBody.hpp"
+#include "misc/cpp/imgui_stdlib.h"
+
+
+using namespace Component;
 
 PropertiesWidget::PropertiesWidget()
 {
-    _title="Properties";
+    _title = "Properties";
 }
 
 void PropertiesWidget::UpdateVisible()
 {
-    World& world = World::Instance();
-
-    TransformReader();
-    if (world.HasComponent<Component::Light>(_entity))
+    //NameReader();
+    World &world = Engine::Instance().GetCurrentWorld();
+    if(world.HasComponent<Name>(_entity))
+        NameReader();
+    if(world.HasComponent<Transform>(_entity))
+        TransformReader();
+    if(world.HasComponent<Light>(_entity))
         LightReader();
-    if (world.HasComponent<Component::Model>(_entity))
-        ModelReader();
-
+    if(world.HasComponent<Camera>(_entity))
+        CameraReader();
+    if(world.HasComponent<RigidBody>(_entity))
+        RigidBodyReader();
 
     AddComponent();
+    DeleteComponent();
 }
-
+void PropertiesWidget::NameReader() const
+{
+    auto &name = Engine::Instance().GetCurrentWorld().GetComponent<Name>(_entity);
+    ImGui::InputText("Name", &name.name);
+}
 void PropertiesWidget::TransformReader() const
 {
-    Transform &transform = World::Instance().GetComponent<Transform>(_entity);
+    auto &transform = Engine::Instance().GetCurrentWorld().GetComponent<Transform>(_entity);
 
     if (ImGui::CollapsingHeader("Transform"))
         return;
@@ -48,7 +53,7 @@ void PropertiesWidget::TransformReader() const
 
 void PropertiesWidget::LightReader() const
 {
-    Component::Light &light = World::Instance().GetComponent<Component::Light>(_entity);
+    Component::Light &light = Engine::Instance().GetCurrentWorld().GetComponent<Component::Light>(_entity);
 
     if (ImGui::CollapsingHeader("Light"))
         return;
@@ -79,7 +84,7 @@ void PropertiesWidget::LightReader() const
                         break;
 
                 }
-                World::Instance().GetRendererInterface().lightSystem->Update(true);
+                Engine::Instance().GetRendererInterface().lightSystem->Update(true);
             }
             if (is_selected)
                 ImGui::SetItemDefaultFocus();
@@ -87,18 +92,22 @@ void PropertiesWidget::LightReader() const
         ImGui::EndCombo();
     }
 
-    if (ImGui::SliderFloat3("Ambient", light.ambient.e, 0, 1) ||
-        ImGui::SliderFloat3("Diffuse", light.diffuse.e, 0, 1) ||
-        ImGui::SliderFloat3("Specular", light.specular.e, 0, 1))
+    //ImGui::SliderFloat3("Ambient", light.ambient.e, 0, 1) ||
+    //ImGui::SliderFloat3("Diffuse", light.diffuse.e, 0, 1) ||
+    //ImGui::SliderFloat3("Specular", light.specular.e, 0, 1)
+
+    if (ImGui::ColorEdit3("Ambient", light.ambient.e) ||
+        ImGui::ColorEdit3("Diffuse", light.diffuse.e) ||
+        ImGui::ColorEdit3("Specular", light.specular.e))
     {
-        World::Instance().GetRendererInterface().lightSystem->Update(true);
+        Engine::Instance().GetRendererInterface().lightSystem->Update(true);
     }
     if (light.type != Component::Light_Type::L_DIRECTIONAL)
     {
         if (ImGui::InputFloat("Linear Attenuation", &light.linear, 0.0f, 0.0f, "%.9f") ||
             ImGui::InputFloat("Quadratic Attenuation", &light.quadratic, 0.0f, 0.0f, "%.9f"))
         {
-            World::Instance().GetRendererInterface().lightSystem->Update(true);
+            Engine::Instance().GetRendererInterface().lightSystem->Update(true);
         }
     }
     if (light.type == Component::Light_Type::L_SPOT)
@@ -106,7 +115,7 @@ void PropertiesWidget::LightReader() const
         if (ImGui::DragFloat("Spot Angle", &light.spotAngle) ||
            ImGui::DragFloat("Outer Spot Angle", &light.outerSpotAngle))
         {
-            World::Instance().GetRendererInterface().lightSystem->Update(true);
+            Engine::Instance().GetRendererInterface().lightSystem->Update(true);
         }
     }
 
@@ -117,9 +126,9 @@ void PropertiesWidget::ModelReader() const
     if (ImGui::CollapsingHeader("Model"))
         return;
 
-    Component::Model& model = World::Instance().GetComponent<Component::Model>(_entity);
+    Component::Model& model = Engine::Instance().GetCurrentWorld().GetComponent<Component::Model>(_entity);
 
-    std::vector<std::string> listModel = World::Instance().GetResourcesManager().GetModelNameList();
+    std::vector<std::string> listModel = Engine::Instance().GetResourcesManager().GetModelNameList();
 
     if  (ImGui::BeginCombo("##combo1", model.name.c_str()))
     {
@@ -129,8 +138,8 @@ void PropertiesWidget::ModelReader() const
             if (ImGui::Selectable(listModel[n].c_str(), is_selected))
             {
                 model.name = listModel[n];
-                model = World::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(), Renderer::VertexType::V_NORMALMAP);
-                World::Instance().GetRendererInterface().renderSystem->SetMaterials();
+                model = Engine::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(), Renderer::VertexType::V_NORMALMAP);
+                Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
             }
 
             if (is_selected)
@@ -142,10 +151,10 @@ void PropertiesWidget::ModelReader() const
     for (unsigned int i = 0; i < model.GetNumberMesh() ; i++)
     {
         ImGui::SliderInt((std::string("Material Mesh ") + std::to_string(i + 1)).c_str(), (int*)model.GetMeshMaterialIndex(i), 0, (int)model.GetNumberMaterial() - 1);
-        World::Instance().GetRendererInterface().renderSystem->SetMaterials();
+        Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
     }
 
-    std::vector<std::string> listMaterial = World::Instance().GetResourcesManager().GetMaterialNameList();
+    std::vector<std::string> listMaterial = Engine::Instance().GetResourcesManager().GetMaterialNameList();
 
     for (unsigned int i = 0; i < model.GetNumberMaterial() ; i++)
     {
@@ -156,9 +165,9 @@ void PropertiesWidget::ModelReader() const
                 bool is_selected = (model.name == listMaterial[n]); // You can store your selection however you want, outside or inside your objects
                 if (ImGui::Selectable(listMaterial[n].c_str(), is_selected))
                 {
-                    Renderer::MaterialInterface materialInterface = World::Instance().GetResourcesManager().LoadMaterial(listMaterial[n].c_str());
+                    Renderer::MaterialInterface materialInterface = Engine::Instance().GetResourcesManager().LoadMaterial(listMaterial[n].c_str());
                     model.ChangeMaterial(materialInterface, i);
-                    World::Instance().GetRendererInterface().renderSystem->SetMaterials();
+                    Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
                 }
                 if (is_selected)
                     ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
@@ -168,7 +177,7 @@ void PropertiesWidget::ModelReader() const
     }
     if (ImGui::Button("Add Material"))
     {
-        model.AddMaterial(World::Instance().GetResourcesManager().LoadMaterial(DEFAULT_MATERIAL_STRING));
+        model.AddMaterial(Engine::Instance().GetResourcesManager().LoadMaterial(DEFAULT_MATERIAL_STRING));
     }
     if (ImGui::Button("Remove Material"))
     {
@@ -176,9 +185,28 @@ void PropertiesWidget::ModelReader() const
     }
 }
 
+void PropertiesWidget::CameraReader() const
+{
+    auto &camera = Engine::Instance().GetCurrentWorld().GetComponent<Camera>(_entity);
+    if (ImGui::CollapsingHeader("Camera"))
+        return;
+
+    ImGui::Checkbox("Is perspective", &camera._isPerspective);
+    float fov = (camera._fov * 180.f) / (float)M_PI;
+    ImGui::DragFloat("FOV", &fov);
+    camera._fov = (fov * (float)M_PI) / 180.f;
+
+}
+
+void PropertiesWidget::RigidBodyReader() const
+{
+    if (ImGui::CollapsingHeader("RigidBody"))
+        return;
+}
+
 void PropertiesWidget::AddComponent()
 {
-    World &world = World::Instance();
+    World &world = Engine::Instance().GetCurrentWorld();
     if (ImGui::Button("Add Component"))
     {
         ImGui::OpenPopup("##ComponentContextMenu_Add");
@@ -201,17 +229,21 @@ void PropertiesWidget::AddComponent()
 
         if (ImGui::BeginMenu("Model"))
         {
-            std::vector<std::string> listModel = World::Instance().GetResourcesManager().GetModelNameList();
+            std::vector<std::string> listModel = Engine::Instance().GetResourcesManager().GetModelNameList();
             for (int n = 0; n < listModel.size(); n++)
             {
                 if (ImGui::MenuItem(listModel[n].c_str()))
                 {
-                    world.AddComponent(_entity, World::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(), Renderer::VertexType::V_NORMALMAP));
+                    world.AddComponent(_entity, Engine::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(), Renderer::VertexType::V_NORMALMAP));
                 }
             }
             ImGui::EndMenu();
         }
 
+        if (ImGui::MenuItem("RigidBody"))
+        {
+            world.AddComponent(_entity, RigidBody());
+        }
         ImGui::EndPopup();
     }
 
@@ -219,7 +251,7 @@ void PropertiesWidget::AddComponent()
 
 void PropertiesWidget::AddLight()
 {
-    World &world = World::Instance();
+    World &world = Engine::Instance().GetCurrentWorld();
 
     Component::Light light;
 
@@ -249,5 +281,10 @@ void PropertiesWidget::AddLight()
         world.AddComponent(_entity, light);
     }
 
+
+}
+
+void PropertiesWidget::DeleteComponent()
+{
 
 }

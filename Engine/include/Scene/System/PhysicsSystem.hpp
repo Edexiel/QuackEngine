@@ -26,6 +26,8 @@ namespace Component
 
 class PhysicsSystem : public System
 {
+private:
+    World* _world;
 public:
 
     void Init();

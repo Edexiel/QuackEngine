@@ -1,6 +1,7 @@
 #include <Widgets/AssetWidget.hpp>
 #include "Scene/Core/World.hpp"
 #include "Renderer/Framebuffer.hpp"
+#include "Engine.hpp"
 
 AssetWidget::AssetWidget() :
 _camera{Component::Camera(1280,720,1000, -1, 20 * 3.1415 / 180)}
@@ -12,7 +13,7 @@ _camera{Component::Camera(1280,720,1000, -1, 20 * 3.1415 / 180)}
 
 void AssetWidget::UpdateVisible()
 {
-    World& world = World::Instance();
+    //World& world = World::Instance();
 
     ImGui::BeginChild("ViewportRender");
     //ImVec2 wsize = ImGui::GetWindowSize();
@@ -31,7 +32,7 @@ void AssetWidget::UpdateVisible()
 
 void AssetWidget::DisplayMaterial()
 {
-    Renderer::MaterialInterface material = World::Instance().GetResourcesManager().LoadMaterial(_assetName.c_str());
+    Renderer::MaterialInterface material = Engine::Instance().GetResourcesManager().LoadMaterial(_assetName.c_str());
 
 
 }

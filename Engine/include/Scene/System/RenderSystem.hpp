@@ -43,7 +43,7 @@ private:
 
     void DrawMaterials(Component::Camera& camera);
 
-    void AddMesh(Renderer::MaterialInterface materialInterface, const Renderer::Mesh& mesh, Entity entity);
+    void AddMesh(const Renderer::MaterialInterface& materialInterface, const Renderer::Mesh& mesh, Entity entity);
 
 
 };

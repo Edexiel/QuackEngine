@@ -24,10 +24,10 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/Shape.cpp
 
         src/Scene/Component/Light.cpp
-        src/Scene/System/TestSystem.cpp
         src/Scene/System/ScriptSystem.cpp
         src/Scene/System/PhysicsSystem.cpp
         src/Scene/Component/Camera.cpp
+        src/Scene/Core/World.cpp
 
         src/Audio/Sound.cpp
         src/Audio/SoundManager.cpp

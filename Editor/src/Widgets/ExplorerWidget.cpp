@@ -1,6 +1,7 @@
 #include "Widgets/ExplorerWidget.hpp"
 
 #include "Scene/Core/World.hpp"
+#include "Engine.hpp"
 
 ExplorerWidget::ExplorerWidget()
 {
@@ -11,9 +12,9 @@ void ExplorerWidget::UpdateVisible()
     if (ImGui::CollapsingHeader("Material"))
         return;
 
-    World &world = World::Instance();
+    World &world = Engine::Instance().GetCurrentWorld();
 
-    std::vector<std::string> listMaterialName = world.GetResourcesManager().GetMaterialNameList();
+    std::vector<std::string> listMaterialName = Engine::Instance().GetResourcesManager().GetMaterialNameList();
 
     for (unsigned int i = 0; i < listMaterialName.size() ; i++)
     {

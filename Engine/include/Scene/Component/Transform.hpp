@@ -5,17 +5,23 @@
 #include <Maths/Vector3.hpp>
 #include "Scene/Core/System.hpp"
 
-struct Transform
+namespace Component
 {
-    Maths::Vector3f position {0,0,0};
-    Maths::Vector3f scale {1,1,1};
-    Maths::Quaternion rotation {1,0,0,0};
-
-    inline Maths::Matrix4 GetMatrix() const
+    struct Transform
     {
-        return Maths::Matrix4::Translate(position) * rotation.ToMatrix() * Maths::Matrix4::Scale(scale);
+        Maths::Vector3f position{0, 0, 0};
+        Maths::Vector3f scale{1, 1, 1};
+        Maths::Quaternion rotation{1, 0, 0, 0};
+
+        Maths::Vector3f forward{0, 0, 1};
+        Maths::Vector3f right{1, 0, 0};
+
+        inline Maths::Matrix4 GetMatrix() const
+        {
+            return Maths::Matrix4::Translate(position) * rotation.ToMatrix() * Maths::Matrix4::Scale(scale);
+        };
     };
-};
+}
 //struct Transform : public Component
 //{
 //private:

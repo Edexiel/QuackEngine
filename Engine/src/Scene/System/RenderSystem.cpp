@@ -1,17 +1,18 @@
 #include "Scene/System/RenderSystem.hpp"
 
-#include "Scene/Core/World.hpp"
+#include "Engine.hpp"
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shape.hpp"
 
 #include "Debug/Log.hpp"
 
 using namespace Renderer;
+using namespace Component;
 
 RenderSystem::RenderSystem()
 {
     _quadMesh = Shape::CreateQuad();
-    _shader = World::Instance().GetResourcesManager().LoadShader(
+    _shader = Engine::Instance().GetResourcesManager().LoadShader(
             "../../Engine/Shader/Framebuffer/BasicVertex.vs",
             "../../Engine/Shader/Framebuffer/BasicFragment.fs");
 }
@@ -42,7 +43,7 @@ void RenderSystem::DrawTextureInFramebuffer(unsigned int framebufferIndex, unsig
     _quadMesh.Draw();
 }
 
-void RenderSystem::AddMesh(Renderer::MaterialInterface materialInterface, const Renderer::Mesh& mesh, Entity entity)
+void RenderSystem::AddMesh(const Renderer::MaterialInterface& materialInterface, const Renderer::Mesh& mesh, Entity entity)
 {
     auto it = _mapMaterial.find(materialInterface);
 
@@ -52,7 +53,7 @@ void RenderSystem::AddMesh(Renderer::MaterialInterface materialInterface, const 
         it = _mapMaterial.find(materialInterface);
     }
 
-    it->second.push_back({mesh, entity});
+    it->second.emplace_back(mesh, entity);
 }
 
 void RenderSystem::SetMaterials()
@@ -60,11 +61,11 @@ void RenderSystem::SetMaterials()
 
     _mapMaterial.erase(_mapMaterial.cbegin(), _mapMaterial.cend());
     MaterialInterface material;
-
+    World& world = Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)
     {
-        auto &t = World::Instance().GetComponent<Transform>(entity);
-        auto &m = World::Instance().GetComponent<Component::Model>(entity);
+        auto &t = world.GetComponent<Transform>(entity);
+        auto &m = world.GetComponent<Model>(entity);
 
         for (unsigned int i = 0; i < m.GetNumberMesh(); i++)
         {
@@ -82,7 +83,7 @@ void RenderSystem::DrawMaterials(Component::Camera& camera)
         SetMaterials();
     }
 
-    World &world = World::Instance();
+    Engine & engine= Engine::Instance();
 
     for (auto material : _mapMaterial)
     {
@@ -92,7 +93,7 @@ void RenderSystem::DrawMaterials(Component::Camera& camera)
 
         for (unsigned int i = 0; i < material.second.size(); i++)
         {
-            material.first->shader.SetMatrix4("model", world.GetComponent<Transform>(material.second[i].second).GetMatrix());
+            material.first->shader.SetMatrix4("model", engine.GetCurrentWorld().GetComponent<Transform>(material.second[i].second).GetMatrix());
             material.second[i].first.Draw();
 
         }
