@@ -99,3 +99,17 @@ void RenderSystem::DrawMaterials(Component::Camera& camera)
         }
     }
 }
+
+void RenderSystem::UpdateModel(const Model &newModel)
+{
+    World& world = Engine::Instance().GetCurrentWorld();
+    for (Entity entity: _entities)
+    {
+        auto &m = world.GetComponent<Model>(entity);
+
+        if (m.name == newModel.name)
+        {
+            Model::ReLoadModel(m, newModel);
+        }
+    }
+}

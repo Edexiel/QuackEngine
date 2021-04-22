@@ -29,9 +29,13 @@ namespace Component
 
         Model(Renderer::VertexType vertexType);
 
+        void Destroy();
+
         //Entity entity;
 
         static Model LoadModel(const char *path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
+        static void ReLoadModel(Model& model, const char *path, Renderer::VertexType vertexType);
+        static void ReLoadModel(Model& oldModel, Model newModel);
 
         unsigned int AddMaterial(const Renderer::MaterialInterface& newMaterial);
         unsigned int ChangeMaterial(const Renderer::MaterialInterface& newMaterial, unsigned int index);

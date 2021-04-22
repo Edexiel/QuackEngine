@@ -83,15 +83,15 @@ void AssetWidget::DisplayMaterial()
     }
 }
 
-std::string AssetWidget::SelectInList(const std::vector<std::string>& list, const char* currentTexture, const char* comboName)
+std::string AssetWidget::SelectInList(const std::vector<std::string>& list, const char* currentlySelected, const char* comboName)
 {
-    std::string selected = currentTexture;
+    std::string selected = currentlySelected;
 
-    if  (ImGui::BeginCombo(comboName, currentTexture))
+    if  (ImGui::BeginCombo(comboName, currentlySelected))
     {
         for (int n = 0; n < list.size(); n++)
         {
-            bool isSelected = (currentTexture == list[n]);
+            bool isSelected = (currentlySelected == list[n]);
             if (ImGui::Selectable(list[n].c_str(), isSelected))
             {
                 selected = list[n];
@@ -135,7 +135,22 @@ void AssetWidget::DisplayTexture()
 
 void AssetWidget::DisplayModel()
 {
-    Engine::Instance().GetResourcesManager().LoadModel(_assetName.c_str());
+    Component::Model model = Engine::Instance().GetResourcesManager().LoadModel(_assetName.c_str());
+
+    std::vector<std::string> listModelType;
+    listModelType.emplace_back("CLASSIC");
+    listModelType.emplace_back("NORMAL_MAP");
+
+    std::string selected = SelectInList(listModelType, listModelType[(int)model.GetVertexType()].c_str(), "Model Vertex Type");
+
+    if (selected != listModelType[(int)model.GetVertexType()])
+    {
+        if (selected == "CLASSIC")
+            Engine::Instance().GetResourcesManager().ReLoadModel(_assetName.c_str(), Renderer::VertexType::V_CLASSIC);
+        else if (selected == "NORMAL_MAP")
+            Engine::Instance().GetResourcesManager().ReLoadModel(_assetName.c_str(), Renderer::VertexType::V_NORMALMAP);
+    }
+
 }
 
 void AssetWidget::DisplaySound()

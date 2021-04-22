@@ -37,6 +37,8 @@ public:
     void Draw(Component::Camera& camera);
     void DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex);
 
+    void UpdateModel(const Component::Model& newModel);
+
     void SetMaterials();
 
 private:

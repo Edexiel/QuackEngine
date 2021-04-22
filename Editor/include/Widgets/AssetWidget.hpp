@@ -27,7 +27,7 @@ private:
     static void DisplaySound();
 
 private:
-    static std::string SelectInList(const std::vector<std::string>& list, const char* currentTexture, const char* comboName);
+    static std::string SelectInList(const std::vector<std::string>& list, const char* currentlySelected, const char* comboName);
     static bool SelectTexture(Renderer::Texture& texture, const std::vector<std::string>& list, const char* currentTexture, const char* comboName);
 
 };

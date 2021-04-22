@@ -64,6 +64,23 @@ Model ResourcesManager::LoadModel(const char* path, VertexType vertexType)
     return model;
 }
 
+void ResourcesManager::ReLoadModel(const char *path, Renderer::VertexType vertexType)
+{
+    // Check if the Model already exist
+
+    auto it = _mapModel.find(path);
+    
+    if (it != _mapModel.end())
+    {
+        Model::ReLoadModel(it->second, path, vertexType);
+        Engine::Instance().GetRendererInterface().renderSystem->UpdateModel(it->second);
+        Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+        return;
+    }
+
+    Assert_Error(true, (std::string("The model : ") + path + " to reload doesn't exist").c_str());
+}
+
 Texture ResourcesManager::LoadTexture(const char* path)
 {
     // Check if the Texture already exist

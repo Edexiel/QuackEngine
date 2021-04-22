@@ -11,13 +11,13 @@ void ExplorerWidget::UpdateVisible()
 {
     Engine &engine = Engine::Instance();
 
-    std::vector<std::string> listMaterialName = engine.GetResourcesManager().GetMaterialNameList();
+    std::vector<std::string> listName = engine.GetResourcesManager().GetMaterialNameList();
 
     unsigned int offset = 0;
 
     if (!ImGui::CollapsingHeader("Material"))
     {
-        offset += DisplayList(listMaterialName, offset);
+        offset += DisplayList(listName, offset);
         if (!_newMaterial && ImGui::Button("Add Material"))
         {
             _newMaterial = true;
@@ -32,10 +32,15 @@ void ExplorerWidget::UpdateVisible()
             }
         }
     }
-    std::vector<std::string> listTextureName = engine.GetResourcesManager().GetTextureNameList();
+    listName = engine.GetResourcesManager().GetTextureNameList();
 
     if (!ImGui::CollapsingHeader("Texture"))
-        offset = DisplayList(listTextureName, offset);
+        offset += DisplayList(listName, offset);
+
+    listName = engine.GetResourcesManager().GetModelNameList();
+
+    if (!ImGui::CollapsingHeader("Model"))
+        offset += DisplayList(listName, offset);
 }
 
 unsigned int ExplorerWidget::DisplayList(std::vector<std::string> &listName, unsigned int offset)

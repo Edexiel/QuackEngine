@@ -16,6 +16,15 @@ using namespace Renderer;
 
 Model::Model(VertexType vertexType) : _vertexType{vertexType} {}
 
+void Model::Destroy()
+{
+    for (unsigned int i = 0; i < _meshList.size(); i++)
+    {
+        _meshList[i].Destroy();
+    }
+    _meshList.clear();
+}
+
 Model Model::LoadModel(const char *path, VertexType vertexType)
 {
   Assimp::Importer importer;
@@ -44,6 +53,20 @@ Model Model::LoadModel(const char *path, VertexType vertexType)
     return loadedModel;
 }
 
+void Model::ReLoadModel(Model& model, const char *path, Renderer::VertexType vertexType)
+{
+    model.Destroy();
+    Model newModel = LoadModel(path, vertexType);
+    newModel._materialList = model._materialList;
+
+    model = newModel;
+}
+
+void Model::ReLoadModel(Model& oldModel, Model newModel)
+{
+    newModel._materialList = oldModel._materialList;
+    oldModel = newModel;
+}
 
 Model Model::LoadClassicModel(const void* loadedScene)
 {
