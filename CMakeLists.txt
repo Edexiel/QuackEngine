@@ -7,22 +7,35 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(OpenGL REQUIRED)
 
-#Platform Specific
-if(UNIX AND NOT APPLE)
-    set(LINUX TRUE)
-endif()
+option(QUACK_BUILD_EDITOR "Build Editor" OFF)
 
-if(LINUX)
+option(QUACK_BUILD_TESTS "Build Editor" ON)
+
+if (QUACK_BUILD_EDITOR)
+    set(QUACK_EDITOR TRUE)
+
+endif ()
+
+message(STATUS ">>> BUILD EDITOR IS ${QUACK_BUILD_EDITOR}")
+message(STATUS ">>> BUILD TEST IS ${QUACK_BUILD_TESTS}")
+
+
+#Platform Specific
+if (UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+endif ()
+
+if (LINUX)
     message(STATUS ">>> Linux ${CMAKE_SYSTEM}")
     # linux stuff here
     add_definitions(-DLINUX)
-elseif(WIN32)
+elseif (WIN32)
     add_definitions(-DWIN32)
     message(STATUS ">>> Not Linux ${CMAKE_SYSTEM}")
     # stuff that should happen on Win32
-else()
+else ()
     message(FATAL_ERROR ">>> Not supported platform ${CMAKE_SYSTEM}")
-endif()
+endif ()
 
 set(external_lib "Vendor")
 
@@ -37,9 +50,9 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "Build the GLFW test programs" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Build the GLFW example programs" FORCE)
 #set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 set(GLFW_INSTALL OFF CACHE BOOL "Generate installation target" FORCE)
-if(WIN32)
+if (WIN32)
     set(GLFW_USE_HYBRID_HPG ON CACHE BOOL "" FORCE)
-endif()
+endif ()
 
 add_subdirectory(${external_lib}/glfw)
 
@@ -56,6 +69,7 @@ target_sources(imgui INTERFACE
         "${IMGUI_FOLDER}/imgui_tables.cpp"
         "${IMGUI_FOLDER}/backends/imgui_impl_glfw.cpp"
         "${IMGUI_FOLDER}/backends/imgui_impl_opengl3.cpp"
+        "${IMGUI_FOLDER}/misc/cpp/imgui_stdlib.cpp"
         )
 target_include_directories(imgui INTERFACE ${IMGUI_FOLDER})
 target_link_libraries(imgui INTERFACE glfw glad)
@@ -91,14 +105,18 @@ add_subdirectory(${external_lib}/assimp)
 
 #reactphysics3d
 add_subdirectory(${external_lib}/reactphysics3d)
+target_compile_options(reactphysics3d PRIVATE --no-warnings)
 
 #gtest
-#todo: create variable test
-add_subdirectory(${external_lib}/googletest)
-add_subdirectory(Test)
+if (QUACK_BUILD_TESTS)
+    add_subdirectory(${external_lib}/googletest)
+    add_subdirectory(Test)
+endif ()
 
 #Editor
-add_subdirectory(Editor)
+if (QUACK_BUILD_EDITOR)
+    add_subdirectory(Editor)
+endif ()
 
 #Engine
 add_subdirectory(Engine)
@@ -107,12 +125,8 @@ add_subdirectory(Engine)
 add_subdirectory(Game)
 
 #Runner
-#add_subdirectory(Runner)
+add_subdirectory(Runner)
 
-#if(debug)
-#{
-#target_link_libraries(Editor PUBLIC Engine)
-#}
 
 #Installer
 include(InstallRequiredSystemLibraries)

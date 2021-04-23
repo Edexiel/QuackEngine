@@ -259,6 +259,7 @@ const Renderer::Mesh& Model::GetMesh(unsigned int index) const
     if (index >= _meshList.size())
     {
         Assert_Error(true, "Invalid mesh index");
+        //todo: urgent à fix
         return Mesh();
     }
     return _meshList[index];

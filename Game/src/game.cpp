@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 
 #include "game.hpp"
 
@@ -27,20 +27,9 @@ void Game::Render()
     printf("Render");
 }
 
-void Game::Destroy()
-{
-    printf("Destroy");
-}
 
-Renderer::Framebuffer &Game::GetFramebuffer()
+void Game::LoadScene(std::string sceneName)
 {
-    return screenFB;
 
 }
-
-//void Game::ResizeFramebuffer(Maths::Vector2 &size)
-//{
-//    //todo: uncomment once implemented
-//    //screenFB.resize(size);
-//}
 
