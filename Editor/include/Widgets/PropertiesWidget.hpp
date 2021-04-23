@@ -10,13 +10,17 @@ public:
     void UpdateVisible() final;
 
 private:
-    void NameReader() const;
-    void TransformReader() const;
-    void LightReader() const;
-    void CameraReader() const;
-    void RigidBodyReader() const;
-    void AddComponent();
-    void DeleteComponent();
+    static void NameReader();
+    static void TransformReader();
+    static void LightReader();
+    static void ModelReader();
+    static void CameraReader();
+    static void RigidBodyReader();
+    static void AddComponent();
+    static void DeleteComponent();
+
+    static void AddLight();
+
 
 };
 

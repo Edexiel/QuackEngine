@@ -25,6 +25,8 @@ void RenderSystem::Draw(Component::Camera& camera)
     RendererPlatform::Clear();
 
     DrawMaterials(camera);
+
+    RendererPlatform::BindFramebuffer(0);
 }
 
 void RenderSystem::DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex)
@@ -56,6 +58,8 @@ void RenderSystem::AddMesh(const Renderer::MaterialInterface& materialInterface,
 
 void RenderSystem::SetMaterials()
 {
+
+    _mapMaterial.erase(_mapMaterial.cbegin(), _mapMaterial.cend());
     MaterialInterface material;
     World& world = Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)
@@ -76,7 +80,6 @@ void RenderSystem::DrawMaterials(Component::Camera& camera)
     if (_lastLinkEntitiesNumbers != _entities.size() || _lastLinkEntitiesNumbers == 0)
     {
         _lastLinkEntitiesNumbers = _entities.size();
-        _mapMaterial.erase(_mapMaterial.cbegin(), _mapMaterial.cend());
         SetMaterials();
     }
 
@@ -93,6 +96,20 @@ void RenderSystem::DrawMaterials(Component::Camera& camera)
             material.first->shader.SetMatrix4("model", engine.GetCurrentWorld().GetComponent<Transform>(material.second[i].second).GetMatrix());
             material.second[i].first.Draw();
 
+        }
+    }
+}
+
+void RenderSystem::UpdateModel(const Model &newModel)
+{
+    World& world = Engine::Instance().GetCurrentWorld();
+    for (Entity entity: _entities)
+    {
+        auto &m = world.GetComponent<Model>(entity);
+
+        if (m.name == newModel.name)
+        {
+            Model::ReLoadModel(m, newModel);
         }
     }
 }

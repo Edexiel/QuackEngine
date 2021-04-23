@@ -18,6 +18,11 @@ Mesh::~Mesh()
   //RendererPlatform::DeleteMesh(_vao,_vbo, _ebo);
 }
 
+void Mesh::Destroy()
+{
+    RendererPlatform::DeleteMesh(_vao,_vbo, _ebo);
+}
+
 void Mesh::Draw() const
 {
     switch (_vertexType)
