@@ -1,7 +1,30 @@
 #include "Renderer/Material.hpp"
-//#include "Renderer/RendererPlatform.hpp"
+#include "Engine.hpp"
+
+#include "Debug/Log.hpp"
 
 using namespace Renderer;
+
+void Material::GenerateShader()
+{
+
+    ShaderConstructData scd{checkLight, colorTexture.GetID() != 0,
+                            diffuseTexture.GetID() != 0,
+                            specularTexture.GetID() != 0,
+                            normalMap.GetID() != 0};
+
+    shader = Engine::Instance().GetResourcesManager().LoadObjectShader(scd);
+}
+
+ShaderConstructData Material::GetConstructData() const
+{
+    ShaderConstructData shaderConstructData{checkLight, colorTexture.GetID() != 0,
+                                            diffuseTexture.GetID() != 0,
+                                            specularTexture.GetID() != 0,
+                                            normalMap.GetID() != 0};;
+
+    return shaderConstructData;
+}
 
 void Material::Apply()
 {
@@ -35,8 +58,4 @@ void Material::Apply()
     normalMap.Bind(3);
     shader.SetSampler("material.normalMap", 3);
   }
-
-
-
-
 }

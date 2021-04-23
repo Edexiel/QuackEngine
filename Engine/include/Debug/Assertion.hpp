@@ -13,21 +13,22 @@
 #define __FILENAME__ (strrchr(__FILE__,'\\')+1)
 #endif
 #ifdef LINUX
+#include <cstring>
 #define __FILENAME__ (strrchr(__FILE__,'/')+1)
 #endif
 
-//#ifdef DEVELOPPEMENT
+#ifdef NDEBUG
+#define Assert_Release(check, message)(check)
+  #define Assert_Fatal_Error(check, message)(check)
+  #define Assert_Error(check, message)(check)
+  #define Assert_Warning(check, message)(check)
+#else
   #define Assert_Release(check, message) (Debug::Assert(check, message, __FILENAME__, __func__, __LINE__, Debug::AssertLevel::A_RELEASE))
   #define Assert_Fatal_Error(check, message) (Debug::Assert(check, message, __FILENAME__, __func__, __LINE__, Debug::AssertLevel::A_FATAL_ERROR))
   #define Assert_Error(check, message) (Debug::Assert(check, message, __FILENAME__, __func__, __LINE__, Debug::AssertLevel::A_ERROR))
   #define Assert_Warning(check, message) (Debug::Assert(check, message, __FILENAME__, __func__, __LINE__, Debug::AssertLevel::A_WARNING))
-//#endif
-//#ifdef RELEASE
-//  #define Assert_Release(check, message) (check)
-//  #define Assert_Fatal_Error(check, message) (check)
-//  #define Assert_Error(check, message) (check)
-//  #define Assert_Warning(check, message) (check)
-//#endif
+#endif
+
 
 namespace Debug
 {
@@ -51,11 +52,11 @@ namespace Debug
 
     /* Get the Current Time */
     time_t time = std::time(nullptr);
-    tm localTime = *std::localtime(&time);
+    tm* localTime = std::localtime(&time);
     std::ostringstream oss;
-    oss << std::put_time(&localTime, "%H:%M:%S");
+    oss << std::put_time(localTime, "%H:%M:%S");
 
-    char* levelString;
+    const char* levelString;
 
     switch (assertLvl)
     {

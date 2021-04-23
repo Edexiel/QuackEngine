@@ -10,34 +10,65 @@ using namespace Audio;
 
 Sound::Sound(SoundManager* soundManager, unsigned int indexSound) : _soundManager{soundManager}, _ID{indexSound} {}
 
+unsigned int Sound::GetID()
+{
+  return _ID;
+}
+
 void Sound::Play()
 {
-    _soundManager->StartSound(_ID);
+  if (_ID == 0)
+    return;
+
+  _soundManager->StartSound(_ID);
 }
 
 void Sound::Stop()
 {
-    _soundManager->StopSound(_ID);
+  if (_ID == 0)
+        return;
+
+  _soundManager->StopSound(_ID);
 }
 
 void Sound::Restart()
 {
-    _soundManager->RestartSound(_ID);
+  if (_ID == 0)
+    return;
+
+  _soundManager->RestartSound(_ID);
 }
 
 float Sound::GetVolume()
 {
-    return _soundManager->SoundVolume(_ID);
+  if (_ID == 0)
+    return 0.f;
+
+  return _soundManager->SoundVolume(_ID);
 }
 
 float Sound::SetVolume(float newVolume)
 {
-    float& volume = _soundManager->SoundVolume(_ID);
-    volume = std::max(newVolume, 0.f);
-    return volume;
+  if (_ID == 0)
+    return 0.f;
+
+  float& volume = _soundManager->SoundVolume(_ID);
+  volume = std::max(newVolume, 0.f);
+  return volume;
 }
 
-SoundType& Sound::Type()
+SoundType Sound::GetType()
 {
-    return _soundManager->Sound_SoundType(_ID);
+  if (_ID == 0)
+    return SoundType::S_MASTER;
+
+  return _soundManager->Sound_SoundType(_ID);
+}
+
+void Sound::SetType(SoundType soundType)
+{
+  if (_ID == 0)
+    return;
+
+  _soundManager->Sound_SoundType(_ID) = soundType;
 }

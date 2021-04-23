@@ -3,33 +3,62 @@
 
 using namespace Renderer;
 
-Framebuffer::Framebuffer(unsigned int ID, unsigned int rbo,unsigned int texture,
-                         unsigned int width,unsigned int height):
-                         _ID{ID}, _rbo{rbo}, _texture{texture},
-                         _width{width},_height{height}{}
+Framebuffer::Framebuffer(unsigned int id, unsigned int rbo, unsigned int texture,
+                         unsigned int width, unsigned int height) :
+        _id{id}, _rbo{rbo}, _texture{texture},
+        _width{width}, _height{height}
+{}
 
-unsigned int Renderer::Framebuffer::GetID() const
+Framebuffer Framebuffer::LoadFramebuffer(unsigned int width, unsigned int height)
 {
-  return _ID;
+    Framebuffer framebuffer = RendererPlatform::CreateFramebuffer(width, height);
+    return framebuffer;
+}
+
+void Framebuffer::Delete() const
+{
+    RendererPlatform::DeleteFramebuffer(_id, _rbo, _texture);
+}
+
+unsigned int Renderer::Framebuffer::GetId() const
+{
+    return _id;
 }
 
 unsigned int Renderer::Framebuffer::GetTexture() const
 {
-  return _texture;
+    return _texture;
 }
+
 unsigned int Framebuffer::GetRbo() const
 {
-  return _rbo;
+    return _rbo;
 }
-Framebuffer::~Framebuffer()
+
+void Framebuffer::Bind() const
 {
-  RendererPlatform::DeleteFramebuffer(_ID, _rbo, _texture);
+    RendererPlatform::BindFramebuffer(_id);
 }
-void Framebuffer::Bind()
+
+void Framebuffer::BindTexture() const
 {
-  RendererPlatform::BindFramebuffer(_ID);
+    RendererPlatform::BindTexture(_texture);
 }
-void Framebuffer::BindTexture()
+
+unsigned int Framebuffer::GetWidth()
 {
-  RendererPlatform::BindTexture(_texture);
+    return _width;
+}
+
+unsigned int Framebuffer::GetHeight()
+{
+    return _height;
+}
+
+void Framebuffer::Resize(unsigned int width, unsigned int height)
+{
+    _width = width;
+    _height = height;
+
+    RendererPlatform::ResizeFramebuffer(_id, _rbo, _texture, width, height);
 }

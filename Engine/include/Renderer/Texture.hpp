@@ -12,7 +12,7 @@ private:
 
 public:
   Texture() = default;
-  //Texture(const Texture& texture): _ID{texture.GetID()}{};
+  //Texture(const Texture& texture): _ID{texture.GetId()}{};
   Texture(const unsigned int& ID);
   ~Texture();
   unsigned int GetID() const;
