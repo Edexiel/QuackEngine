@@ -37,9 +37,12 @@ public:
     void Draw(Component::Camera& camera);
     void DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex);
 
-private:
+    void UpdateModel(const Component::Model& newModel);
 
     void SetMaterials();
+
+private:
+
     void DrawMaterials(Component::Camera& camera);
 
     void AddMesh(const Renderer::MaterialInterface& materialInterface, const Renderer::Mesh& mesh, Entity entity);
