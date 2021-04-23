@@ -140,24 +140,57 @@ inline Maths::Matrix4 Quaternion::ToMatrix() const
 inline Vector3f Quaternion::ToEuler() const
 {
     Vector3f result;
+    float radToDeg = 180.f / (float)M_PI;
 
     // roll (x-axis rotation)
     float x0 = 2.0f*(w * x + y * z);
     float x1 = 1.0f - 2.0f * ( x * x + y * y);
-    result.x = atan2f(x0, x1) * (180.f / M_PI);
+    result.x = atan2f(x0, x1);
 
     // pitch (y-axis rotation)
-    float y0 = 2.0f*(w * y - z * x);
+    float y0 = 2.0f * (w * y - z * x);
     y0 = y0 > 1.0f ? 1.0f : y0;
     y0 = y0 < -1.0f ? -1.0f : y0;
-    result.y = asinf(y0)* (180.f / M_PI);
+    result.y = asinf(y0);
 
     // yaw (z-axis rotation)
     float z0 = 2.0f*(w * z + x * y);
     float z1 = 1.0f - 2.0f*(y * y + z * z);
-    result.z = atan2f(z0, z1)* (180.f / M_PI);
+    result.z = atan2f(z0, z1);
 
-    return result;
+    return result * radToDeg;
+//    float test = w * y - z * x;
+//
+
+//
+//    if (test >= 0.4999) { // singularity at north pole
+//        result.x = 2 * atan2f(x, w);
+//        result.y = (float)M_PI/2;
+//        result.z = 0;
+//        return result * radToDeg;
+//    }
+//    if (test <= -0.4999) { // singularity at south pole
+//        result.x = -2 * atan2f(x, w);
+//        result.y = - (float)M_PI/2;
+//        result.z = 0;
+//        return result * radToDeg;
+//    }
+//
+//    // roll (x-axis rotation)
+//    float x0 = 2.0f*(w * x + y * z);
+//    float x1 = 1.0f - 2.0f * ( x * x + y * y);
+//    result.x = atan2f(x0, x1);
+//
+//    // pitch (y-axis rotation)
+//    float y0 = 2.0f * (w * y - z * x);
+//    result.y = asinf(y0);
+//
+//    // yaw (z-axis rotation)
+//    float z0 = 2.0f*(w * z + x * y);
+//    float z1 = 1.0f - 2.0f*(y * y + z * z);
+//    result.z = atan2f(z0, z1);
+//
+//    return result * radToDeg;
 }
 
     inline Quaternion Quaternion::EulerToQuaternion(Vector3f rot)

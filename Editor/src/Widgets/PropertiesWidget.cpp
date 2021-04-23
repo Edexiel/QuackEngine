@@ -44,10 +44,12 @@ void PropertiesWidget::TransformReader() const
 
     ImGui::DragFloat3("Position", transform.position.e);
     ImGui::DragFloat3("Scale", transform.scale.e);
-    Maths::Vector3f v = transform.rotation.ToEuler();
+    Maths::Vector3f v = transform.rotation.Normalize().ToEuler();
     ImGui::DragFloat3("Rotation", v.e);
+
     v = v * (M_PI / 180.f);
-    transform.rotation = Maths::Quaternion::EulerToQuaternion(v);
+
+    transform.rotation = Maths::Quaternion::EulerToQuaternion(v).Normalize();
 }
 
 void PropertiesWidget::LightReader() const
