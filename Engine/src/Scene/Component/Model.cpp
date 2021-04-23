@@ -5,6 +5,7 @@
 #include <assimp/postprocess.h>     // Post processing flags
 
 #include "Renderer/RendererPlatform.hpp"
+#include "Engine.hpp"
 
 #include "Debug/Assertion.hpp"
 
@@ -14,6 +15,15 @@ using namespace Component;
 using namespace Renderer;
 
 Model::Model(VertexType vertexType) : _vertexType{vertexType} {}
+
+void Model::Destroy()
+{
+    for (unsigned int i = 0; i < _meshList.size(); i++)
+    {
+        _meshList[i].Destroy();
+    }
+    _meshList.clear();
+}
 
 Model Model::LoadModel(const char *path, VertexType vertexType)
 {
@@ -31,18 +41,32 @@ Model Model::LoadModel(const char *path, VertexType vertexType)
     return {};
   }
 
+  Model loadedModel;
+
   switch (vertexType)
   {
-    case VertexType::V_NORMALMAP : return LoadNormalMapModel(scene);
-    default : return LoadClassicModel(scene);
+      case VertexType::V_NORMALMAP : loadedModel = LoadNormalMapModel(scene); break;
+      default : loadedModel = LoadClassicModel(scene); break;
   }
 
-  //if (normalMapping)
-  //  return  LoadModelNormalMap(scene);
-
-  return Model();
+    loadedModel.name = path;
+    return loadedModel;
 }
 
+void Model::ReLoadModel(Model& model, const char *path, Renderer::VertexType vertexType)
+{
+    model.Destroy();
+    Model newModel = LoadModel(path, vertexType);
+    newModel._materialList = model._materialList;
+
+    model = newModel;
+}
+
+void Model::ReLoadModel(Model& oldModel, Model newModel)
+{
+    newModel._materialList = oldModel._materialList;
+    oldModel = newModel;
+}
 
 Model Model::LoadClassicModel(const void* loadedScene)
 {
@@ -182,11 +206,12 @@ Model Model::LoadNormalMapModel(const void* loadedScene)
 
 unsigned int Model::AddMaterial(const MaterialInterface& newMaterial)
 {
-    for (unsigned int i = 0; i < _materialList.size(); i++)
+    // todo put back when the PropertiesWidget allow material selection for the "Add Material" button
+    /*for (unsigned int i = 0; i < _materialList.size(); i++)
     {
         if (newMaterial == _materialList[i])
             return i;
-    }
+    }*/
 
     _materialList.push_back(newMaterial);
 
@@ -208,6 +233,15 @@ void Model::RemoveMaterial(unsigned int index)
 
 Renderer::MaterialInterface& Model::GetMaterial(unsigned int index)
 {
+    if (_materialList.size() <= index)
+    {
+        if (_materialList.empty())
+        {
+            MaterialInterface material = Engine::Instance().GetResourcesManager().LoadMaterial(DEFAULT_MATERIAL_STRING);
+            _materialList.push_back(material);
+        }
+        return _materialList[0];
+    }
     return _materialList[index];
 }
 
@@ -219,8 +253,8 @@ void Model::Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view, c
 
      material->Apply();
 
-     //material->shader.SetMatrix4("projection", projection);
-     //material->shader.SetMatrix4("view", view);
+     material->shader.SetMatrix4("projection", projection);
+     material->shader.SetMatrix4("view", view);
      material->shader.SetMatrix4("model", transform);
 
 
@@ -264,9 +298,24 @@ const Renderer::Mesh& Model::GetMesh(unsigned int index) const
     return _meshList[index];
 }
 
+unsigned int* Model::GetMeshMaterialIndex(unsigned int index)
+{
+    if (index >= _meshList.size())
+    {
+        Assert_Error(true, "Invalid mesh index");
+        return nullptr;
+    }
+    return &_meshList[index].materialIndex;
+}
+
 unsigned int Model::GetNumberMesh() const
 {
     return _meshList.size();
+}
+
+unsigned int Model::GetNumberMaterial() const
+{
+    return _materialList.size();
 }
 
 Renderer::VertexType Model::GetVertexType() const
