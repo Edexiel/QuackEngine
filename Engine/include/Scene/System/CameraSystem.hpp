@@ -12,8 +12,19 @@ namespace Renderer
 
 class CameraSystem : public System
 {
+private:
+    void SetScaleAxisX(float scale) const;
+    void SetScaleAxisY(float scale) const;
+    void SetScaleAxisZ(float scale) const;
+
+    Entity _activeCamera = -1;
+    void FreeFly();
+    void MouseMovement();
 public:
-    CameraSystem() = default;
+    CameraSystem();
+
+    void InitInput();
+    void Update();
 
     Component::Camera& GetActiveCamera();
     void Clear();

@@ -23,13 +23,19 @@ namespace Component
 
     public:
 
+        std::string name;
+
         Model() = default;
 
         Model(Renderer::VertexType vertexType);
 
+        void Destroy();
+
         //Entity entity;
 
         static Model LoadModel(const char *path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
+        static void ReLoadModel(Model& model, const char *path, Renderer::VertexType vertexType);
+        static void ReLoadModel(Model& oldModel, Model newModel);
 
         unsigned int AddMaterial(const Renderer::MaterialInterface& newMaterial);
         unsigned int ChangeMaterial(const Renderer::MaterialInterface& newMaterial, unsigned int index);
@@ -44,7 +50,9 @@ namespace Component
         void Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view, const Maths::Matrix4& transform);
 
         const Renderer::Mesh& GetMesh(unsigned int index) const;
+        unsigned int* GetMeshMaterialIndex(unsigned int index);
         unsigned int GetNumberMesh() const;
+        unsigned int GetNumberMaterial() const;
         Renderer::VertexType GetVertexType() const;
 
     };

@@ -7,10 +7,20 @@ class PropertiesWidget : public Widget
 {
 public:
     PropertiesWidget();
-
     void UpdateVisible() final;
-    void TransformReader() const;
-    void AddComponent();
+
+private:
+    static void NameReader();
+    static void TransformReader();
+    static void LightReader();
+    static void ModelReader();
+    static void CameraReader();
+    static void RigidBodyReader();
+    static void AddComponent();
+    static void DeleteComponent();
+
+    static void AddLight();
+
 
 };
 
