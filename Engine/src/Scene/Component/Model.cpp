@@ -9,6 +9,8 @@
 
 #include "Debug/Assertion.hpp"
 
+#include "Renderer/SkeletalMesh.hpp"
+
 #include <iostream>
 
 using namespace Component;
@@ -45,6 +47,7 @@ Model Model::LoadModel(const char *path, VertexType vertexType)
 
   switch (vertexType)
   {
+      case VertexType::V_SKELETAL : loadedModel = LoadSkeletalMeshModel(scene); break;
       case VertexType::V_NORMALMAP : loadedModel = LoadNormalMapModel(scene); break;
       default : loadedModel = LoadClassicModel(scene); break;
   }
@@ -203,6 +206,67 @@ Model Model::LoadNormalMapModel(const void* loadedScene)
   return model;
 }
 
+Model Model::LoadSkeletalMeshModel(const void* loadedScene)
+{
+    const aiScene* scene = (aiScene*)loadedScene;
+
+    Model model(VertexType::V_CLASSIC);
+    model._meshList.resize(scene->mNumMeshes);
+
+    unsigned int count;
+
+    for (unsigned int i = 0; i < scene->mNumMeshes ; i++)
+    {
+        std::vector<SkeletalMeshVertex> vertices;
+        std::vector<unsigned int> indices;
+
+        vertices.resize(scene->mMeshes[i]->mNumVertices);
+
+        // Load indices
+        for (unsigned int g = 0; g < scene->mMeshes[i]->mNumFaces ; g++)
+        {
+            if (scene->mMeshes[i]->mFaces[g].mNumIndices == 3)
+            {
+                indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[0]);
+                indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[1]);
+                indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[2]);
+            }
+        }
+
+        // Load Vertices
+        count = 0;
+        for (unsigned int e = 0 ; e < scene->mMeshes[i]->mNumVertices ; e++)
+        {
+            Maths::Vector3f position {(scene->mMeshes[i]->mVertices[e]).x,
+                                      (scene->mMeshes[i]->mVertices[e]).y,
+                                      (scene->mMeshes[i]->mVertices[e]).z};
+
+            Maths::Vector3f normal {(scene->mMeshes[i]->mNormals[e]).x,
+                                    (scene->mMeshes[i]->mNormals[e]).y,
+                                    (scene->mMeshes[i]->mNormals[e]).z};
+
+            Maths::Vector2f texture;
+
+            if (scene->mMeshes[i]->HasTextureCoords(0))
+            {
+                texture = {(scene->mMeshes[i]->mTextureCoords[0][e]).x,
+                         (scene->mMeshes[i]->mTextureCoords[0][e]).y};
+            }
+
+            vertices[e] = {position, normal, texture};
+        }
+
+        SkeletalMesh skeletalMesh;
+
+        // Put loaded data in buffers
+        model._meshList[i] = Renderer::RendererPlatform::CreateMesh((float*)vertices.data(), vertices.size() * 16,
+                                                                    indices.data(), indices.size(),
+                                                                    Renderer::VertexType::V_SKELETAL);
+        RendererPlatform::VerticesReadingSkeletalMesh();
+    }
+
+    return model;
+}
 
 unsigned int Model::AddMaterial(const MaterialInterface& newMaterial)
 {
@@ -257,8 +321,7 @@ void Model::Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view, c
      material->shader.SetMatrix4("view", view);
      material->shader.SetMatrix4("model", transform);
 
-
-     _meshList[i].Draw(_vertexType);
+     _meshList[i].Draw();
   }
 }
 

@@ -20,6 +20,7 @@ namespace Component
 
         static Model LoadClassicModel(const void *loadedScene);
         static Model LoadNormalMapModel(const void *loadedScene);
+        static Model LoadSkeletalMeshModel(const void *loadedScene);
 
     public:
 

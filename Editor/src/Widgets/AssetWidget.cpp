@@ -140,6 +140,7 @@ void AssetWidget::DisplayModel()
     std::vector<std::string> listModelType;
     listModelType.emplace_back("CLASSIC");
     listModelType.emplace_back("NORMAL_MAP");
+    listModelType.emplace_back("SKELETAL");
 
     std::string selected = SelectInList(listModelType, listModelType[(int)model.GetVertexType()].c_str(), "Model Vertex Type");
 
@@ -149,6 +150,8 @@ void AssetWidget::DisplayModel()
             Engine::Instance().GetResourcesManager().ReLoadModel(_assetName.c_str(), Renderer::VertexType::V_CLASSIC);
         else if (selected == "NORMAL_MAP")
             Engine::Instance().GetResourcesManager().ReLoadModel(_assetName.c_str(), Renderer::VertexType::V_NORMALMAP);
+        else if (selected == "SKELETAL")
+            Engine::Instance().GetResourcesManager().ReLoadModel(_assetName.c_str(), Renderer::VertexType::V_SKELETAL);
     }
 
 }
