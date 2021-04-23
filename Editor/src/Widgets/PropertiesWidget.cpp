@@ -14,6 +14,9 @@ PropertiesWidget::PropertiesWidget()
 
 void PropertiesWidget::UpdateVisible()
 {
+    if (_propertiesSwitch == PROPERTIES_SHOW_ASSET)
+        return;
+
     //NameReader();
     World &world = Engine::Instance().GetCurrentWorld();
     if(world.HasComponent<Name>(_entity))
@@ -26,16 +29,18 @@ void PropertiesWidget::UpdateVisible()
         CameraReader();
     if(world.HasComponent<RigidBody>(_entity))
         RigidBodyReader();
+    if (world.HasComponent<Model>(_entity))
+        ModelReader();
 
     AddComponent();
     DeleteComponent();
 }
-void PropertiesWidget::NameReader() const
+void PropertiesWidget::NameReader()
 {
     auto &name = Engine::Instance().GetCurrentWorld().GetComponent<Name>(_entity);
     ImGui::InputText("Name", &name.name);
 }
-void PropertiesWidget::TransformReader() const
+void PropertiesWidget::TransformReader()
 {
     auto &transform = Engine::Instance().GetCurrentWorld().GetComponent<Transform>(_entity);
 
@@ -48,29 +53,140 @@ void PropertiesWidget::TransformReader() const
     ImGui::DragFloat3("Rotation", v.e);
     v = v * (M_PI / 180.f);
     transform.rotation = Maths::Quaternion::EulerToQuaternion(v);
+
 }
 
-void PropertiesWidget::LightReader() const
+void PropertiesWidget::LightReader()
 {
-    auto &light = Engine::Instance().GetCurrentWorld().GetComponent<Light>(_entity);
+    Component::Light &light = Engine::Instance().GetCurrentWorld().GetComponent<Component::Light>(_entity);
+
     if (ImGui::CollapsingHeader("Light"))
         return;
 
-    ImGui::DragFloat3("Direction", light.direction.e);
+    std::vector<std::string> listLightType;
+    listLightType.emplace_back("Point");
+    listLightType.emplace_back("Directional");
+    listLightType.emplace_back("Spot");
 
-    ImGui::ColorEdit3("Ambient", light.ambient.e);
-    ImGui::ColorEdit3("Diffuse", light.diffuse.e);
-    ImGui::ColorEdit3("Specular", light.specular.e);
+    if (ImGui::BeginCombo("Light Type", listLightType[(int) light.type].c_str()))
+    {
+        for (int n = 0; n < listLightType.size(); n++)
+        {
+            bool isSelected = (listLightType[(int)light.type] ==
+                                listLightType[n]); // You can store your selection however you want, outside or inside your objects
+            if (ImGui::Selectable(listLightType[n].c_str(), isSelected))
+            {
+                switch (n)
+                {
+                    case 0:
+                        light.type = Component::Light_Type::L_POINT;
+                        break;
+                    case 1:
+                        light.type = Component::Light_Type::L_DIRECTIONAL;
+                        break;
+                    case 2:
+                        light.type = Component::Light_Type::L_SPOT;
+                        break;
 
-    ImGui::DragFloat("Constant", &light.constant);
-    ImGui::DragFloat("Linear", &light.linear);
-    ImGui::DragFloat("Quadratic", &light.quadratic);
+                }
+                Engine::Instance().GetRendererInterface().lightSystem->Update(true);
+            }
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+    }
 
-    ImGui::DragFloat("Spot angle", &light.spotAngle);
-    ImGui::DragFloat("Outer spot angle", &light.outerSpotAngle);
+    if (ImGui::ColorEdit3("Ambient", light.ambient.e) ||
+        ImGui::ColorEdit3("Diffuse", light.diffuse.e) ||
+        ImGui::ColorEdit3("Specular", light.specular.e))
+    {
+        Engine::Instance().GetRendererInterface().lightSystem->Update(true);
+    }
+    if (light.type != Component::Light_Type::L_DIRECTIONAL)
+    {
+        if (ImGui::InputFloat("Linear Attenuation", &light.linear, 0.0f, 0.0f, "%.9f") ||
+            ImGui::InputFloat("Quadratic Attenuation", &light.quadratic, 0.0f, 0.0f, "%.9f"))
+        {
+            Engine::Instance().GetRendererInterface().lightSystem->Update(true);
+        }
+    }
+    if (light.type == Component::Light_Type::L_SPOT)
+    {
+        if (ImGui::DragFloat("Spot Angle", &light.spotAngle) ||
+           ImGui::DragFloat("Outer Spot Angle", &light.outerSpotAngle))
+        {
+            Engine::Instance().GetRendererInterface().lightSystem->Update(true);
+        }
+    }
+
 }
 
-void PropertiesWidget::CameraReader() const
+void PropertiesWidget::ModelReader()
+{
+    if (ImGui::CollapsingHeader("Model"))
+        return;
+
+    Component::Model& model = Engine::Instance().GetCurrentWorld().GetComponent<Component::Model>(_entity);
+
+    std::vector<std::string> listModel = Engine::Instance().GetResourcesManager().GetModelNameList();
+
+    if  (ImGui::BeginCombo("##combo1", model.name.c_str()))
+    {
+        for (int n = 0; n < listModel.size(); n++)
+        {
+            bool isSelected = (model.name == listModel[n]); // You can store your selection however you want, outside or inside your objects
+            if (ImGui::Selectable(listModel[n].c_str(), isSelected))
+            {
+                model.name = listModel[n];
+                model = Engine::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(), Renderer::VertexType::V_NORMALMAP);
+                Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+            }
+
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+        }
+        ImGui::EndCombo();
+    }
+
+    for (unsigned int i = 0; i < model.GetNumberMesh() ; i++)
+    {
+        ImGui::SliderInt((std::string("Material Mesh ") + std::to_string(i + 1)).c_str(), (int*)model.GetMeshMaterialIndex(i), 0, (int)model.GetNumberMaterial() - 1);
+        Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+    }
+
+    std::vector<std::string> listMaterial = Engine::Instance().GetResourcesManager().GetMaterialNameList();
+
+    for (unsigned int i = 0; i < model.GetNumberMaterial() ; i++)
+    {
+        if  (ImGui::BeginCombo((std::string ("##comboMaterial") + std::to_string(i)).c_str(), model.GetMaterial(i)->name.c_str()))
+        {
+            for (int n = 0; n < listMaterial.size(); n++)
+            {
+                bool is_selected = (model.name == listMaterial[n]); // You can store your selection however you want, outside or inside your objects
+                if (ImGui::Selectable(listMaterial[n].c_str(), is_selected))
+                {
+                    Renderer::MaterialInterface materialInterface = Engine::Instance().GetResourcesManager().LoadMaterial(listMaterial[n].c_str());
+                    model.ChangeMaterial(materialInterface, i);
+                    Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+                }
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+            }
+            ImGui::EndCombo();
+        }
+    }
+    if (ImGui::Button("Add Material"))
+    {
+        model.AddMaterial(Engine::Instance().GetResourcesManager().LoadMaterial(DEFAULT_MATERIAL_STRING));
+    }
+    if (ImGui::Button("Remove Material"))
+    {
+        model.RemoveMaterial(model.GetNumberMaterial() - 1);
+    }
+}
+
+void PropertiesWidget::CameraReader()
 {
     auto &camera = Engine::Instance().GetCurrentWorld().GetComponent<Camera>(_entity);
     if (ImGui::CollapsingHeader("Camera"))
@@ -83,7 +199,7 @@ void PropertiesWidget::CameraReader() const
 
 }
 
-void PropertiesWidget::RigidBodyReader() const
+void PropertiesWidget::RigidBodyReader()
 {
     if (ImGui::CollapsingHeader("RigidBody"))
         return;
@@ -108,37 +224,19 @@ void PropertiesWidget::AddComponent()
         //Light
         if (ImGui::BeginMenu("Light"))
         {
-            Component::Light light;
+            AddLight();
+            ImGui::EndMenu();
+        }
 
-            light.ambient = {0.1f, 0.1f, 0.1f};
-            light.constant = 1.0f;
-            light.linear = 0.0014f;
-            light.quadratic = 0.000007f;
-
-            light.outerSpotAngle = 10.5;
-            light.spotAngle = 8.5;
-
-            if (ImGui::MenuItem("Directional"))
+        if (ImGui::BeginMenu("Model"))
+        {
+            std::vector<std::string> listModel = Engine::Instance().GetResourcesManager().GetModelNameList();
+            for (int n = 0; n < listModel.size(); n++)
             {
-                light.type = Component::Light_Type::L_DIRECTIONAL;
-                light.diffuse = {0, 0, 1};
-                light.specular = {0, 0, 1};
-                world.AddComponent(_entity, light);
-            }
-            else if (ImGui::MenuItem("Point"))
-            {
-                light.type = Component::Light_Type::L_POINT;
-                light.diffuse = {1, 1, 1};
-                light.specular = {1, 1, 1};
-
-                world.AddComponent(_entity, light);
-            }
-            else if (ImGui::MenuItem("Spot"))
-            {
-                light.type = Component::Light_Type::L_SPOT;
-                light.diffuse = {1, 0, 0};
-                light.specular = {1, 0, 0};
-                world.AddComponent(_entity, light);
+                if (ImGui::MenuItem(listModel[n].c_str()))
+                {
+                    world.AddComponent(_entity, Engine::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(), Renderer::VertexType::V_NORMALMAP));
+                }
             }
             ImGui::EndMenu();
         }
@@ -152,27 +250,42 @@ void PropertiesWidget::AddComponent()
 
 }
 
-void PropertiesWidget::DeleteComponent()
+void PropertiesWidget::AddLight()
 {
     World &world = Engine::Instance().GetCurrentWorld();
-    if (ImGui::Button("Delete Component"))
+
+    Component::Light light;
+
+    light.ambient = {0.1f, 0.1f, 0.1f};
+    light.diffuse = {0.7f,0.7f,0.7f};
+    light.specular = {1.0, 1.0f, 1.0f};
+    light.constant = 1.0f;
+    light.linear = 0.0014f;
+    light.quadratic = 0.000007f;
+
+    light.outerSpotAngle = 10.5;
+    light.spotAngle = 8.5;
+
+    if (ImGui::MenuItem("Directional"))
     {
-        ImGui::OpenPopup("##ComponentContextMenu_Delete");
+        light.type = Component::Light_Type::L_DIRECTIONAL;
+        world.AddComponent(_entity, light);
     }
-    if (ImGui::BeginPopup("##ComponentContextMenu_Delete"))
+    else if (ImGui::MenuItem("Point"))
     {
-        if (world.HasComponent<Camera>(_entity) && ImGui::MenuItem("Camera"))
-        {
-            world.RemoveComponent<Camera>(_entity);
-        }
-        if(world.HasComponent<Light>(_entity) && ImGui::MenuItem("Light"))
-        {
-            world.RemoveComponent<Light>(_entity);
-        }
-        if(world.HasComponent<RigidBody>(_entity) && ImGui::MenuItem("RigidBody"))
-        {
-            world.RemoveComponent<RigidBody>(_entity);
-        }
-        ImGui::EndPopup();
+        light.type = Component::Light_Type::L_POINT;
+        world.AddComponent(_entity, light);
     }
+    else if (ImGui::MenuItem("Spot"))
+    {
+        light.type = Component::Light_Type::L_SPOT;
+        world.AddComponent(_entity, light);
+    }
+
+
+}
+
+void PropertiesWidget::DeleteComponent()
+{
+
 }

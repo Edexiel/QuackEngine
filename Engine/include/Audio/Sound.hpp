@@ -20,7 +20,7 @@ namespace Audio
         Sound() = default;
         Sound(SoundManager* soundManager, unsigned int index);
 
-        unsigned int GetID();
+        unsigned int GetID() const;
 
         void Play();
         void Stop();

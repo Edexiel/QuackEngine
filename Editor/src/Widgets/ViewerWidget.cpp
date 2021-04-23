@@ -21,6 +21,7 @@ void ViewerWidget::UpdateVisible()
         sprintf(buf, (world.GetComponent<Name>(entity).name + "(%d)").c_str(), n);
         if (ImGui::Selectable(buf, _selected == n))
         {
+            _propertiesSwitch = PROPERTIES_SHOW_ENTITY;
             _selected = n;
             _entity = entity;
             std::cout << _entity << std::endl;

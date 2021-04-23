@@ -42,7 +42,7 @@ struct EngineSettings
 class Engine
 {
 private:
-    Engine() noexcept = default;
+    Engine() = default;
     static Engine _instance;
 
     class GLFWwindow *_window = nullptr;

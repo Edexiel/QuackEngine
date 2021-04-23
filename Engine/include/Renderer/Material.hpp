@@ -10,8 +10,10 @@
 
 namespace Renderer
 {
-  struct Material
-  {
+    struct Material
+    {
+        std::string name;
+
         Shader shader;
 
         bool checkLight {true};
