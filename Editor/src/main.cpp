@@ -20,6 +20,7 @@ using namespace Renderer;
 using namespace Component;
 using namespace Resources;
 
+
 void loadScene()
 {
 
@@ -267,7 +268,7 @@ int main()
         editor.Draw();
 
         /** UPDATE **/
-//        physicsSystem->FixedUpdate(deltaTime);
+//        tempPhysicsSystem->FixedUpdate(deltaTime);
 
         engine.SwapBuffers();
     }
