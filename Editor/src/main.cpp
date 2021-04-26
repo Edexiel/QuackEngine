@@ -44,7 +44,7 @@ void loadScene()
     Engine &engine = Engine::Instance();
 
     engine.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
-//    engine.GetResourcesManager().Init();
+    engine.GetResourcesManager().Init();
     engine.GetResourcesManager().LoadFolder(R"(..\..\Game\Asset)");
 
 

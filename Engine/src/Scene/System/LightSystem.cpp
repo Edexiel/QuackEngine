@@ -5,10 +5,13 @@
 
 using namespace Component;
 
-void LightSystem::Update()
+void LightSystem::Update(bool force)
 {
-    if (_lastEntitiesSize == _entities.size())
-        return;
+    if (!force)
+    {
+        if (_lastEntitiesSize == _entities.size())
+            return;
+    }
 
     _lastEntitiesSize = _entities.size();
 
