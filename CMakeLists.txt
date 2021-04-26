@@ -8,14 +8,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(OpenGL REQUIRED)
 
 option(QUACK_BUILD_EDITOR "Build Editor" OFF)
-
-option(QUACK_BUILD_TESTS "Build Editor" ON)
+option(QUACK_BUILD_TESTS "Build Tests" OFF)
 
 if (QUACK_BUILD_EDITOR)
     set(QUACK_EDITOR TRUE)
 
 endif ()
 
+message(STATUS ">>> COMPILING IN  ${CMAKE_BUILD_TYPE}")
 message(STATUS ">>> BUILD EDITOR IS ${QUACK_BUILD_EDITOR}")
 message(STATUS ">>> BUILD TEST IS ${QUACK_BUILD_TESTS}")
 
@@ -113,19 +113,16 @@ if (QUACK_BUILD_TESTS)
     add_subdirectory(Test)
 endif ()
 
-#Editor
-if (QUACK_BUILD_EDITOR)
-    add_subdirectory(Editor)
-endif ()
+add_subdirectory(Editor)
+
+#Runner
+add_subdirectory(Runner)
 
 #Engine
 add_subdirectory(Engine)
 
 #Game
 add_subdirectory(Game)
-
-#Runner
-add_subdirectory(Runner)
 
 
 #Installer

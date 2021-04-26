@@ -14,12 +14,8 @@ public:
     Game() = default;
     virtual ~Game() = default;
 
-    void LoadScene(std::string sceneName);
     void Init();
-    void UpdateInput();
     void Update(float deltaTime);
-    void FixedUpdate(float fixedDeltaTime);
-    void Render();
 };
 
 #endif // QUACKENGINE_GAME_HPP

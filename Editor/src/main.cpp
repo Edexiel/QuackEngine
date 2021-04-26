@@ -45,7 +45,7 @@ void loadScene()
 
     engine.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
     engine.GetResourcesManager().Init();
-    engine.GetResourcesManager().LoadFolder(R"(..\..\Game\Asset)");
+    engine.GetResourcesManager().LoadFolder(R"(../../Game/Asset)");
 
 
     //Signature Renderer
