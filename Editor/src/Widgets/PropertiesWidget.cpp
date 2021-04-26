@@ -285,15 +285,33 @@ void PropertiesWidget::AddLight()
         light.type = Component::Light_Type::L_SPOT;
         world.AddComponent(_entity, light);
     }
-
-        if (ImGui::MenuItem("RigidBody"))
-        {
-            world.AddComponent(_entity, RigidBody());
-        }
-        ImGui::EndPopup();
-    }
+}
 
 void PropertiesWidget::DeleteComponent()
 {
+    World &world = Engine::Instance().GetCurrentWorld();
+    if (ImGui::Button("Delete Component"))
+    {
+        ImGui::OpenPopup("##ComponentContextMenu_Delete");
+    }
 
+    if (ImGui::BeginPopup("##ComponentContextMenu_Delete"))
+    {
+        if (world.HasComponent<Camera>(_entity) && ImGui::MenuItem("Camera"))
+        {
+            world.RemoveComponent<Camera>(_entity);
+        }
+
+        //Light
+        if (world.HasComponent<Light>(_entity) && ImGui::MenuItem("Light"))
+        {
+            world.RemoveComponent<Light>(_entity);
+        }
+
+        if (world.HasComponent<Model>(_entity) && ImGui::MenuItem("Model"))
+        {
+            world.RemoveComponent<Model>(_entity);
+        }
+        ImGui::EndPopup();
+    }
 }
