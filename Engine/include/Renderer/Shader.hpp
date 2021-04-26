@@ -3,43 +3,54 @@
 
 #include "Maths/Matrix4.hpp"
 
-namespace Renderer
+namespace Component
 {
     class Light;
+}
 
+namespace Renderer
+{
     struct ShaderConstructData
     {
       bool hasLight {false};
-
-      unsigned int nbPointLight       {0};
-      unsigned int nbDirectionalLight {0};
-      unsigned int nbSpotLight        {0};
 
       bool hasColorTexture;
       bool hasDiffuseTexture;
       bool hasSpecularTexture;
 
       bool hasNormalMap;
+
+      unsigned int GetKey() const
+      {
+        return hasLight + hasColorTexture * 10 + hasDiffuseTexture * 100 + hasSpecularTexture * 1000 + hasNormalMap * 10000;
+      };
     };
 
     class Shader
     {
+      unsigned int _ID {0};
+
       public:
-        unsigned int ID;// TO DO: put the variable in private
+
         Shader() = default;
-        Shader(const unsigned int& _ID);
+        Shader(unsigned int ID);
         ~Shader();
 
+        unsigned int GetID() const;
         void Use();
         void SetFloat(const char* name, float value);
         void SetMatrix4(const char* name, const Maths::Matrix4& mat);
-        void SetVector3f(const char* name, const Maths::Vector3f vec);
-        void SetVector4f(const char* name, const Maths::Vector4f vec);
+        void SetVector3f(const char* name, const Maths::Vector3f& vec);
+        void SetVector4f(const char* name, const Maths::Vector4f& vec);
+        void SetUint(const char* name, unsigned int value);
         void SetSampler(const char* name, int sampler);
-        void SetLight(const Light& light, unsigned int index);
+        void SetLight(Component::Light& light, unsigned int index);
+        void SetPointLight(Component::Light& light, unsigned int index);
+        void SetDirectionalLight(Component::Light& light, unsigned int index);
+        void SetSpotLight(Component::Light& light, unsigned int index);
 
         static Shader LoadShader(const char* vertexPath, const char* fragmentPath);
-        static Shader LoadShader(const ShaderConstructData& shaderData);
+        static Shader LoadObjectShader(const ShaderConstructData& shaderData);
 
       private:
         static std::string CreateMaterial(const ShaderConstructData& shaderData);

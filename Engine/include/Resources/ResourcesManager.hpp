@@ -6,9 +6,19 @@
 #include <unordered_map>
 
 #include "Renderer/Shader.hpp"
-#include "Renderer/Model.hpp"
+#include "Scene/Component/Model.hpp"
 #include "Renderer/Texture.hpp"
+#include "Renderer/Material.hpp"
 
+#include "Audio/Sound.hpp"
+
+#define NO_TYPE_STRING "NoType"
+#define DEFAULT_MATERIAL_STRING "Default material"
+
+#define EMPTY_TEXTURE_STRING "NONE"
+
+
+class World;
 
 namespace Resources
 {
@@ -23,17 +33,52 @@ namespace Resources
     class ResourcesManager
     {
     private:
-        std::unordered_map<std::string, Renderer::Model   >  mapModel;
-        std::unordered_map<std::string, Renderer::Texture >  mapTexture;
-        std::vector<ReferenceShader >                        listShader;
 
-    public: 
-        ResourcesManager()  = default;
+        std::unordered_map<std::string, Component::Model>     _mapModel;
+        std::unordered_map<std::string, Renderer::Texture>    _mapTexture;
+        std::vector<ReferenceShader>                          _listShader;
+        std::unordered_map<unsigned int, Renderer::Shader>    _mapDynamicShader;
+        std::unordered_map<std::string, Audio::Sound>         _mapSound;
+        std::unordered_map<std::string, Renderer::MaterialInterface>   _mapMaterial;
+
+        std::vector<Renderer::Mesh> listLoadedShape; //keep loaded shape saved for GPU memory management
+
+        std::unordered_map<unsigned int, std::string> _textureToName;
+        std::unordered_map<unsigned int, std::string> _soundToName;
+
+    public:
+
+        ResourcesManager() = default;
         ~ResourcesManager() = default;
 
-        Renderer::Model   LoadModel     (const char* path);
+        void Init();
+
+        Component::Model  LoadModel     (const char* path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
+        void  ReLoadModel   (const char* path, Renderer::VertexType vertexType);
         Renderer::Texture LoadTexture   (const char* path);
         Renderer::Shader  LoadShader    (const char* vertexShader, const char* fragmentShader);
+        Renderer::Shader  LoadObjectShader    (const char* vertexShader, const char* fragmentShader);
+        Renderer::Shader  LoadObjectShader    (const Renderer::ShaderConstructData& constructData);
+
+        Renderer::MaterialInterface LoadMaterial(const char* path);
+        Renderer::MaterialInterface GenerateMaterial(const char* name, const Renderer::Material& material); // Should be used to load a material from scratch
+
+
+        Audio::Sound      LoadSound     (const char* path, Audio::SoundType soundType);
+
+        Renderer::Mesh& AddShape(Renderer::Mesh& mesh);
+
+        void LoadFolder(const char* path);
+
+        std::vector<std::string> GetModelNameList() const;
+        std::vector<std::string> GetMaterialNameList() const;
+        std::vector<std::string> GetTextureNameList() const;
+
+        std::string GetName(const Renderer::Texture& texture) const;
+        std::string GetName(const Audio::Sound& texture) const;
+
+
+        static std::string GetFileType(const std::string& file);
 
     };
 }

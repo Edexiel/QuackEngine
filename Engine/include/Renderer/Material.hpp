@@ -6,27 +6,36 @@
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
 
+#include <memory>
+
 namespace Renderer
 {
-  struct Material
-  {
+    struct Material
+    {
+        std::string name;
 
-    Shader shader;
+        Shader shader;
 
-    Maths::Color4f  color    {1,1,1,1};
-    Maths::Vector3f ambient  {1,1,1};
-    Maths::Vector3f diffuse  {1,1,1};
-    Maths::Vector3f specular {1,1,1};
+        bool checkLight {true};
 
-    float shininess {128};
+        Maths::Color4f  color    {1,1,1,1};
+        Maths::Color3f ambient  {1,1,1};
+        Maths::Color3f diffuse  {1,1,1};
+        Maths::Color3f specular {1,1,1};
 
-    Texture colorTexture;
-    Texture diffuseTexture;
-    Texture specularTexture;
-    Texture normalMap;
+        float shininess {128};
 
-    void Apply();
-  };
+        Texture colorTexture;
+        Texture diffuseTexture;
+        Texture specularTexture;
+        Texture normalMap;
+
+        void GenerateShader();
+        ShaderConstructData GetConstructData() const;
+        void Apply();
+    };
+
+    typedef std::shared_ptr<Material> MaterialInterface;
 }
 
 #endif //_MATERIAL_

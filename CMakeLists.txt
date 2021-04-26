@@ -3,6 +3,7 @@ project(QuackEngine VERSION 0.1.0 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(OpenGL REQUIRED)
 
@@ -55,6 +56,7 @@ target_sources(imgui INTERFACE
         "${IMGUI_FOLDER}/imgui_tables.cpp"
         "${IMGUI_FOLDER}/backends/imgui_impl_glfw.cpp"
         "${IMGUI_FOLDER}/backends/imgui_impl_opengl3.cpp"
+        "${IMGUI_FOLDER}/misc/cpp/imgui_stdlib.cpp"
         )
 target_include_directories(imgui INTERFACE ${IMGUI_FOLDER})
 target_link_libraries(imgui INTERFACE glfw glad)
@@ -62,6 +64,10 @@ target_link_libraries(imgui INTERFACE glfw glad)
 #STB
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE ${external_lib}/stb)
+
+#miniaudio
+add_library(miniaudio INTERFACE)
+target_include_directories(miniaudio INTERFACE ${external_lib}/miniaudio)
 
 #assimp
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
@@ -98,7 +104,11 @@ add_subdirectory(Editor)
 #Engine
 add_subdirectory(Engine)
 
-target_include_directories(Editor PRIVATE Engine/include)
+#Game
+add_subdirectory(Game)
+
+#Runner
+#add_subdirectory(Runner)
 
 #if(debug)
 #{
