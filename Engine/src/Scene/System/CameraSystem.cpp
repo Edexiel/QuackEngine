@@ -17,7 +17,9 @@ Component::Camera& CameraSystem::GetActiveCamera()
         {
             _activeCamera = entity;
             Transform trs = world.GetComponent<Transform>(entity);
+            //todo : dégager ça
             trs.position = trs.position * -1;
+            //todo : Oui , ca ^
             t.SetView(trs.GetMatrix());
             return t;
         }
