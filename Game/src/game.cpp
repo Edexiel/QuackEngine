@@ -90,7 +90,7 @@ void Game::Init()
 
         Component::Camera camera(1280,
                                  720,
-                                 1000, -1, 20 * 3.1415 / 180);
+                                 1000, -1.f, 20.f * 3.1415f / 180.f);
 
         Transform cameraTrs;
         cameraTrs.position = {0, 0, -5};
