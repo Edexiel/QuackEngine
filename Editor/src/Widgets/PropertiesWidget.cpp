@@ -44,6 +44,7 @@ void PropertiesWidget::NameReader()
 }
 void PropertiesWidget::TransformReader()
 {
+    ImGuiIO& io = ImGui::GetIO();
     auto &transform = Engine::Instance().GetCurrentWorld().GetComponent<Transform>(_entity);
 
     if (ImGui::CollapsingHeader("Transform"))
@@ -53,10 +54,15 @@ void PropertiesWidget::TransformReader()
     ImGui::DragFloat3("Scale", transform.scale.e);
 
 
-    Maths::Vector3f v = transform.rotation.ToEuler() * (180.f / (float)M_PI);
-    ImGui::DragFloat3("Rotation", v.e);
-    v = v * (M_PI / 180.f);
-    transform.rotation = Maths::Quaternion::EulerToQuaternion(v);
+    if(_previousEntity != _entity || ImGui::IsMouseReleased(0) && _eulerRot != _previousEulerRot)
+    {
+        _eulerRot = transform.rotation.ToEuler() * (180.f / (float) M_PI);
+        _previousEulerRot = _eulerRot;
+        _previousEntity = _entity;
+    }
+    ImGui::DragFloat3("Rotation", _eulerRot.e);
+
+    transform.rotation = Maths::Quaternion::EulerToQuaternion(_eulerRot * (M_PI / 180.f));
 
 }
 
@@ -199,6 +205,9 @@ void PropertiesWidget::CameraReader()
     ImGui::Checkbox("Is perspective", &camera._isPerspective);
     float fov = (camera._fov * 180.f) / (float)M_PI;
     ImGui::DragFloat("FOV", &fov);
+    fov > 180.f? fov = 180.f : fov = fov;
+    fov < 0.f? fov = 0.f : fov = fov;
+
     camera._fov = (fov * (float)M_PI) / 180.f;
 
 }
@@ -285,15 +294,33 @@ void PropertiesWidget::AddLight()
         light.type = Component::Light_Type::L_SPOT;
         world.AddComponent(_entity, light);
     }
-
-        if (ImGui::MenuItem("RigidBody"))
-        {
-            world.AddComponent(_entity, RigidBody());
-        }
-        ImGui::EndPopup();
-    }
+}
 
 void PropertiesWidget::DeleteComponent()
 {
-    
+    World &world = Engine::Instance().GetCurrentWorld();
+    if (ImGui::Button("Delete Component"))
+    {
+        ImGui::OpenPopup("##ComponentContextMenu_Delete");
+    }
+
+    if (ImGui::BeginPopup("##ComponentContextMenu_Delete"))
+    {
+        if (world.HasComponent<Camera>(_entity) && ImGui::MenuItem("Camera"))
+        {
+            world.RemoveComponent<Camera>(_entity);
+        }
+
+        //Light
+        if (world.HasComponent<Light>(_entity) && ImGui::MenuItem("Light"))
+        {
+            world.RemoveComponent<Light>(_entity);
+        }
+
+        if (world.HasComponent<Model>(_entity) && ImGui::MenuItem("Model"))
+        {
+            world.RemoveComponent<Model>(_entity);
+        }
+        ImGui::EndPopup();
+    }
 }

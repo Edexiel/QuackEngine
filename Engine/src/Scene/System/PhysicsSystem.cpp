@@ -29,7 +29,18 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
 {
     //todo: faire l'update
     //todo: faire classe de traduction (transform, position, etc)
+    for (Entity entity: _entities)
+    {
+        auto &t = _world->GetComponent<Transform>(entity);
+        auto &r = _world->GetComponent<Component::RigidBody>(entity);
+        rp3d::Transform newTransform({t.position.x, t.position.y, t.position.z}, {t.rotation.w, t.rotation.x, t.rotation.y, t.rotation.z});
+        const rp3d::Transform &transform = r.rb->getTransform();
+        if(newTransform != transform)
+            r.rb->setTransform(newTransform);
+    }
+
     _world->GetPhysicsWorld()->update(fixedDeltaTime);
+
     for (Entity entity: _entities)
     {
         auto &t = _world->GetComponent<Transform>(entity);
