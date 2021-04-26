@@ -7,7 +7,6 @@
 #include "Scene/Component/Transform.hpp"
 #include "Renderer/RendererInterface.hpp"
 #include "Renderer/RendererPlatform.hpp"
-#include "Renderer/Shape.hpp"
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
@@ -16,9 +15,47 @@
 #include "Tools/Random.hpp"
 #include "CameraEditor.hpp"
 
+#include "reactphysics3d/reactphysics3d.h"
+
 using namespace Renderer;
 using namespace Component;
 using namespace Resources;
+
+// todo: remove this vars and class when you can have access of the PhysicsSystem
+std::shared_ptr<PhysicsSystem> tempPhysicsSystemPtr;
+
+class EventLisenerTemp : public rp3d::EventListener
+{
+    virtual void onTrigger(const rp3d::OverlapCallback::CallbackData& callbackData)
+    {
+        std::cout << "OnTrigger\n";
+    }
+    virtual void onContact(const rp3d::CollisionCallback::CallbackData& callbackData)
+    {
+        std::cout << "OnContact\n";
+        for (unsigned int p = 0; p < callbackData.getNbContactPairs(); p++)
+        {
+
+            // Get the contact pair
+            CollisionCallback::ContactPair contactPair = callbackData.getContactPair(p);
+
+            // For each contact point of the contact pair
+            for (unsigned int c = 0; c < contactPair.getNbContactPoints(); c++)
+            {
+
+                // Get the contact point
+                CollisionCallback::ContactPoint contactPoint = contactPair.getContactPoint(c);
+
+                // Get the contact point on the first collider and convert it in world-space
+                rp3d::Vector3 worldPoint = contactPair.getCollider1()->getLocalToWorldTransform() *
+                                           contactPoint.getLocalPointOnCollider1();
+//                std::cout <<"Collision point: "<< worldPoint.x << ", " <<  worldPoint.y << ", " <<  worldPoint.z << std::endl;
+            }
+        }
+    }
+};
+
+EventLisenerTemp eventLisener;
 
 void loadScene()
 {
@@ -81,6 +118,8 @@ void loadScene()
     }
 
     physicsSystem->Init();
+    tempPhysicsSystemPtr = physicsSystem;
+    world.GetPhysicsWorld()->setEventListener(&eventLisener);
 //    CameraEditor cam;
 //    cam.SetInput(engine.GetInputManager());
 
@@ -95,7 +134,6 @@ void loadScene()
         cameraTrs.position = {0, 0, -5};
         world.AddComponent(CameraEntity, camera);
         world.AddComponent(CameraEntity, cameraTrs);
-
     }
     ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
 
@@ -122,8 +160,8 @@ void loadScene()
             for (int  z = 0; z < 1; z++)
             {
                 t.position.x = 0;
-                t.position.y = 5.f - (float)y * 2;
-                t.position.z = 20.f + (float)z * 2;
+                t.position.y = 10.f /*- (float)y * 2*/;
+                t.position.z = 20.f /*+ (float)z * 2*/;
 
                 Entity id = world.CreateEntity("Sphere");
 
@@ -140,6 +178,35 @@ void loadScene()
             }
         }
     }
+
+    //Test triggerCollision
+    Component::RigidBody rbTrigger;
+    Component::Model mdTrigger = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
+    Transform tTrigger = {Maths::Vector3f{0, -2.5f, 20}, {1,1,1}, Maths::Quaternion{}};
+    Entity idTrigger = world.CreateEntity("TriggerBox");
+
+    world.AddComponent(idTrigger, tTrigger);
+    world.AddComponent(idTrigger, mdTrigger);
+    world.AddComponent(idTrigger, rbTrigger);
+
+    physicsSystem->SetRigidBody(idTrigger);
+    physicsSystem->SetType(idTrigger, BodyType::STATIC);
+    physicsSystem->AddBoxCollider(idTrigger,{1,1,1});
+    physicsSystem->SetIsTrigger(idTrigger, true);
+
+//Test triggerCollision
+    Component::RigidBody rbContact;
+    Component::Model mdContact = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
+    Transform tContact = {Maths::Vector3f{0, -5.f, 20}, {1,1,1}, Maths::Quaternion{}};
+    Entity idContact = world.CreateEntity("ContactBox");
+
+    world.AddComponent(idContact, tContact);
+    world.AddComponent(idContact, mdContact);
+    world.AddComponent(idContact, rbContact);
+
+    physicsSystem->SetRigidBody(idContact);
+    physicsSystem->SetType(idContact, BodyType::STATIC);
+    physicsSystem->AddBoxCollider(idContact,{1,1,1});
 
     Entity idFloor = world.CreateEntity("Floor");
 
@@ -269,7 +336,7 @@ int main()
         editor.Draw();
 
         /** UPDATE **/
-//        physicsSystem->FixedUpdate(deltaTime);
+        tempPhysicsSystemPtr->FixedUpdate(deltaTime);
 
         engine.SwapBuffers();
     }

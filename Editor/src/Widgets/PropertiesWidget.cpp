@@ -295,5 +295,5 @@ void PropertiesWidget::AddLight()
 
 void PropertiesWidget::DeleteComponent()
 {
-
+    
 }

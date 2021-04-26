@@ -77,6 +77,10 @@ void PhysicsSystem::SetType(Entity id, const BodyType &type)
     _world->GetComponent<Component::RigidBody>(id).rb->setType((rp3d::BodyType) type);
 }
 
+void PhysicsSystem::SetIsTrigger(Entity id, bool isTrigger)
+{
+    _world->GetComponent<Component::RigidBody>(id).rb->getCollider(0)->setIsTrigger(isTrigger);
+}
 void PhysicsSystem::SetRigidBody(Entity id)
 {
     auto &r = _world->GetComponent<Component::RigidBody>(id);
