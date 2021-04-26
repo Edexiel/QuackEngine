@@ -20,7 +20,6 @@ using namespace Renderer;
 using namespace Component;
 using namespace Resources;
 
-
 void loadScene()
 {
 
@@ -45,6 +44,9 @@ void loadScene()
     Engine &engine = Engine::Instance();
 
     engine.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
+//    engine.GetResourcesManager().Init();
+    engine.GetResourcesManager().LoadFolder(R"(..\..\Game\Asset)");
+
 
     //Signature Renderer
     {
@@ -90,6 +92,7 @@ void loadScene()
                                  1000, -1, 20 * 3.1415 / 180);
 
         Transform cameraTrs;
+        cameraTrs.position = {0, 0, -5};
         world.AddComponent(CameraEntity, camera);
         world.AddComponent(CameraEntity, cameraTrs);
 
@@ -97,8 +100,7 @@ void loadScene()
     ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
 
     Transform t = {Maths::Vector3f{0, 0, 10}, Maths::Vector3f::One() * 1.5f, Maths::Quaternion{}};
-    Component::Model md = resourcesManager.LoadModel("../../Asset/Sphere.fbx",
-                                                                 Renderer::VertexType::V_NORMALMAP);
+    Component::Model md = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Sphere.fbx)", Renderer::VertexType::V_NORMALMAP);
 
     Material material;
 
@@ -106,7 +108,7 @@ void loadScene()
     material.diffuse = {1, 1, 1};
     material.specular = {1, 1, 1};
     material.checkLight = true;
-    material.normalMap = resourcesManager.LoadTexture("../../Asset/Floor_N.jpg");
+    material.normalMap = engine.GetResourcesManager().LoadTexture(R"(..\..\Game\Asset\Texture\Floor_N.jpg)");
 
     MaterialInterface materialInterface = resourcesManager.GenerateMaterial("base", material);
 
@@ -123,7 +125,7 @@ void loadScene()
                 t.position.y = 5.f - (float)y * 2;
                 t.position.z = 20.f + (float)z * 2;
 
-                Entity id = world.CreateEntity("Test");
+                Entity id = world.CreateEntity("Sphere");
 
                 Component::RigidBody rb;
 
@@ -146,10 +148,9 @@ void loadScene()
 
 
     Component::RigidBody rbFloor;
-    Component::Model mdFloor = resourcesManager.LoadModel("../../Asset/Cube.fbx",
-                                                                     Renderer::VertexType::V_NORMALMAP);
+    Component::Model mdFloor = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
 
-    material.colorTexture = resourcesManager.LoadTexture("../../Asset/Floor_C.jpg");
+    material.colorTexture = engine.GetResourcesManager().LoadTexture(R"(..\..\Game\Asset\Texture\Floor_C.jpg)");
 
     MaterialInterface materialInterface2 = resourcesManager.GenerateMaterial("mat2", material);
 
@@ -165,15 +166,15 @@ void loadScene()
 
 
     Entity lightID = world.CreateEntity("Light");
-    Entity lightID2 = world.CreateEntity("Light");
-    Entity lightID3 = world.CreateEntity("Light");
+    //Entity lightID2 = world.CreateEntity("Light");
+    //Entity lightID3 = world.CreateEntity("Light");
 
     Component::Light light;
 
-    light.type = Component::Light_Type::L_SPOT;
+    light.type = Component::Light_Type::L_POINT;
     light.ambient = {0.1f, 0.1f, 0.1f};
-    light.diffuse = {1, 0, 0};
-    light.specular = {1, 0, 0};
+    light.diffuse = {1, 1, 1};
+    light.specular = {1, 1, 1};
     light.constant = 1.0f;
     light.linear = 0.0014f;
     light.quadratic = 0.000007f;
@@ -182,11 +183,11 @@ void loadScene()
     light.spotAngle = 8.5;
 
 
-    Transform tl1 = {Maths::Vector3f::One(), Maths::Vector3f::One(), Maths::Quaternion{}};
+    Transform tl1 = {Maths::Vector3f::One() * -10, Maths::Vector3f::One(), Maths::Quaternion{}};
     world.AddComponent(lightID, light);
     world.AddComponent(lightID, tl1);
 
-    light.type = Component::Light_Type::L_POINT;
+    /*light.type = Component::Light_Type::L_POINT;
     light.diffuse = {1, 1, 1};
     light.specular = {1, 1, 1};
     Transform tl2 = {Maths::Vector3f::One() * -100, Maths::Vector3f::One(), Maths::Quaternion{}};
@@ -205,7 +206,7 @@ void loadScene()
     Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
 
     world.AddComponent(lightID3, light);
-    world.AddComponent(lightID3, tl3);
+    world.AddComponent(lightID3, tl3);*/
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
 }
@@ -268,7 +269,7 @@ int main()
         editor.Draw();
 
         /** UPDATE **/
-//        tempPhysicsSystem->FixedUpdate(deltaTime);
+//        physicsSystem->FixedUpdate(deltaTime);
 
         engine.SwapBuffers();
     }
