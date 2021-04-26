@@ -87,7 +87,7 @@ inline void World::Clear()
 inline Entity World::CreateEntity(std::string name)
 {
     Entity id = _entityManager->Create();
-    AddComponent(id, Name{std::move(name)});
+    AddComponent(id, Component::Name{std::move(name)});
     return id;
 }
 
