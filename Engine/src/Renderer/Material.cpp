@@ -21,7 +21,8 @@ ShaderConstructData Material::GetConstructData() const
     ShaderConstructData shaderConstructData{checkLight, colorTexture.GetID() != 0,
                                             diffuseTexture.GetID() != 0,
                                             specularTexture.GetID() != 0,
-                                            normalMap.GetID() != 0};;
+                                            normalMap.GetID() != 0,
+                                            hasSkeleton};
 
     return shaderConstructData;
 }

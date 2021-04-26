@@ -2,12 +2,19 @@
 #define _SKELETALMESH_HPP
 
 #include "Renderer/Mesh.hpp"
+#include "Maths/Matrix4.hpp"
 
 namespace Renderer
 {
+    struct Bone
+    {
+        unsigned int id {};
+        Maths::Matrix4 offset;
+    };
+
     class SkeletalMesh : Mesh
     {
-        explicit SkeletalMesh(const Mesh& mesh);
+        SkeletalMesh() = default;
     };
 }
 

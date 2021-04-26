@@ -31,6 +31,12 @@ namespace Renderer
 
     void Draw() const;
 
+    unsigned int GetVAO() const;
+    unsigned int GetVBO() const;
+    unsigned int GetEBO() const;
+    unsigned int GetNBVertices() const;
+    unsigned int GetNBindices() const;
+
   };
 }
 

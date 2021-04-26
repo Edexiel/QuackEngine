@@ -30,6 +30,8 @@ namespace Renderer
         Texture specularTexture;
         Texture normalMap;
 
+        bool hasSkeleton {false};
+
         void GenerateShader();
         ShaderConstructData GetConstructData() const;
         void Apply();

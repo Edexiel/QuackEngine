@@ -25,7 +25,7 @@ namespace Renderer
       Maths::Vector3f biTangent {0.f,0.f,0.f};
   };
 
-  struct SkeletalMeshVertex
+  struct SkeletalVertex
   {
       Maths::Vector3f position  {0.f,0.f,0.f};
       Maths::Vector3f normal    {0.f,0.f,0.f};

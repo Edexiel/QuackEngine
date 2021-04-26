@@ -46,10 +46,24 @@ void AssetWidget::DisplayMaterial()
     Engine& engine = Engine::Instance();
     Renderer::MaterialInterface material = engine.GetResourcesManager().LoadMaterial(_assetName.c_str());
 
-    ImGui::ColorEdit3("Ambient", material->ambient.e);
-    ImGui::ColorEdit3("Diffuse", material->diffuse.e);
-    ImGui::ColorEdit3("Specular", material->specular.e);
-    ImGui::SliderFloat("Shininess", &(material->shininess), 1, 512, "%.1f");
+    if (ImGui::Checkbox("Check Lights", &material->checkLight))
+    {
+        material->GenerateShader();
+        engine.GetRendererInterface().lightSystem->Update(true);
+    }
+    if (ImGui::Checkbox("Has Skeleton", &material->hasSkeleton))
+    {
+        material->GenerateShader();
+        engine.GetRendererInterface().lightSystem->Update(true);
+    }
+
+    if (material->checkLight)
+    {
+        ImGui::ColorEdit3("Ambient", material->ambient.e);
+        ImGui::ColorEdit3("Diffuse", material->diffuse.e);
+        ImGui::ColorEdit3("Specular", material->specular.e);
+        ImGui::SliderFloat("Shininess", &(material->shininess), 1, 512, "%.1f");
+    }
 
     std::vector<std::string> listTexture = Engine::Instance().GetResourcesManager().GetTextureNameList();
     listTexture.insert(listTexture.cbegin(), EMPTY_TEXTURE_STRING);
@@ -60,6 +74,9 @@ void AssetWidget::DisplayMaterial()
         material->GenerateShader();
         engine.GetRendererInterface().lightSystem->Update(true);
     }
+
+    if (!material->checkLight)
+        return;
 
     name = engine.GetResourcesManager().GetName(material->diffuseTexture);
     if (SelectTexture(material->diffuseTexture, listTexture, name.c_str(), "Diffuse Texture"))

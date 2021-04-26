@@ -31,3 +31,28 @@ void Mesh::Draw() const
         default : return RendererPlatform::DrawMesh(_vao, _vbo, _ebo, _nbIndices);
     }
 }
+
+unsigned int Mesh::GetVAO() const
+{
+    return _vao;
+}
+
+unsigned int Mesh::GetVBO() const
+{
+    return _vbo;
+}
+
+unsigned int Mesh::GetEBO() const
+{
+    return _ebo;
+}
+
+unsigned int Mesh::GetNBVertices() const
+{
+    return _nbVertices;
+}
+
+unsigned int Mesh::GetNBindices() const
+{
+    return _nbIndices;
+}

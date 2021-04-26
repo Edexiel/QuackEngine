@@ -28,7 +28,7 @@ namespace Maths
                float _y,
                float _z);
     Quaternion(float _w, const Vector3f& _axis);
-    Quaternion(const Vector3f& Axe, float angle);
+    Quaternion(const Vector3f& axe, float angle);
 
     float GetMagnitude() const;
     Quaternion GetConjugate() const;
@@ -68,13 +68,13 @@ inline Quaternion::Quaternion(float _w, float _x, float _y, float _z) : x{_x}, y
 
 inline Quaternion::Quaternion(float _w, const Vector3f& _axis) : x{ _axis.x }, y{ _axis.y }, z{_axis.z}, w{ _w } {}
 
-inline Quaternion::Quaternion(const Vector3f& Axe, float angle)
+inline Quaternion::Quaternion(const Vector3f& axe, float angle)
 {
     w = cosf(angle / 2);
 
-    x = sinf(angle / 2) * Axe.x;
-    y = sinf(angle / 2) * Axe.y;
-    z = sinf(angle / 2) * Axe.z;
+    x = sinf(angle / 2) * axe.x;
+    y = sinf(angle / 2) * axe.y;
+    z = sinf(angle / 2) * axe.z;
 }
 
 

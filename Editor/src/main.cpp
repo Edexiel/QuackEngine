@@ -99,8 +99,8 @@ void loadScene()
     }
     ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
 
-    Transform t = {Maths::Vector3f{0, 0, 10}, Maths::Vector3f::One() * 1.5f, Maths::Quaternion{}};
-    Component::Model md = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Sphere.fbx)", Renderer::VertexType::V_NORMALMAP);
+    Transform t = {Maths::Vector3f{0, -1, 5}, Maths::Vector3f::One() * 0.01f, Maths::Quaternion{}};
+    Component::Model md = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\BartenderMesh.fbx)", Renderer::VertexType::V_NORMALMAP);
 
     Material material;
 
@@ -108,9 +108,12 @@ void loadScene()
     material.diffuse = {1, 1, 1};
     material.specular = {1, 1, 1};
     material.checkLight = true;
-    material.normalMap = engine.GetResourcesManager().LoadTexture(R"(..\..\Game\Asset\Texture\Floor_N.jpg)");
+    material.colorTexture = engine.GetResourcesManager().LoadTexture(R"(..\..\Game\Asset\Texture\Bartender.png)");
 
-    MaterialInterface materialInterface = resourcesManager.GenerateMaterial("base", material);
+    material.hasSkeleton = true;
+    //material.normalMap = engine.GetResourcesManager().LoadTexture(R"(..\..\Game\Asset\Texture\Floor_N.jpg)");
+
+    MaterialInterface materialInterface = resourcesManager.GenerateMaterial("BartenderMaterial", material);
 
     md.AddMaterial(materialInterface);
 
@@ -122,8 +125,10 @@ void loadScene()
             for (int  z = 0; z < 1; z++)
             {
                 t.position.x = 0;
-                t.position.y = 5.f - (float)y * 2;
+                t.position.y = -2 + (float)y * 2;
                 t.position.z = 20.f + (float)z * 2;
+
+                t.rotation = Maths::Quaternion({0,1,0}, 3.1415f);
 
                 Entity id = world.CreateEntity("Sphere");
 

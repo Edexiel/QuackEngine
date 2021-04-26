@@ -7,7 +7,12 @@
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Material.hpp"
 
+#include "Renderer/SkeletalMesh.hpp"
+
 #include "Scene/Core/Types.hpp"
+
+#include <memory>
+#include <unordered_map>
 
 namespace Component
 {
@@ -18,9 +23,16 @@ namespace Component
         std::vector<Renderer::MaterialInterface> _materialList;
         Renderer::VertexType _vertexType {Renderer::VertexType::V_CLASSIC};
 
+        std::unordered_map<std::string, Renderer::Bone> _skeleton;
+
         static Model LoadClassicModel(const void *loadedScene);
         static Model LoadNormalMapModel(const void *loadedScene);
         static Model LoadSkeletalMeshModel(const void *loadedScene);
+
+        static void SetVertexBoneData(Renderer::SkeletalVertex& vertex, int boneID, float weight);
+        void ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex>& vertices,
+                                          unsigned int meshId,
+                                          const void* loadedScene);
 
     public:
 
