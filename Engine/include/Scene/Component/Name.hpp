@@ -2,9 +2,12 @@
 #define QUACKENGINE_NAME_HPP
 #include <string>
 
-struct Name
+namespace Component
 {
-    std::string name;
-};
+    struct Name
+    {
+        std::string name;
+    };
+}
 
 #endif //QUACKENGINE_NAME_HPP
