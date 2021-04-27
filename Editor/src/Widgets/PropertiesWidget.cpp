@@ -204,9 +204,7 @@ void PropertiesWidget::CameraReader()
 
     ImGui::Checkbox("Is perspective", &camera._isPerspective);
     float fov = (camera._fov * 180.f) / (float)M_PI;
-    ImGui::DragFloat("FOV", &fov);
-    fov > 180.f? fov = 180.f : fov = fov;
-    fov < 0.f? fov = 0.f : fov = fov;
+    ImGui::DragFloat("FOV", &fov, 1.f, 0.f, 180.f);
 
     camera._fov = (fov * (float)M_PI) / 180.f;
 
