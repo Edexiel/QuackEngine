@@ -97,13 +97,6 @@ set(ASSIMP_BUILD_ASSXML_EXPORTER ON CACHE BOOL "" FORCE)
 add_subdirectory(${external_lib}/assimp)
 
 
-
-#flatbuffer
-set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(FLATBUFFERS_MAX_PARSING_DEPTH 16)
-add_subdirectory(${external_lib}/flatbuffers ${CMAKE_CURRENT_BINARY_DIR}/flatbuffers-build EXCLUDE_FROM_ALL)
-
-
 #reactphysics3d
 add_subdirectory(${external_lib}/reactphysics3d)
 target_compile_options(reactphysics3d PRIVATE --no-warnings)
