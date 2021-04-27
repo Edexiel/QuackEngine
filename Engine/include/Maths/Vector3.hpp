@@ -69,6 +69,12 @@ namespace Maths
         Vector3<T> operator-(const Vector3<T> &v2) const;
 
         Vector3<T> operator*(const T &f) const;
+
+        template<class Archive>
+        void serialize(Archive &archive)
+        {
+            archive(x, y, z);
+        }
     };
 
     typedef Vector3<float> Vector3f;
@@ -101,7 +107,8 @@ namespace Maths
     inline Vector3<T> &Vector3<T>::Normalize()
     {
         T length = Length();
-        if (length > 0) {
+        if (length > 0)
+        {
             x /= length;
             y /= length;
             z /= length;

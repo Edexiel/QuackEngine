@@ -17,12 +17,6 @@ namespace Component
 {
     class Camera
     {
-    public:
-        bool isActive {true};
-
-        friend ::CameraSystem;
-        float _fov;
-        bool _isPerspective{true};
 
     private:
         unsigned int _width;
@@ -48,6 +42,14 @@ namespace Component
         Maths::Matrix4 _view;
 
     public:
+
+        bool isActive {true};
+
+        friend ::CameraSystem;
+        float _fov;
+        bool _isPerspective{true};
+
+
         Camera(unsigned int width, unsigned int height, float far, float near, float fov);
         Camera(unsigned int width, unsigned int height, float far, float near);
 

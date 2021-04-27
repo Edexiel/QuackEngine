@@ -96,6 +96,10 @@ set(ASSIMP_BUILD_ASSBIN_EXPORTER ON CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ASSXML_EXPORTER ON CACHE BOOL "" FORCE)
 add_subdirectory(${external_lib}/assimp)
 
+#Cereal
+set(SKIP_PERFORMANCE_COMPARISON ON CACHE BOOL "Skip performance comparison(requires boost)" FORCE)
+set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
+add_subdirectory(${external_lib}/cereal)
 
 #reactphysics3d
 add_subdirectory(${external_lib}/reactphysics3d)

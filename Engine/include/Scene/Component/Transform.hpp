@@ -20,6 +20,12 @@ namespace Component
         {
             return Maths::Matrix4::Translate(position) * rotation.ToMatrix() * Maths::Matrix4::Scale(scale);
         };
+
+        template<class Archive>
+        void serialize(Archive & archive)
+        {
+            archive( position, scale, rotation,forward,right );
+        }
     };
 }
 //struct Transform : public Component

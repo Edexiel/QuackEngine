@@ -8,6 +8,7 @@
 #include "Renderer/Material.hpp"
 
 #include "Scene/Core/Types.hpp"
+#include <cereal/access.hpp>
 
 namespace Component
 {
@@ -20,6 +21,9 @@ namespace Component
 
         static Model LoadClassicModel(const void *loadedScene);
         static Model LoadNormalMapModel(const void *loadedScene);
+
+        friend class cereal::access;
+
 
     public:
 
@@ -54,6 +58,13 @@ namespace Component
         unsigned int GetNumberMesh() const;
         unsigned int GetNumberMaterial() const;
         Renderer::VertexType GetVertexType() const;
+
+
+        template<class Archive>
+        void serialize(Archive & archive)
+        {
+            archive( name,_vertexType);
+        }
 
     };
 }
