@@ -37,6 +37,8 @@ public:
 
     void SetType(Entity id, const BodyType& type);
 
+    void SetIsTrigger(Entity id, bool type);
+
     void AddBoxCollider(Entity id, const Maths::Vector3f &halfExtend, const Maths::Vector3f &position = {0, 0, 0},
                         const Maths::Quaternion &rotation = {1, 0, 0, 0});
 
