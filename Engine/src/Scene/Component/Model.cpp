@@ -9,7 +9,7 @@
 
 #include "Debug/Assertion.hpp"
 
-#include "Renderer/SkeletalMesh.hpp"
+#include "Renderer/Skeleton.hpp"
 
 #include <iostream>
 
@@ -83,21 +83,9 @@ Model Model::LoadClassicModel(const void* loadedScene)
   for (unsigned int i = 0; i < scene->mNumMeshes ; i++)
   {
     std::vector<float> vertices;
-    std::vector<unsigned int> indices;
+    std::vector<unsigned int> indices = LoadIndices(loadedScene, i);
 
     vertices.resize(scene->mMeshes[i]->mNumVertices * 8);
-
-    // Load indices
-    for (unsigned int g = 0; g < scene->mMeshes[i]->mNumFaces ; g++)
-    {
-      if (scene->mMeshes[i]->mFaces[g].mNumIndices == 3)
-      {
-        indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[0]);
-        indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[1]);
-        indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[2]);
-      }
-    }
-
 
     // Load Vertices
     count = 0;
@@ -110,8 +98,6 @@ Model Model::LoadClassicModel(const void* loadedScene)
       vertices[count + 3] = (scene->mMeshes[i]->mNormals[e]).x;
       vertices[count + 4] = (scene->mMeshes[i]->mNormals[e]).y;
       vertices[count + 5] = (scene->mMeshes[i]->mNormals[e]).z;
-
-      //scene->mMeshes[i]->mTextureCoords[0][e].x;
 
       if (scene->mMeshes[i]->HasTextureCoords(0))
       {
@@ -146,20 +132,7 @@ Model Model::LoadNormalMapModel(const void* loadedScene)
   for (unsigned int i = 0; i < scene->mNumMeshes ; i++)
   {
     std::vector<float> vertices;
-    std::vector<unsigned int> indices;
-
-    //vertices.resize(scene->mMeshes[i]->mNumVertices * 14);
-
-    // Load indices
-    for (unsigned int g = 0; g < scene->mMeshes[i]->mNumFaces ; g++)
-    {
-        if (scene->mMeshes[i]->mFaces[g].mNumIndices == 3)
-        {
-            indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[0]);
-            indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[1]);
-            indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[2]);
-        }
-    }
+    std::vector<unsigned int> indices = LoadIndices(loadedScene, i);
 
 
     // Load Vertices
@@ -206,6 +179,26 @@ Model Model::LoadNormalMapModel(const void* loadedScene)
   return model;
 }
 
+std::vector<unsigned int> Model::LoadIndices(const void* loadedScene, unsigned int meshId)
+{
+    const aiScene* scene = (aiScene*)loadedScene;
+
+    std::vector<unsigned int> indices;
+
+    // Load indices
+    for (unsigned int g = 0; g < scene->mMeshes[meshId]->mNumFaces ; g++)
+    {
+        if (scene->mMeshes[meshId]->mFaces[g].mNumIndices == 3)
+        {
+            indices.push_back(scene->mMeshes[meshId]->mFaces[g].mIndices[0]);
+            indices.push_back(scene->mMeshes[meshId]->mFaces[g].mIndices[1]);
+            indices.push_back(scene->mMeshes[meshId]->mFaces[g].mIndices[2]);
+        }
+    }
+
+    return indices;
+}
+
 Model Model::LoadSkeletalMeshModel(const void* loadedScene)
 {
     const aiScene* scene = (aiScene*)loadedScene;
@@ -218,20 +211,9 @@ Model Model::LoadSkeletalMeshModel(const void* loadedScene)
     for (unsigned int i = 0; i < scene->mNumMeshes ; i++)
     {
         std::vector<SkeletalVertex> vertices;
-        std::vector<unsigned int> indices;
+        std::vector<unsigned int> indices = LoadIndices(loadedScene, i);
 
         vertices.resize(scene->mMeshes[i]->mNumVertices);
-
-        // Load indices
-        for (unsigned int g = 0; g < scene->mMeshes[i]->mNumFaces ; g++)
-        {
-            if (scene->mMeshes[i]->mFaces[g].mNumIndices == 3)
-            {
-                indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[0]);
-                indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[1]);
-                indices.push_back(scene->mMeshes[i]->mFaces[g].mIndices[2]);
-            }
-        }
 
         // Load Vertices
         count = 0;
@@ -258,7 +240,15 @@ Model Model::LoadSkeletalMeshModel(const void* loadedScene)
             model.ExtractBoneWeightForVertices(vertices, i, scene);
         }
 
-        //SkeletalMesh skeletalMesh;
+        //Skeleton skeletalMesh;
+
+        for (unsigned int i = 0 ; i < vertices.size(); i++)
+        {
+            std::cout << "X = " << vertices[i].boneId.x <<
+            ", Y = " << vertices[i].boneId.y <<
+            ", Z = " << vertices[i].boneId.z <<
+            ", W = " << vertices[i].boneId.w << std::endl;
+        }
 
         // Put loaded data in buffers
         model._meshList[i] = Renderer::RendererPlatform::CreateMesh((float*)vertices.data(), vertices.size() * 16,
@@ -274,38 +264,29 @@ void Model::SetVertexBoneData(SkeletalVertex &vertex, int boneID, float weight)
 {
     for (int i = 0; i < 4; ++i)
     {
-        if (vertex.boneId.e[i] < 0)
+        if (vertex.boneId.e[i] == -1.0f)
         {
             vertex.weights.e[i] = weight;
-            vertex.boneId.e[i] = boneID;
+            vertex.boneId.e[i] = i * 10;
+            std::cout << "BoneID : " << weight << " / " << boneID << std::endl;
             break;
         }
     }
-}
-
-
-unsigned int Model::AddMaterial(const MaterialInterface& newMaterial)
-{
-    // todo put back when the PropertiesWidget allow material selection for the "Add Material" button
-    /*for (unsigned int i = 0; i < _materialList.size(); i++)
-    {
-        if (newMaterial == _materialList[i])
-            return i;
-    }*/
-
-    _materialList.push_back(newMaterial);
-
-    return _materialList.size() - 1;
 }
 
 void Model::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &vertices,
                                          unsigned int meshId,
                                          const void *loadedScene)
 {
+
+    //std::cout << 035746 << std::endl;
+
     const aiScene* scene = (aiScene*)loadedScene;
     aiMesh* mesh = scene->mMeshes[meshId];
 
     int boneCounter = 0;
+
+    //std::cout << mesh->mBones[0]->mNumWeights << std::endl;
 
     for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
     {
@@ -333,7 +314,9 @@ void Model::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &
         auto weights = mesh->mBones[boneIndex]->mWeights;
         int numWeights = mesh->mBones[boneIndex]->mNumWeights;
 
-        for (unsigned int weightIndex = 0; weightIndex < numWeights; ++weightIndex)
+        //std::cout << "Num Weight = " << numWeights << std::endl;
+
+        for (unsigned int weightIndex = 0; weightIndex < numWeights; weightIndex++)
         {
             unsigned int vertexId = weights[weightIndex].mVertexId;
             float weight = weights[weightIndex].mWeight;
@@ -341,8 +324,22 @@ void Model::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &
             SetVertexBoneData(vertices[vertexId], boneID, weight);
         }
     }
-
 }
+
+unsigned int Model::AddMaterial(const MaterialInterface& newMaterial)
+{
+    // todo put back when the PropertiesWidget allow material selection for the "Add Material" button
+    /*for (unsigned int i = 0; i < _materialList.size(); i++)
+    {
+        if (newMaterial == _materialList[i])
+            return i;
+    }*/
+
+    _materialList.push_back(newMaterial);
+
+    return _materialList.size() - 1;
+}
+
 void Model::RemoveMaterial(unsigned int index)
 {
     _materialList.erase(_materialList.cbegin() + index);

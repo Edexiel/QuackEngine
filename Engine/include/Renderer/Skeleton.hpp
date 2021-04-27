@@ -12,10 +12,8 @@ namespace Renderer
         Maths::Matrix4 offset;
     };
 
-    class SkeletalMesh : Mesh
-    {
-        SkeletalMesh() = default;
-    };
+    struct Skeleton
+    {};
 }
 
 #endif //_SKELETALMESH_HPP

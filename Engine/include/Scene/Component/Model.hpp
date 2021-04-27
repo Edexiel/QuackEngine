@@ -7,7 +7,7 @@
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Material.hpp"
 
-#include "Renderer/SkeletalMesh.hpp"
+#include "Renderer/Skeleton.hpp"
 
 #include "Scene/Core/Types.hpp"
 
@@ -24,6 +24,8 @@ namespace Component
         Renderer::VertexType _vertexType {Renderer::VertexType::V_CLASSIC};
 
         std::unordered_map<std::string, Renderer::Bone> _skeleton;
+
+        static std::vector<unsigned int> LoadIndices(const void* loadedScene, unsigned int meshId);
 
         static Model LoadClassicModel(const void *loadedScene);
         static Model LoadNormalMapModel(const void *loadedScene);
@@ -44,8 +46,6 @@ namespace Component
 
         void Destroy();
 
-        //Entity entity;
-
         static Model LoadModel(const char *path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
         static void ReLoadModel(Model& model, const char *path, Renderer::VertexType vertexType);
         static void ReLoadModel(Model& oldModel, Model newModel);
@@ -53,8 +53,6 @@ namespace Component
         unsigned int AddMaterial(const Renderer::MaterialInterface& newMaterial);
         unsigned int ChangeMaterial(const Renderer::MaterialInterface& newMaterial, unsigned int index);
         void RemoveMaterial(unsigned int index);
-
-        //void SetMaterial(const Renderer::MaterialInterface & newMaterial, unsigned int index);
 
         void SetMeshMaterial(unsigned int meshIndex, unsigned int materialIndex);
 

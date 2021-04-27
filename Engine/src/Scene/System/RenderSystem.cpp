@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shape.hpp"
+#include "Scene/Component/Animator.hpp"
 
 #include "Debug/Log.hpp"
 
@@ -85,17 +86,25 @@ void RenderSystem::DrawMaterials(Component::Camera& camera)
 
     Engine & engine= Engine::Instance();
 
-    for (auto material : _mapMaterial)
+    for (auto it : _mapMaterial)
     {
-        material.first->Apply();
-        material.first->shader.SetMatrix4("projection", camera.GetProjection());
-        material.first->shader.SetMatrix4("view", camera.GetView());
+        it.first->Apply();
+        it.first->shader.SetMatrix4("projection", camera.GetProjection());
+        it.first->shader.SetMatrix4("view", camera.GetView());
 
-        for (unsigned int i = 0; i < material.second.size(); i++)
+        for (unsigned int i = 0; i < it.second.size(); i++)
         {
-            material.first->shader.SetMatrix4("model", engine.GetCurrentWorld().GetComponent<Transform>(material.second[i].second).GetMatrix());
-            material.second[i].first.Draw();
+            it.first->shader.SetMatrix4("model", engine.GetCurrentWorld().GetComponent<Transform>(it.second[i].second).GetMatrix());
 
+            if (it.second[i].first.GetType() == Renderer::VertexType::V_SKELETAL)
+            {
+                if (it.first->hasSkeleton &&
+                        engine.GetCurrentWorld().HasComponent<Animator>(it.second[i].second))
+                {
+                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).SetShader(it.first->shader);
+                }
+            }
+            it.second[i].first.Draw();
         }
     }
 }

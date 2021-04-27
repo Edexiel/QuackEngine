@@ -35,7 +35,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Scene/System/RenderSystem.cpp
         src/Scene/System/CameraSystem.cpp
         src/Scene/System/LightSystem.cpp
-        src/Renderer/SkeletalMesh.cpp)
+        src/Renderer/Skeleton.cpp src/Renderer/Animation.cpp src/Scene/Component/Animator.cpp)
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

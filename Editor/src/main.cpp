@@ -13,6 +13,8 @@
 #include "Scene/System/CameraSystem.hpp"
 #include "Resources/ResourcesManager.hpp"
 
+#include "Scene/Component/Animator.hpp"
+
 #include "Tools/Random.hpp"
 #include "CameraEditor.hpp"
 
@@ -34,6 +36,7 @@ void loadScene()
         world.RegisterComponent<Camera>();
         world.RegisterComponent<Light>();
         world.RegisterComponent<RigidBody>();
+        world.RegisterComponent<Animator>();
     }
 
     auto renderSystem = world.RegisterSystem<RenderSystem>();
@@ -100,7 +103,8 @@ void loadScene()
     ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
 
     Transform t = {Maths::Vector3f{0, -1, 5}, Maths::Vector3f::One() * 0.01f, Maths::Quaternion{}};
-    Component::Model md = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\BartenderMesh.fbx)", Renderer::VertexType::V_NORMALMAP);
+    engine.GetResourcesManager().ReLoadModel(R"(..\..\Game\Asset\Model\BartenderSkeletonToApply.fbx)", Renderer::VertexType::V_SKELETAL);
+    Component::Model md = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\BartenderSkeletonToApply.fbx)", Renderer::VertexType::V_SKELETAL);
 
     Material material;
 
@@ -126,7 +130,7 @@ void loadScene()
             {
                 t.position.x = 0;
                 t.position.y = -2 + (float)y * 2;
-                t.position.z = 20.f + (float)z * 2;
+                t.position.z = 2.f + (float)z * 2;
 
                 t.rotation = Maths::Quaternion({0,1,0}, 3.1415f);
 
@@ -137,6 +141,7 @@ void loadScene()
                 world.AddComponent(id, t);
                 world.AddComponent(id, md);
                 world.AddComponent(id, rb);
+                world.AddComponent(id, Component::Animator());
 
                 physicsSystem->SetRigidBody(id);
                 physicsSystem->SetType(id, BodyType::DYNAMIC);
@@ -155,6 +160,7 @@ void loadScene()
     Component::RigidBody rbFloor;
     Component::Model mdFloor = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
 
+    material.hasSkeleton = false;
     material.colorTexture = engine.GetResourcesManager().LoadTexture(R"(..\..\Game\Asset\Texture\Floor_C.jpg)");
 
     MaterialInterface materialInterface2 = resourcesManager.GenerateMaterial("mat2", material);

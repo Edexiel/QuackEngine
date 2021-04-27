@@ -32,27 +32,7 @@ void Mesh::Draw() const
     }
 }
 
-unsigned int Mesh::GetVAO() const
+VertexType Mesh::GetType() const
 {
-    return _vao;
-}
-
-unsigned int Mesh::GetVBO() const
-{
-    return _vbo;
-}
-
-unsigned int Mesh::GetEBO() const
-{
-    return _ebo;
-}
-
-unsigned int Mesh::GetNBVertices() const
-{
-    return _nbVertices;
-}
-
-unsigned int Mesh::GetNBindices() const
-{
-    return _nbIndices;
+    return _vertexType;
 }
