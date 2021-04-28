@@ -75,6 +75,7 @@ int main()
 
         /** UPDATE **/
         engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
+        engine.GetCurrentWorld().GetSystemManager()->GetSystem<CameraSystem>()->Update();
 
         engine.SwapBuffers();
     }

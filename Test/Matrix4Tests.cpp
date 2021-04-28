@@ -95,7 +95,41 @@ TEST(Matrix4, Transpose)
   {
     EXPECT_EQ(res.e[i], goodRes.e[i]);
   }
-
 }
 
+TEST(Matrix4, Determinant)
+{
+    Matrix4 mat
+    {
+        1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        10,2,3,1
+    };
+    float res = mat.GetDeterminant();
+    EXPECT_EQ(res, 1);
+}
 
+TEST(Matrix4, Invert)
+{
+    Matrix4 mat
+    {
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            10, 2, 3, 1
+    };
+
+    Matrix4 goodRes
+    {
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        -10, -2, -3, 1
+    };
+    Matrix4 res = mat.GetInvert();
+    for (int i = 0; i < 16; i++)
+    {
+        EXPECT_EQ(res.e[i], goodRes.e[i]);
+    }
+}
