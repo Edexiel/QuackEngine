@@ -10,6 +10,8 @@
 
 class ViewportWidget : public Widget
 {
+private:
+    bool _isInGame {false};
 public:
     ViewportWidget();
 
