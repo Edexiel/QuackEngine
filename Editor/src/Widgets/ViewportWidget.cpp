@@ -20,6 +20,15 @@ ViewportWidget::ViewportWidget()
 
 void ViewportWidget::UpdateVisible()
 {
+//    ImGuiIO& io = ImGui::GetIO();
+
+//    if(ImGui::IsMouseReleased(0) && ImGui::IsItemHovered())
+//    {
+//        io.ConfigFlags |= ImGuiConfigFlags_NoMouse;
+//        ImGui::SetMouseCursor(ImGuiMouseCursor_None);
+//        std::cout << "Click!\n";
+//    }
+
     ImGui::BeginChild("ViewportRender");
     // Get the size of the child (i.e. the whole draw size of the windows).
     const ImVec2 wsize = ImGui::GetWindowSize();

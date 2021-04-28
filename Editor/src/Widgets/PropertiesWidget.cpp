@@ -44,6 +44,7 @@ void PropertiesWidget::NameReader()
 }
 void PropertiesWidget::TransformReader()
 {
+    ImGuiIO& io = ImGui::GetIO();
     auto &transform = Engine::Instance().GetCurrentWorld().GetComponent<Transform>(_entity);
 
     if (ImGui::CollapsingHeader("Transform"))
