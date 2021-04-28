@@ -90,7 +90,7 @@ void Game::Init()
 
         Component::Camera camera(1280,
                                  720,
-                                 1000, -1.f, 20.f * 3.1415f / 180.f);
+                                 1000, 0.01f, 45.f * 3.1415f / 180.f);
 
         Transform cameraTrs;
         cameraTrs.position = {0, 0, -5};
@@ -124,8 +124,8 @@ void Game::Init()
             for (int z = 0; z < 1; z++)
             {
                 t.position.x = 0;
-                t.position.y = 5.f - (float) y * 2;
-                t.position.z = 20.f + (float) z * 2;
+                t.position.y = 50.f /*- (float)y * 2*/;
+                t.position.z = 20.f /*+ (float)z * 2*/;
 
                 Entity id = world.CreateEntity("Sphere");
 
@@ -142,6 +142,34 @@ void Game::Init()
             }
         }
     }
+//Test triggerCollision
+    Component::RigidBody rbTrigger;
+    Component::Model mdTrigger = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
+    Transform tTrigger = {Maths::Vector3f{0, -2.5f, 20}, {1,1,1}, Maths::Quaternion{}};
+    Entity idTrigger = world.CreateEntity("TriggerBox");
+
+    world.AddComponent(idTrigger, tTrigger);
+    world.AddComponent(idTrigger, mdTrigger);
+    world.AddComponent(idTrigger, rbTrigger);
+
+    physicsSystem->SetRigidBody(idTrigger);
+    physicsSystem->SetType(idTrigger, BodyType::STATIC);
+    physicsSystem->AddBoxCollider(idTrigger,{1,1,1});
+    physicsSystem->SetIsTrigger(idTrigger, true);
+
+//Test contactCollision
+    Component::RigidBody rbContact;
+    Component::Model mdContact = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
+    Transform tContact = {Maths::Vector3f{0, -5.f, 20}, {1,1,1}, Maths::Quaternion{}};
+    Entity idContact = world.CreateEntity("ContactBox");
+
+    world.AddComponent(idContact, tContact);
+    world.AddComponent(idContact, mdContact);
+    world.AddComponent(idContact, rbContact);
+
+    physicsSystem->SetRigidBody(idContact);
+    physicsSystem->SetType(idContact, BodyType::STATIC);
+    physicsSystem->AddBoxCollider(idContact,{1,1,1});
 
     Entity idFloor = world.CreateEntity("Floor");
 

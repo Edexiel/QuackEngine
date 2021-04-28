@@ -33,8 +33,8 @@ namespace Component
         float _yaw = 0;
         float _pitch = 0;
 
-        float _speedTranslation = 0.01f;
-        float _speedRotation = 0.01f;
+        float _speedTranslation = 0.1f;
+        float _speedRotation = 0.1f;
 
         Renderer::Framebuffer _framebuffer;
 

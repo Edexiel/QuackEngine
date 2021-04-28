@@ -8,6 +8,9 @@
 #include "Scene/System/PhysicsSystem.hpp"
 #include "game.hpp"
 
+#include "Scene/Component/RigidBody.hpp"
+//#include "reactphysics3d/reactphysics3d.h"
+
 using namespace Renderer;
 using namespace Component;
 using namespace Resources;
@@ -71,7 +74,8 @@ int main()
         editor.Draw();
 
         /** UPDATE **/
-        physicsSystem->FixedUpdate(deltaTime);
+        engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
+        engine.GetCurrentWorld().GetSystemManager()->GetSystem<CameraSystem>()->Update();
 
         engine.SwapBuffers();
     }

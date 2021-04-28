@@ -44,6 +44,8 @@ void PropertiesWidget::NameReader()
 }
 void PropertiesWidget::TransformReader()
 {
+
+    ImGuiIO& io = ImGui::GetIO();
     auto &transform = Engine::Instance().GetCurrentWorld().GetComponent<Transform>(_entity);
 
     if (ImGui::CollapsingHeader("Transform"))
@@ -51,13 +53,12 @@ void PropertiesWidget::TransformReader()
 
     ImGui::DragFloat3("Position", transform.position.e);
     ImGui::DragFloat3("Scale", transform.scale.e);
+    ImGui::DragFloat3("Rotation", _eulerRot.e);
 
+    if(!ImGui::IsMouseDragging(0))
+        _eulerRot = transform.rotation.ToEuler() * (180.f / (float) M_PI);
 
-    Maths::Vector3f v = transform.rotation.ToEuler() * (180.f / (float)M_PI);
-    ImGui::DragFloat3("Rotation", v.e);
-    v = v * (M_PI / 180.f);
-    transform.rotation = Maths::Quaternion::EulerToQuaternion(v);
-
+    transform.rotation = Maths::Quaternion::EulerToQuaternion(_eulerRot * (M_PI / 180.f));
 }
 
 void PropertiesWidget::LightReader()
@@ -198,7 +199,8 @@ void PropertiesWidget::CameraReader()
 
     ImGui::Checkbox("Is perspective", &camera._isPerspective);
     float fov = (camera._fov * 180.f) / (float)M_PI;
-    ImGui::DragFloat("FOV", &fov);
+    ImGui::DragFloat("FOV", &fov, 1.f, 0.f, 180.f);
+
     camera._fov = (fov * (float)M_PI) / 180.f;
 
 }

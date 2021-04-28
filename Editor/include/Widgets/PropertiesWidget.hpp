@@ -2,6 +2,7 @@
 #define QUACKENGINE_PROPERTIESWIDGET_HPP
 
 #include "Widgets/Widget.hpp"
+#include "Maths/Vector3.hpp"
 
 class PropertiesWidget : public Widget
 {
@@ -11,7 +12,7 @@ public:
 
 private:
     static void NameReader();
-    static void TransformReader();
+    void TransformReader();
     static void LightReader();
     static void ModelReader();
     static void CameraReader();
@@ -21,7 +22,7 @@ private:
 
     static void AddLight();
 
-
+    Maths::Vector3f _eulerRot{0,0,0};
 };
 
 
