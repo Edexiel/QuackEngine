@@ -16,6 +16,7 @@ public:
 //    void UpdateAlways() override;
 
     void UpdateVisible() override;
+    void LockCursor();
 
 //    void OnShow() override;
 
