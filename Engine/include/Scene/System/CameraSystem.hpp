@@ -9,6 +9,7 @@ namespace Renderer
 {
     class Shader;
 }
+class Engine;
 
 class CameraSystem : public System
 {
@@ -18,16 +19,19 @@ private:
     void SetScaleAxisZ(float scale) const;
 
     Entity _activeCamera = -1;
-    void FreeFly();
-    void MouseMovement();
+    Engine &_engine;
+    void FreeFly() const;
+    void MouseMovement() const;
+    void UpdateCameraAngle() const;
 public:
     CameraSystem();
 
     void InitInput();
     void Update();
-
     Component::Camera& GetActiveCamera();
     void Clear();
+
+    bool _isFreeFlyCam{false};
 };
 
 

@@ -22,11 +22,7 @@ private:
 
     static void AddLight();
 
-    Entity _previousEntity{0};
-    Maths::Vector3f _previousEulerRot{0,0,0};
     Maths::Vector3f _eulerRot{0,0,0};
-
-
 };
 
 

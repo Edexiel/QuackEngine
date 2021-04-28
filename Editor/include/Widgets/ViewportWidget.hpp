@@ -10,12 +10,15 @@
 
 class ViewportWidget : public Widget
 {
+private:
+    bool _isInGame {false};
 public:
     ViewportWidget();
 
 //    void UpdateAlways() override;
 
     void UpdateVisible() override;
+    void LockCursor();
 
 //    void OnShow() override;
 
