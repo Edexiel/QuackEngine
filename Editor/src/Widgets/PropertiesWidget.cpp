@@ -44,6 +44,7 @@ void PropertiesWidget::NameReader()
 }
 void PropertiesWidget::TransformReader()
 {
+
     ImGuiIO& io = ImGui::GetIO();
     auto &transform = Engine::Instance().GetCurrentWorld().GetComponent<Transform>(_entity);
 
@@ -52,18 +53,12 @@ void PropertiesWidget::TransformReader()
 
     ImGui::DragFloat3("Position", transform.position.e);
     ImGui::DragFloat3("Scale", transform.scale.e);
-
-
-    if(_previousEntity != _entity || ImGui::IsMouseReleased(0) && _eulerRot != _previousEulerRot)
-    {
-        _eulerRot = transform.rotation.ToEuler() * (180.f / (float) M_PI);
-        _previousEulerRot = _eulerRot;
-        _previousEntity = _entity;
-    }
     ImGui::DragFloat3("Rotation", _eulerRot.e);
 
-    transform.rotation = Maths::Quaternion::EulerToQuaternion(_eulerRot * (M_PI / 180.f));
+    if(!ImGui::IsMouseDragging(0))
+        _eulerRot = transform.rotation.ToEuler() * (180.f / (float) M_PI);
 
+    transform.rotation = Maths::Quaternion::EulerToQuaternion(_eulerRot * (M_PI / 180.f));
 }
 
 void PropertiesWidget::LightReader()
