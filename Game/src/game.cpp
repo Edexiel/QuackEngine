@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <typeinfo>
 #include "Engine.hpp"
 
 #include "Scene/Core/World.hpp"
@@ -18,6 +19,27 @@
 using namespace Component;
 using namespace Resources;
 using namespace Renderer;
+
+class EventLisenerTemp : public rp3d::EventListener
+{
+    virtual void onTrigger(const rp3d::OverlapCallback::CallbackData& callbackData)
+    {
+//        std::cout << "OnTrigger\n";
+    }
+    virtual void onContact(const rp3d::CollisionCallback::CallbackData& callbackData)
+    {
+//        std::cout << "OnContact\n";
+        for (unsigned int p = 0; p < callbackData.getNbContactPairs(); p++)
+        {
+            // Get the contact pair
+            CollisionCallback::ContactPair contactPair = callbackData.getContactPair(p);
+            std::cout << typeid(contactPair).name() << std::endl;
+
+        }
+    }
+};
+
+EventLisenerTemp eventLisener;
 
 void Game::Init()
 {
@@ -82,6 +104,7 @@ void Game::Init()
     }
 
     physicsSystem->Init();
+    world.GetPhysicsWorld()->setEventListener(&eventLisener);
 //    CameraEditor cam;
 //    cam.SetInput(engine.GetInputManager());
 
