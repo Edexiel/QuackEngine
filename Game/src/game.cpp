@@ -20,6 +20,7 @@ using namespace Component;
 using namespace Resources;
 using namespace Renderer;
 
+rp3d::RigidBody *_rigidBody = nullptr;
 class EventLisenerTemp : public rp3d::EventListener
 {
     virtual void onTrigger(const rp3d::OverlapCallback::CallbackData& callbackData)
@@ -33,7 +34,20 @@ class EventLisenerTemp : public rp3d::EventListener
         {
             // Get the contact pair
             CollisionCallback::ContactPair contactPair = callbackData.getContactPair(p);
-            std::cout << typeid(contactPair).name() << std::endl;
+            rp3d::CollisionBody* body1 = contactPair.getBody1();
+            rp3d::CollisionBody* body2 = contactPair.getBody2();
+
+            if(body1 == _rigidBody || body2 == _rigidBody)
+            {
+                std::cout<< "Hey!! It's working!!!\n";
+            }
+            else
+            {
+                std::cout<< "My disappointment is unmeasurable and my day is ruined. ;-;\n";
+            }
+
+//            Quack::RigidComp* comp1 = static_cast<Quack::RigidComp*>(body1->getUserData());
+//            Quack::RigidComp* comp2 = static_cast<Quack::RigidComp*>(body2->getUserData());
 
         }
     }
@@ -154,6 +168,7 @@ void Game::Init()
 
                 Component::RigidBody rb;
 
+
                 world.AddComponent(id, t);
                 world.AddComponent(id, md);
                 world.AddComponent(id, rb);
@@ -162,6 +177,7 @@ void Game::Init()
                 physicsSystem->SetType(id, BodyType::DYNAMIC);
 
                 physicsSystem->AddSphereCollider(id, 1.5f);
+                _rigidBody = world.GetComponent<RigidBody>(id).rb;
             }
         }
     }
