@@ -24,7 +24,7 @@ namespace Component
         template<class Archive>
         void serialize(Archive & archive)
         {
-            archive( position, scale, rotation,forward,right );
+            archive( position, scale, rotation);
         }
     };
 }
