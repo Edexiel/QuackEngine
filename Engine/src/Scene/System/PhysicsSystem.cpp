@@ -2,10 +2,6 @@
 
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/Component/RigidBody.hpp"
-#include "Scene/Component/Transform.hpp"
-#include "Scene/Core/World.hpp"
-
-#include "reactphysics3d/reactphysics3d.h"
 
 using namespace Component;
 
@@ -20,8 +16,10 @@ void PhysicsSystem::Init()
         auto &r = _world->GetComponent<Component::RigidBody>(entity);
 
         if (!r.rb)
+        {
             r.rb = _world->GetPhysicsWorld()->createRigidBody({{t.position.x, t.position.y, t.position.z},
                                                                {t.rotation.x, t.rotation.y, t.rotation.z, t.rotation.w}});
+        }
     }
 }
 
@@ -95,6 +93,7 @@ void PhysicsSystem::SetIsTrigger(Entity id, bool isTrigger)
 void PhysicsSystem::SetRigidBody(Entity id)
 {
     auto &r = _world->GetComponent<Component::RigidBody>(id);
+    auto & name = _world->GetComponent<Component::Name>(id);
 
     if (r.rb)
         return;
@@ -102,4 +101,7 @@ void PhysicsSystem::SetRigidBody(Entity id)
     auto &t = _world->GetComponent<Transform>(id);
     r.rb = _world->GetPhysicsWorld()->createRigidBody({{t.position.x, t.position.y, t.position.z},
                                                        {t.rotation.x, t.rotation.y, t.rotation.z, t.rotation.w}});
+
+    std::cout << name.name << " address in SetRigidBody: " << &r << std::endl;
+    r.rb->setUserData(reinterpret_cast<void*>(static_cast<size_t>(id)));
 }

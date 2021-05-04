@@ -76,8 +76,8 @@ void ComponentArray<T>::DeleteData(Entity id)
 template<typename T>
 T &ComponentArray<T>::GetData(Entity id)
 {
-//    if (_entityToIndex.find(id) == _entityToIndex.end())
-//    Assert_Fatal_Error(_entityToIndex.find(id) == _entityToIndex.end(), "Retrieving non-existent component.");
+    if (_entityToIndex.find(id) == _entityToIndex.end())
+    Assert_Fatal_Error(_entityToIndex.find(id) == _entityToIndex.end(), "Retrieving non-existent component.");
 
     return _components[_entityToIndex[id]];
 }

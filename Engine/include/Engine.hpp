@@ -53,6 +53,7 @@ private:
     Resources::ResourcesManager _resourcesManager;
     Audio::SoundManager _soundManager;
     rp3d::PhysicsCommon _physicsManager;
+    PhysicsEventManager _physicsEventManager;
     Input::InputManager _inputManager;
 
     uint_fast16_t _currentWorld = 0;
@@ -83,6 +84,7 @@ public:
     Resources::ResourcesManager &GetResourcesManager();
     Audio::SoundManager &GetSoundManager();
     rp3d::PhysicsCommon &GetPhysicsManager();
+    PhysicsEventManager &GetPhysicsEventManager();
 };
 
 inline Engine Engine::_instance = Engine();
