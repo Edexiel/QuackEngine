@@ -101,6 +101,7 @@ void RenderSystem::DrawMaterials(Component::Camera& camera)
                 if (it.first->hasSkeleton &&
                         engine.GetCurrentWorld().HasComponent<Animator>(it.second[i].second))
                 {
+                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).Update(0.01f);
                     engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).SetShader(it.first->shader);
                 }
             }

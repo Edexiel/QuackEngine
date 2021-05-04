@@ -39,35 +39,25 @@ namespace Maths
         T SqrLength() const;
 
         Vector3<T> &Normalize();
-
         Vector3<T> GetNormalized() const;
-
         static void Normalize(Vector3<T> &v);
 
         static T DotProduct(const Vector3<T> &v1, const Vector3<T> &v2);
-
         static Vector3<T> CrossProduct(const Vector3<T> &v1, const Vector3<T> &v2);
+        static Vector3<T> Lerp(const Vector3<T> &v1, const Vector3<T> &v2, float t);
+
 
         static Vector3<T> Up();
-
         static Vector3<T> Down();
-
         static Vector3<T> Right();
-
         static Vector3<T> Left();
-
         static Vector3<T> Forward();
-
         static Vector3<T> Backward();
-
         static Vector3<T> Zero();
-
         static Vector3<T> One();
 
         Vector3<T> operator+(const Vector3<T> &v2) const;
-
         Vector3<T> operator-(const Vector3<T> &v2) const;
-
         Vector3<T> operator*(const T &f) const;
     };
 
@@ -202,6 +192,12 @@ namespace Maths
     inline Vector3<T> Vector3<T>::operator*(const T &f) const
     {
         return {this->x * f, this->y * f, this->z * f};
+    }
+
+    template<typename T>
+    Vector3<T> Vector3<T>::Lerp(const Vector3<T> &v1, const Vector3<T> &v2, float t)
+    {
+        return v1 * (1 - t) + v2 * t;
     }
 
 

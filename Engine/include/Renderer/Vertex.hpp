@@ -31,7 +31,7 @@ namespace Renderer
       Maths::Vector3f normal    {0.f,0.f,0.f};
       Maths::Vector2f uv        {0.f,0.f};
 
-      Maths::Vector4f boneId    {-1.0f,-1.0f,-1.0f,-1.0f};
+      Maths::Vector4<int> boneId    {-1,-1,-1,-1};
       Maths::Vector4f weights   {0.f,0.f,0.f,0.f};
   };
 

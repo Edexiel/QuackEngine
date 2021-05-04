@@ -69,7 +69,7 @@ void ResourcesManager::ReLoadModel(const char *path, Renderer::VertexType vertex
     // Check if the Model already exist
 
     auto it = _mapModel.find(path);
-    
+
     if (it != _mapModel.end())
     {
         Model::ReLoadModel(it->second, path, vertexType);
@@ -258,7 +258,7 @@ void ResourcesManager::LoadFolder(const char *path)
     {
         std::cout << i << std::endl;
         type = GetFileType(i);
-        if (type == "fbx")
+        if (type == "fbx" || type == "glb")
             LoadModel(i.c_str(), VertexType::V_NORMALMAP);
         else if (type == "ogg" || type == "mp3" || type == "wav")
             LoadSound(i.c_str(), Audio::SoundType::S_MASTER);

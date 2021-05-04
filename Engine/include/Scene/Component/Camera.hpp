@@ -28,7 +28,6 @@ namespace Component
         unsigned int _width;
         unsigned int _height;
 
-
         float _far;
         float _near;
 

@@ -40,7 +40,7 @@ namespace Maths
 
     Matrix4 GetTranspose() const;
 
-    Matrix4 operator*(const Matrix4& m);
+    Matrix4 operator*(const Matrix4& m) const;
     Matrix4& operator*=(const Matrix4& m);
     Matrix4 operator*(float f);
     Vector4f operator*(const Vector4f& v) const;
@@ -236,7 +236,7 @@ inline Matrix4 Matrix4::GetTranspose() const
   };
 }
 
-inline Matrix4 Matrix4::operator*(const Matrix4& m)
+inline Matrix4 Matrix4::operator*(const Matrix4& m) const
 {
   Matrix4 result;
 

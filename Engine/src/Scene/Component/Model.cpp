@@ -242,13 +242,13 @@ Model Model::LoadSkeletalMeshModel(const void* loadedScene)
 
         //Skeleton skeletalMesh;
 
-        for (unsigned int i = 0 ; i < vertices.size(); i++)
+        /*for (unsigned int i = 0 ; i < vertices.size(); i++)
         {
             std::cout << "X = " << vertices[i].boneId.x <<
             ", Y = " << vertices[i].boneId.y <<
             ", Z = " << vertices[i].boneId.z <<
             ", W = " << vertices[i].boneId.w << std::endl;
-        }
+        }*/
 
         // Put loaded data in buffers
         model._meshList[i] = Renderer::RendererPlatform::CreateMesh((float*)vertices.data(), vertices.size() * 16,
@@ -267,8 +267,7 @@ void Model::SetVertexBoneData(SkeletalVertex &vertex, int boneID, float weight)
         if (vertex.boneId.e[i] == -1.0f)
         {
             vertex.weights.e[i] = weight;
-            vertex.boneId.e[i] = i * 10;
-            std::cout << "BoneID : " << weight << " / " << boneID << std::endl;
+            vertex.boneId.e[i] = boneID;
             break;
         }
     }
@@ -288,13 +287,15 @@ void Model::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &
 
     //std::cout << mesh->mBones[0]->mNumWeights << std::endl;
 
+    std::unordered_map<std::string, int> _skeleton;
+
     for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
     {
         int boneID = -1;
         std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
         if (_skeleton.find(boneName) == _skeleton.end())
         {
-            Bone newBone;
+            /*Bone newBone;
             //newBone.id = m_BoneCounter;
             auto boneMatrix = mesh->mBones[boneIndex]->mOffsetMatrix;
             newBone.offset = {boneMatrix.a1, boneMatrix.a2, boneMatrix.a3, boneMatrix.a4,
@@ -302,19 +303,18 @@ void Model::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &
                               boneMatrix.c1, boneMatrix.c2, boneMatrix.c3, boneMatrix.c4,
                               boneMatrix.d1, boneMatrix.d2, boneMatrix.d3, boneMatrix.d4};
 
-            _skeleton.insert({boneName, newBone});
+            newBone.offset = newBone.offset.GetTranspose();*/
+            _skeleton.insert({boneName, boneCounter});
             boneID = boneCounter;
             boneCounter++;
         }
         else
         {
-            boneID = _skeleton[boneName].id;
+            boneID = _skeleton[boneName];
         }
         assert(boneID != -1);
         auto weights = mesh->mBones[boneIndex]->mWeights;
         int numWeights = mesh->mBones[boneIndex]->mNumWeights;
-
-        //std::cout << "Num Weight = " << numWeights << std::endl;
 
         for (unsigned int weightIndex = 0; weightIndex < numWeights; weightIndex++)
         {
@@ -324,6 +324,10 @@ void Model::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &
             SetVertexBoneData(vertices[vertexId], boneID, weight);
         }
     }
+    /*for (unsigned int i = 0; i < vertices.size(); i++)
+    {
+        std::cout << "X = " << vertices[i].boneId.x << ", Y = " << vertices[i].boneId.y << ", Z = " << vertices[i].boneId.z << ", W = " << vertices[i].boneId.w << std::endl;
+    }*/
 }
 
 unsigned int Model::AddMaterial(const MaterialInterface& newMaterial)

@@ -28,7 +28,7 @@ void AssetWidget::UpdateVisible()
 
     if (type == NO_TYPE_STRING)
         return ImGui::EndChild();
-    else if (type == "fbx")
+    else if (type == "fbx" || type == "glb")
         DisplayModel();
     else if (type == "ogg" || type == "mp3" || type == "wav")
         DisplaySound();

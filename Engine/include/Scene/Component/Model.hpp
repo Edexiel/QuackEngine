@@ -23,8 +23,6 @@ namespace Component
         std::vector<Renderer::MaterialInterface> _materialList;
         Renderer::VertexType _vertexType {Renderer::VertexType::V_CLASSIC};
 
-        std::unordered_map<std::string, Renderer::Bone> _skeleton;
-
         static std::vector<unsigned int> LoadIndices(const void* loadedScene, unsigned int meshId);
 
         static Model LoadClassicModel(const void *loadedScene);
@@ -37,6 +35,8 @@ namespace Component
                                           const void* loadedScene);
 
     public:
+
+        std::unordered_map<std::string, Renderer::Bone> _skeleton;
 
         std::string name;
 
