@@ -8,9 +8,12 @@
 #include "Scene/Core/ComponentManager.hpp"
 
 #include "reactphysics3d/reactphysics3d.h"
+#include "Physics/PhysicsEventManager.hpp"
 
 #include "Scene/Component/Name.hpp"
 #include <string>
+
+
 
 class World
 {
@@ -21,12 +24,8 @@ private:
 public:
     const std::unique_ptr<SystemManager> &GetSystemManager() const;
 private:
-
     rp3d::PhysicsWorld *_physicsWorld = nullptr;
-
     std::string _name;
-
-
 public:
     World() = delete;
     explicit World(std::string &name);
