@@ -186,4 +186,9 @@ void Engine::SwapBuffers()
     glfwSwapBuffers(_window);
 }
 
+PhysicsEventManager &Engine::GetPhysicsEventManager()
+{
+    return _physicsEventManager;
+}
+
 
