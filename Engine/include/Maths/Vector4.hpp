@@ -24,7 +24,7 @@ namespace Maths
             Vector3<T> xyz;
         };
 
-        Vector4();
+        Vector4() = default;
         Vector4(T _x, T _y, T _z, T _w);
         Vector4(Vector3<T> v, T _w);
         Vector4(T n);
@@ -47,5 +47,6 @@ namespace Maths
     };
 
 #include "Maths/Vector4.inl"
+
 }
 #endif // QUACKENGINE_VECTOR4_HPP

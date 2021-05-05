@@ -1,8 +1,9 @@
 #ifndef QUACKENGINE_VECTOR3_HPP
 #define QUACKENGINE_VECTOR3_HPP
 
-#include "Maths/Vector2.hpp"
 #include <cmath>
+
+#include "Maths/Vector2.hpp"
 #include <iostream>
 
 namespace Maths
