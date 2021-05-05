@@ -11,6 +11,7 @@
         <pair source="cpp" header="hpp" fileNamingConvention="PASCAL_CASE" />
         <pair source="c" header="h" fileNamingConvention="NONE" />
         <pair source="cu" header="cuh" fileNamingConvention="NONE" />
+        <pair source="cpp" header="inl" fileNamingConvention="NONE" />
       </extensions>
       <rules>
         <rule entity="NAMESPACE,CLASS,STRUCT,ENUM,ENUMERATOR" visibility="ANY" specifier="ANY" prefix="" style="PASCAL_CASE" suffix="" />
