@@ -1,7 +1,7 @@
 #include "Scene/Core/World.hpp"
 #include "Engine.hpp"
 
-World::World(std::string &name) : _name(name)
+World::World(std::string_view &name) : _name(name)
 {}
 
 void World::Init()

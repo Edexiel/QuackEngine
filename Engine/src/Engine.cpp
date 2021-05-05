@@ -11,16 +11,17 @@
 
 #include "Debug/Assertion.hpp"
 
-inline Engine *_instance = nullptr;
+
+inline Engine *instance = nullptr;
 
 Engine &Engine::Instance()
 {
-    return *_instance;
+    return *instance;
 }
 
 void Engine::SetInstance(Engine &engine)
 {
-    _instance = &engine;
+    instance = &engine;
 }
 
 Engine::~Engine()
@@ -30,7 +31,7 @@ Engine::~Engine()
 
 Engine::Engine(const EngineSettings &settings)
 {
-    Assert_Fatal_Error(_instance != nullptr, "There should be only one Engine");
+    Assert_Fatal_Error(instance != nullptr, "There should be only one Engine");
     Assert_Fatal_Error(!glfwInit(), "GLFW was not correctly initialized, aborting");
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -146,7 +147,7 @@ Audio::SoundManager &Engine::GetSoundManager()
     return _soundManager;
 }
 
-rp3d::PhysicsCommon &Engine::GetPhysicsManager()
+reactphysics3d::PhysicsCommon &Engine::GetPhysicsManager()
 {
     return _physicsManager;
 }
@@ -161,7 +162,7 @@ World &Engine::GetCurrentWorld()
     return _worlds[_currentWorld];
 }
 
-World &Engine::CreateWorld(std::string name)
+World &Engine::CreateWorld(std::string_view name)
 {
     _worldLut.insert({name, (uint_fast16_t) _worlds.size()});
     return _worlds.emplace_back(name);
@@ -180,7 +181,7 @@ void Engine::UnloadWorld(const std::string &name)
 void Engine::RemoveWorld(const std::string &name)
 {
     uint_fast16_t index = _worldLut[name];
-    std::string back_name = _worlds.back().GetName();
+    std::string_view back_name = _worlds.back().GetName();
     std::swap(_worlds[index], _worlds.back());
     _worlds.pop_back();
     _worldLut[back_name] = index;

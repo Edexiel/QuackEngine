@@ -4,18 +4,22 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <string_view>
 
 #include <Scene/Core/World.hpp>
 
 #include "Resources/ResourcesManager.hpp"
 #include "Renderer/RendererInterface.hpp"
 #include "Audio/SoundManager.hpp"
-#include <reactphysics3d/reactphysics3d.h>
+#include <reactphysics3d/engine/PhysicsCommon.h>
+
+
 #include "Input/InputManager.hpp"
 #include "Input/PlatformInput.hpp"
 
 #include "Input/PlatformInput.hpp"
 #include "Input/PlatformInputGLFW.hpp"
+
 
 enum class WINDOW_MODE
 {
@@ -49,18 +53,18 @@ private:
     Renderer::RendererInterface _rendererInterface; //init after world loading
     Resources::ResourcesManager _resourcesManager;
     Audio::SoundManager _soundManager;
-    rp3d::PhysicsCommon _physicsManager;
+    reactphysics3d::PhysicsCommon _physicsManager;
     Input::InputManager _inputManager;
 
     uint_fast16_t _currentWorld = 0;
-    std::map<std::string, uint_fast16_t> _worldLut;
+    std::map<std::string_view , uint_fast16_t> _worldLut;
     std::vector<World> _worlds;
 
 public:
     static Engine &Instance();
     static void SetInstance(Engine &engine);
 
-    Engine(const EngineSettings &settings);
+    explicit Engine(const EngineSettings &settings);
     ~Engine();
 
     GLFWwindow *GetWindow();
@@ -72,7 +76,7 @@ public:
     void SwapBuffers();
 
 
-    World &CreateWorld(std::string name);
+    World &CreateWorld(std::string_view name);
     void LoadWorld(const std::string &name);
     void UnloadWorld(const std::string &name);
     void RemoveWorld(const std::string &name);
@@ -81,7 +85,7 @@ public:
     Renderer::RendererInterface &GetRendererInterface();
     Resources::ResourcesManager &GetResourcesManager();
     Audio::SoundManager &GetSoundManager();
-    rp3d::PhysicsCommon &GetPhysicsManager();
+    reactphysics3d::PhysicsCommon &GetPhysicsManager();
 };
 
 #endif //QUACKENGINE_ENGINE_HPP

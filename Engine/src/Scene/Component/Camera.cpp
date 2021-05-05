@@ -1,14 +1,5 @@
 #include "Scene/Component/Camera.hpp"
 
-#define _USE_MATH_DEFINES
-
-#include <math.h>
-#include <algorithm>
-
-#include "Input/InputManager.hpp"
-
-#include "Scene/Core/World.hpp"
-
 using namespace Component;
 using namespace Maths;
 
