@@ -11,14 +11,26 @@
 
 #include "Debug/Assertion.hpp"
 
+inline Engine *_instance = nullptr;
+
+Engine &Engine::Instance()
+{
+    return *_instance;
+}
+
+void Engine::SetInstance(Engine &engine)
+{
+    _instance = &engine;
+}
+
 Engine::~Engine()
 {
     glfwTerminate();
 }
 
-void Engine::InitWindow(const EngineSettings &settings)
+Engine::Engine(const EngineSettings &settings)
 {
-
+    Assert_Fatal_Error(_instance != nullptr, "There should be only one Engine");
     Assert_Fatal_Error(!glfwInit(), "GLFW was not correctly initialized, aborting");
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -138,6 +150,7 @@ rp3d::PhysicsCommon &Engine::GetPhysicsManager()
 {
     return _physicsManager;
 }
+
 Input::InputManager &Engine::GetInputManager()
 {
     return _inputManager;
@@ -148,7 +161,7 @@ World &Engine::GetCurrentWorld()
     return _worlds[_currentWorld];
 }
 
-World& Engine::CreateWorld(std::string name)
+World &Engine::CreateWorld(std::string name)
 {
     _worldLut.insert({name, (uint_fast16_t) _worlds.size()});
     return _worlds.emplace_back(name);

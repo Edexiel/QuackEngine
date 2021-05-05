@@ -1,14 +1,15 @@
-typedef Vector2<double> Vector2d;
-typedef Vector2<float> Vector2f;
-typedef Vector2<int> Vector2i;
+using Vector2f = Vector2<float>;
+using Vector2d = Vector2<double>;
+using Vector2i = Vector2<int>;
 
 template<typename T>
-Vector2<T>::Vector2(T _x, T _y): x{_x},y{_y}{}
+Vector2<T>::Vector2(T _x, T _y): x{_x}, y{_y}
+{}
 
 template<typename T>
 T Vector2<T>::Length() const
 {
-    return sqrtf(x*x + y*y);
+    return sqrtf(x * x + y * y);
 }
 
 template<typename T>
@@ -18,7 +19,7 @@ T Vector2<T>::SqrLength() const
 }
 
 template<typename T>
-Vector2<T>& Vector2<T>::Normalize()
+Vector2 <T> &Vector2<T>::Normalize()
 {
     T length = Length();
     if (length > 0)
@@ -31,17 +32,17 @@ Vector2<T>& Vector2<T>::Normalize()
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::GetNormalized() const
+Vector2 <T> Vector2<T>::GetNormalized() const
 {
     T length = Length();
     if (length > 0)
-        return { x / length, y / length };
+        return {x / length, y / length};
     else
         return *this;
 }
 
 template<typename T>
-void Vector2<T>::Normalize(Vector2<T>& v)
+void Vector2<T>::Normalize(Vector2 <T> &v)
 {
     T length = v.Length();
 
@@ -50,56 +51,56 @@ void Vector2<T>::Normalize(Vector2<T>& v)
 }
 
 template<typename T>
-T Vector2<T>::DotProduct(const Vector2<T>& v1, const Vector2<T>& v2)
+T Vector2<T>::DotProduct(const Vector2 <T> &v1, const Vector2 <T> &v2)
 {
     return v1.x * v2.x + v1.y * v2.y;
 }
 
 
 template<typename T>
-Vector2<T> Vector2<T>::Up()
+Vector2 <T> Vector2<T>::Up()
 {
-    return{0,1};
+    return {0, 1};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Down()
+Vector2 <T> Vector2<T>::Down()
 {
-    return{0,-1};
+    return {0, -1};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Right()
+Vector2 <T> Vector2<T>::Right()
 {
-    return{1,0};
+    return {1, 0};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Left()
+Vector2 <T> Vector2<T>::Left()
 {
-    return{-1, 0};
+    return {-1, 0};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::Zero()
+Vector2 <T> Vector2<T>::Zero()
 {
-    return{0, 0};
+    return {0, 0};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::operator+(const Vector2<T>& v2) const
+Vector2 <T> Vector2<T>::operator+(const Vector2 <T> &v2) const
 {
-    return { this->x + v2.x, this->y + v2.y };
+    return {this->x + v2.x, this->y + v2.y};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::operator-(const Vector2<T>& v2) const
+Vector2 <T> Vector2<T>::operator-(const Vector2 <T> &v2) const
 {
-    return { this->x - v2.x, this->y - v2.y };
+    return {this->x - v2.x, this->y - v2.y};
 }
 
 template<typename T>
-Vector2<T> Vector2<T>::operator*(const T& f) const
+Vector2 <T> Vector2<T>::operator*(const T &f) const
 {
-    return { this->x * f, this->y * f };
+    return {this->x * f, this->y * f};
 }

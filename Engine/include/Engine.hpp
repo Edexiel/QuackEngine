@@ -42,9 +42,6 @@ struct EngineSettings
 class Engine
 {
 private:
-    Engine() = default;
-    static Engine _instance;
-
     class GLFWwindow *_window = nullptr;
 
     std::unique_ptr<Input::PlatformInput> _platformInput;
@@ -61,9 +58,11 @@ private:
 
 public:
     static Engine &Instance();
+    static void SetInstance(Engine &engine);
+
+    Engine(const EngineSettings &settings);
     ~Engine();
 
-    void InitWindow(const EngineSettings &settings);
     GLFWwindow *GetWindow();
     void SetWindowTitle(const std::string &title);
     void SetWindowSize(int width, int height);
@@ -73,10 +72,10 @@ public:
     void SwapBuffers();
 
 
-    World& CreateWorld(std::string name);
-    void LoadWorld(const std::string& name);
-    void UnloadWorld(const std::string& name);
-    void RemoveWorld(const std::string& name);
+    World &CreateWorld(std::string name);
+    void LoadWorld(const std::string &name);
+    void UnloadWorld(const std::string &name);
+    void RemoveWorld(const std::string &name);
 
     Input::InputManager &GetInputManager();
     Renderer::RendererInterface &GetRendererInterface();
@@ -84,13 +83,5 @@ public:
     Audio::SoundManager &GetSoundManager();
     rp3d::PhysicsCommon &GetPhysicsManager();
 };
-
-inline Engine Engine::_instance = Engine();
-
-inline Engine &Engine::Instance()
-{
-    return _instance;
-}
-
 
 #endif //QUACKENGINE_ENGINE_HPP

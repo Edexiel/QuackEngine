@@ -1,4 +1,3 @@
-#include <Renderer/RendererPlatform.hpp>
 #include "GLFW/glfw3.h"
 
 #include "Editor.hpp"
@@ -8,10 +7,6 @@
 #include "Scene/System/PhysicsSystem.hpp"
 #include "game.hpp"
 
-#include "Scene/Component/RigidBody.hpp"
-//#include "reactphysics3d/reactphysics3d.h"
-
-using namespace Renderer;
 using namespace Component;
 using namespace Resources;
 
@@ -26,8 +21,8 @@ int main()
             INPUT_MODE::GLFW
     };
 
-    Engine &engine = Engine::Instance();
-    engine.InitWindow(settings);
+    Engine engine(settings);
+    Engine::SetInstance(engine);
 
     Editor editor{engine.GetWindow()};
 

@@ -1,6 +1,6 @@
-typedef Vector4<float> Vector4f;
-typedef Vector4<float> Color4f;
-typedef Vector4<double> Vector4d;
+using Vector4f = Vector4<float>;
+using Color4f = Vector4<float>;
+using Vector4d = Vector4<double>;
 
 template<typename T>
 Vector4<T>::Vector4(T _x, T _y, T _z, T _w):x{_x}, y{_y}, z{_z}, w{_w}

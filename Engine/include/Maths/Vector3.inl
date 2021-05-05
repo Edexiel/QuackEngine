@@ -1,9 +1,9 @@
 
-typedef Vector3<float> Vector3f;
-typedef Vector3<double> Vector3d;
-typedef Vector3<int> Vector3i;
-typedef Vector3<unsigned char> Color3;
-typedef Vector3<float> Color3f;
+using Vector3f = Vector3<float>;
+using Vector3d = Vector3<double>;
+using Vector3i = Vector3<int>;
+using Color3 = Vector3<unsigned char>;
+using Color3f = Vector3<float>;
 
 template<typename T>
 Vector3<T>::Vector3(T _x, T _y, T _z) : x{_x}, y{_y}, z{_z}
