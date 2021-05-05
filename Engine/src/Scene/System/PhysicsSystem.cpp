@@ -1,7 +1,7 @@
 #include "Engine.hpp"
 
 #include "Scene/System/PhysicsSystem.hpp"
-#include "Scene/Component/RigidBody.hpp"
+
 
 using namespace Component;
 
@@ -102,6 +102,5 @@ void PhysicsSystem::SetRigidBody(Entity id)
     r.rb = _world->GetPhysicsWorld()->createRigidBody({{t.position.x, t.position.y, t.position.z},
                                                        {t.rotation.x, t.rotation.y, t.rotation.z, t.rotation.w}});
 
-    std::cout << name.name << " address in SetRigidBody: " << &r << std::endl;
     r.rb->setUserData(reinterpret_cast<void*>(static_cast<size_t>(id)));
 }

@@ -19,7 +19,6 @@ using namespace Component;
 using namespace Resources;
 using namespace Renderer;
 
-
 void Game::Init()
 {
     printf("Init");
@@ -140,7 +139,6 @@ void Game::Init()
 
                 physicsSystem->SetRigidBody(id);
                 physicsSystem->SetType(id, BodyType::DYNAMIC);
-
                 physicsSystem->AddSphereCollider(id, 1.5f);
             }
         }

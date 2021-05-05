@@ -6,6 +6,7 @@
 #include "Scene/Core/Types.hpp"
 
 class PhysicsEventManager;
+class PhysicsSystem;
 
 namespace Component
 {
@@ -23,6 +24,7 @@ namespace Component
         std::function<void(Entity, Entity)> _overlapExit;
 
         friend ::PhysicsEventManager;
+        friend ::PhysicsSystem;
     };
 }
 #endif //QUACKENGINE_RIGIDBODY_HPP
