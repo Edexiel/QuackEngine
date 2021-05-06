@@ -10,6 +10,13 @@
 #include "Renderer/RendererPlatform.hpp"
 
 #include "Debug/Assertion.hpp"
+#include "Debug/Log.hpp"
+
+//Serialization json for debug only
+#include <cereal/archives/json.hpp>
+#include <fstream>
+
+namespace fs = std::filesystem;
 
 Engine::~Engine()
 {
@@ -138,6 +145,7 @@ rp3d::PhysicsCommon &Engine::GetPhysicsManager()
 {
     return _physicsManager;
 }
+
 Input::InputManager &Engine::GetInputManager()
 {
     return _inputManager;
@@ -148,30 +156,6 @@ World &Engine::GetCurrentWorld()
     return _worlds[_currentWorld];
 }
 
-World& Engine::CreateWorld(std::string name)
-{
-    _worldLut.insert({name, (uint_fast16_t) _worlds.size()});
-    return _worlds.emplace_back(name);
-}
-
-void Engine::LoadWorld(const std::string &name)
-{
-
-}
-
-void Engine::UnloadWorld(const std::string &name)
-{
-    _worlds[_worldLut[name]].Clear();
-}
-
-void Engine::RemoveWorld(const std::string &name)
-{
-    uint_fast16_t index = _worldLut[name];
-    std::string back_name = _worlds.back().GetName();
-    std::swap(_worlds[index], _worlds.back());
-    _worlds.pop_back();
-    _worldLut[back_name] = index;
-}
 
 void Engine::TestWindowShouldClose()
 {
@@ -186,4 +170,53 @@ void Engine::SwapBuffers()
     glfwSwapBuffers(_window);
 }
 
+
+World &Engine::CreateWorld(std::string name)
+{
+    _worldLut.insert({name, (uint_fast16_t) _worlds.size()});
+    return _worlds.emplace_back(name);
+}
+
+void Engine::SaveWorld(const std::string &worldName, fs::path &path)
+{
+    if (_worldLut.find(worldName) == _worldLut.end())
+    {
+        Log_Error("Trying to save a world that does not exists");
+        return;
+    }
+    Log_Info((std::string("Saving world : ")+ worldName).c_str());
+
+    path.append(worldName).replace_extension(".quack");
+    std::ofstream os(path);
+
+    cereal::JSONOutputArchive archive(os);
+
+
+
+    archive(_worlds[_worldLut[worldName]]);
+
+    Log_Info((std::string("World has been saved as :")+path.string()).c_str());
+
+
+
+}
+
+World &Engine::LoadWorld(const std::string &path)
+{
+
+}
+
+void Engine::RemoveWorld(const std::string &name)
+{
+    uint_fast16_t index = _worldLut[name];
+    std::string back_name = _worlds.back().GetName();
+    std::swap(_worlds[index], _worlds.back());
+    _worlds.pop_back();
+    _worldLut[back_name] = index;
+}
+
+//void Engine::UnloadWorld(const std::string &name)
+//{
+//    _worlds[_worldLut[name]].Clear();
+//}
 

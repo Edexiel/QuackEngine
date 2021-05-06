@@ -36,7 +36,7 @@ namespace Component
         template<class Archive>
         void serialize(Archive &archive)
         {
-            archive(type,position,direction,ambient,diffuse,specular,constant,linear,quadratic,spotAngle,outerSpotAngle);
+            archive(type,ambient,diffuse,specular,constant,linear,quadratic,spotAngle,outerSpotAngle);
         }
     };
 }

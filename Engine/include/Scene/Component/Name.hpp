@@ -1,6 +1,8 @@
 #ifndef QUACKENGINE_NAME_HPP
 #define QUACKENGINE_NAME_HPP
+
 #include <string>
+#include <cereal/types/string.hpp>
 
 namespace Component
 {

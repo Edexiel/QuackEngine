@@ -22,7 +22,6 @@ namespace Component
         unsigned int _width;
         unsigned int _height;
 
-
         float _far;
         float _near;
 
@@ -66,6 +65,12 @@ namespace Component
         void SetProjection(unsigned int width, unsigned int height, float far, float near);
         void CreateProjection();
         void SetView(const Maths::Matrix4& view);
+
+        template<class Archive>
+        void serialize(Archive &archive)
+        {
+            //archive(isActive,ambient,diffuse,specular,constant,linear,quadratic,spotAngle,outerSpotAngle);
+        }
 
     };
 }

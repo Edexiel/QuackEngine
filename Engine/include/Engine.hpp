@@ -17,6 +17,9 @@
 #include "Input/PlatformInput.hpp"
 #include "Input/PlatformInputGLFW.hpp"
 
+#include <filesystem>
+
+
 enum class WINDOW_MODE
 {
     WINDOWED,
@@ -74,9 +77,10 @@ public:
 
 
     World& CreateWorld(std::string name);
-    void LoadWorld(const std::string& name);
-    void UnloadWorld(const std::string& name);
-    void RemoveWorld(const std::string& name);
+    World& LoadWorld(const std::string& path);
+    void SaveWorld(const std::string& worldName,std::filesystem::path& path);
+    void RemoveWorld(const std::string &name);
+
 
     Input::InputManager &GetInputManager();
     Renderer::RendererInterface &GetRendererInterface();
