@@ -11,18 +11,18 @@ Animation Animation::LoadAnimation(const char *path)
     Assimp::Importer importer;
 
     const aiScene* scene = importer.ReadFile(path,
-                                             aiProcess_Triangulate|
-                                             aiProcess_SortByPType|
+                                             aiProcess_Triangulate |
+                                             aiProcess_SortByPType |
+                                             aiProcess_JoinIdenticalVertices |
+                                             aiProcess_CalcTangentSpace |
                                              aiProcess_PopulateArmatureData);
 
     Animation animation;
     animation.ReadBaseSkeleton((void*)scene->mMeshes[0]);
     auto assimpAnimation = scene->mAnimations[0];
-    animation._duration = assimpAnimation->mDuration;
-    animation._tickPerSecond = assimpAnimation->mTicksPerSecond;
+    animation._duration = (float)assimpAnimation->mDuration;
+    animation._tickPerSecond = (float)assimpAnimation->mTicksPerSecond;
     ReadHierarchy(animation._rootNode, (void*)scene->mRootNode);
-
-    std::cout << "Num Mesh" << scene->mNumMeshes << std::endl;
 
     animation.ReadBones((void*)assimpAnimation);
 
@@ -87,11 +87,11 @@ void Animation::ReadBones(const void *loadedAnimation)
     {
         const Bone* bone = _skeleton.GetBone(animation->mChannels[i]->mNodeName.data);
         if (bone)
-            _skeleton.SetBone(Bone(bone->GetName(), bone->GetID(), (void*)animation->mChannels[i]));
+            _skeleton.SetBoneAnimation(bone->GetName(), (void*)animation->mChannels[i]);
         else
         {
             _skeleton.AddBone(Bone(animation->mChannels[i]->mNodeName.data, _skeleton.GetBonesNb(),
-                                   (void *) animation->mChannels[i]));
+                                   Maths::Matrix4::Identity()));
             std::cout << "Kes tu fou la ? " << animation->mChannels[i]->mNodeName.data <<  std::endl;
         }
     }

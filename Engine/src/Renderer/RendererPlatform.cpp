@@ -196,15 +196,15 @@ void RendererPlatform::VerticesReadingSkeletalMesh()
     glDisableVertexAttribArray(3);
     glDisableVertexAttribArray(4);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (const GLvoid*)nullptr);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(SkeletalVertex), (const GLvoid*)nullptr);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (const GLvoid*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(SkeletalVertex), (const GLvoid*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 16 * sizeof(float) , (const GLvoid*)(6 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(SkeletalVertex), (const GLvoid*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (const GLvoid*)(8 * sizeof(float)));
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(SkeletalVertex), (const GLvoid*)(8 * sizeof(float)));
     glEnableVertexAttribArray(3);
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (const GLvoid*)(12 * sizeof(float)));
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(SkeletalVertex), (const GLvoid*)(12 * sizeof(float)));
     glEnableVertexAttribArray(4);
 }
 

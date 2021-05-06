@@ -26,7 +26,7 @@ Framebuffer RendererInterface::GetSceneUpdatedFramebuffer()
     return camera.GetFramebuffer();
 }
 
-void RendererInterface::DrawFramebufferinFrambuffer(const Framebuffer& framebufferDrawIn, const Framebuffer& framebuffer2DrawOut)
+void RendererInterface::DrawFramebufferinFramebuffer(const Framebuffer& framebufferDrawIn, const Framebuffer& framebuffer2DrawOut)
 {
     renderSystem->DrawTextureInFramebuffer(framebufferDrawIn.GetId(), framebuffer2DrawOut.GetTexture());
 }

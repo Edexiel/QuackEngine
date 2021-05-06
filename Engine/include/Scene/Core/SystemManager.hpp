@@ -29,6 +29,9 @@ public:
 
     void EntitySignatureChanged(Entity id, Signature entitySignature);
 
+    template<typename T>
+    T * GetSystem();
+
 };
 
 template<typename T>
@@ -48,34 +51,51 @@ inline void SystemManager::SetSignature(Signature signature)
     const char *typeName = typeid(T).name();
     Assert_Fatal_Error(_systems.find(typeName) == _systems.end(), "System used before registered.");
 
-    (void)_signatures.insert({typeName, signature});
+    (void) _signatures.insert({typeName, signature});
 
 }
 
 inline void SystemManager::EntityDestroyed(Entity id)
 {
-    for (auto const &pair : _systems) {
+    for (auto const &pair : _systems)
+    {
         auto const &system = pair.second;
 
-        (void)system->_entities.erase(id);
+        (void) system->_entities.erase(id);
     }
 
 }
 
 inline void SystemManager::EntitySignatureChanged(Entity id, Signature entitySignature)
 {
-    for (auto const &pair : _systems) {
+    for (auto const &pair : _systems)
+    {
         auto const &type = pair.first;
         auto const &system = pair.second;
         auto const &systemSignature = _signatures[type];
 
-        if ((entitySignature & systemSignature) == systemSignature) {
-            (void)system->_entities.insert(id);
-        } else {
-            (void)system->_entities.erase(id);
+        if ((entitySignature & systemSignature) == systemSignature)
+        {
+            (void) system->_entities.insert(id);
+        }
+        else
+        {
+            (void) system->_entities.erase(id);
         }
     }
 
+}
+
+template<typename T>
+T * SystemManager::GetSystem()
+{
+    const char *typeName = typeid(T).name();
+    auto search = _systems.find(typeName);
+    if (search != _systems.end())
+    {
+        return static_cast<T*>(search->second.get());
+    }
+    return nullptr;
 }
 
 #endif //QUACKENGINE_SYSTEMMANAGER_HPP

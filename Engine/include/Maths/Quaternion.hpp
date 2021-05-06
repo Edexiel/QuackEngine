@@ -36,6 +36,7 @@ namespace Maths
     Quaternion& Normalize();
     Quaternion GetNormalized() const;
     static void Normalize(Quaternion& q);
+    static float NormalizeAxis(float angle);
     Matrix4 ToMatrix() const;
     Vector3f ToEuler() const;
     static Quaternion EulerToQuaternion(Vector3f rot);
@@ -115,6 +116,17 @@ inline void Quaternion::Normalize(Quaternion& q)
   q.y  /= size;
   q.z  /= size;
 }
+/**
+ * @brief clamp angle between pi and -pi
+ * @param angle
+ * @return clamped angle
+ */
+inline float Quaternion::NormalizeAxis(float angle)
+{
+    angle > 1.f? angle = (float)M_PI: angle = angle;
+    angle < -1.f? angle = -(float)M_PI : angle = angle;
+    return angle;
+}
 
 inline Maths::Matrix4 Quaternion::ToMatrix() const
 {
@@ -142,22 +154,36 @@ inline Vector3f Quaternion::ToEuler() const
     Vector3f result;
 
     // roll (x-axis rotation)
-    float x0 = 2.0f*(w * x + y * z);
+    float x0 = 2.0f * (w * x + y * z);
     float x1 = 1.0f - 2.0f * ( x * x + y * y);
-    result.x = atan2f(x0, x1) * (180.f / M_PI);
+    result.x = atan2f(x0, x1);
 
     // pitch (y-axis rotation)
     float y0 = 2.0f*(w * y - z * x);
     y0 = y0 > 1.0f ? 1.0f : y0;
     y0 = y0 < -1.0f ? -1.0f : y0;
-    result.y = asinf(y0)* (180.f / M_PI);
+    result.y = asinf(y0);
 
     // yaw (z-axis rotation)
     float z0 = 2.0f*(w * z + x * y);
     float z1 = 1.0f - 2.0f*(y * y + z * z);
-    result.z = atan2f(z0, z1)* (180.f / M_PI);
+    result.z = atan2f(z0, z1);
 
     return result;
+
+//    float check = 2.0f * (w * x - y * z);
+//
+//    if (check < -0.999999f) {
+//        return Vector3f(-(float)M_PI * 0.5f, 0.0f, -atan2f(2.0f * (x * z - w * y), 1.0f - 2.0f * (y * y + z * z)));
+//    }
+//
+//    if (check > 0.999999f) {
+//        return Vector3f((float)M_PI * 0.5f, 0.0f, atan2f(2.0f * (x * z - w * y), 1.0f - 2.0f * (y * y + z * z)));
+//    }
+//
+//    return Vector3f((float)asin(check),
+//                atan2f(2.0f * (x * z + w * y), 1.0f - 2.0f * (x * x + y * y)),
+//                atan2f(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z)));
 }
 
     inline Quaternion Quaternion::EulerToQuaternion(Vector3f rot)

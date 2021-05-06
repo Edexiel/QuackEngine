@@ -59,6 +59,10 @@ namespace Maths
         Vector3<T> operator+(const Vector3<T> &v2) const;
         Vector3<T> operator-(const Vector3<T> &v2) const;
         Vector3<T> operator*(const T &f) const;
+
+        bool operator==(const Vector3<T> v2) const;
+
+        bool operator!=(const Vector3<T> v2) const;
     };
 
     typedef Vector3<float> Vector3f;
@@ -192,6 +196,26 @@ namespace Maths
     inline Vector3<T> Vector3<T>::operator*(const T &f) const
     {
         return {this->x * f, this->y * f, this->z * f};
+    }
+    template<typename T>
+    inline bool Vector3<T>::operator==(const Vector3<T> v2) const
+    {
+        for (unsigned int i = 0; i< 3; i++)
+        {
+            if(e[i] != v2.e[i])
+                return false;
+        }
+        return true;
+    }
+    template<typename T>
+    inline bool Vector3<T>::operator!=(const Vector3<T> v2) const
+    {
+        for (unsigned int i = 0; i< 3; i++)
+        {
+            if(e[i] != v2.e[i])
+                return true;
+        }
+        return false;
     }
 
     template<typename T>

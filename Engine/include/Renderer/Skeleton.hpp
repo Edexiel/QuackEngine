@@ -20,6 +20,7 @@ namespace Renderer
 
         int _id {-1};
         Maths::Matrix4 _localTransform {Maths::Matrix4::Identity()};
+        Maths::Matrix4 _offset {Maths::Matrix4::Identity()};
 
         std::string _name;
 
@@ -35,13 +36,16 @@ namespace Renderer
 
 
     public:
-        Bone(const std::string& name, const int id, const void* node);
+        //Bone(const std::string& name, const int id, const void* node);
         Bone(const std::string& name, const int id, const Maths::Matrix4& transform);
+
+        void SetAnimation(const void* node);
 
         void Update(float animationTime);
 
         int GetID() const;
         const Maths::Matrix4& GetLocalTransformation() const;
+        const Maths::Matrix4& GetOffsetTransformation() const;
         const std::string& GetName() const;
 
     };
@@ -53,6 +57,7 @@ namespace Renderer
 
         const Bone* GetBone(std::string name) const;
         void SetBone(const Bone& bone);
+        void SetBoneAnimation(const std::string& name, const void* node);
         void Update(float deltaTime);
 
         unsigned int GetBonesNb() const;

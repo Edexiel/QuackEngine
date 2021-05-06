@@ -18,6 +18,9 @@ private:
     std::unique_ptr<ComponentManager> _componentManager;
     std::unique_ptr<EntityManager> _entityManager;
     std::unique_ptr<SystemManager> _systemManager;
+public:
+    const std::unique_ptr<SystemManager> &GetSystemManager() const;
+private:
 
     rp3d::PhysicsWorld *_physicsWorld = nullptr;
 
@@ -84,7 +87,7 @@ inline void World::Clear()
 inline Entity World::CreateEntity(std::string name)
 {
     Entity id = _entityManager->Create();
-    AddComponent(id, Name{std::move(name)});
+    AddComponent(id, Component::Name{std::move(name)});
     return id;
 }
 
@@ -164,6 +167,11 @@ inline const std::string &World::GetName() const
 inline const std::unique_ptr<EntityManager> &World::GetEntityManager() const
 {
     return _entityManager;
+}
+
+inline const std::unique_ptr<SystemManager> &World::GetSystemManager() const
+{
+    return _systemManager;
 }
 
 #endif //QUACKENGINE_WORLD_HPP

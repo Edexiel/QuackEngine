@@ -277,9 +277,6 @@ void Model::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &
                                          unsigned int meshId,
                                          const void *loadedScene)
 {
-
-    //std::cout << 035746 << std::endl;
-
     const aiScene* scene = (aiScene*)loadedScene;
     aiMesh* mesh = scene->mMeshes[meshId];
 
@@ -418,6 +415,7 @@ const Renderer::Mesh& Model::GetMesh(unsigned int index) const
     if (index >= _meshList.size())
     {
         Assert_Error(true, "Invalid mesh index");
+        //todo: urgent à fix
         return Mesh();
     }
     return _meshList[index];

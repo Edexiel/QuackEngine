@@ -9,18 +9,14 @@ using namespace Maths;
 using namespace Renderer;
 
 
-Bone::Bone(const std::string& name, const int id, const Maths::Matrix4& transform) : _name(name), _id{id}, _localTransform{transform}
+Bone::Bone(const std::string& name, const int id, const Maths::Matrix4& transform) : _name(name), _id{id}, _offset{transform}
 {}
 
-Bone::Bone(const std::string &name, const int id, const void *node)
-        :
-        _name(name),
-        _id{id},
-        _animated{true}
+void Bone::SetAnimation(const void *node)
 {
-    const aiNodeAnim* channel = (aiNodeAnim*)node;
+    _animated = true;
 
-    std::cout << "Loading Bone Anim" << std::endl;
+    const aiNodeAnim* channel = (aiNodeAnim*)node;
 
     for (int i = 0; i < channel->mNumPositionKeys; i++)
     {
@@ -139,9 +135,13 @@ void Bone::Update(float animationTime)
     if (!_animated)
         return;
 
-    _localTransform = InterpolatePosition(animationTime) *
+    /*_localTransform = InterpolatePosition(animationTime) *
                       InterpolateRotation(animationTime) *
-                      InterpolateScale(animationTime);
+                      InterpolateScale(animationTime);*/
+
+    _localTransform = InterpolateScale(animationTime) *
+                      InterpolateRotation(animationTime) *
+                      InterpolatePosition(animationTime);
 }
 
 int Bone::GetID() const
@@ -152,6 +152,11 @@ int Bone::GetID() const
 const Maths::Matrix4 &Bone::GetLocalTransformation() const
 {
     return _localTransform;
+}
+
+const Maths::Matrix4 &Bone::GetOffsetTransformation() const
+{
+    return _offset;
 }
 
 const std::string &Bone::GetName() const
@@ -173,13 +178,21 @@ const Bone *Skeleton::GetBone(std::string name) const
 void Skeleton::SetBone(const Bone& bone)
 {
     auto it = mapBones.find(bone.GetName());
-
     if(it == mapBones.end())
     {
         AddBone(bone);
     }
 
     listBones[it->second] = bone;
+}
+
+void Skeleton::SetBoneAnimation(const std::string &name, const void *node)
+{
+    auto it = mapBones.find(name);
+    if(it != mapBones.end())
+    {
+        listBones[it->second].SetAnimation(node);
+    }
 }
 
 void Skeleton::AddBone(const Bone& bone)

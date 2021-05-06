@@ -21,7 +21,7 @@ namespace Component
 
         const std::vector<Maths::Matrix4>& GetBonesOffsets() const;
 
-        void CalculateBoneTransform(const Renderer::NodeData& node, Maths::Matrix4 parentMatrix);
+        void CalculateBoneTransform(const Renderer::NodeData& node, Maths::Matrix4 parentMatrixWorld, Maths::Matrix4 bonePlace);
 
     public:
 
