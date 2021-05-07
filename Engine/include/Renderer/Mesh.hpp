@@ -1,7 +1,7 @@
 #ifndef _MESH_
 #define _MESH_
 
-typedef unsigned int Gluint;
+//typedef unsigned int Gluint;
 
 #include "Renderer/Vertex.hpp"
 

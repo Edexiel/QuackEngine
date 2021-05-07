@@ -16,7 +16,7 @@
 struct ma_decoder;
 struct ma_device;
 
-typedef unsigned int soundIndex;
+using soundIndex = unsigned int ;
 
 class World;
 
