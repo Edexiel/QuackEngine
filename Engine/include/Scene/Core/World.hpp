@@ -1,18 +1,25 @@
 #ifndef QUACKENGINE_WORLD_HPP
 #define QUACKENGINE_WORLD_HPP
 
+#include <utility>
+
 #include "Types.hpp"
 
 #include "Scene/Core/EntityManager.hpp"
 #include "Scene/Core/SystemManager.hpp"
 #include "Scene/Core/ComponentManager.hpp"
-#include "reactphysics3d/reactphysics3d.h"
-#include "Scene/Component/Name.hpp"
+#include "Physics/PhysicsEventManager.hpp"
 
-#include <string>
+#include "Scene/Component/Name.hpp"
+#include <string_view>
+
+namespace reactphysics3d
+{
+    class PhysicsWorld;
+}
 
 //Serialization
-#include <cereal/types/string.hpp>
+#include <cereal/types/string_view.hpp>
 #include <cereal/access.hpp>
 
 class World
@@ -21,13 +28,18 @@ private:
     std::unique_ptr<ComponentManager> _componentManager;
     std::unique_ptr<EntityManager> _entityManager;
     std::unique_ptr<SystemManager> _systemManager;
-    rp3d::PhysicsWorld *_physicsWorld = nullptr;
-    std::string _name;
+public:
+    const std::unique_ptr<SystemManager> &GetSystemManager() const;
+private:
+
+    reactphysics3d::PhysicsWorld *_physicsWorld = nullptr;
+
+    std::string_view _name;
 
 
 public:
     World() = delete;
-    explicit World(std::string &name);
+    explicit World(std::string_view &name);
 
     void Init();
 
@@ -64,13 +76,12 @@ public:
     template<typename T>
     void SetSystemSignature(Signature signature);
 
-    rp3d::PhysicsWorld *GetPhysicsWorld() const;
+    reactphysics3d::PhysicsWorld *GetPhysicsWorld() const;
 
-    const std::string &GetName() const;
+    const std::string_view &GetName() const;
 
     const std::unique_ptr<EntityManager> &GetEntityManager() const;
 
-    const std::unique_ptr<SystemManager> &GetSystemManager() const;
 
     friend class cereal::access;
 
@@ -80,7 +91,6 @@ public:
         archive(_name);
 
     }
-
 };
 #include "Scene/Core/World.inl"
 

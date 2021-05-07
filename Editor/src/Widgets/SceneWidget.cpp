@@ -7,7 +7,7 @@
 
 SceneWidget::SceneWidget()
 {
-    _title="Scene";
+    _title = "Scene";
 }
 
 void SceneWidget::UpdateVisible()

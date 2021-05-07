@@ -18,14 +18,27 @@
 
 namespace fs = std::filesystem;
 
+
+inline Engine *instance = nullptr;
+
+Engine &Engine::Instance()
+{
+    return *instance;
+}
+
+void Engine::SetInstance(Engine &engine)
+{
+    instance = &engine;
+}
+
 Engine::~Engine()
 {
     glfwTerminate();
 }
 
-void Engine::InitWindow(const EngineSettings &settings)
+Engine::Engine(const EngineSettings &settings)
 {
-
+    Assert_Fatal_Error(instance != nullptr, "There should be only one Engine");
     Assert_Fatal_Error(!glfwInit(), "GLFW was not correctly initialized, aborting");
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -141,7 +154,7 @@ Audio::SoundManager &Engine::GetSoundManager()
     return _soundManager;
 }
 
-rp3d::PhysicsCommon &Engine::GetPhysicsManager()
+reactphysics3d::PhysicsCommon &Engine::GetPhysicsManager()
 {
     return _physicsManager;
 }
@@ -209,13 +222,20 @@ World &Engine::LoadWorld(const std::string &path)
 void Engine::RemoveWorld(const std::string &name)
 {
     uint_fast16_t index = _worldLut[name];
-    std::string back_name = _worlds.back().GetName();
+    std::string_view back_name = _worlds.back().GetName();
     std::swap(_worlds[index], _worlds.back());
     _worlds.pop_back();
     _worldLut[back_name] = index;
 }
 
-//void Engine::UnloadWorld(const std::string &name)
+PhysicsEventManager &Engine::GetPhysicsEventManager()
+{
+    return _physicsEventManager;
+}
+
+
+//void Engine
+// ::UnloadWorld(const std::string &name)
 //{
 //    _worlds[_worldLut[name]].Clear();
 //}

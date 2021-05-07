@@ -103,7 +103,7 @@ add_subdirectory(${external_lib}/cereal)
 
 #reactphysics3d
 add_subdirectory(${external_lib}/reactphysics3d)
-target_compile_options(reactphysics3d PRIVATE --no-warnings)
+target_compile_options(reactphysics3d PRIVATE -w --no-warnings)
 
 #gtest
 if (QUACK_BUILD_TESTS)
@@ -121,6 +121,15 @@ add_subdirectory(Engine)
 
 #Game
 add_subdirectory(Game)
+
+
+if(NOT MSVC)
+#    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Editor PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Engine PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Game PRIVATE -Wall -Wextra -pedantic)
+endif()
+
 
 
 #Installer

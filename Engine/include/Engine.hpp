@@ -4,13 +4,16 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <string_view>
 
 #include <Scene/Core/World.hpp>
 
 #include "Resources/ResourcesManager.hpp"
 #include "Renderer/RendererInterface.hpp"
 #include "Audio/SoundManager.hpp"
-#include <reactphysics3d/reactphysics3d.h>
+#include <reactphysics3d/engine/PhysicsCommon.h>
+
+
 #include "Input/InputManager.hpp"
 #include "Input/PlatformInput.hpp"
 
@@ -45,9 +48,6 @@ struct EngineSettings
 class Engine
 {
 private:
-    Engine() = default;
-    static Engine _instance;
-
     class GLFWwindow *_window = nullptr;
 
     std::unique_ptr<Input::PlatformInput> _platformInput;
@@ -55,18 +55,21 @@ private:
     Renderer::RendererInterface _rendererInterface; //init after world loading
     Resources::ResourcesManager _resourcesManager;
     Audio::SoundManager _soundManager;
-    rp3d::PhysicsCommon _physicsManager;
+    PhysicsEventManager _physicsEventManager;
+    reactphysics3d::PhysicsCommon _physicsManager;
     Input::InputManager _inputManager;
 
     uint_fast16_t _currentWorld = 0;
-    std::map<std::string, uint_fast16_t> _worldLut;
+    std::map<std::string_view , uint_fast16_t> _worldLut;
     std::vector<World> _worlds;
 
 public:
     static Engine &Instance();
+    static void SetInstance(Engine &engine);
+
+    explicit Engine(const EngineSettings &settings);
     ~Engine();
 
-    void InitWindow(const EngineSettings &settings);
     GLFWwindow *GetWindow();
     void SetWindowTitle(const std::string &title);
     void SetWindowSize(int width, int height);
@@ -76,7 +79,7 @@ public:
     void SwapBuffers();
 
 
-    World& CreateWorld(std::string name);
+    World& CreateWorld(std::string_view name);
     World& LoadWorld(const std::string& path);
     void SaveWorld(const std::string& worldName,std::filesystem::path& path);
     void RemoveWorld(const std::string &name);
@@ -86,15 +89,8 @@ public:
     Renderer::RendererInterface &GetRendererInterface();
     Resources::ResourcesManager &GetResourcesManager();
     Audio::SoundManager &GetSoundManager();
-    rp3d::PhysicsCommon &GetPhysicsManager();
+    PhysicsEventManager &GetPhysicsEventManager();
+    reactphysics3d::PhysicsCommon &GetPhysicsManager();
 };
-
-inline Engine Engine::_instance = Engine();
-
-inline Engine &Engine::Instance()
-{
-    return _instance;
-}
-
 
 #endif //QUACKENGINE_ENGINE_HPP
