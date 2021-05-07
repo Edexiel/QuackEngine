@@ -3,6 +3,7 @@
 
 #include "Scene/Component/RigidBody.hpp"
 #include "misc/cpp/imgui_stdlib.h"
+#include "Maths/Common.hpp"
 
 #include <algorithm>
 
@@ -55,12 +56,12 @@ void PropertiesWidget::TransformReader()
 
     ImGui::DragFloat3("Position", transform.position.e);
     ImGui::DragFloat3("Scale", transform.scale.e);
-    ImGui::DragFloat3("Rotation", _eulerRot.e);
+    bool isRotationChange = ImGui::DragFloat3("Rotation", _eulerRot.e);
 
-    if (!ImGui::IsMouseDragging(0))
-        _eulerRot = transform.rotation.ToEuler() * (180.f / (float) M_PI);
+    if (!ImGui::IsMouseDragging(0) && !isRotationChange)
+        _eulerRot = transform.rotation.ToEuler() * RadToDeg<float>();
 
-    transform.rotation = Maths::Quaternion::EulerToQuaternion(_eulerRot * (M_PI / 180.f));
+    transform.rotation = Maths::Quaternion::EulerToQuaternion(_eulerRot * DegToRad<float>());
 }
 
 void PropertiesWidget::LightReader()
@@ -206,10 +207,10 @@ void PropertiesWidget::CameraReader()
         return;
 
     ImGui::Checkbox("Is perspective", &camera._isPerspective);
-    float fov = (camera._fov * 180.f) / (float) M_PI;
+    float fov = camera._fov * RadToDeg<float>();
     ImGui::DragFloat("FOV", &fov, 1.f, 0.f, 180.f);
 
-    camera._fov = (fov * (float) M_PI) / 180.f;
+    camera._fov = fov * DegToRad<float>();
 
 }
 

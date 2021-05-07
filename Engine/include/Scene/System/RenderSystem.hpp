@@ -35,6 +35,7 @@ public:
      * @param camera
      */
     void Draw(Component::Camera& camera);
+    void Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view);
     void DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex);
 
     void UpdateModel(const Component::Model& newModel);
@@ -43,7 +44,7 @@ public:
 
 private:
 
-    void DrawMaterials(Component::Camera& camera);
+    void DrawMaterials(const Maths::Matrix4& projection, const Maths::Matrix4& view);
 
     void AddMesh(const Renderer::MaterialInterface& materialInterface, const Renderer::Mesh& mesh, Entity entity);
 
