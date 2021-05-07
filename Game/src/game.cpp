@@ -124,7 +124,7 @@ void Game::Init()
             for (int z = 0; z < 1; z++)
             {
                 t.position.x = 0;
-                t.position.y = 50.f /*- (float)y * 2*/;
+                t.position.y = 5.f /*- (float)y * 2*/;
                 t.position.z = 20.f /*+ (float)z * 2*/;
 
                 Entity id = world.CreateEntity("Sphere");

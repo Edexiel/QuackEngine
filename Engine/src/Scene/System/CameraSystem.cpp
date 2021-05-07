@@ -12,14 +12,14 @@ Component::Camera& CameraSystem::GetActiveCamera()
 {
     World& world = _engine.GetCurrentWorld();
     for (Entity entity: _entities) {
-        auto &t = world.GetComponent<Component::Camera>(entity);
-        if (t.isActive)
+        auto &cam = world.GetComponent<Component::Camera>(entity);
+        if (cam.isActive)
         {
             _activeCamera = entity;
             Transform trs = world.GetComponent<Transform>(entity);
             trs.scale.z *= -1;
-            t.SetView(trs.GetMatrix().GetInvert());
-            return t;
+            cam.SetView(trs.GetMatrix().GetInvert());
+            return cam;
         }
     }
     Assert_Fatal_Error(true, "No Camera Active");
@@ -83,7 +83,7 @@ void CameraSystem::FreeFly() const
     Vector3f forward = transform.rotation * Vector3f::Forward() * cam._scaleAxisZ;
     Vector3f right = transform.rotation * Vector3f::Right() * cam._scaleAxisX;
 
-    Vector3f up = Vector3f::Down() * cam._scaleAxisY;
+    Vector3f up = Vector3f::Up() * cam._scaleAxisY;
     Vector3f direction = (forward + right + up).GetNormalized();
 
     transform.position = transform.position + (direction * cam._speedTranslation);
@@ -96,11 +96,10 @@ void CameraSystem::MouseMovement() const
     Input::MousePosition &mousePosition = _engine.GetInputManager().mousePosition;
     auto &cam = world.GetComponent<Component::Camera>(_activeCamera);
     auto &transform = world.GetComponent<Transform>(_activeCamera);
-    Vector3f eulerRot = transform.rotation.ToEuler();
 
-    Vector2d angleRotation = (mousePosition.prevPos - mousePosition.pos) * (cam._speedRotation * M_PI / 180.f);
-    cam._yaw -= (float)angleRotation.x;
-    cam._pitch = (float)std::clamp(cam._pitch - angleRotation.y, -M_PI / 2.0, M_PI / 2.0);
+    Vector2d angleRotation = (mousePosition.pos - mousePosition.prevPos) * (cam._speedRotation * M_PI / 180.f);
+    cam._yaw += (float)angleRotation.x;
+    cam._pitch = (float)std::clamp(cam._pitch + angleRotation.y, -M_PI / 2.0, M_PI / 2.0);
 
     transform.rotation = Quaternion({0, 1, 0}, cam._yaw) * Quaternion({1, 0, 0}, cam._pitch);
 }

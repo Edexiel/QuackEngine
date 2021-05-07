@@ -64,7 +64,6 @@ namespace Component
         void SetProjection(unsigned int width, unsigned int height, float far, float near);
         void CreateProjection();
         void SetView(const Maths::Matrix4& view);
-
     };
 }
 #endif // QUACKENGINE_CAMERA_HPP

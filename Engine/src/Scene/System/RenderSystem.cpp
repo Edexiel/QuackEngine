@@ -21,12 +21,20 @@ void RenderSystem::Draw(Component::Camera& camera)
 {
     camera.GetFramebuffer().Bind();
 
-    RendererPlatform::ClearColor({0.0f, 0.0f, 0.0f, 1.f});
+    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 1.f});
     RendererPlatform::Clear();
 
-    DrawMaterials(camera);
+    DrawMaterials(camera.GetProjection(), camera.GetView());
 
     RendererPlatform::BindFramebuffer(0);
+}
+
+void RenderSystem::Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view)
+{
+    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 1.f});
+    RendererPlatform::Clear();
+
+    DrawMaterials(projection, view);
 }
 
 void RenderSystem::DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex)
@@ -75,7 +83,7 @@ void RenderSystem::SetMaterials()
     }
 }
 
-void RenderSystem::DrawMaterials(Component::Camera& camera)
+void RenderSystem::DrawMaterials(const Maths::Matrix4& projection, const Maths::Matrix4& view)
 {
     if (_lastLinkEntitiesNumbers != _entities.size() || _lastLinkEntitiesNumbers == 0)
     {
@@ -88,14 +96,13 @@ void RenderSystem::DrawMaterials(Component::Camera& camera)
     for (auto material : _mapMaterial)
     {
         material.first->Apply();
-        material.first->shader.SetMatrix4("projection", camera.GetProjection());
-        material.first->shader.SetMatrix4("view", camera.GetView());
+        material.first->shader.SetMatrix4("projection", projection);
+        material.first->shader.SetMatrix4("view", view);
 
         for (unsigned int i = 0; i < material.second.size(); i++)
         {
             material.first->shader.SetMatrix4("model", engine.GetCurrentWorld().GetComponent<Transform>(material.second[i].second).GetMatrix());
             material.second[i].first.Draw();
-
         }
     }
 }
