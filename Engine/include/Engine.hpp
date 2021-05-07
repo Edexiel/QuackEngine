@@ -53,6 +53,7 @@ private:
     Renderer::RendererInterface _rendererInterface; //init after world loading
     Resources::ResourcesManager _resourcesManager;
     Audio::SoundManager _soundManager;
+    PhysicsEventManager _physicsEventManager;
     reactphysics3d::PhysicsCommon _physicsManager;
     Input::InputManager _inputManager;
 
@@ -85,6 +86,7 @@ public:
     Renderer::RendererInterface &GetRendererInterface();
     Resources::ResourcesManager &GetResourcesManager();
     Audio::SoundManager &GetSoundManager();
+    PhysicsEventManager &GetPhysicsEventManager();
     reactphysics3d::PhysicsCommon &GetPhysicsManager();
 };
 

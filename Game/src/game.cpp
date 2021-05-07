@@ -131,13 +131,14 @@ void Game::Init()
 
                 Component::RigidBody rb;
 
+
                 world.AddComponent(id, t);
                 world.AddComponent(id, md);
                 world.AddComponent(id, rb);
 
+
                 physicsSystem->SetRigidBody(id);
                 physicsSystem->SetType(id, BodyType::DYNAMIC);
-
                 physicsSystem->AddSphereCollider(id, 1.5f);
             }
         }
