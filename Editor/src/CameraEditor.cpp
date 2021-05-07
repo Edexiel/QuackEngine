@@ -28,9 +28,9 @@ void CameraEditor::SetScaleAxisZ(float scale)
 
 void CameraEditor::SetInput(Input::InputManager &inputManager)
 {
-    inputManager.RegisterEventAxis("CameraEditorMovementForward",this, &CameraEditor::SetScaleAxisZ);
-    inputManager.RegisterEventAxis("CameraEditorMovementRight",this, &CameraEditor::SetScaleAxisX);
-    inputManager.RegisterEventAxis("CameraEditorMovementUp",this, &CameraEditor::SetScaleAxisY);
+    inputManager.RegisterEventAxis("CameraEditorMovementForward", this, &CameraEditor::SetScaleAxisZ);
+    inputManager.RegisterEventAxis("CameraEditorMovementRight", this, &CameraEditor::SetScaleAxisX);
+    inputManager.RegisterEventAxis("CameraEditorMovementUp", this, &CameraEditor::SetScaleAxisY);
 }
 
 void CameraEditor::FreeFly()
@@ -46,8 +46,8 @@ void CameraEditor::FreeFly()
 void CameraEditor::MouseMovement(const Vector2d &currentPos, const Vector2d &oldPos)
 {
     Vector2d angleRotation = (oldPos - currentPos) * (_speedRotation * M_PI / 180.f);
-    _yaw += (float)angleRotation.x;
-    _pitch = (float)std::clamp(_pitch + angleRotation.y, -M_PI / 2.0, M_PI / 2.0);
+    _yaw += (float) angleRotation.x;
+    _pitch = (float) std::clamp(_pitch + angleRotation.y, -M_PI / 2.0, M_PI / 2.0);
 
     _rotation = (Quaternion({1, 0, 0}, _pitch) * Quaternion({0, 1, 0}, _yaw)).ToMatrix();
 }

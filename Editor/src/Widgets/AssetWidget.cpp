@@ -4,7 +4,7 @@
 #include "Engine.hpp"
 
 AssetWidget::AssetWidget() :
-_camera{Component::Camera(1280,720,1000, -1, 20 * 3.1415 / 180)}
+        _camera{Component::Camera(1280, 720, 1000, -1, 20 * 3.1415 / 180)}
 {
     _title = "Properties";
 
@@ -17,7 +17,7 @@ void AssetWidget::UpdateVisible()
         return;
 
 
-    Engine& engine = Engine::Instance();
+    Engine &engine = Engine::Instance();
 
     ImGui::BeginChild("ViewportRender");
     //ImVec2 wsize = ImGui::GetWindowSize();
@@ -43,7 +43,7 @@ void AssetWidget::UpdateVisible()
 
 void AssetWidget::DisplayMaterial()
 {
-    Engine& engine = Engine::Instance();
+    Engine &engine = Engine::Instance();
     Renderer::MaterialInterface material = engine.GetResourcesManager().LoadMaterial(_assetName.c_str());
 
     ImGui::ColorEdit3("Ambient", material->ambient.e);
@@ -83,11 +83,12 @@ void AssetWidget::DisplayMaterial()
     }
 }
 
-std::string AssetWidget::SelectInList(const std::vector<std::string>& list, const char* currentlySelected, const char* comboName)
+std::string
+AssetWidget::SelectInList(const std::vector<std::string> &list, const char *currentlySelected, const char *comboName)
 {
     std::string selected = currentlySelected;
 
-    if  (ImGui::BeginCombo(comboName, currentlySelected))
+    if (ImGui::BeginCombo(comboName, currentlySelected))
     {
         for (int n = 0; n < list.size(); n++)
         {
@@ -107,7 +108,9 @@ std::string AssetWidget::SelectInList(const std::vector<std::string>& list, cons
 
 }
 
-bool AssetWidget::SelectTexture(Renderer::Texture& texture, const std::vector<std::string>& list, const char* currentTexture, const char* comboName)
+bool
+AssetWidget::SelectTexture(Renderer::Texture &texture, const std::vector<std::string> &list, const char *currentTexture,
+                           const char *comboName)
 {
     std::string selectedTexture = SelectInList(list, currentTexture, comboName);
 
@@ -127,9 +130,9 @@ void AssetWidget::DisplayTexture()
     Renderer::Texture texture = Engine::Instance().GetResourcesManager().LoadTexture(_assetName.c_str());
     ImVec2 wsize = ImGui::GetWindowSize();
     if (wsize.x < wsize.y)
-        ImGui::Image((ImTextureID)(size_t)texture.GetID(), {wsize.x, wsize.x}, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((ImTextureID) (size_t) texture.GetID(), {wsize.x, wsize.x}, ImVec2(0, 1), ImVec2(1, 0));
     else
-        ImGui::Image((ImTextureID)(size_t)texture.GetID(), {wsize.y, wsize.y}, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((ImTextureID) (size_t) texture.GetID(), {wsize.y, wsize.y}, ImVec2(0, 1), ImVec2(1, 0));
 
 }
 
@@ -141,9 +144,10 @@ void AssetWidget::DisplayModel()
     listModelType.emplace_back("CLASSIC");
     listModelType.emplace_back("NORMAL_MAP");
 
-    std::string selected = SelectInList(listModelType, listModelType[(int)model.GetVertexType()].c_str(), "Model Vertex Type");
+    std::string selected = SelectInList(listModelType, listModelType[(int) model.GetVertexType()].c_str(),
+                                        "Model Vertex Type");
 
-    if (selected != listModelType[(int)model.GetVertexType()])
+    if (selected != listModelType[(int) model.GetVertexType()])
     {
         if (selected == "CLASSIC")
             Engine::Instance().GetResourcesManager().ReLoadModel(_assetName.c_str(), Renderer::VertexType::V_CLASSIC);
