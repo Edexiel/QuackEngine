@@ -1,6 +1,6 @@
 #ifndef QUACKENGINE_NAME_HPP
 #define QUACKENGINE_NAME_HPP
-#include <string>
+#include <string_view>
 
 namespace Component
 {

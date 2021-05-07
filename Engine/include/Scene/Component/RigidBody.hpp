@@ -1,9 +1,14 @@
 #ifndef QUACKENGINE_RIGIDBODY_HPP
 #define QUACKENGINE_RIGIDBODY_HPP
 
-#include "reactphysics3d/reactphysics3d.h"
 #include <functional>
 #include "Scene/Core/Types.hpp"
+
+namespace reactphysics3d
+{
+    class RigidBody;
+}
+
 
 class PhysicsEventManager;
 class PhysicsSystem;
@@ -12,8 +17,7 @@ namespace Component
 {
     struct RigidBody
     {
-        rp3d::RigidBody *rb {nullptr};
-
+        reactphysics3d::RigidBody *rb {nullptr};
     private:
         std::function<void(Entity, Entity)> _contactStart;
         std::function<void(Entity, Entity)> _contactStay;
