@@ -5,19 +5,19 @@
 #ifndef QUACKENGINE_COMPONENTMANAGER_HPP
 #define QUACKENGINE_COMPONENTMANAGER_HPP
 
+#include <string_view>
 #include <unordered_map>
 #include <memory>
 
 #include "Types.hpp"
 #include "ComponentArray.hpp"
-
 #include "Debug/Assertion.hpp"
 
 class ComponentManager
 {
 private:
-    std::unordered_map<const char *, ComponentType> _componentTypes;
-    std::unordered_map<const char *, std::shared_ptr<IComponentArray>> _componentArrays;
+    std::unordered_map<std::string_view , ComponentType> _componentTypes;
+    std::unordered_map<std::string_view , std::shared_ptr<IComponentArray>> _componentArrays;
 
     ComponentType _nextType =0;
 
@@ -49,7 +49,7 @@ public:
 template<typename T>
 inline std::shared_ptr<ComponentArray<T>> ComponentManager::GetComponentArray()
 {
-    const char *typeName = typeid(T).name();
+    std::string_view typeName = typeid(T).name();
 
     //std::printf("GetComponentArray : %s \n",typeName);
     Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "Component not registered before use.");
@@ -60,8 +60,8 @@ template<typename T>
 inline void ComponentManager::RegisterComponent()
 {
 
-    const char *typeName = typeid(T).name();
-    std::printf("Register : %s \n",typeName);
+    std::string_view typeName = typeid(T).name();
+    std::printf("Register : %s \n",typeName.data(),"\n");
 
     Assert_Fatal_Error(_componentTypes.find(typeName) != _componentTypes.end(),
                        "Registering component type more than once.");
@@ -79,7 +79,7 @@ inline void ComponentManager::RegisterComponent()
 template<typename T>
 inline ComponentType ComponentManager::GetComponentType()
 {
-    const char *typeName = typeid(T).name();
+    std::string_view typeName = typeid(T).name();
     Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "Component not registered before use.");
     return _componentTypes[typeName];
 }

@@ -5,13 +5,14 @@
 #include <functional>
 
 #include "Maths/Vector2.hpp"
+
 namespace Input
 {
     enum class Action
     {
         RELEASE = 0,
-        PRESS   = 1,
-        REPEAT  = 2
+        PRESS = 1,
+        REPEAT = 2
     };
 
     enum class MouseButton
@@ -158,8 +159,8 @@ namespace Input
     };
     struct MousePosition
     {
-      Maths::Vector2d pos{0,0};
-      Maths::Vector2d prevPos{0,0};
+        Maths::Vector2d pos{0, 0};
+        Maths::Vector2d prevPos{0, 0};
     };
 
     class PlatformInput
@@ -171,7 +172,7 @@ namespace Input
         std::function<void(const double x, const double y)> UpdateMousePosition;
 
         virtual void PollEvents() = 0;
-        virtual void UpdateCursorPosition(MousePosition& mousePosition) = 0;
+        virtual void UpdateCursorPosition(MousePosition &mousePosition) = 0;
     };
 }
 

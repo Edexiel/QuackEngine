@@ -97,9 +97,9 @@ void CameraSystem::MouseMovement() const
     auto &cam = world.GetComponent<Component::Camera>(_activeCamera);
     auto &transform = world.GetComponent<Transform>(_activeCamera);
 
-    Vector2d angleRotation = (mousePosition.pos - mousePosition.prevPos) * (cam._speedRotation * M_PI / 180.f);
+    Vector2d angleRotation = (mousePosition.pos - mousePosition.prevPos) * (cam._speedRotation * Pi<float>() / 180.f);
     cam._yaw += (float)angleRotation.x;
-    cam._pitch = (float)std::clamp(cam._pitch + angleRotation.y, -M_PI / 2.0, M_PI / 2.0);
+    cam._pitch = (float)std::clamp(cam._pitch + angleRotation.y, -Pi<float>() / 2.0, Pi<float>() / 2.0);
 
     transform.rotation = Quaternion({0, 1, 0}, cam._yaw) * Quaternion({1, 0, 0}, cam._pitch);
 }

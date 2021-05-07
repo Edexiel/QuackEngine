@@ -111,7 +111,6 @@ set(ASSIMP_BUILD_ASSXML_EXPORTER ON CACHE BOOL "" FORCE)
 add_subdirectory(${external_lib}/assimp)
 
 
-
 #flatbuffer
 set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(FLATBUFFERS_MAX_PARSING_DEPTH 16)
@@ -120,7 +119,7 @@ add_subdirectory(${external_lib}/flatbuffers ${CMAKE_CURRENT_BINARY_DIR}/flatbuf
 
 #reactphysics3d
 add_subdirectory(${external_lib}/reactphysics3d)
-target_compile_options(reactphysics3d PRIVATE --no-warnings)
+target_compile_options(reactphysics3d PRIVATE -w --no-warnings)
 
 #gtest
 if (QUACK_BUILD_TESTS)
@@ -130,6 +129,7 @@ endif ()
 
 add_subdirectory(Editor)
 
+
 #Runner
 add_subdirectory(Runner)
 
@@ -138,6 +138,15 @@ add_subdirectory(Engine)
 
 #Game
 add_subdirectory(Game)
+
+
+if(NOT MSVC)
+#    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Editor PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Engine PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Game PRIVATE -Wall -Wextra -pedantic)
+endif()
+
 
 
 #Installer

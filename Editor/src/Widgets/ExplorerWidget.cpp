@@ -5,8 +5,9 @@
 
 ExplorerWidget::ExplorerWidget()
 {
-    _title="Explorer";
+    _title = "Explorer";
 }
+
 void ExplorerWidget::UpdateVisible()
 {
     Engine &engine = Engine::Instance();
@@ -45,7 +46,7 @@ void ExplorerWidget::UpdateVisible()
 
 unsigned int ExplorerWidget::DisplayList(std::vector<std::string> &listName, unsigned int offset)
 {
-    for (unsigned int i = 0; i < listName.size() ; i++)
+    for (unsigned int i = 0; i < listName.size(); i++)
     {
         if (ImGui::Selectable(listName[i].c_str(), _selected == i + offset))
         {
