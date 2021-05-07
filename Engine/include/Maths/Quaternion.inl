@@ -61,8 +61,8 @@ inline void Quaternion::Normalize(Quaternion &q)
  */
 inline float Quaternion::NormalizeAxis(float angle)
 {
-    angle > 1.f ? angle = (float) M_PI : angle = angle;
-    angle < -1.f ? angle = -(float) M_PI : angle = angle;
+    angle > 1.f ? angle = Pi<float>() : angle = angle;
+    angle < -1.f ? angle = - Pi<float>() : angle = angle;
     return angle;
 }
 
@@ -108,20 +108,6 @@ inline Vector3f Quaternion::ToEuler() const
     result.z = atan2f(z0, z1);
 
     return result;
-
-//    float check = 2.0f * (w * x - y * z);
-//
-//    if (check < -0.999999f) {
-//        return Vector3f(-(float)M_PI * 0.5f, 0.0f, -atan2f(2.0f * (x * z - w * y), 1.0f - 2.0f * (y * y + z * z)));
-//    }
-//
-//    if (check > 0.999999f) {
-//        return Vector3f((float)M_PI * 0.5f, 0.0f, atan2f(2.0f * (x * z - w * y), 1.0f - 2.0f * (y * y + z * z)));
-//    }
-//
-//    return Vector3f((float)asin(check),
-//                atan2f(2.0f * (x * z + w * y), 1.0f - 2.0f * (x * x + y * y)),
-//                atan2f(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z)));
 }
 
 inline Quaternion Quaternion::EulerToQuaternion(Vector3f rot)

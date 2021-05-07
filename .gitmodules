@@ -16,3 +16,6 @@
 [submodule "Vendor/googletest"]
 	path = Vendor/googletest
 	url = https://github.com/google/googletest.git
+[submodule "Vendor/ImGuizmo"]
+	path = Vendor/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

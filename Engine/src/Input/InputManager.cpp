@@ -123,12 +123,12 @@ void InputManager::InitInput()
   BindEventAxis("CameraEditorMovementRight", Input::Key::KEY_D, 1.0f);
   BindEventAxis("CameraEditorMovementRight", Input::Key::KEY_A, -1.0f);
   BindEventAxis("CameraEditorMovementUp", Input::Key::KEY_SPACE, 1.0f);
-  BindEventAxis("CameraEditorMovementUp", Input::Key::KEY_LEFT_CONTROL,- 1.0f);
+  BindEventAxis("CameraEditorMovementUp", Input::Key::KEY_LEFT_CONTROL,-1.0f);
 
-  BindEventAxis("CameraMovementForward", Input::Key::KEY_W, -1.0f);
-  BindEventAxis("CameraMovementForward", Input::Key::KEY_S, 1.0f);
-  BindEventAxis("CameraMovementRight", Input::Key::KEY_D, -1.0f);
-  BindEventAxis("CameraMovementRight", Input::Key::KEY_A, 1.0f);
-  BindEventAxis("CameraMovementUp", Input::Key::KEY_SPACE, -1.0f);
-  BindEventAxis("CameraMovementUp", Input::Key::KEY_LEFT_CONTROL, 1.0f);
+  BindEventAxis("CameraMovementForward", Input::Key::KEY_W, 1.0f);
+  BindEventAxis("CameraMovementForward", Input::Key::KEY_S, -1.0f);
+  BindEventAxis("CameraMovementRight", Input::Key::KEY_D, 1.0f);
+  BindEventAxis("CameraMovementRight", Input::Key::KEY_A, -1.0f);
+  BindEventAxis("CameraMovementUp", Input::Key::KEY_SPACE, 1.0f);
+  BindEventAxis("CameraMovementUp", Input::Key::KEY_LEFT_CONTROL, -1.0f);
 }

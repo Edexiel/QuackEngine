@@ -1,7 +1,6 @@
 #ifndef QUACKENGINE_VECTOR4_HPP
 #define QUACKENGINE_VECTOR4_HPP
 
-#include <cmath>
 #include "Vector3.hpp"
 
 namespace Maths
