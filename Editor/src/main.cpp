@@ -75,5 +75,7 @@ int main()
         engine.SwapBuffers();
     }
 
+    engine.SaveWorld(engine.GetCurrentWorld().GetName(),"./");
+
     return 0;
 }

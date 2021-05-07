@@ -1,8 +1,8 @@
 #ifndef QUACKENGINE_NAME_HPP
 #define QUACKENGINE_NAME_HPP
-#include <string_view>
-#include <cereal/types/string_view.hpp>
 
+#include <string>
+#include <cereal/types/string.hpp>
 
 namespace Component
 {
@@ -13,7 +13,7 @@ namespace Component
         template<class Archive>
         void serialize(Archive & archive)
         {
-            archive(name) ;
+            archive(name);
         }
     };
 }

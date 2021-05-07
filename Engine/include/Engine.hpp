@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 #include <memory>
-#include <string_view>
+#include <string>
 
 #include <Scene/Core/World.hpp>
 
@@ -60,7 +60,7 @@ private:
     Input::InputManager _inputManager;
 
     uint_fast16_t _currentWorld = 0;
-    std::map<std::string_view , uint_fast16_t> _worldLut;
+    std::map<std::string, uint_fast16_t> _worldLut;
     std::vector<World> _worlds;
 
 public:
@@ -79,11 +79,10 @@ public:
     void SwapBuffers();
 
 
-    World& CreateWorld(std::string_view name);
+    World& CreateWorld(std::string name);
     World& LoadWorld(const std::string& path);
-    void SaveWorld(const std::string& worldName,std::filesystem::path& path);
+    void SaveWorld(const std::string& worldName,std::filesystem::path path);
     void RemoveWorld(const std::string &name);
-
 
     Input::InputManager &GetInputManager();
     Renderer::RendererInterface &GetRendererInterface();

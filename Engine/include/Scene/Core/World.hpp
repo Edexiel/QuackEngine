@@ -10,8 +10,18 @@
 #include "Scene/Core/ComponentManager.hpp"
 #include "Physics/PhysicsEventManager.hpp"
 
+#include <string>
+
+
+//Serialization, yeah sorry
+#include <cereal/types/string.hpp>
+#include "Scene/Component/Camera.hpp"
+#include "Scene/Component/Light.hpp"
+#include "Scene/Component/Model.hpp"
+#include "Scene/Component/RigidBody.hpp"
+#include "Scene/Component/Transform.hpp"
 #include "Scene/Component/Name.hpp"
-#include <string_view>
+
 
 namespace reactphysics3d
 {
@@ -19,7 +29,7 @@ namespace reactphysics3d
 }
 
 //Serialization
-#include <cereal/types/string_view.hpp>
+#include <cereal/types/string.hpp>
 #include <cereal/access.hpp>
 
 class World
@@ -34,12 +44,12 @@ private:
 
     reactphysics3d::PhysicsWorld *_physicsWorld = nullptr;
 
-    std::string_view _name;
+    std::string _name;
 
 
 public:
     World() = delete;
-    explicit World(std::string_view &name);
+    explicit World(std::string &name);
 
     void Init();
 
@@ -78,20 +88,48 @@ public:
 
     reactphysics3d::PhysicsWorld *GetPhysicsWorld() const;
 
-    const std::string_view &GetName() const;
+    const std::string &GetName() const;
 
     const std::unique_ptr<EntityManager> &GetEntityManager() const;
 
 
     friend class cereal::access;
 
-    template<class Archive>
-    void serialize(Archive & archive)
+    template<class Archive, class T>
+    void save(Archive &archive, Entity &e)
     {
-        archive(_name);
+        if (HasComponent<T>(e))
+        {
+            archive(GetComponent<T>(e));
+        }
+    }
+
+    template<class Archive>
+    void serialize(Archive &archive,
+                   Entity &e)
+    {
+        save<Component::Name>(archive, e);
+        save<Component::Transform>(archive, e);
+        save<Component::Camera>(archive, e);
+        save<Component::Light>(archive, e);
+        save<Component::Model>(archive, e);
+        save<Component::RigidBody>(archive, e);
+    }
+
+
+    template<class Archive>
+    void serialize(Archive &archive)
+    {
+        archive(CEREAL_NVP(_name));
+
+        for (const Entity &entity : _entityManager->GetEntities())
+        {
+            archive(reinterpret_cast<Entity>(entity));
+        }
 
     }
 };
+
 #include "Scene/Core/World.inl"
 
 #endif //QUACKENGINE_WORLD_HPP

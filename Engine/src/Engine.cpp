@@ -190,7 +190,7 @@ World &Engine::CreateWorld(std::string name)
     return _worlds.emplace_back(name);
 }
 
-void Engine::SaveWorld(const std::string &worldName, fs::path &path)
+void Engine::SaveWorld(const std::string &worldName,fs::path path)
 {
     if (_worldLut.find(worldName) == _worldLut.end())
     {
@@ -202,11 +202,11 @@ void Engine::SaveWorld(const std::string &worldName, fs::path &path)
     path.append(worldName).replace_extension(".quack");
     std::ofstream os(path);
 
-    cereal::JSONOutputArchive archive(os);
+    cereal::JSONOutputArchive oarchive(os);
 
 
 
-    archive(_worlds[_worldLut[worldName]]);
+    oarchive(_worlds[_worldLut[worldName]]);
 
     Log_Info((std::string("World has been saved as :")+path.string()).c_str());
 
@@ -222,7 +222,7 @@ World &Engine::LoadWorld(const std::string &path)
 void Engine::RemoveWorld(const std::string &name)
 {
     uint_fast16_t index = _worldLut[name];
-    std::string_view back_name = _worlds.back().GetName();
+    std::string back_name = _worlds.back().GetName();
     std::swap(_worlds[index], _worlds.back());
     _worlds.pop_back();
     _worldLut[back_name] = index;
