@@ -17,7 +17,7 @@
 class EntityManager
 {
 private:
-    Entity _idCount = 0;
+    Entity _idCount {0};
 
     std::vector<Entity> _entities{};
 public:
