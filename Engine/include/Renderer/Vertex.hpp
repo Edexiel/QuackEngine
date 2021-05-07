@@ -34,7 +34,6 @@ namespace Renderer
       Maths::Vector4<int> boneId    {-1,-1,-1,-1};
       Maths::Vector4f weights   {0.f,0.f,0.f,0.f};
   };
-
 }
 
 #endif // _VERTEX_HPP

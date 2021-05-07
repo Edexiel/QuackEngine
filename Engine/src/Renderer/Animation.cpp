@@ -10,12 +10,11 @@ Animation Animation::LoadAnimation(const char *path)
 {
     Assimp::Importer importer;
 
+    //importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
+
     const aiScene* scene = importer.ReadFile(path,
                                              aiProcess_Triangulate |
-                                             aiProcess_SortByPType |
-                                             aiProcess_JoinIdenticalVertices |
-                                             aiProcess_CalcTangentSpace |
-                                             aiProcess_PopulateArmatureData);
+                                             aiProcess_JoinIdenticalVertices);
 
     Animation animation;
     animation.ReadBaseSkeleton((void*)scene->mMeshes[0]);
@@ -47,6 +46,12 @@ void Animation::ReadBaseSkeleton(const void* baseMesh)
                                 boneMatrix.a2, boneMatrix.b2, boneMatrix.c2, boneMatrix.d2,
                                 boneMatrix.a3, boneMatrix.b3, boneMatrix.c3, boneMatrix.d3,
                                 boneMatrix.a4, boneMatrix.c3, boneMatrix.c4, boneMatrix.d4};
+
+            /*aiVector3t<float> position;
+            aiQuaterniont<float> rotation;
+            aiVector3t<float> scale;
+
+            boneMatrix.Decompose(scale, rotation, position);*/
 
             _skeleton.AddBone(Bone(boneName, boneCounter, transform));
             boneCounter++;

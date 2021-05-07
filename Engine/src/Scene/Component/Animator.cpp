@@ -63,8 +63,7 @@ void Animator::CalculateBoneTransform(const Renderer::NodeData& node, Maths::Mat
         //_bonesOffset[bone->GetID()] = boneMatrix * parentMatrixWorld.GetInvert();
 
         globalTransform = parentMatrixWorld * bone->GetLocalTransformation();
-        _bonesOffset[bone->GetID()] = globalTransform * bonePlace.GetInvert();
-
+        _bonesOffset[bone->GetID()] = globalTransform  * bone->GetOffsetTransformation().GetInvert();
     }
 
     for (unsigned int i = 0; i < node.listChildren.size(); i++)

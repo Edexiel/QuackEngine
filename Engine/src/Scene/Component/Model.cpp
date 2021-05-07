@@ -30,16 +30,16 @@ void Model::Destroy()
 Model Model::LoadModel(const char *path, VertexType vertexType)
 {
   Assimp::Importer importer;
-
   const aiScene* scene = importer.ReadFile(path,
                     aiProcess_Triangulate |
                     aiProcess_SortByPType |
                     aiProcess_JoinIdenticalVertices |
                     aiProcess_CalcTangentSpace);
 
+
   if (!scene)
   {
-    std::cout << "Object : " << path << " not found" << std::endl;
+    std::cout << "Object : " << path << " can't be load" << std::endl;
     return {};
   }
 

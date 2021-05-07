@@ -258,7 +258,7 @@ void ResourcesManager::LoadFolder(const char *path)
     {
         std::cout << i << std::endl;
         type = GetFileType(i);
-        if (type == "fbx" || type == "glb")
+        if (type == "fbx" || type == "glb" || type == "dae")
             LoadModel(i.c_str(), VertexType::V_NORMALMAP);
         else if (type == "ogg" || type == "mp3" || type == "wav")
             LoadSound(i.c_str(), Audio::SoundType::S_MASTER);
