@@ -135,13 +135,9 @@ void Bone::Update(float animationTime)
     if (!_animated)
         return;
 
-    /*_localTransform = InterpolatePosition(animationTime) *
+    _localTransform = InterpolatePosition(animationTime) *
                       InterpolateRotation(animationTime) *
-                      InterpolateScale(animationTime);*/
-
-    _localTransform = InterpolateScale(animationTime) *
-                      InterpolateRotation(animationTime) *
-                      InterpolatePosition(animationTime);
+                      InterpolateScale(animationTime);
 }
 
 int Bone::GetID() const
@@ -162,6 +158,11 @@ const Maths::Matrix4 &Bone::GetOffsetTransformation() const
 const std::string &Bone::GetName() const
 {
     return _name;
+}
+
+bool Bone::IsAnimated() const
+{
+    return _animated;
 }
 
 const Bone *Skeleton::GetBone(std::string name) const

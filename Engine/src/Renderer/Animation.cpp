@@ -25,6 +25,8 @@ Animation Animation::LoadAnimation(const char *path)
 
     animation.ReadBones((void*)assimpAnimation);
 
+    DisplayHierachy(animation._rootNode, 0);
+
     return animation;
 }
 
@@ -45,13 +47,7 @@ void Animation::ReadBaseSkeleton(const void* baseMesh)
                                 boneMatrix.a1, boneMatrix.b1, boneMatrix.c1, boneMatrix.d1,
                                 boneMatrix.a2, boneMatrix.b2, boneMatrix.c2, boneMatrix.d2,
                                 boneMatrix.a3, boneMatrix.b3, boneMatrix.c3, boneMatrix.d3,
-                                boneMatrix.a4, boneMatrix.c3, boneMatrix.c4, boneMatrix.d4};
-
-            /*aiVector3t<float> position;
-            aiQuaterniont<float> rotation;
-            aiVector3t<float> scale;
-
-            boneMatrix.Decompose(scale, rotation, position);*/
+                                boneMatrix.a4, boneMatrix.b4, boneMatrix.c4, boneMatrix.d4};
 
             _skeleton.AddBone(Bone(boneName, boneCounter, transform));
             boneCounter++;
@@ -126,4 +122,16 @@ const NodeData &Animation::GetRootNode() const
 const Skeleton &Animation::GetSkeleton() const
 {
     return _skeleton;
+}
+
+void Animation::DisplayHierachy(const NodeData& node, int depth)
+{
+    for (unsigned int i = 0; i < depth; i++)
+        std::cout << " - ";
+
+    std::cout << "| " << node.name << std::endl;
+    for (unsigned int i = 0; i < node.listChildren.size(); i++)
+    {
+        DisplayHierachy(node.listChildren[i], depth + 1);
+    }
 }

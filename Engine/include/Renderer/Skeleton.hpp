@@ -47,7 +47,7 @@ namespace Renderer
         const Maths::Matrix4& GetLocalTransformation() const;
         const Maths::Matrix4& GetOffsetTransformation() const;
         const std::string& GetName() const;
-
+        bool IsAnimated() const;
     };
 
     struct Skeleton

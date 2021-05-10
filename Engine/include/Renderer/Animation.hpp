@@ -33,6 +33,9 @@ namespace Renderer
         float GetTickPerSecond() const;
         const NodeData& GetRootNode() const;
         const Skeleton& GetSkeleton() const;
+
+        static void DisplayHierachy(const NodeData& node, int depth);
+
     };
 }
 

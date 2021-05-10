@@ -34,7 +34,7 @@ void Animator::SetShader(Renderer::Shader &shader)
 void Animator::Update(float deltaTime)
 {
     _currentTime += _currentAnimation.GetTickPerSecond() * deltaTime;
-    if (_currentTime > _currentAnimation.GetDuration() - 1)
+    if (_currentTime > _currentAnimation.GetDuration())
         _currentTime = 0;
 
     Maths::Matrix4 identity = Maths::Matrix4::Identity();
@@ -50,25 +50,22 @@ void Animator::PlayAnimation(Renderer::Animation &animation)
 
 void Animator::CalculateBoneTransform(const Renderer::NodeData& node, Maths::Matrix4 parentMatrixWorld, Maths::Matrix4 bonePlace)
 {
+    Maths::Matrix4 nodeTransform = node.transform;
+
     const Bone* bone = _currentAnimation.GetSkeleton().GetBone(node.name);
 
-    //Maths::Matrix4 boneTransform = node.transform;
-    Maths::Matrix4 globalTransform = parentMatrixWorld * node.transform;
+    if (bone && bone->IsAnimated())
+    {
+        nodeTransform = bone->GetLocalTransformation();
+    }
 
-    //std::cout << node.name << std::endl;
-    //parentMatrixWorld *= node.transform;
+    Maths::Matrix4 globalTransform = parentMatrixWorld * nodeTransform;
+
     if (bone)
     {
-        //boneTransform = bone->GetLocalTransformation();
-        //_bonesOffset[bone->GetID()] = boneMatrix * parentMatrixWorld.GetInvert();
-
-        globalTransform = parentMatrixWorld * bone->GetLocalTransformation();
-        _bonesOffset[bone->GetID()] = globalTransform  * bone->GetOffsetTransformation().GetInvert();
+        _bonesOffset[bone->GetID()] = globalTransform * bone->GetOffsetTransformation();
     }
 
-    for (unsigned int i = 0; i < node.listChildren.size(); i++)
-    {
-        //std::cout << i << std::endl;
+    for (int i = 0; i < node.listChildren.size(); i++)
         CalculateBoneTransform(node.listChildren[i], globalTransform, bonePlace);
-    }
 }

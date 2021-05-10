@@ -22,21 +22,6 @@ uniform mat4 finalBonesMatrices[MAX_BONES];
 
 void main(void)
 {
-
-    /*vec4 totalPosition = vec4(0.0f);
-    for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++)
-    {
-        if(boneIds[i] == -1) 
-            continue;
-        if(boneIds[i] >= MAX_BONES) 
-        {
-            totalPosition = vec4(vertexPosition,1.0f);
-            break;
-        }
-        vec4 localPosition = finalBonesMatrices[int(boneIds[i])] * weights[i] * vec4(vertexPosition, 1.0f);
-        totalPosition += localPosition;
-   }*/
-
     mat4 BoneTransform = finalBonesMatrices[int(boneIds[0])] * weights[0];
     if (int(boneIds[1]) != -1)
         BoneTransform += finalBonesMatrices[int(boneIds[1])] * weights[1];
@@ -48,8 +33,8 @@ void main(void)
 
   gl_Position = projection * view * model * BoneTransform * vec4(vertexPosition, 1.0f);
 
-  Position =  vec3(model * vec4(vertexPosition, 1));
-  Normal = vec3(model  * vec4(vertexNormal, 0));
+  Position =  vec3(model * BoneTransform * vec4(vertexPosition, 1));
+  Normal = vec3(model * BoneTransform * vec4(vertexNormal, 0));
   TexCoord = vertexTexture;
 
   cameraPosition = vec3(view[3][0], view[3][1], view[3][2]);

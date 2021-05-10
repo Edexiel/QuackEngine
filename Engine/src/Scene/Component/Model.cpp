@@ -292,15 +292,6 @@ void Model::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &
         std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
         if (_skeleton.find(boneName) == _skeleton.end())
         {
-            /*Bone newBone;
-            //newBone.id = m_BoneCounter;
-            auto boneMatrix = mesh->mBones[boneIndex]->mOffsetMatrix;
-            newBone.offset = {boneMatrix.a1, boneMatrix.a2, boneMatrix.a3, boneMatrix.a4,
-                              boneMatrix.b1, boneMatrix.b2, boneMatrix.b3, boneMatrix.b4,
-                              boneMatrix.c1, boneMatrix.c2, boneMatrix.c3, boneMatrix.c4,
-                              boneMatrix.d1, boneMatrix.d2, boneMatrix.d3, boneMatrix.d4};
-
-            newBone.offset = newBone.offset.GetTranspose();*/
             _skeleton.insert({boneName, boneCounter});
             boneID = boneCounter;
             boneCounter++;
@@ -313,12 +304,9 @@ void Model::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &
         auto weights = mesh->mBones[boneIndex]->mWeights;
         int numWeights = mesh->mBones[boneIndex]->mNumWeights;
 
-        for (unsigned int weightIndex = 0; weightIndex < numWeights; weightIndex++)
+        for (unsigned int i = 0; i < numWeights; i++)
         {
-            unsigned int vertexId = weights[weightIndex].mVertexId;
-            float weight = weights[weightIndex].mWeight;
-            assert(vertexId <= vertices.size());
-            SetVertexBoneData(vertices[vertexId], boneID, weight);
+            SetVertexBoneData(vertices[weights[i].mVertexId], boneID, weights[i].mWeight);
         }
     }
     /*for (unsigned int i = 0; i < vertices.size(); i++)
