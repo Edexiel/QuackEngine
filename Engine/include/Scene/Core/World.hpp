@@ -21,6 +21,7 @@
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/Component/Transform.hpp"
 #include "Scene/Component/Name.hpp"
+#include "fmt/core.h"
 
 
 namespace reactphysics3d
@@ -30,11 +31,44 @@ namespace reactphysics3d
 
 //Serialization
 #include <cereal/types/string.hpp>
+#include <cereal/types/vector.hpp>
 #include <cereal/access.hpp>
 
 class World
 {
 private:
+    struct EntityHandler
+    {
+        EntityHandler() = default;
+        EntityHandler(Entity id, World *world) : id(id), world(world) {}
+
+        Entity id;
+        World* world;
+
+        template<class Archive, class T>
+        void save(Archive &archive, Entity &e, const char *name)
+        {
+            if (world->HasComponent<T>(e))
+            {
+                archive(cereal::make_nvp(name, world->GetComponent<T>(e)));
+            }
+        }
+
+        template<class Archive>
+        void serialize(Archive &archive)
+        {
+            archive(CEREAL_NVP(id));
+            save<Archive, Component::Name>(archive, id, "Name");
+            save<Archive, Component::Transform>(archive, id, "Transform");
+//        save<Archive, Component::Camera>(archive, e,"Camera");
+//        save<Archive,Component::Light>(archive, e,"Light");
+//        save<Archive,Component::Model>(archive, e,"Model");
+//        save<Archive,Component::RigidBody>(archive, e,"RigidBody");
+        }
+    };
+
+
+
     std::unique_ptr<ComponentManager> _componentManager;
     std::unique_ptr<EntityManager> _entityManager;
     std::unique_ptr<SystemManager> _systemManager;
@@ -92,29 +126,8 @@ public:
 
     const std::unique_ptr<EntityManager> &GetEntityManager() const;
 
-
+///***************SERIALIZATION**************/////////
     friend class cereal::access;
-
-    template<class Archive, class T>
-    void save(Archive &archive, Entity &e)
-    {
-        if (HasComponent<T>(e))
-        {
-            archive(GetComponent<T>(e));
-        }
-    }
-
-    template<class Archive>
-    void serialize(Archive &archive,
-                   Entity &e)
-    {
-        save<Component::Name>(archive, e);
-        save<Component::Transform>(archive, e);
-        save<Component::Camera>(archive, e);
-        save<Component::Light>(archive, e);
-        save<Component::Model>(archive, e);
-        save<Component::RigidBody>(archive, e);
-    }
 
 
     template<class Archive>
@@ -122,13 +135,15 @@ public:
     {
         archive(CEREAL_NVP(_name));
 
-        for (const Entity &entity : _entityManager->GetEntities())
-        {
-            archive(reinterpret_cast<Entity>(entity));
-        }
+        std::vector<EntityHandler> entities;
+        for (Entity &entity : _entityManager->GetEntities())
+            entities.emplace_back(entity, this);
 
+        archive(CEREAL_NVP(entities));
+        //serialize(archive, entity);
     }
 };
+
 
 #include "Scene/Core/World.inl"
 

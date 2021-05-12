@@ -16,3 +16,6 @@
 [submodule "Vendor/imgui"]
 	path = Vendor/imgui
 	url = git@gitlab.com:quack-engine/imgui.git
+[submodule "Vendor/fmt"]
+	path = Vendor/fmt
+	url = https://github.com/fmtlib/fmt.git

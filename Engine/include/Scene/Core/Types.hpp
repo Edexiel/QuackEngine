@@ -1,16 +1,15 @@
-//
-// Created by gnisi on 22/03/2021.
-//
 
 #ifndef QUACKENGINE_TYPES_HPP
 #define QUACKENGINE_TYPES_HPP
 
 #include <cstdint>
 #include <bitset>
+#include <cereal/types/string.hpp>
+
 
 const std::uint32_t COMPONENTS_NUMBER = 6;
 const size_t START_SIZE = 10000;
-typedef uint_fast32_t Entity;
+typedef uint Entity;
 using ComponentType = std::uint_fast8_t;
 using Signature = std::bitset<COMPONENTS_NUMBER>;
 
@@ -18,15 +17,82 @@ using Signature = std::bitset<COMPONENTS_NUMBER>;
 //class Entity
 //{
 //private:
-//    std::uint_fast32_t val;
+//    uint val;
 //public:
-//    explicit Entity(uint_fast32_t val) : val(val)
+//    Entity():val()
 //    {}
-//    explicit operator uint_fast32_t() const noexcept
+//
+//    explicit Entity(const uint & val) : val(val)
+//    {}
+//
+//    explicit Entity(uint && value) noexcept(std::is_nothrow_move_constructible<uint>::value)
+//    : val(value)
+//    {
+//    }
+//
+//    friend void swap(Entity& a, Entity& b) noexcept
+//    {
+//        using std::swap;
+//        swap(a.val, b.val);
+//    }
+//
+//    explicit operator const uint&() const noexcept
 //    {
 //        return val;
 //    }
+//    explicit operator uint&() noexcept
+//    {
+//        return val;
+//    }
+//
+//    bool operator==(const Entity &rhs) const
+//    {
+//        return val == rhs.val;
+//    }
+//
+//    bool operator!=(const Entity &rhs) const
+//    {
+//        return !(rhs == *this);
+//    }
+//
+//    bool operator<(const Entity &rhs) const
+//    {
+//        return val < rhs.val;
+//    }
+//
+//    bool operator>(const Entity &rhs) const
+//    {
+//        return rhs < *this;
+//    }
+//
+//    bool operator<=(const Entity &rhs) const
+//    {
+//        return !(rhs < *this);
+//    }
+//
+//    bool operator>=(const Entity &rhs) const
+//    {
+//        return !(*this < rhs);
+//    }
+//
+//    uint operator++(int)
+//    {
+//        return val++;
+//    }
+//
 //};
+//
+//namespace std
+//{
+//    template<>
+//    struct hash<Entity>
+//    {
+//        std::size_t operator()(Entity const& e) const noexcept
+//        {
+//            return std::hash<uint>{}(e.operator const unsigned int &());
+//        }
+//    };
+//}
 
 
 #endif //QUACKENGINE_TYPES_HPP

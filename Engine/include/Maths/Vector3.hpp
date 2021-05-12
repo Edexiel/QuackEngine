@@ -5,6 +5,7 @@
 
 #include "Maths/Vector2.hpp"
 #include <iostream>
+#include "cereal/cereal.hpp"
 
 namespace Maths
 {
@@ -78,7 +79,7 @@ namespace Maths
         template<class Archive>
         void serialize(Archive &archive)
         {
-            archive(x, y, z);
+            archive(CEREAL_NVP(x),CEREAL_NVP(y), CEREAL_NVP(z));
         }
     };
 

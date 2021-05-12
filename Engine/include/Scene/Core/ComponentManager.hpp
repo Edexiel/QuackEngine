@@ -27,6 +27,7 @@ private:
 public:
     template<typename T>
     void RegisterComponent();
+    void RegisterComponent();
 
     template<typename T>
     ComponentType GetComponentType();

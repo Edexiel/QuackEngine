@@ -206,7 +206,7 @@ void Engine::SaveWorld(const std::string &worldName,fs::path path)
 
 
 
-    oarchive(_worlds[_worldLut[worldName]]);
+    oarchive(cereal::make_nvp("world",_worlds[_worldLut[worldName]]));
 
     Log_Info((std::string("World has been saved as :")+path.string()).c_str());
 

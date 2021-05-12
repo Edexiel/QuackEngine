@@ -13,7 +13,7 @@ namespace Component
         template<class Archive>
         void serialize(Archive & archive)
         {
-            archive(name);
+            archive(CEREAL_NVP(name));
         }
     };
 }

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.18)
 project(QuackEngine VERSION 0.1.0 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -9,6 +9,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 #option(QUACK_BUILD_EDITOR "Build Editor" OFF)
 option(QUACK_BUILD_TESTS "Build Tests" OFF)
+
+include(CheckIPOSupported)
+check_ipo_supported(RESULT supported OUTPUT error)
+
+
 
 if (QUACK_BUILD_EDITOR)
     set(QUACK_EDITOR TRUE)
@@ -105,6 +110,9 @@ add_subdirectory(${external_lib}/cereal)
 add_subdirectory(${external_lib}/reactphysics3d)
 target_compile_options(reactphysics3d PRIVATE -w --no-warnings)
 
+#fmt
+add_subdirectory(${external_lib}/fmt)
+
 #gtest
 if (QUACK_BUILD_TESTS)
     add_subdirectory(${external_lib}/googletest)
@@ -122,6 +130,15 @@ add_subdirectory(Engine)
 #Game
 add_subdirectory(Game)
 
+
+#if( supported )
+#    message(STATUS "IPO / LTO enabled")
+#    set_property(TARGET Editor PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+#    set_property(TARGET Engine PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+#    set_property(TARGET Game PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+#else()
+#    message(STATUS "IPO / LTO not supported: <${error}>")
+#endif()
 
 if(NOT MSVC)
 #    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)

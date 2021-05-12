@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include "Matrix4.hpp"
+#include "cereal/cereal.hpp"
 
 
 namespace Maths
@@ -69,7 +70,7 @@ namespace Maths
         template<class Archive>
         void serialize(Archive &archive)
         {
-            archive(w, x, y, z);
+            archive(CEREAL_NVP(w),CEREAL_NVP(x),CEREAL_NVP(y),CEREAL_NVP(z));
         }
     };
 
