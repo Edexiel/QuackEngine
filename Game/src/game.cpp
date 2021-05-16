@@ -104,8 +104,8 @@ void Game::Init()
     ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
 
     Transform t = {Maths::Vector3f{0, -1, 0}, Maths::Vector3f::One() * 0.2f, Maths::Quaternion({0,1,0}, M_PI)};
-    engine.GetResourcesManager().ReLoadModel(R"(..\..\Game\Asset\Model\dancing_vampire.dae)", Renderer::VertexType::V_SKELETAL);
-    Component::Model md = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\dancing_vampire.dae)", Renderer::VertexType::V_SKELETAL);
+    engine.GetResourcesManager().ReLoadModel(R"(..\..\Game\Asset\Model\BartenderAnimation.fbx)", Renderer::VertexType::V_SKELETAL);
+    Component::Model md = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\BartenderAnimation.fbx)", Renderer::VertexType::V_SKELETAL);
 
     Material material;
 
@@ -122,7 +122,7 @@ void Game::Init()
 
     md.AddMaterial(materialInterface);
 
-    Animation animation = Renderer::Animation::LoadAnimation(R"(..\..\Game\Asset\Model\dancing_vampire.dae)");
+    Animation animation = engine.GetResourcesManager().LoadAnimation(R"(..\..\Game\Asset\Model\BartenderAnimation.fbx)");
 
 
     for (int x = 0; x < 1; x++)

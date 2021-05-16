@@ -10,8 +10,6 @@ Animation Animation::LoadAnimation(const char *path)
 {
     Assimp::Importer importer;
 
-    //importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
-
     const aiScene* scene = importer.ReadFile(path,
                                              aiProcess_Triangulate |
                                              aiProcess_JoinIdenticalVertices);
@@ -24,8 +22,6 @@ Animation Animation::LoadAnimation(const char *path)
     ReadHierarchy(animation._rootNode, (void*)scene->mRootNode);
 
     animation.ReadBones((void*)assimpAnimation);
-
-    DisplayHierachy(animation._rootNode, 0);
 
     return animation;
 }
@@ -52,10 +48,6 @@ void Animation::ReadBaseSkeleton(const void* baseMesh)
             _skeleton.AddBone(Bone(boneName, boneCounter, transform));
             boneCounter++;
         }
-        else
-        {
-            std::cout << "Y'a une couille dans le potage" << std::endl;
-        }
     }
 }
 
@@ -64,8 +56,6 @@ void Animation::ReadHierarchy(NodeData& node, const void *src)
     const aiNode* srcNode = (aiNode*)src;
 
     node.name = srcNode->mName.data;
-
-    //std::cout << node.name << std::endl;
 
     node.transform = {srcNode->mTransformation.a1, srcNode->mTransformation.b1, srcNode->mTransformation.c1, srcNode->mTransformation.d1,
                       srcNode->mTransformation.a2, srcNode->mTransformation.b2, srcNode->mTransformation.c2, srcNode->mTransformation.d2,
@@ -84,6 +74,8 @@ void Animation::ReadBones(const void *loadedAnimation)
 {
     const aiAnimation* animation = (aiAnimation*)loadedAnimation;
 
+    std::cout << "Animation Name : " << animation->mName.data << std::endl;
+
     for (unsigned int i = 0; i < animation->mNumChannels; i++)
     {
         const Bone* bone = _skeleton.GetBone(animation->mChannels[i]->mNodeName.data);
@@ -93,7 +85,6 @@ void Animation::ReadBones(const void *loadedAnimation)
         {
             _skeleton.AddBone(Bone(animation->mChannels[i]->mNodeName.data, _skeleton.GetBonesNb(),
                                    Maths::Matrix4::Identity()));
-            std::cout << "Kes tu fou la ? " << animation->mChannels[i]->mNodeName.data <<  std::endl;
         }
     }
 }
@@ -124,7 +115,7 @@ const Skeleton &Animation::GetSkeleton() const
     return _skeleton;
 }
 
-void Animation::DisplayHierachy(const NodeData& node, int depth)
+void Animation::DisplayHierarchy(const NodeData& node, int depth)
 {
     for (unsigned int i = 0; i < depth; i++)
         std::cout << " - ";
@@ -132,6 +123,6 @@ void Animation::DisplayHierachy(const NodeData& node, int depth)
     std::cout << "| " << node.name << std::endl;
     for (unsigned int i = 0; i < node.listChildren.size(); i++)
     {
-        DisplayHierachy(node.listChildren[i], depth + 1);
+        DisplayHierarchy(node.listChildren[i], depth + 1);
     }
 }

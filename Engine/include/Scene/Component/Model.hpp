@@ -11,12 +11,14 @@
 
 #include "Scene/Core/Types.hpp"
 
+#include "Resources/Asset.hpp"
+
 #include <memory>
 #include <unordered_map>
 
 namespace Component
 {
-    class Model
+    class Model : public Resources::Asset
     {
 
         std::vector<Renderer::Mesh> _meshList;
@@ -30,7 +32,7 @@ namespace Component
         static Model LoadSkeletalMeshModel(const void *loadedScene);
 
         static void SetVertexBoneData(Renderer::SkeletalVertex& vertex, int boneID, float weight);
-        void ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex>& vertices,
+        static void ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex>& vertices,
                                           unsigned int meshId,
                                           const void* loadedScene);
 
@@ -40,8 +42,7 @@ namespace Component
 
         std::string name;
 
-        Model() = default;
-
+        Model();
         Model(Renderer::VertexType vertexType);
 
         void Destroy();

@@ -41,6 +41,10 @@ void ExplorerWidget::UpdateVisible()
 
     if (!ImGui::CollapsingHeader("Model"))
         offset += DisplayList(listName, offset);
+
+    listName = engine.GetResourcesManager().GetAnimationNameList();
+    if (!ImGui::CollapsingHeader("Animation"))
+        offset += DisplayList(listName, offset);
 }
 
 unsigned int ExplorerWidget::DisplayList(std::vector<std::string> &listName, unsigned int offset)
@@ -52,7 +56,6 @@ unsigned int ExplorerWidget::DisplayList(std::vector<std::string> &listName, uns
             _propertiesSwitch = PROPERTIES_SHOW_ASSET;
             _selected = i + offset;
             _assetName = listName[i];
-            std::cout << _selected << std::endl;
         }
     }
     return listName.size();

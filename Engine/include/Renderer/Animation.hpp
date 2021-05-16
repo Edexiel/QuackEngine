@@ -34,7 +34,7 @@ namespace Renderer
         const NodeData& GetRootNode() const;
         const Skeleton& GetSkeleton() const;
 
-        static void DisplayHierachy(const NodeData& node, int depth);
+        static void DisplayHierarchy(const NodeData& node, int depth);
 
     };
 }

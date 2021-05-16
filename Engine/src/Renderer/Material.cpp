@@ -5,6 +5,8 @@
 
 using namespace Renderer;
 
+Material::Material() : Resources::Asset(Resources::ASSET_TYPE::A_MATERIAL){}
+
 void Material::GenerateShader()
 {
 

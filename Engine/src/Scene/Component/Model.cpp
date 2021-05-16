@@ -16,7 +16,9 @@
 using namespace Component;
 using namespace Renderer;
 
-Model::Model(VertexType vertexType) : _vertexType{vertexType} {}
+Model::Model() : Resources::Asset(Resources::ASSET_TYPE::A_MODEL){}
+
+Model::Model(VertexType vertexType) : Resources::Asset(Resources::ASSET_TYPE::A_MODEL), _vertexType{vertexType} {}
 
 void Model::Destroy()
 {
@@ -240,18 +242,8 @@ Model Model::LoadSkeletalMeshModel(const void* loadedScene)
             model.ExtractBoneWeightForVertices(vertices, i, scene);
         }
 
-        //Skeleton skeletalMesh;
-
-        /*for (unsigned int i = 0 ; i < vertices.size(); i++)
-        {
-            std::cout << "X = " << vertices[i].boneId.x <<
-            ", Y = " << vertices[i].boneId.y <<
-            ", Z = " << vertices[i].boneId.z <<
-            ", W = " << vertices[i].boneId.w << std::endl;
-        }*/
-
         // Put loaded data in buffers
-        model._meshList[i] = Renderer::RendererPlatform::CreateMesh((float*)vertices.data(), vertices.size() * 16,
+        model._meshList[i] = Renderer::RendererPlatform::CreateMesh((float*)vertices.data(), vertices.size() * sizeof(SkeletalVertex)/sizeof(float),
                                                                     indices.data(), indices.size(),
                                                                     Renderer::VertexType::V_SKELETAL);
         RendererPlatform::VerticesReadingSkeletalMesh();
@@ -282,8 +274,6 @@ void Model::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &
 
     int boneCounter = 0;
 
-    //std::cout << mesh->mBones[0]->mNumWeights << std::endl;
-
     std::unordered_map<std::string, int> _skeleton;
 
     for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
@@ -302,17 +292,12 @@ void Model::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &
         }
         assert(boneID != -1);
         auto weights = mesh->mBones[boneIndex]->mWeights;
-        int numWeights = mesh->mBones[boneIndex]->mNumWeights;
 
-        for (unsigned int i = 0; i < numWeights; i++)
+        for (unsigned int i = 0; i < mesh->mBones[boneIndex]->mNumWeights; i++)
         {
             SetVertexBoneData(vertices[weights[i].mVertexId], boneID, weights[i].mWeight);
         }
     }
-    /*for (unsigned int i = 0; i < vertices.size(); i++)
-    {
-        std::cout << "X = " << vertices[i].boneId.x << ", Y = " << vertices[i].boneId.y << ", Z = " << vertices[i].boneId.z << ", W = " << vertices[i].boneId.w << std::endl;
-    }*/
 }
 
 unsigned int Model::AddMaterial(const MaterialInterface& newMaterial)
