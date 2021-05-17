@@ -60,8 +60,8 @@ void PropertiesWidget::TransformReader()
 
     if (!ImGui::IsMouseDragging(0) && !isRotationChange)
         _eulerRot = transform.rotation.ToEuler() * RadToDeg<float>();
-
-    transform.rotation = Maths::Quaternion::EulerToQuaternion(_eulerRot * DegToRad<float>());
+    if(isRotationChange)
+        transform.rotation = Maths::Quaternion::EulerToQuaternion(_eulerRot * DegToRad<float>());
 }
 
 void PropertiesWidget::LightReader()
