@@ -5,15 +5,14 @@
 #include "Maths/Vector4.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
+#include "Resources/Asset.hpp"
 
 #include <memory>
 
 namespace Renderer
 {
-    struct Material
+    struct Material : public Resources::Asset
     {
-        std::string name;
-
         Shader shader;
 
         bool checkLight{true};
@@ -30,6 +29,11 @@ namespace Renderer
         Texture specularTexture;
         Texture normalMap;
 
+        bool hasSkeleton {false};
+
+        std::string name;
+
+        Material();
         void GenerateShader();
         ShaderConstructData GetConstructData() const;
         void Apply();

@@ -26,30 +26,44 @@ void AssetWidget::UpdateVisible()
 
     std::string type = Resources::ResourcesManager::GetFileType(_assetName);
 
-    if (type == NO_TYPE_STRING)
-        return ImGui::EndChild();
-    else if (type == "fbx")
-        DisplayModel();
-    else if (type == "ogg" || type == "mp3" || type == "wav")
-        DisplaySound();
-    else if (type == "png" || type == "jpg" || type == "epg")
-        DisplayTexture();
-    else
-        DisplayMaterial();
+    const Resources::Asset* asset = Engine::Instance().GetResourcesManager().GetAsset(_assetName);
+
+    if (asset->GetType() == Resources::ASSET_TYPE::A_MODEL)
+        DisplayModel(asset);
+    else if (asset->GetType() == Resources::ASSET_TYPE::A_SOUND)
+        DisplaySound(asset);
+    else if (asset->GetType() == Resources::ASSET_TYPE::A_TEXTURE)
+        DisplayTexture(asset);
+    else if (asset->GetType() == Resources::ASSET_TYPE::A_MATERIAL)
+        DisplayMaterial(asset);
 
     ImGui::EndChild();
 
 }
 
-void AssetWidget::DisplayMaterial()
+void AssetWidget::DisplayMaterial(const Resources::Asset* asset)
 {
-    Engine &engine = Engine::Instance();
-    Renderer::MaterialInterface material = engine.GetResourcesManager().LoadMaterial(_assetName.c_str());
+    Engine& engine = Engine::Instance();
+    Renderer::Material* material = (Renderer::Material*)asset;
 
-    ImGui::ColorEdit3("Ambient", material->ambient.e);
-    ImGui::ColorEdit3("Diffuse", material->diffuse.e);
-    ImGui::ColorEdit3("Specular", material->specular.e);
-    ImGui::SliderFloat("Shininess", &(material->shininess), 1, 512, "%.1f");
+    if (ImGui::Checkbox("Check Lights", &material->checkLight))
+    {
+        material->GenerateShader();
+        engine.GetRendererInterface().lightSystem->Update(true);
+    }
+    if (ImGui::Checkbox("Has Skeleton", &material->hasSkeleton))
+    {
+        material->GenerateShader();
+        engine.GetRendererInterface().lightSystem->Update(true);
+    }
+
+    if (material->checkLight)
+    {
+        ImGui::ColorEdit3("Ambient", material->ambient.e);
+        ImGui::ColorEdit3("Diffuse", material->diffuse.e);
+        ImGui::ColorEdit3("Specular", material->specular.e);
+        ImGui::SliderFloat("Shininess", &(material->shininess), 1, 512, "%.1f");
+    }
 
     std::vector<std::string> listTexture = Engine::Instance().GetResourcesManager().GetTextureNameList();
     listTexture.insert(listTexture.cbegin(), EMPTY_TEXTURE_STRING);
@@ -60,6 +74,9 @@ void AssetWidget::DisplayMaterial()
         material->GenerateShader();
         engine.GetRendererInterface().lightSystem->Update(true);
     }
+
+    if (!material->checkLight)
+        return;
 
     name = engine.GetResourcesManager().GetName(material->diffuseTexture);
     if (SelectTexture(material->diffuseTexture, listTexture, name.c_str(), "Diffuse Texture"))
@@ -125,39 +142,42 @@ AssetWidget::SelectTexture(Renderer::Texture &texture, const std::vector<std::st
     return false;
 }
 
-void AssetWidget::DisplayTexture()
+void AssetWidget::DisplayTexture(const Resources::Asset* asset)
 {
-    Renderer::Texture texture = Engine::Instance().GetResourcesManager().LoadTexture(_assetName.c_str());
+    Renderer::Texture* texture = (Renderer::Texture*)asset;
+    //Renderer::Texture texture = Engine::Instance().GetResourcesManager().LoadTexture(_assetName.c_str());
     ImVec2 wsize = ImGui::GetWindowSize();
     if (wsize.x < wsize.y)
-        ImGui::Image((ImTextureID) (size_t) texture.GetID(), {wsize.x, wsize.x}, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((ImTextureID)(size_t)texture->GetID(), {wsize.x, wsize.x}, ImVec2(0, 1), ImVec2(1, 0));
     else
-        ImGui::Image((ImTextureID) (size_t) texture.GetID(), {wsize.y, wsize.y}, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((ImTextureID)(size_t)texture->GetID(), {wsize.y, wsize.y}, ImVec2(0, 1), ImVec2(1, 0));
 
 }
 
-void AssetWidget::DisplayModel()
+void AssetWidget::DisplayModel(const Resources::Asset* asset)
 {
-    Component::Model model = Engine::Instance().GetResourcesManager().LoadModel(_assetName.c_str());
+    Component::Model* model = (Component::Model*)asset;
 
     std::vector<std::string> listModelType;
     listModelType.emplace_back("CLASSIC");
     listModelType.emplace_back("NORMAL_MAP");
+    listModelType.emplace_back("SKELETAL");
 
-    std::string selected = SelectInList(listModelType, listModelType[(int) model.GetVertexType()].c_str(),
-                                        "Model Vertex Type");
+    std::string selected = SelectInList(listModelType, listModelType[(int)model->GetVertexType()].c_str(), "Model Vertex Type");
 
-    if (selected != listModelType[(int) model.GetVertexType()])
+    if (selected != listModelType[(int)model->GetVertexType()])
     {
         if (selected == "CLASSIC")
             Engine::Instance().GetResourcesManager().ReLoadModel(_assetName.c_str(), Renderer::VertexType::V_CLASSIC);
         else if (selected == "NORMAL_MAP")
             Engine::Instance().GetResourcesManager().ReLoadModel(_assetName.c_str(), Renderer::VertexType::V_NORMALMAP);
+        else if (selected == "SKELETAL")
+            Engine::Instance().GetResourcesManager().ReLoadModel(_assetName.c_str(), Renderer::VertexType::V_SKELETAL);
     }
 
 }
 
-void AssetWidget::DisplaySound()
+void AssetWidget::DisplaySound(const Resources::Asset* asset)
 {
     Engine::Instance().GetResourcesManager().LoadSound(_assetName.c_str(), Audio::SoundType::S_MASTER);
 }

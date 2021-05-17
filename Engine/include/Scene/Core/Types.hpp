@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <bitset>
 
-const std::uint32_t COMPONENTS_NUMBER = 6;
+const std::uint32_t COMPONENTS_NUMBER = 8;
 const size_t START_SIZE = 10000;
 using Entity = std::uint_fast32_t;
 using ComponentType = std::uint_fast8_t;
