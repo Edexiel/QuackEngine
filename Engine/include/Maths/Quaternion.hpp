@@ -2,6 +2,7 @@
 #define QUACKENGINE_QUATERNION_HPP
 
 #include <cmath>
+#include "Common.hpp"
 
 #include "Matrix4.hpp"
 #include "cereal/cereal.hpp"

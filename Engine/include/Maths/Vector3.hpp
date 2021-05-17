@@ -1,8 +1,6 @@
 #ifndef QUACKENGINE_VECTOR3_HPP
 #define QUACKENGINE_VECTOR3_HPP
 
-#include <cmath>
-
 #include "Maths/Vector2.hpp"
 #include <iostream>
 #include "cereal/cereal.hpp"

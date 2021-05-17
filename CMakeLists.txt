@@ -78,6 +78,20 @@ target_sources(imgui INTERFACE
 target_include_directories(imgui INTERFACE ${IMGUI_FOLDER})
 target_link_libraries(imgui INTERFACE glfw glad)
 
+#IMGUIZMO
+#set(IMGUI_IMPL_OPENGL_LOADER_GLAD2 TRUE)
+
+set(IMGUIZMO_FOLDER "${external_lib}/ImGuizmo")
+add_library(ImGuizmo INTERFACE)
+target_sources(ImGuizmo INTERFACE
+        "${IMGUIZMO_FOLDER}/ImCurveEdit.cpp"
+        "${IMGUIZMO_FOLDER}/ImGradient.cpp"
+        "${IMGUIZMO_FOLDER}/ImGuizmo.cpp"
+        "${IMGUIZMO_FOLDER}/ImSequencer.cpp"
+        )
+target_include_directories(ImGuizmo INTERFACE ${IMGUIZMO_FOLDER})
+target_link_libraries(ImGuizmo INTERFACE glfw glad)
+
 #STB
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE ${external_lib}/stb)
