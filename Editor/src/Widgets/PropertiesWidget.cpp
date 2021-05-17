@@ -58,7 +58,7 @@ void PropertiesWidget::TransformReader()
     ImGui::DragFloat3("Scale", transform.scale.e);
     bool isRotationChange = ImGui::DragFloat3("Rotation", _eulerRot.e);
 
-    if (!isRotationChange)
+    if (!ImGui::IsMouseDragging(0) && !isRotationChange)
         _eulerRot = transform.rotation.ToEuler() * RadToDeg<float>();
     if(isRotationChange)
         transform.rotation = Maths::Quaternion::EulerToQuaternion(_eulerRot * DegToRad<float>());
