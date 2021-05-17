@@ -22,12 +22,20 @@ void RenderSystem::Draw(Component::Camera& camera)
 {
     camera.GetFramebuffer().Bind();
 
-    RendererPlatform::ClearColor({0.0f, 0.0f, 0.0f, 1.f});
+    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 1.f});
     RendererPlatform::Clear();
 
-    DrawMaterials(camera);
+    DrawMaterials(camera.GetProjection(), camera.GetView());
 
     RendererPlatform::BindFramebuffer(0);
+}
+
+void RenderSystem::Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view)
+{
+    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 1.f});
+    RendererPlatform::Clear();
+
+    DrawMaterials(projection, view);
 }
 
 void RenderSystem::DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex)
@@ -76,7 +84,7 @@ void RenderSystem::SetMaterials()
     }
 }
 
-void RenderSystem::DrawMaterials(Component::Camera& camera)
+void RenderSystem::DrawMaterials(const Maths::Matrix4& projection, const Maths::Matrix4& view)
 {
     if (_lastLinkEntitiesNumbers != _entities.size() || _lastLinkEntitiesNumbers == 0)
     {
@@ -89,8 +97,8 @@ void RenderSystem::DrawMaterials(Component::Camera& camera)
     for (auto it : _mapMaterial)
     {
         it.first->Apply();
-        it.first->shader.SetMatrix4("projection", camera.GetProjection());
-        it.first->shader.SetMatrix4("view", camera.GetView());
+        it.first->shader.SetMatrix4("projection", projection);
+        it.first->shader.SetMatrix4("view", view);
 
         for (unsigned int i = 0; i < it.second.size(); i++)
         {
@@ -101,7 +109,7 @@ void RenderSystem::DrawMaterials(Component::Camera& camera)
                 if (it.first->hasSkeleton &&
                         engine.GetCurrentWorld().HasComponent<Animator>(it.second[i].second))
                 {
-                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).Update(0.001f);
+                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).Update(0.01f);
                     engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).SetShader(it.first->shader);
                 }
             }

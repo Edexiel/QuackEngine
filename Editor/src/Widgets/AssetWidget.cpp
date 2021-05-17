@@ -4,7 +4,7 @@
 #include "Engine.hpp"
 
 AssetWidget::AssetWidget() :
-_camera{Component::Camera(1280,720,1000, -1, 20 * 3.1415 / 180)}
+        _camera{Component::Camera(1280, 720, 1000, -1, 20 * 3.1415 / 180)}
 {
     _title = "Properties";
 
@@ -17,7 +17,7 @@ void AssetWidget::UpdateVisible()
         return;
 
 
-    Engine& engine = Engine::Instance();
+    Engine &engine = Engine::Instance();
 
     ImGui::BeginChild("ViewportRender");
     //ImVec2 wsize = ImGui::GetWindowSize();
@@ -100,11 +100,12 @@ void AssetWidget::DisplayMaterial(const Resources::Asset* asset)
     }
 }
 
-std::string AssetWidget::SelectInList(const std::vector<std::string>& list, const char* currentlySelected, const char* comboName)
+std::string
+AssetWidget::SelectInList(const std::vector<std::string> &list, const char *currentlySelected, const char *comboName)
 {
     std::string selected = currentlySelected;
 
-    if  (ImGui::BeginCombo(comboName, currentlySelected))
+    if (ImGui::BeginCombo(comboName, currentlySelected))
     {
         for (int n = 0; n < list.size(); n++)
         {
@@ -124,7 +125,9 @@ std::string AssetWidget::SelectInList(const std::vector<std::string>& list, cons
 
 }
 
-bool AssetWidget::SelectTexture(Renderer::Texture& texture, const std::vector<std::string>& list, const char* currentTexture, const char* comboName)
+bool
+AssetWidget::SelectTexture(Renderer::Texture &texture, const std::vector<std::string> &list, const char *currentTexture,
+                           const char *comboName)
 {
     std::string selectedTexture = SelectInList(list, currentTexture, comboName);
 

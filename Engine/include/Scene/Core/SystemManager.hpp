@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <string_view>
 
 #include "Types.hpp"
 #include "System.hpp"
@@ -15,8 +16,8 @@
 class SystemManager
 {
 private:
-    std::unordered_map<const char *, Signature> _signatures;
-    std::unordered_map<const char *, std::shared_ptr<System>> _systems;
+    std::unordered_map<std::string_view, Signature> _signatures;
+    std::unordered_map<std::string_view, std::shared_ptr<System>> _systems;
 
 public:
     template<typename T>
@@ -37,7 +38,7 @@ public:
 template<typename T>
 inline std::shared_ptr<T> SystemManager::RegisterSystem()
 {
-    const char *typeName = typeid(T).name();
+    std::string_view typeName = typeid(T).name();
     Assert_Fatal_Error(_systems.find(typeName) != _systems.end(), "Registering system more than once.");
 
     auto system = std::make_shared<T>();
@@ -48,7 +49,7 @@ inline std::shared_ptr<T> SystemManager::RegisterSystem()
 template<typename T>
 inline void SystemManager::SetSignature(Signature signature)
 {
-    const char *typeName = typeid(T).name();
+    std::string_view typeName = typeid(T).name();
     Assert_Fatal_Error(_systems.find(typeName) == _systems.end(), "System used before registered.");
 
     (void) _signatures.insert({typeName, signature});
@@ -89,7 +90,7 @@ inline void SystemManager::EntitySignatureChanged(Entity id, Signature entitySig
 template<typename T>
 T * SystemManager::GetSystem()
 {
-    const char *typeName = typeid(T).name();
+    std::string_view typeName = typeid(T).name();
     auto search = _systems.find(typeName);
     if (search != _systems.end())
     {

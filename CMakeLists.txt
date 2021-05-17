@@ -73,6 +73,20 @@ target_sources(imgui INTERFACE
 target_include_directories(imgui INTERFACE ${IMGUI_FOLDER})
 target_link_libraries(imgui INTERFACE glfw glad)
 
+#IMGUIZMO
+#set(IMGUI_IMPL_OPENGL_LOADER_GLAD2 TRUE)
+
+set(IMGUIZMO_FOLDER "${external_lib}/ImGuizmo")
+add_library(ImGuizmo INTERFACE)
+target_sources(ImGuizmo INTERFACE
+        "${IMGUIZMO_FOLDER}/ImCurveEdit.cpp"
+        "${IMGUIZMO_FOLDER}/ImGradient.cpp"
+        "${IMGUIZMO_FOLDER}/ImGuizmo.cpp"
+        "${IMGUIZMO_FOLDER}/ImSequencer.cpp"
+        )
+target_include_directories(ImGuizmo INTERFACE ${IMGUIZMO_FOLDER})
+target_link_libraries(ImGuizmo INTERFACE glfw glad)
+
 #STB
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE ${external_lib}/stb)
@@ -97,16 +111,15 @@ target_include_directories(miniaudio INTERFACE ${external_lib}/miniaudio)
 add_subdirectory(${external_lib}/assimp)
 
 
-
 #flatbuffer
-set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(FLATBUFFERS_MAX_PARSING_DEPTH 16)
-add_subdirectory(${external_lib}/flatbuffers ${CMAKE_CURRENT_BINARY_DIR}/flatbuffers-build EXCLUDE_FROM_ALL)
+#set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+#set(FLATBUFFERS_MAX_PARSING_DEPTH 16)
+#add_subdirectory(${external_lib}/flatbuffers ${CMAKE_CURRENT_BINARY_DIR}/flatbuffers-build EXCLUDE_FROM_ALL)
 
 
 #reactphysics3d
 add_subdirectory(${external_lib}/reactphysics3d)
-target_compile_options(reactphysics3d PRIVATE --no-warnings)
+target_compile_options(reactphysics3d PRIVATE -w --no-warnings)
 
 #gtest
 if (QUACK_BUILD_TESTS)
@@ -116,6 +129,7 @@ endif ()
 
 add_subdirectory(Editor)
 
+
 #Runner
 add_subdirectory(Runner)
 
@@ -124,6 +138,15 @@ add_subdirectory(Engine)
 
 #Game
 add_subdirectory(Game)
+
+
+#if(NOT MSVC)
+#    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Editor PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Engine PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Game PRIVATE -Wall -Wextra -pedantic)
+#endif()
+
 
 
 #Installer

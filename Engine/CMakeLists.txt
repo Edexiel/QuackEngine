@@ -37,8 +37,11 @@ add_library(${PROJECT_NAME} STATIC
         src/Scene/System/LightSystem.cpp
 
         src/Audio/Sound.cpp
-        src/Audio/SoundManager.cpp)
+        src/Audio/SoundManager.cpp
+
+        src/Physics/PhysicsEventManager.cpp
+        )
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp stb miniaudio reactphysics3d flatbuffers)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp stb miniaudio reactphysics3d)

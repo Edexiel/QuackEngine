@@ -1,23 +1,15 @@
 #include "Renderer/RendererPlatform.hpp"
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-
-#include <vector>
-
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
 
 #include "Renderer/Framebuffer.hpp"
-
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
 #include "Scene/Component/Light.hpp"
 
 #include "Maths/Vector3.hpp"
-
-#include "Debug/Assertion.hpp"
 
 using namespace Renderer;
 using namespace Component;
@@ -41,7 +33,7 @@ int RendererPlatform::LoadGl()
 void RendererPlatform::BindTexture(unsigned int texture, unsigned int index)
 {
   glActiveTexture(GL_TEXTURE0 + index);
-  glBindTexture(GL_TEXTURE_2D, (Gluint)texture);
+  glBindTexture(GL_TEXTURE_2D, (GLuint)texture);
 }
 void RendererPlatform::ClearColor(const Maths::Vector4f &color)
 {

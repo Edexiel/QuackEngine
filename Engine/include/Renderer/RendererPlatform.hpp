@@ -1,8 +1,9 @@
 #ifndef QUACKENGINE_RENDERERPLATFORM_HPP
 #define QUACKENGINE_RENDERERPLATFORM_HPP
 
-#include "Maths/Matrix4.hpp"
 #include <vector>
+
+#include "Maths/Matrix4.hpp"
 
 #include "Renderer/Vertex.hpp"
 

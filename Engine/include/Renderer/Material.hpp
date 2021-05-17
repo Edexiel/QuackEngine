@@ -15,14 +15,14 @@ namespace Renderer
     {
         Shader shader;
 
-        bool checkLight {true};
+        bool checkLight{true};
 
-        Maths::Color4f  color    {1,1,1,1};
-        Maths::Color3f ambient  {1,1,1};
-        Maths::Color3f diffuse  {1,1,1};
-        Maths::Color3f specular {1,1,1};
+        Maths::Color4f color{1, 1, 1, 1};
+        Maths::Color3f ambient{1, 1, 1};
+        Maths::Color3f diffuse{1, 1, 1};
+        Maths::Color3f specular{1, 1, 1};
 
-        float shininess {128};
+        float shininess{128};
 
         Texture colorTexture;
         Texture diffuseTexture;
@@ -39,7 +39,7 @@ namespace Renderer
         void Apply();
     };
 
-    typedef std::shared_ptr<Material> MaterialInterface;
+    using MaterialInterface = std::shared_ptr<Material>;
 }
 
 #endif //_MATERIAL_

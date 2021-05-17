@@ -1,7 +1,7 @@
 #include "Scene/Core/World.hpp"
 #include "Engine.hpp"
 
-World::World(std::string &name) : _name(name)
+World::World(std::string_view &name) : _name(name)
 {}
 
 void World::Init()
@@ -10,7 +10,9 @@ void World::Init()
     _entityManager = std::make_unique<EntityManager>();
     _systemManager = std::make_unique<SystemManager>();
 
-    _physicsWorld = Engine::Instance().GetPhysicsManager().createPhysicsWorld();
+    Engine &engine = Engine::Instance();
+    _physicsWorld = engine.GetPhysicsManager().createPhysicsWorld();
+    _physicsWorld->setEventListener(&engine.GetPhysicsEventManager());
 
     //_componentManager->RegisterComponent<Name>();
 }

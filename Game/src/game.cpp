@@ -103,7 +103,7 @@ void Game::Init()
     }
     ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
 
-    Transform t = {Maths::Vector3f{0, -1, 0}, Maths::Vector3f::One() * 0.2f, Maths::Quaternion({0,1,0}, M_PI)};
+    Transform t = {Maths::Vector3f{0, -1, 0}, Maths::Vector3f::One() * 0.2f, Maths::Quaternion({0,1,0}, Pi<float>())};
     engine.GetResourcesManager().ReLoadModel(R"(..\..\Game\Asset\Model\Vampire.fbx)", Renderer::VertexType::V_SKELETAL);
     Component::Model md = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Vampire.fbx)", Renderer::VertexType::V_SKELETAL);
 
@@ -139,6 +139,7 @@ void Game::Init()
 
                 Component::RigidBody rb;
 
+
                 world.AddComponent(id, t);
                 world.AddComponent(id, md);
                 //world.AddComponent(id, rb);
@@ -158,7 +159,7 @@ void Game::Init()
 
 //Test triggerCollision
     Component::RigidBody rbTrigger;
-    Component::Model mdTrigger = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
+    Component::Model mdTrigger = engine.GetResourcesManager().LoadModel(R"(../../Game/Asset/Model/Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
     Transform tTrigger = {Maths::Vector3f{0, -2.5f, 20}, {1,1,1}, Maths::Quaternion{}};
     Entity idTrigger = world.CreateEntity("TriggerBox");
 
@@ -173,7 +174,7 @@ void Game::Init()
 
 //Test contactCollision
     Component::RigidBody rbContact;
-    Component::Model mdContact = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
+    Component::Model mdContact = engine.GetResourcesManager().LoadModel(R"(../../Game/Asset/Model/Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
     Transform tContact = {Maths::Vector3f{0, -5.f, 20}, {1,1,1}, Maths::Quaternion{}};
     Entity idContact = world.CreateEntity("ContactBox");
 

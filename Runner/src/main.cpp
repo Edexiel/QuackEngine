@@ -14,8 +14,8 @@ int main()
             INPUT_MODE::GLFW
     };
 
-    Engine &engine = Engine::Instance();
-    engine.InitWindow(settings);
+    Engine engine(settings);
+    Engine::SetInstance(engine);
 
     Game game;
     game.Init();
