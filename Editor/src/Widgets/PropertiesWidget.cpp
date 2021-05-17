@@ -5,6 +5,8 @@
 #include "misc/cpp/imgui_stdlib.h"
 #include "Maths/Common.hpp"
 
+#include "Scene/Component/Animator.hpp"
+
 #include <algorithm>
 
 
@@ -34,6 +36,8 @@ void PropertiesWidget::UpdateVisible()
         RigidBodyReader();
     if (world.HasComponent<Model>(_entity))
         ModelReader();
+    if (world.HasComponent<Animator>(_entity))
+        AnimatorReader();
 
     AddComponent();
     DeleteComponent();
@@ -139,7 +143,7 @@ void PropertiesWidget::ModelReader()
 
     std::vector<std::string> listModel = Engine::Instance().GetResourcesManager().GetModelNameList();
 
-    if (ImGui::BeginCombo("##combo1", model.name.c_str()))
+    if  (ImGui::BeginCombo("##ModelCombo", model.name.c_str()))
     {
         for (int n = 0; n < listModel.size(); n++)
         {
@@ -199,6 +203,34 @@ void PropertiesWidget::ModelReader()
         model.RemoveMaterial(model.GetNumberMaterial() - 1);
     }
 }
+
+void PropertiesWidget::AnimatorReader()
+{
+    if (ImGui::CollapsingHeader("Animator"))
+        return;
+
+    Component::Animator& animator = Engine::Instance().GetCurrentWorld().GetComponent<Component::Animator>(_entity);
+
+    std::vector<std::string> listAnimation = Engine::Instance().GetResourcesManager().GetAnimationNameList();
+
+    if  (ImGui::BeginCombo("##AnimatorCombo", animator.GetAnimation().name.c_str()))
+    {
+        for (int n = 0; n < listAnimation.size(); n++)
+        {
+            bool isSelected = (animator.GetAnimation().name == listAnimation[n]); // You can store your selection however you want, outside or inside your objects
+            if (ImGui::Selectable(listAnimation[n].c_str(), isSelected))
+            {
+                animator.SetAnimation(*(Renderer::Animation*)(Engine::Instance().GetResourcesManager().GetAsset(listAnimation[n].c_str())));
+                Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+            }
+
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+        }
+        ImGui::EndCombo();
+    }
+}
+
 
 void PropertiesWidget::CameraReader()
 {
@@ -260,6 +292,10 @@ void PropertiesWidget::AddComponent()
         if (ImGui::MenuItem("RigidBody"))
         {
             world.AddComponent(_entity, RigidBody());
+        }
+        if (ImGui::MenuItem("Animator"))
+        {
+            world.AddComponent(_entity, Animator());
         }
         ImGui::EndPopup();
     }

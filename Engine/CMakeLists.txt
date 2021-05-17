@@ -21,6 +21,9 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/IcoSphere.cpp
         src/Renderer/RendererInterface.cpp
         src/Renderer/Shape.cpp
+        src/Renderer/Skeleton.cpp 
+        src/Renderer/Animation.cpp 
+        src/Scene/Component/Animator.cpp
 
         src/Scene/Core/World.cpp
         src/Scene/Component/Model.cpp
@@ -41,4 +44,4 @@ add_library(${PROJECT_NAME} STATIC
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp stb miniaudio reactphysics3d flatbuffers)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp stb miniaudio reactphysics3d)
