@@ -12,9 +12,13 @@ Animator::Animator(Renderer::Animation& animation) : _currentAnimation{animation
 {
     _currentAnimation = animation;
     _bonesOffset.resize(100, Maths::Matrix4::Identity());
+}
 
-    /*for (unsigned int i = 0; i < 100; i++)
-        _bonesOffset[i] = Maths::Matrix4::Identity();*/
+void Animator::SetAnimation(Animation &animation)
+{
+    _currentAnimation = animation;
+    _bonesOffset.clear();
+    _bonesOffset.resize(100, Maths::Matrix4::Identity());
 }
 
 const std::vector<Maths::Matrix4>& Animator::GetBonesOffsets() const
@@ -68,4 +72,9 @@ void Animator::CalculateBoneTransform(const Renderer::NodeData& node, Maths::Mat
 
     for (int i = 0; i < node.listChildren.size(); i++)
         CalculateBoneTransform(node.listChildren[i], globalTransform, bonePlace);
+}
+
+const Renderer::Animation &Animator::GetAnimation() const
+{
+    return _currentAnimation;
 }

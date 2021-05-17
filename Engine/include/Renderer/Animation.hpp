@@ -1,6 +1,7 @@
 #ifndef _ANIMATION_HPP
 #define _ANIMATION_HPP
 
+#include "Resources/Asset.hpp"
 #include "Renderer/Skeleton.hpp"
 
 namespace Renderer
@@ -12,7 +13,7 @@ namespace Renderer
         std::vector<NodeData> listChildren;
     };
 
-    class Animation
+    class Animation : public Resources::Asset
     {
         NodeData _rootNode;
         float _duration         {0.0f};
@@ -25,6 +26,7 @@ namespace Renderer
         void ReadBones(const void* loadedAnimation);
 
     public:
+        Animation();
         static Animation LoadAnimation(const char* path);
 
         void Update(float currentTime);

@@ -86,7 +86,17 @@ Animation ResourcesManager::LoadAnimation(const char* path)
 {
     // Check if the Model already exist
 
-    auto it = _mapAnimation.find(path);
+    std::string type = GetFileType(path);
+    std::string name = path;
+
+    if (type != "anm")
+    {
+        // Change the type of the file
+        name.erase(name.cend() - 3, name.cend());
+        name += "anm";
+    }
+
+    auto it = _mapAnimation.find(name);
 
     if (it != _mapAnimation.end())
     {
@@ -102,8 +112,9 @@ Animation ResourcesManager::LoadAnimation(const char* path)
 
     // Create a new Model
     Animation animation = Animation::LoadAnimation(path);
-    _mapAnimation.insert({path, animation});
-    _globalAssetMap.insert({path, &_mapModel.find(path)->second});
+    animation.name = name;
+    _mapAnimation.insert({name, animation});
+    _globalAssetMap.insert({name, &_mapAnimation.find(name)->second});
 
     return animation;
 }

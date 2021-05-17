@@ -104,8 +104,8 @@ void Game::Init()
     ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
 
     Transform t = {Maths::Vector3f{0, -1, 0}, Maths::Vector3f::One() * 0.2f, Maths::Quaternion({0,1,0}, M_PI)};
-    engine.GetResourcesManager().ReLoadModel(R"(..\..\Game\Asset\Model\BartenderAnimation.fbx)", Renderer::VertexType::V_SKELETAL);
-    Component::Model md = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\BartenderAnimation.fbx)", Renderer::VertexType::V_SKELETAL);
+    engine.GetResourcesManager().ReLoadModel(R"(..\..\Game\Asset\Model\Vampire.fbx)", Renderer::VertexType::V_SKELETAL);
+    Component::Model md = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Vampire.fbx)", Renderer::VertexType::V_SKELETAL);
 
     Material material;
 
@@ -118,11 +118,11 @@ void Game::Init()
     material.hasSkeleton = true;
     //material.normalMap = engine.GetResourcesManager().LoadTexture(R"(..\..\Game\Asset\Texture\Floor_N.jpg)");
 
-    MaterialInterface materialInterface = resourcesManager.GenerateMaterial("BartenderMaterial", material);
+    MaterialInterface materialInterface = resourcesManager.GenerateMaterial("AnimationMaterial", material);
 
     md.AddMaterial(materialInterface);
 
-    Animation animation = engine.GetResourcesManager().LoadAnimation(R"(..\..\Game\Asset\Model\BartenderAnimation.fbx)");
+    Animation animation = engine.GetResourcesManager().LoadAnimation(R"(..\..\Game\Asset\Model\Vampire.fbx)");
 
 
     for (int x = 0; x < 1; x++)

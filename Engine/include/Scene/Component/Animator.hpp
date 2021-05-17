@@ -27,11 +27,14 @@ namespace Component
 
         Animator() = default;
         explicit Animator(Renderer::Animation& animation);
+        void SetAnimation(Renderer::Animation& animation);
 
         void Update(float deltaTime);
         void SetShader(Renderer::Shader& shader);
 
         void PlayAnimation(Renderer::Animation& animation);
+
+        const Renderer::Animation& GetAnimation() const;
 
     };
 }

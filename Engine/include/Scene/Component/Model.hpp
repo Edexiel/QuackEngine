@@ -40,8 +40,6 @@ namespace Component
 
         std::unordered_map<std::string, Renderer::Bone> _skeleton;
 
-        std::string name;
-
         Model();
         Model(Renderer::VertexType vertexType);
 

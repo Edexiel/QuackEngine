@@ -1,6 +1,8 @@
 #ifndef _ASSET_HPP
 #define _ASSET_HPP
 
+#include <string>
+
 namespace Resources
 {
     enum class ASSET_TYPE{A_TEXTURE, A_MODEL, A_SOUND, A_ANIMATION, A_MATERIAL};
@@ -11,6 +13,9 @@ namespace Resources
         ASSET_TYPE _type;
 
     public:
+
+        std::string name;
+
         Asset(ASSET_TYPE assetType);
         ASSET_TYPE GetType() const;
     };
