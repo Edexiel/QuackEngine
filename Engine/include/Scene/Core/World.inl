@@ -9,7 +9,7 @@ inline void World::Clear()
     //todo:
 }
 
-inline Entity World::CreateEntity(std::string name)
+inline Entity World::CreateEntity(std::string name) const
 {
     Entity id = _entityManager->Create();
     AddComponent(id, Component::Name{std::move(name)});
@@ -30,7 +30,7 @@ inline void World::RegisterComponent()
 }
 
 template<typename T>
-inline void World::AddComponent(Entity id, T component) //todo: maybe pass by const ref
+inline void World::AddComponent(Entity id, T component) const //todo: maybe pass by const ref
 {
     _componentManager->AddComponent<T>(id, component);
 

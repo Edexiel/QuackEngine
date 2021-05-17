@@ -16,6 +16,7 @@ namespace Renderer
         unsigned int _height;
 
     public:
+        Framebuffer() = default;
         Framebuffer(unsigned int id, unsigned int rbo, unsigned int texture,
                     unsigned int width, unsigned int height);
 

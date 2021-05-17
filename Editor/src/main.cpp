@@ -41,7 +41,8 @@ int main()
     Editor editor{engine.GetWindow()};
 
     Game game;
-    game.Init();
+    engine.LoadWorld("Main","./");
+    //game.Init();
 
     // Time && fps
     double tempTime{0.0};
@@ -78,7 +79,6 @@ int main()
         engine.GetInputManager().Update();
         engine.TestWindowShouldClose();
 
-
         /** Editor draw **/
         editor.Draw();
 
@@ -89,7 +89,7 @@ int main()
         engine.SwapBuffers();
     }
 
-    engine.SaveWorld(engine.GetCurrentWorld().GetName(),"./");
+    //engine.SaveWorld("Main","./");
 
     return 0;
 }

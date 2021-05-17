@@ -27,6 +27,8 @@
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/access.hpp>
+#include "Engine.hpp"
+
 
 namespace reactphysics3d
 {
@@ -52,7 +54,7 @@ public:
     void Clear();
 
     // Entity methods
-    Entity CreateEntity(std::string name);
+    Entity CreateEntity(std::string name) const;
 
     void DestroyEntity(Entity id);
 
@@ -61,7 +63,7 @@ public:
     void RegisterComponent();
 
     template<typename T>
-    void AddComponent(Entity id, T component);
+    void AddComponent(Entity id, T component) const;
 
     template<typename T>
     void RemoveComponent(Entity id);
@@ -98,14 +100,14 @@ public:
     {
         EntityHandler() = default;
 
-        EntityHandler(Entity id,const World *world) : id(id), world(world)
+        explicit EntityHandler(Entity id, const World *world) : id(id), world(world)
         {}
 
-        Entity id;
         const World *world;
+        Entity id;
 
         template<class Archive, class T>
-        void process(Archive &archive,const Entity &e, const char *name) const
+        void write(Archive &archive, const Entity &e, const char *name) const
         {
             if (world->HasComponent<T>(e))
             {
@@ -113,29 +115,54 @@ public:
             }
         }
 
+        template<class Archive, class T>
+        void read(Archive &archive, T &component, const char *name) const
+        {
+            archive(cereal::make_nvp(name, component));
+        }
+
         template<class Archive>
         void save(Archive &archive) const
         {
             archive(CEREAL_NVP(id));
-            process<Archive, Component::Name>(archive, id, "Name");
-            process<Archive, Component::Transform>(archive, id, "Transform");
-            process<Archive, Component::Camera>(archive, id, "Camera");
-            process<Archive, Component::Light>(archive, id, "Light");
-            process<Archive, Component::Model>(archive, id, "Model");
+
+            write<Archive, Component::Name>(archive, id, "Name");
+            write<Archive, Component::Transform>(archive, id, "Transform");
+            write<Archive, Component::Camera>(archive, id, "Camera");
+            write<Archive, Component::Light>(archive, id, "Light");
+            write<Archive, Component::Model>(archive, id, "Model");
 //        save<Archive,Component::RigidBody>(archive, id,"RigidBody");
         }
 
         template<class Archive>
         void load(Archive &archive)
         {
+            archive(CEREAL_NVP(id));
+            World& w = Engine::Instance().GetCurrentWorld();
+            Component::Name name;
+            read<Archive, Component::Name>(archive, name, "Name");
+            world->CreateEntity(name.name);
 
+            Component::Transform t;
+            Component::Camera c;
+            Component::Light l;
+            Component::Model m;
+
+            read<Archive, Component::Transform>(archive, t, "Transform");
+            read<Archive, Component::Camera>(archive, c, "Camera");
+            read<Archive, Component::Light>(archive, l, "Light");
+            read<Archive, Component::Model>(archive, m, "Model");
+
+
+            //world->AddComponent(id, name.name);
         }
+
     };
 
     template<class Archive>
     void save(Archive &archive) const
     {
-        archive(cereal::make_nvp("name",_name));
+        archive(cereal::make_nvp("name", _name));
 
         std::vector<EntityHandler> entities;
         for (Entity &entity : _entityManager->GetEntities())
@@ -147,6 +174,9 @@ public:
     template<class Archive>
     void load(Archive &archive)
     {
+        archive(_name);
+        std::vector<EntityHandler> entities;
+        archive(CEREAL_NVP(entities));
     }
 };
 

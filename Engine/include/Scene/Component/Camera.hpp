@@ -49,7 +49,7 @@ namespace Component
         float _fov;
         bool _isPerspective{true};
 
-
+        Camera() = default;
         Camera(unsigned int width, unsigned int height, float far, float near, float fov);
         Camera(unsigned int width, unsigned int height, float far, float near);
 

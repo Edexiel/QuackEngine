@@ -211,7 +211,7 @@ void Engine::SaveWorld(const std::string &worldName, fs::path path) const
 
 }
 
-World &Engine::LoadWorld(fs::path path)
+void Engine::LoadWorld(const std::string &worldName, fs::path path)
 {
     if (!exists(path))
     {
@@ -220,11 +220,12 @@ World &Engine::LoadWorld(fs::path path)
 
     Log_Info(fmt::format("Saving world: {}", path.string()).c_str());
 
+    path.append(worldName).replace_extension(".qck");
     std::ifstream is(path);
     cereal::JSONInputArchive iarchive(is);
 
-    iarchive(cereal::make_nvp("world", _worlds.at(_worldLut.at(worldName))));
-
+    CreateWorld(worldName);
+    iarchive(_worlds[_worldLut[worldName]]);
 }
 
 void Engine::RemoveWorld(const std::string &name)
