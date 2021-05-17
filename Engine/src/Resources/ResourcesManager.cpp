@@ -60,6 +60,7 @@ Model ResourcesManager::LoadModel(const char* path, VertexType vertexType)
     // Create a new Model
     Model model = Model::LoadModel(path, vertexType);
     _mapModel.insert({path, model});
+    _globalAssetMap.insert({path, &_mapModel.find(path)->second});
 
     return model;
 }
@@ -69,7 +70,7 @@ void ResourcesManager::ReLoadModel(const char *path, Renderer::VertexType vertex
     // Check if the Model already exist
 
     auto it = _mapModel.find(path);
-    
+
     if (it != _mapModel.end())
     {
         Model::ReLoadModel(it->second, path, vertexType);
@@ -79,6 +80,43 @@ void ResourcesManager::ReLoadModel(const char *path, Renderer::VertexType vertex
     }
 
     Assert_Error(true, (std::string("The model : ") + path + " to reload doesn't exist").c_str());
+}
+
+Animation ResourcesManager::LoadAnimation(const char* path)
+{
+    // Check if the Model already exist
+
+    std::string type = GetFileType(path);
+    std::string name = path;
+
+    if (type != "anm")
+    {
+        // Change the type of the file
+        name.erase(name.cend() - 3, name.cend());
+        name += "anm";
+    }
+
+    auto it = _mapAnimation.find(name);
+
+    if (it != _mapAnimation.end())
+    {
+        return (it->second);
+    }
+
+    // return null Texture if the file doesn't exist
+    if (access(path, F_OK) == -1)
+    {
+        std::cout << "File : " << path << " doesn't exist" << std::endl;
+        return Animation();
+    }
+
+    // Create a new Model
+    Animation animation = Animation::LoadAnimation(path);
+    animation.name = name;
+    _mapAnimation.insert({name, animation});
+    _globalAssetMap.insert({name, &_mapAnimation.find(name)->second});
+
+    return animation;
 }
 
 Texture ResourcesManager::LoadTexture(const char* path)
@@ -104,6 +142,7 @@ Texture ResourcesManager::LoadTexture(const char* path)
     Texture texture = Texture::LoadTexture(path);
     _mapTexture.insert({path, texture});
     _textureToName.insert({texture.GetID(), path});
+    _globalAssetMap.insert({path, &_mapTexture.find(path)->second});
 
     return texture;
 }
@@ -237,6 +276,7 @@ Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const char* name,
     _mapMaterial.insert({name, materialInterface});
 
     materialInterface->shader = LoadObjectShader(materialInterface->GetConstructData());
+    _globalAssetMap.insert({name, _mapMaterial.find(name)->second.get()});
 
     std::cout << "materialLoading : " << name << std::endl;
 
@@ -258,7 +298,7 @@ void ResourcesManager::LoadFolder(const char *path)
     {
         std::cout << i << std::endl;
         type = GetFileType(i);
-        if (type == "fbx")
+        if (type == "fbx" || type == "glb")
             LoadModel(i.c_str(), VertexType::V_NORMALMAP);
         else if (type == "ogg" || type == "mp3" || type == "wav")
             LoadSound(i.c_str(), Audio::SoundType::S_MASTER);
@@ -311,6 +351,18 @@ std::vector<std::string> ResourcesManager::GetTextureNameList() const
     return list;
 }
 
+std::vector<std::string> ResourcesManager::GetAnimationNameList() const
+{
+    std::vector<std::string> list;
+
+    for (const auto& it : _mapAnimation)
+    {
+        list.emplace_back(it.first.c_str());
+    }
+
+    return list;
+}
+
 std::string ResourcesManager::GetName(const Renderer::Texture& texture) const
 {
     auto it = _textureToName.find(texture.GetID());
@@ -325,4 +377,9 @@ std::string ResourcesManager::GetName(const Audio::Sound& sound) const
     if(it == _soundToName.end())
         return std::string(EMPTY_TEXTURE_STRING);
     return it->second;
+}
+
+const Asset *ResourcesManager::GetAsset(const std::string& name)
+{
+    return _globalAssetMap.find(name)->second;
 }

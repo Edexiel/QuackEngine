@@ -15,6 +15,8 @@
 #include "Renderer/Shape.hpp"
 #include "game.hpp"
 
+#include "Scene/Component/Animator.hpp"
+
 using namespace Component;
 using namespace Resources;
 using namespace Renderer;
@@ -35,6 +37,7 @@ void Game::Init()
         world.RegisterComponent<Camera>();
         world.RegisterComponent<Light>();
         world.RegisterComponent<RigidBody>();
+        world.RegisterComponent<Animator>();
     }
 
     auto renderSystem = world.RegisterSystem<RenderSystem>();
@@ -46,7 +49,7 @@ void Game::Init()
 
     engine.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
     engine.GetResourcesManager().Init();
-    engine.GetResourcesManager().LoadFolder(R"(../../Game/Asset/)");
+    engine.GetResourcesManager().LoadFolder(R"(..\..\Game\Asset\)");
 
 
     //Signature Renderer
@@ -100,9 +103,9 @@ void Game::Init()
     }
     ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
 
-    Transform t = {Maths::Vector3f{0, 0, 10}, Maths::Vector3f::One() * 1.5f, Maths::Quaternion{}};
-    Component::Model md = engine.GetResourcesManager().LoadModel(R"(../../Game/Asset/Model/Sphere.fbx)",
-                                                                 Renderer::VertexType::V_NORMALMAP);
+    Transform t = {Maths::Vector3f{0, -1, 0}, Maths::Vector3f::One() * 0.2f, Maths::Quaternion({0,1,0}, Pi<float>())};
+    engine.GetResourcesManager().ReLoadModel(R"(..\..\Game\Asset\Model\Vampire.fbx)", Renderer::VertexType::V_SKELETAL);
+    Component::Model md = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Vampire.fbx)", Renderer::VertexType::V_SKELETAL);
 
     Material material;
 
@@ -110,11 +113,16 @@ void Game::Init()
     material.diffuse = {1, 1, 1};
     material.specular = {1, 1, 1};
     material.checkLight = true;
-    material.normalMap = engine.GetResourcesManager().LoadTexture(R"(../../Game/Asset/Texture/Floor_N.jpg)");
+    material.colorTexture = engine.GetResourcesManager().LoadTexture(R"(..\..\Game\Asset\Texture\Bartender.png)");
 
-    MaterialInterface materialInterface = resourcesManager.GenerateMaterial("base", material);
+    material.hasSkeleton = true;
+    //material.normalMap = engine.GetResourcesManager().LoadTexture(R"(..\..\Game\Asset\Texture\Floor_N.jpg)");
+
+    MaterialInterface materialInterface = resourcesManager.GenerateMaterial("AnimationMaterial", material);
 
     md.AddMaterial(materialInterface);
+
+    Animation animation = engine.GetResourcesManager().LoadAnimation(R"(..\..\Game\Asset\Model\Vampire.fbx)");
 
 
     for (int x = 0; x < 1; x++)
@@ -124,8 +132,8 @@ void Game::Init()
             for (int z = 0; z < 1; z++)
             {
                 t.position.x = 0;
-                t.position.y = 50.f /*- (float)y * 2*/;
-                t.position.z = 20.f /*+ (float)z * 2*/;
+                //t.position.y = 50.f /*- (float)y * 2*/;
+                //t.position.z = 20.f /*+ (float)z * 2*/;
 
                 Entity id = world.CreateEntity("Sphere");
 
@@ -134,18 +142,24 @@ void Game::Init()
 
                 world.AddComponent(id, t);
                 world.AddComponent(id, md);
-                world.AddComponent(id, rb);
+                //world.AddComponent(id, rb);
 
+                Component::Animator animator(animation);
+                //animator.PlayAnimation(animation);
+                world.AddComponent(id, animator);
 
-                physicsSystem->SetRigidBody(id);
+                /*physicsSystem->SetRigidBody(id);
                 physicsSystem->SetType(id, BodyType::DYNAMIC);
-                physicsSystem->AddSphereCollider(id, 1.5f);
+                physicsSystem->AddSphereCollider(id, 1.5f);*/
             }
         }
     }
+
+    material.hasSkeleton = false;
+
 //Test triggerCollision
     Component::RigidBody rbTrigger;
-    Component::Model mdTrigger = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
+    Component::Model mdTrigger = engine.GetResourcesManager().LoadModel(R"(../../Game/Asset/Model/Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
     Transform tTrigger = {Maths::Vector3f{0, -2.5f, 20}, {1,1,1}, Maths::Quaternion{}};
     Entity idTrigger = world.CreateEntity("TriggerBox");
 
@@ -160,7 +174,7 @@ void Game::Init()
 
 //Test contactCollision
     Component::RigidBody rbContact;
-    Component::Model mdContact = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
+    Component::Model mdContact = engine.GetResourcesManager().LoadModel(R"(../../Game/Asset/Model/Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
     Transform tContact = {Maths::Vector3f{0, -5.f, 20}, {1,1,1}, Maths::Quaternion{}};
     Entity idContact = world.CreateEntity("ContactBox");
 

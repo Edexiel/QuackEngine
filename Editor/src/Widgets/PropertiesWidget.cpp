@@ -2,7 +2,11 @@
 #include "Engine.hpp"
 
 #include "Scene/Component/RigidBody.hpp"
+#include "Scene/System/PhysicsSystem.hpp"
 #include "misc/cpp/imgui_stdlib.h"
+#include "Maths/Common.hpp"
+
+#include "Scene/Component/Animator.hpp"
 
 #include <algorithm>
 
@@ -21,31 +25,35 @@ void PropertiesWidget::UpdateVisible()
 
     //NameReader();
     World &world = Engine::Instance().GetCurrentWorld();
-    if(world.HasComponent<Name>(_entity))
+    if (world.HasComponent<Name>(_entity))
         NameReader();
-    if(world.HasComponent<Transform>(_entity))
+    if (world.HasComponent<Transform>(_entity))
         TransformReader();
-    if(world.HasComponent<Light>(_entity))
+    if (world.HasComponent<Light>(_entity))
         LightReader();
-    if(world.HasComponent<Camera>(_entity))
+    if (world.HasComponent<Camera>(_entity))
         CameraReader();
-    if(world.HasComponent<RigidBody>(_entity))
+    if (world.HasComponent<RigidBody>(_entity))
         RigidBodyReader();
     if (world.HasComponent<Model>(_entity))
         ModelReader();
+    if (world.HasComponent<Animator>(_entity))
+        AnimatorReader();
 
     AddComponent();
     DeleteComponent();
 }
+
 void PropertiesWidget::NameReader()
 {
     auto &name = Engine::Instance().GetCurrentWorld().GetComponent<Name>(_entity);
     ImGui::InputText("Name", &name.name);
 }
+
 void PropertiesWidget::TransformReader()
 {
 
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO &io = ImGui::GetIO();
     auto &transform = Engine::Instance().GetCurrentWorld().GetComponent<Transform>(_entity);
 
     if (ImGui::CollapsingHeader("Transform"))
@@ -53,12 +61,12 @@ void PropertiesWidget::TransformReader()
 
     ImGui::DragFloat3("Position", transform.position.e);
     ImGui::DragFloat3("Scale", transform.scale.e);
-    ImGui::DragFloat3("Rotation", _eulerRot.e);
+    bool isRotationChange = ImGui::DragFloat3("Rotation", _eulerRot.e);
 
-    if(!ImGui::IsMouseDragging(0))
-        _eulerRot = transform.rotation.ToEuler() * (180.f / (float) M_PI);
-
-    transform.rotation = Maths::Quaternion::EulerToQuaternion(_eulerRot * (M_PI / 180.f));
+    if (!ImGui::IsMouseDragging(0) && !isRotationChange)
+        _eulerRot = transform.rotation.ToEuler() * RadToDeg<float>();
+    if(isRotationChange)
+        transform.rotation = Maths::Quaternion::EulerToQuaternion(_eulerRot * DegToRad<float>());
 }
 
 void PropertiesWidget::LightReader()
@@ -77,8 +85,8 @@ void PropertiesWidget::LightReader()
     {
         for (int n = 0; n < listLightType.size(); n++)
         {
-            bool isSelected = (listLightType[(int)light.type] ==
-                                listLightType[n]); // You can store your selection however you want, outside or inside your objects
+            bool isSelected = (listLightType[(int) light.type] ==
+                               listLightType[n]); // You can store your selection however you want, outside or inside your objects
             if (ImGui::Selectable(listLightType[n].c_str(), isSelected))
             {
                 switch (n)
@@ -119,7 +127,7 @@ void PropertiesWidget::LightReader()
     if (light.type == Component::Light_Type::L_SPOT)
     {
         if (ImGui::DragFloat("Spot Angle", &light.spotAngle) ||
-           ImGui::DragFloat("Outer Spot Angle", &light.outerSpotAngle))
+            ImGui::DragFloat("Outer Spot Angle", &light.outerSpotAngle))
         {
             Engine::Instance().GetRendererInterface().lightSystem->Update(true);
         }
@@ -132,19 +140,21 @@ void PropertiesWidget::ModelReader()
     if (ImGui::CollapsingHeader("Model"))
         return;
 
-    Component::Model& model = Engine::Instance().GetCurrentWorld().GetComponent<Component::Model>(_entity);
+    Component::Model &model = Engine::Instance().GetCurrentWorld().GetComponent<Component::Model>(_entity);
 
     std::vector<std::string> listModel = Engine::Instance().GetResourcesManager().GetModelNameList();
 
-    if  (ImGui::BeginCombo("##combo1", model.name.c_str()))
+    if  (ImGui::BeginCombo("##ModelCombo", model.name.c_str()))
     {
         for (int n = 0; n < listModel.size(); n++)
         {
-            bool isSelected = (model.name == listModel[n]); // You can store your selection however you want, outside or inside your objects
+            bool isSelected = (model.name ==
+                               listModel[n]); // You can store your selection however you want, outside or inside your objects
             if (ImGui::Selectable(listModel[n].c_str(), isSelected))
             {
                 model.name = listModel[n];
-                model = Engine::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(), Renderer::VertexType::V_NORMALMAP);
+                model = Engine::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(),
+                                                                           Renderer::VertexType::V_NORMALMAP);
                 Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
             }
 
@@ -154,24 +164,28 @@ void PropertiesWidget::ModelReader()
         ImGui::EndCombo();
     }
 
-    for (unsigned int i = 0; i < model.GetNumberMesh() ; i++)
+    for (unsigned int i = 0; i < model.GetNumberMesh(); i++)
     {
-        ImGui::SliderInt((std::string("Material Mesh ") + std::to_string(i + 1)).c_str(), (int*)model.GetMeshMaterialIndex(i), 0, (int)model.GetNumberMaterial() - 1);
+        ImGui::SliderInt((std::string("Material Mesh ") + std::to_string(i + 1)).c_str(),
+                         (int *) model.GetMeshMaterialIndex(i), 0, (int) model.GetNumberMaterial() - 1);
         Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
     }
 
     std::vector<std::string> listMaterial = Engine::Instance().GetResourcesManager().GetMaterialNameList();
 
-    for (unsigned int i = 0; i < model.GetNumberMaterial() ; i++)
+    for (unsigned int i = 0; i < model.GetNumberMaterial(); i++)
     {
-        if  (ImGui::BeginCombo((std::string ("##comboMaterial") + std::to_string(i)).c_str(), model.GetMaterial(i)->name.c_str()))
+        if (ImGui::BeginCombo((std::string("##comboMaterial") + std::to_string(i)).c_str(),
+                              model.GetMaterial(i)->name.c_str()))
         {
             for (int n = 0; n < listMaterial.size(); n++)
             {
-                bool is_selected = (model.name == listMaterial[n]); // You can store your selection however you want, outside or inside your objects
+                bool is_selected = (model.name ==
+                                    listMaterial[n]); // You can store your selection however you want, outside or inside your objects
                 if (ImGui::Selectable(listMaterial[n].c_str(), is_selected))
                 {
-                    Renderer::MaterialInterface materialInterface = Engine::Instance().GetResourcesManager().LoadMaterial(listMaterial[n].c_str());
+                    Renderer::MaterialInterface materialInterface = Engine::Instance().GetResourcesManager().LoadMaterial(
+                            listMaterial[n].c_str());
                     model.ChangeMaterial(materialInterface, i);
                     Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
                 }
@@ -191,6 +205,34 @@ void PropertiesWidget::ModelReader()
     }
 }
 
+void PropertiesWidget::AnimatorReader()
+{
+    if (ImGui::CollapsingHeader("Animator"))
+        return;
+
+    Component::Animator& animator = Engine::Instance().GetCurrentWorld().GetComponent<Component::Animator>(_entity);
+
+    std::vector<std::string> listAnimation = Engine::Instance().GetResourcesManager().GetAnimationNameList();
+
+    if  (ImGui::BeginCombo("##AnimatorCombo", animator.GetAnimation().name.c_str()))
+    {
+        for (int n = 0; n < listAnimation.size(); n++)
+        {
+            bool isSelected = (animator.GetAnimation().name == listAnimation[n]); // You can store your selection however you want, outside or inside your objects
+            if (ImGui::Selectable(listAnimation[n].c_str(), isSelected))
+            {
+                animator.SetAnimation(*(Renderer::Animation*)(Engine::Instance().GetResourcesManager().GetAsset(listAnimation[n].c_str())));
+                Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+            }
+
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+        }
+        ImGui::EndCombo();
+    }
+}
+
+
 void PropertiesWidget::CameraReader()
 {
     auto &camera = Engine::Instance().GetCurrentWorld().GetComponent<Camera>(_entity);
@@ -198,10 +240,10 @@ void PropertiesWidget::CameraReader()
         return;
 
     ImGui::Checkbox("Is perspective", &camera._isPerspective);
-    float fov = (camera._fov * 180.f) / (float)M_PI;
+    float fov = camera._fov * RadToDeg<float>();
     ImGui::DragFloat("FOV", &fov, 1.f, 0.f, 180.f);
 
-    camera._fov = (fov * (float)M_PI) / 180.f;
+    camera._fov = fov * DegToRad<float>();
 
 }
 
@@ -209,6 +251,40 @@ void PropertiesWidget::RigidBodyReader()
 {
     if (ImGui::CollapsingHeader("RigidBody"))
         return;
+    World &world = Engine::Instance().GetCurrentWorld();
+    auto rigidBody = world.GetComponent<RigidBody>(_entity);
+    const char *enumBodyType[]{"Static", "Kinematic", "Dynamic"};
+    int bodyType = (int) rigidBody.GetBodyType();
+    ImGui::Combo("BodyType",&bodyType, enumBodyType, IM_ARRAYSIZE(enumBodyType));
+    switch (bodyType)
+    {
+        case 0:
+        {
+            if(rigidBody.GetBodyType() != BodyType::STATIC)
+                world.GetSystemManager()->GetSystem<PhysicsSystem>()->SetType(_entity, BodyType::STATIC);
+
+            break;
+        }
+        case 1:
+        {
+            if(rigidBody.GetBodyType() != BodyType::KINEMATIC)
+                world.GetSystemManager()->GetSystem<PhysicsSystem>()->SetType(_entity, BodyType::KINEMATIC);
+
+            break;
+        }
+        case 2:
+        {
+            if(rigidBody.GetBodyType() != BodyType::DYNAMIC)
+                world.GetSystemManager()->GetSystem<PhysicsSystem>()->SetType(_entity, BodyType::DYNAMIC);
+
+            break;
+        }
+        default:
+            break;
+    }
+//    float mass = rigidBody.GetMass();
+//    ImGui::DragFloat("Mass", &mass);
+//    world.GetSystemManager()->GetSystem<PhysicsSystem>()->SetMass(_entity, mass);
 }
 
 void PropertiesWidget::AddComponent()
@@ -241,16 +317,16 @@ void PropertiesWidget::AddComponent()
             {
                 if (ImGui::MenuItem(listModel[n].c_str()))
                 {
-                    world.AddComponent(_entity, Engine::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(), Renderer::VertexType::V_NORMALMAP));
+                    world.AddComponent(_entity, Engine::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(),
+                                                                                                   Renderer::VertexType::V_NORMALMAP));
                 }
             }
             ImGui::EndMenu();
         }
 
-        if (ImGui::MenuItem("RigidBody"))
-        {
-            world.AddComponent(_entity, RigidBody());
-        }
+        AddRigidBody();
+
+
         ImGui::EndPopup();
     }
 
@@ -263,7 +339,7 @@ void PropertiesWidget::AddLight()
     Component::Light light;
 
     light.ambient = {0.1f, 0.1f, 0.1f};
-    light.diffuse = {0.7f,0.7f,0.7f};
+    light.diffuse = {0.7f, 0.7f, 0.7f};
     light.specular = {1.0, 1.0f, 1.0f};
     light.constant = 1.0f;
     light.linear = 0.0014f;
@@ -314,6 +390,45 @@ void PropertiesWidget::DeleteComponent()
         {
             world.RemoveComponent<Model>(_entity);
         }
+        if (world.HasComponent<RigidBody>(_entity) && ImGui::MenuItem("Rigidbody"))
+        {
+            auto physicsWorld = world.GetPhysicsWorld();
+            physicsWorld->destroyRigidBody(world.GetComponent<RigidBody>(_entity).rb);
+            world.RemoveComponent<RigidBody>(_entity);
+        }
         ImGui::EndPopup();
+    }
+}
+
+void PropertiesWidget::AddRigidBody()
+{
+    if (ImGui::BeginMenu("RigidBody"))
+    {
+        World &world = Engine::Instance().GetCurrentWorld();
+        if (ImGui::MenuItem("Box collider"))
+        {
+            world.AddComponent(_entity, RigidBody());
+            auto physicsSystem = world.GetSystemManager()->GetSystem<PhysicsSystem>();
+            physicsSystem->SetRigidBody(_entity);
+            physicsSystem->SetType(_entity, BodyType::STATIC);
+            physicsSystem->AddBoxCollider(_entity, {1.0f, 1.0f, 1.0f});
+        }
+        if (ImGui::MenuItem("Sphere collider"))
+        {
+            world.AddComponent(_entity, RigidBody());
+            auto physicsSystem = world.GetSystemManager()->GetSystem<PhysicsSystem>();
+            physicsSystem->SetRigidBody(_entity);
+            physicsSystem->SetType(_entity, BodyType::STATIC);
+
+        }
+        if(ImGui::MenuItem("Capsule collider"))
+        {
+            world.AddComponent(_entity, RigidBody());
+            auto physicsSystem = world.GetSystemManager()->GetSystem<PhysicsSystem>();
+            physicsSystem->SetRigidBody(_entity);
+            physicsSystem->SetType(_entity, BodyType::STATIC);
+            physicsSystem->AddCapsuleCollider(_entity, 1.f, 1.0f);
+        }
+        ImGui::EndMenu();
     }
 }
