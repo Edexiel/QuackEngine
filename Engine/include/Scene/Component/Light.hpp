@@ -36,7 +36,9 @@ namespace Component
         template<class Archive>
         void serialize(Archive &archive)
         {
-            archive(type,ambient,diffuse,specular,constant,linear,quadratic,spotAngle,outerSpotAngle);
+            archive(CEREAL_NVP(type), CEREAL_NVP(ambient), CEREAL_NVP(diffuse), CEREAL_NVP(specular),
+                    CEREAL_NVP(constant), CEREAL_NVP(linear), CEREAL_NVP(quadratic), CEREAL_NVP(spotAngle),
+                    CEREAL_NVP(outerSpotAngle));
         }
     };
 }

@@ -23,63 +23,25 @@
 #include "Scene/Component/Name.hpp"
 #include "fmt/core.h"
 
+//Serialization
+#include <cereal/types/string.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/access.hpp>
 
 namespace reactphysics3d
 {
     class PhysicsWorld;
 }
 
-//Serialization
-#include <cereal/types/string.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/access.hpp>
-
 class World
 {
 private:
-    struct EntityHandler
-    {
-        EntityHandler() = default;
-        EntityHandler(Entity id, World *world) : id(id), world(world) {}
-
-        Entity id;
-        World* world;
-
-        template<class Archive, class T>
-        void save(Archive &archive, Entity &e, const char *name)
-        {
-            if (world->HasComponent<T>(e))
-            {
-                archive(cereal::make_nvp(name, world->GetComponent<T>(e)));
-            }
-        }
-
-        template<class Archive>
-        void serialize(Archive &archive)
-        {
-            archive(CEREAL_NVP(id));
-            save<Archive, Component::Name>(archive, id, "Name");
-            save<Archive, Component::Transform>(archive, id, "Transform");
-//        save<Archive, Component::Camera>(archive, e,"Camera");
-//        save<Archive,Component::Light>(archive, e,"Light");
-//        save<Archive,Component::Model>(archive, e,"Model");
-//        save<Archive,Component::RigidBody>(archive, e,"RigidBody");
-        }
-    };
-
-
-
     std::unique_ptr<ComponentManager> _componentManager;
     std::unique_ptr<EntityManager> _entityManager;
     std::unique_ptr<SystemManager> _systemManager;
-public:
-    const std::unique_ptr<SystemManager> &GetSystemManager() const;
-private:
-
     reactphysics3d::PhysicsWorld *_physicsWorld = nullptr;
 
     std::string _name;
-
 
 public:
     World() = delete;
@@ -105,10 +67,10 @@ public:
     void RemoveComponent(Entity id);
 
     template<typename T>
-    T &GetComponent(Entity id);
+    T &GetComponent(Entity id) const;
 
     template<typename T>
-    bool HasComponent(Entity id);
+    bool HasComponent(Entity id) const;
 
     template<typename T>
     ComponentType GetComponentType();
@@ -126,21 +88,65 @@ public:
 
     const std::unique_ptr<EntityManager> &GetEntityManager() const;
 
-///***************SERIALIZATION**************/////////
+    const std::unique_ptr<SystemManager> &GetSystemManager() const;
+
+
+    ///***************SERIALIZATION**************/////////
     friend class cereal::access;
 
+    struct EntityHandler
+    {
+        EntityHandler() = default;
+
+        EntityHandler(Entity id,const World *world) : id(id), world(world)
+        {}
+
+        Entity id;
+        const World *world;
+
+        template<class Archive, class T>
+        void process(Archive &archive,const Entity &e, const char *name) const
+        {
+            if (world->HasComponent<T>(e))
+            {
+                archive(cereal::make_nvp(name, world->GetComponent<T>(e)));
+            }
+        }
+
+        template<class Archive>
+        void save(Archive &archive) const
+        {
+            archive(CEREAL_NVP(id));
+            process<Archive, Component::Name>(archive, id, "Name");
+            process<Archive, Component::Transform>(archive, id, "Transform");
+            process<Archive, Component::Camera>(archive, id, "Camera");
+            process<Archive, Component::Light>(archive, id, "Light");
+            process<Archive, Component::Model>(archive, id, "Model");
+//        save<Archive,Component::RigidBody>(archive, id,"RigidBody");
+        }
+
+        template<class Archive>
+        void load(Archive &archive)
+        {
+
+        }
+    };
 
     template<class Archive>
-    void serialize(Archive &archive)
+    void save(Archive &archive) const
     {
-        archive(CEREAL_NVP(_name));
+        archive(cereal::make_nvp("name",_name));
 
         std::vector<EntityHandler> entities;
         for (Entity &entity : _entityManager->GetEntities())
             entities.emplace_back(entity, this);
 
         archive(CEREAL_NVP(entities));
-        //serialize(archive, entity);
+    }
+
+    template<class Archive>
+    void load(Archive &archive)
+    {
     }
 };
 

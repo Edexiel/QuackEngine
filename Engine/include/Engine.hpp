@@ -79,9 +79,9 @@ public:
     void SwapBuffers();
 
 
-    World& CreateWorld(std::string name);
-    World& LoadWorld(const std::string& path);
-    void SaveWorld(const std::string& worldName,std::filesystem::path path);
+    World &CreateWorld(std::string name);
+    World &LoadWorld(std::filesystem::path path);
+    void SaveWorld(const std::string &worldName, std::filesystem::path path) const;
     void RemoveWorld(const std::string &name);
 
     Input::InputManager &GetInputManager();

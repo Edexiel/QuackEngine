@@ -54,13 +54,13 @@ inline void World::RemoveComponent(Entity id)
 }
 
 template<typename T>
-inline T &World::GetComponent(Entity id)
+inline T &World::GetComponent(Entity id) const
 {
     return _componentManager->GetComponent<T>(id);
 }
 
 template<typename T>
-inline bool World::HasComponent(Entity id)
+inline bool World::HasComponent(Entity id) const
 {
     return _componentManager->HasComponent<T>(id);
 }

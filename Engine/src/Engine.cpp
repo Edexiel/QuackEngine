@@ -15,6 +15,7 @@
 //Serialization json for debug only
 #include <cereal/archives/json.hpp>
 #include <fstream>
+#include <fmt/core.h>
 
 namespace fs = std::filesystem;
 
@@ -190,32 +191,37 @@ World &Engine::CreateWorld(std::string name)
     return _worlds.emplace_back(name);
 }
 
-void Engine::SaveWorld(const std::string &worldName,fs::path path)
+void Engine::SaveWorld(const std::string &worldName, fs::path path) const
 {
     if (_worldLut.find(worldName) == _worldLut.end())
     {
         Log_Error("Trying to save a world that does not exists");
         return;
     }
-    Log_Info((std::string("Saving world : ")+ worldName).c_str());
+    Log_Info(fmt::format("Saving world : {}", worldName).c_str());
 
-    path.append(worldName).replace_extension(".quack");
+    path.append(worldName).replace_extension(".qck");
     std::ofstream os(path);
 
     cereal::JSONOutputArchive oarchive(os);
 
+    oarchive(cereal::make_nvp("world", _worlds.at(_worldLut.at(worldName))));
 
-
-    oarchive(cereal::make_nvp("world",_worlds[_worldLut[worldName]]));
-
-    Log_Info((std::string("World has been saved as :")+path.string()).c_str());
-
-
+    Log_Info(fmt::format("World has been saved as: {}", path.string()).c_str());
 
 }
 
-World &Engine::LoadWorld(const std::string &path)
+World &Engine::LoadWorld(fs::path path)
 {
+    if (!exists(path))
+    {
+        Log_Error(fmt::format("Path does not exists: {}", path.c_str()).c_str());
+    }
+
+    Log_Info(fmt::format("Saving world: {}", path.string()).c_str());
+
+    std::ifstream is(path);
+    cereal::JSONInputArchive iarchive(is);
 
 }
 

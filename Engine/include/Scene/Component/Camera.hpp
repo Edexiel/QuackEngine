@@ -11,6 +11,7 @@ namespace Input
 {
     class InputManager;
 };
+
 class CameraSystem;
 
 namespace Component
@@ -42,7 +43,7 @@ namespace Component
 
     public:
 
-        bool isActive {true};
+        bool isActive{true};
 
         friend ::CameraSystem;
         float _fov;
@@ -57,19 +58,24 @@ namespace Component
 
         Renderer::Framebuffer GetFramebuffer() const;
 
-        const Maths::Matrix4& GetProjection() const;
-        const Maths::Matrix4& GetView() const;
+        const Maths::Matrix4 &GetProjection() const;
+        const Maths::Matrix4 &GetView() const;
 
         void SetProjection(unsigned int width, unsigned int height, float far, float near,
                            float fov);
         void SetProjection(unsigned int width, unsigned int height, float far, float near);
         void CreateProjection();
-        void SetView(const Maths::Matrix4& view);
+        void SetView(const Maths::Matrix4 &view);
+
+        /****** Serialization *******/
+
+        friend class cereal::access;
 
         template<class Archive>
         void serialize(Archive &archive)
         {
-            //archive(isActive,ambient,diffuse,specular,constant,linear,quadratic,spotAngle,outerSpotAngle);
+            archive(CEREAL_NVP(isActive), CEREAL_NVP(_width), CEREAL_NVP(_height), CEREAL_NVP(_far), CEREAL_NVP(_near),
+                    CEREAL_NVP(_fov));
         }
 
     };
