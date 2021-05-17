@@ -37,10 +37,12 @@ namespace Renderer
                                unsigned int indicesSize, Renderer::VertexType vertexType);
         static void DrawMesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbIndices);
         static void DrawMeshNormalMap(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbIndices);
+        static void DrawSkeletalMesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbIndices);
         static void DeleteMesh(unsigned int vao, unsigned int vbo, unsigned int ebo);
 
         static void VerticesReading();
         static void VerticesReadingNormalMapping();
+        static void VerticesReadingSkeletalMesh();
 
 
         // Shader

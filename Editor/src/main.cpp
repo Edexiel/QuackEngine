@@ -2,6 +2,19 @@
 
 #include "Editor.hpp"
 #include "Engine.hpp"
+#include "Renderer/Material.hpp"
+#include "Scene/Core/World.hpp"
+#include "Scene/Component/Transform.hpp"
+#include "Renderer/RendererInterface.hpp"
+#include "Renderer/RendererPlatform.hpp"
+#include "Renderer/Shape.hpp"
+#include "Scene/Component/RigidBody.hpp"
+#include "Scene/System/PhysicsSystem.hpp"
+#include "Scene/System/CameraSystem.hpp"
+#include "Resources/ResourcesManager.hpp"
+
+#include "Scene/Component/Animator.hpp"
+
 #include "Tools/Random.hpp"
 #include "CameraEditor.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
@@ -9,6 +22,7 @@
 
 using namespace Component;
 using namespace Resources;
+
 
 int main()
 {
