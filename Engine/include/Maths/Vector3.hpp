@@ -2,8 +2,9 @@
 #define QUACKENGINE_VECTOR3_HPP
 
 #include "Maths/Vector2.hpp"
-#include <iostream>
 #include "cereal/cereal.hpp"
+#include <cmath>
+
 
 namespace Maths
 {

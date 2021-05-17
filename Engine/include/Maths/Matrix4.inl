@@ -1,4 +1,3 @@
-
 inline Matrix4 Matrix4::Identity()
 {
     Matrix4 mat;
