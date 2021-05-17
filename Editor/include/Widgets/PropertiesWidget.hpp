@@ -21,6 +21,7 @@ private:
     static void DeleteComponent();
 
     static void AddLight();
+    static void AddRigidBody();
 
     Maths::Vector3f _eulerRot{0,0,0};
 };

@@ -64,7 +64,6 @@ void
 PhysicsSystem::AddSphereCollider(Entity id, float radius, const Maths::Vector3f &position,
                                  const Maths::Quaternion &rotation)
 {
-
     rp3d::SphereShape *sphereShape = Engine::Instance().GetPhysicsManager().createSphereShape(radius);
     rp3d::Transform transform{{position.x, position.y, position.z},
                               {rotation.x, rotation.y, rotation.z, rotation.w}};
@@ -83,7 +82,10 @@ void PhysicsSystem::AddCapsuleCollider(Entity id, float radius, float height, co
 
 void PhysicsSystem::SetType(Entity id, const BodyType &type)
 {
-    _world->GetComponent<Component::RigidBody>(id).rb->setType((rp3d::BodyType) type);
+
+    auto &rb = _world->GetComponent<Component::RigidBody>(id);
+    rb._bodyType = type;
+    rb.rb->setType((rp3d::BodyType) type);
 }
 
 void PhysicsSystem::SetIsTrigger(Entity id, bool isTrigger)
@@ -103,4 +105,12 @@ void PhysicsSystem::SetRigidBody(Entity id)
                                                        {t.rotation.x, t.rotation.y, t.rotation.z, t.rotation.w}});
 
     r.rb->setUserData(reinterpret_cast<void*>(static_cast<size_t>(id)));
+}
+
+void PhysicsSystem::SetMass(Entity id, float mass)
+{
+    auto &world = Engine::Instance().GetCurrentWorld();
+    auto rb = world.GetComponent<RigidBody>(id);
+    rb._mass = mass;
+    rb.rb->setMass(mass);
 }

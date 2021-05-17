@@ -100,7 +100,7 @@ void Game::Init()
     }
     ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
 
-    Transform t = {Maths::Vector3f{0, 0, 10}, Maths::Vector3f::One() * 1.5f, Maths::Quaternion{}};
+    Transform t = {Maths::Vector3f{0, 0, 10}, Maths::Vector3f::One(), Maths::Quaternion{}};
     Component::Model md = engine.GetResourcesManager().LoadModel(R"(../../Game/Asset/Model/Sphere.fbx)",
                                                                  Renderer::VertexType::V_NORMALMAP);
 
@@ -138,8 +138,8 @@ void Game::Init()
 
 
                 physicsSystem->SetRigidBody(id);
-                physicsSystem->SetType(id, BodyType::DYNAMIC);
-                physicsSystem->AddSphereCollider(id, 1.5f);
+                physicsSystem->SetType(id, BodyType::STATIC);
+                physicsSystem->AddSphereCollider(id, 1.f);
             }
         }
     }
