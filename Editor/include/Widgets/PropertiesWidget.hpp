@@ -15,6 +15,7 @@ private:
     void TransformReader();
     static void LightReader();
     static void ModelReader();
+    static void AnimatorReader();
     static void CameraReader();
     static void RigidBodyReader();
     static void AddComponent();

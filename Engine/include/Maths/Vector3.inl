@@ -1,4 +1,6 @@
 
+#include "Vector3.hpp"
+
 using Vector3f = Vector3<float>;
 using Vector3d = Vector3<double>;
 using Vector3i = Vector3<int>;
@@ -153,5 +155,11 @@ bool Vector3<T>::operator!=(const Vector3 <T> &v2) const
             return true;
     }
     return false;
+}
+
+template<typename T>
+Vector3<T> Vector3<T>::Lerp(const Vector3<T> &v1, const Vector3<T> &v2, float t)
+{
+    return v1 * (1 - t) + v2 * t;
 }
 

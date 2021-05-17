@@ -103,7 +103,6 @@ set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
 set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
-#set(ASSIMP_NO_EXPORT OFF)
 set(ASSIMP_BUILD_GLTF_IMPORTER ON CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_FBX_IMPORTER ON CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ASSBIN_EXPORTER ON CACHE BOOL "" FORCE)
@@ -112,9 +111,9 @@ add_subdirectory(${external_lib}/assimp)
 
 
 #flatbuffer
-set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(FLATBUFFERS_MAX_PARSING_DEPTH 16)
-add_subdirectory(${external_lib}/flatbuffers ${CMAKE_CURRENT_BINARY_DIR}/flatbuffers-build EXCLUDE_FROM_ALL)
+#set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+#set(FLATBUFFERS_MAX_PARSING_DEPTH 16)
+#add_subdirectory(${external_lib}/flatbuffers ${CMAKE_CURRENT_BINARY_DIR}/flatbuffers-build EXCLUDE_FROM_ALL)
 
 
 #reactphysics3d
@@ -140,12 +139,12 @@ add_subdirectory(Engine)
 add_subdirectory(Game)
 
 
-if(NOT MSVC)
+#if(NOT MSVC)
 #    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
 #    target_compile_options(Editor PRIVATE -Wall -Wextra -pedantic)
 #    target_compile_options(Engine PRIVATE -Wall -Wextra -pedantic)
 #    target_compile_options(Game PRIVATE -Wall -Wextra -pedantic)
-endif()
+#endif()
 
 
 
