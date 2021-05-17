@@ -223,6 +223,8 @@ World &Engine::LoadWorld(fs::path path)
     std::ifstream is(path);
     cereal::JSONInputArchive iarchive(is);
 
+    iarchive(cereal::make_nvp("world", _worlds.at(_worldLut.at(worldName))));
+
 }
 
 void Engine::RemoveWorld(const std::string &name)

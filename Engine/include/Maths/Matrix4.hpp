@@ -58,5 +58,4 @@ namespace Maths
 #include "Maths/Matrix4.inl"
 }
 
-
 #endif // QUACKENGINE_MATRIX4_HPP
