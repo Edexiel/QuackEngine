@@ -14,15 +14,16 @@ namespace Renderer
     {
       bool hasLight {false};
 
-      bool hasColorTexture;
-      bool hasDiffuseTexture;
-      bool hasSpecularTexture;
+      bool hasColorTexture      {false};
+      bool hasDiffuseTexture    {false};
+      bool hasSpecularTexture   {false};
 
-      bool hasNormalMap;
+      bool hasNormalMap {false};
+      bool hasSkeleton  {false};
 
       unsigned int GetKey() const
       {
-        return hasLight + hasColorTexture * 10 + hasDiffuseTexture * 100 + hasSpecularTexture * 1000 + hasNormalMap * 10000;
+        return hasLight + hasColorTexture * 10 + hasDiffuseTexture * 100 + hasSpecularTexture * 1000 + hasNormalMap * 10000 + hasSkeleton * 100000;
       };
     };
 

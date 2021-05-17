@@ -1,15 +1,16 @@
 #include "CameraEditor.hpp"
 
+#include "Renderer/RendererPlatform.hpp"
 #include "Input/InputManager.hpp"
 #include "Maths/Quaternion.hpp"
 #include <algorithm>
 
 using namespace Maths;
 
-void CameraEditor::Update()
-{
-
-}
+CameraEditor::CameraEditor(unsigned int width, unsigned int height,
+             float far, float near, float fov)
+             : _width{width}, _height{height}, _far{far}, _near{near}, _fov{fov}, _isPerspective{true},
+             _framebuffer{Renderer::RendererPlatform::CreateFramebuffer(width, height)}{}
 
 void CameraEditor::SetScaleAxisX(float scale)
 {
@@ -23,31 +24,32 @@ void CameraEditor::SetScaleAxisY(float scale)
 
 void CameraEditor::SetScaleAxisZ(float scale)
 {
-    _scaleAxisX = scale;
+    _scaleAxisZ = scale;
 }
 
 void CameraEditor::SetInput(Input::InputManager &inputManager)
 {
-    inputManager.RegisterEventAxis("CameraEditorMovementForward",this, &CameraEditor::SetScaleAxisZ);
-    inputManager.RegisterEventAxis("CameraEditorMovementRight",this, &CameraEditor::SetScaleAxisX);
-    inputManager.RegisterEventAxis("CameraEditorMovementUp",this, &CameraEditor::SetScaleAxisY);
+    inputManager.RegisterEventAxis("CameraEditorMovementForward", this, &CameraEditor::SetScaleAxisZ);
+    inputManager.RegisterEventAxis("CameraEditorMovementRight", this, &CameraEditor::SetScaleAxisX);
+    inputManager.RegisterEventAxis("CameraEditorMovementUp", this, &CameraEditor::SetScaleAxisY);
 }
 
 void CameraEditor::FreeFly()
 {
-    _forward = (_rotation * Vector4f(Vector3f::Backward(), 0)).xyz * _scaleAxisZ;
-    _right = (_rotation * Vector4f(Vector3f::Left(), 0)).xyz * _scaleAxisX;
-    Vector3f up = Vector3f::Down() * _scaleAxisY;
-    Vector3f direction = (_forward + _right + up).GetNormalized();
+    Vector3f forward = _rotation * Vector3f::Forward() * _scaleAxisZ;
+    Vector3f right = _rotation * Vector3f::Right() * _scaleAxisX;
+
+    Vector3f up = Vector3f::Up() * _scaleAxisY;
+    Vector3f direction = (forward + right + up).GetNormalized();
 
     _position = _position + (direction * _speedTranslation);
 }
 
 void CameraEditor::MouseMovement(const Vector2d &currentPos, const Vector2d &oldPos)
 {
-    Vector2d angleRotation = (oldPos - currentPos) * (_speedRotation * M_PI / 180.f);
+    Vector2d angleRotation = (currentPos - oldPos) * (_speedRotation * Pi<float>() / 180.f);
     _yaw += (float)angleRotation.x;
-    _pitch = (float)std::clamp(_pitch + angleRotation.y, -M_PI / 2.0, M_PI / 2.0);
+    _pitch = (float)std::clamp(_pitch + angleRotation.y, -Pi<float>() / 2.0, Pi<float>() / 2.0);
 
-    _rotation = (Quaternion({1, 0, 0}, _pitch) * Quaternion({0, 1, 0}, _yaw)).ToMatrix();
+    _rotation = Quaternion({0, 1, 0}, _yaw) * Quaternion({1, 0, 0}, _pitch);
 }

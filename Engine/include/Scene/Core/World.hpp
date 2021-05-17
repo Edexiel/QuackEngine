@@ -1,16 +1,22 @@
 #ifndef QUACKENGINE_WORLD_HPP
 #define QUACKENGINE_WORLD_HPP
 
+#include <utility>
+
 #include "Types.hpp"
 
 #include "Scene/Core/EntityManager.hpp"
 #include "Scene/Core/SystemManager.hpp"
 #include "Scene/Core/ComponentManager.hpp"
-
-#include "reactphysics3d/reactphysics3d.h"
+#include "Physics/PhysicsEventManager.hpp"
 
 #include "Scene/Component/Name.hpp"
-#include <string>
+#include <string_view>
+
+namespace reactphysics3d
+{
+    class PhysicsWorld;
+}
 
 class World
 {
@@ -18,15 +24,18 @@ private:
     std::unique_ptr<ComponentManager> _componentManager;
     std::unique_ptr<EntityManager> _entityManager;
     std::unique_ptr<SystemManager> _systemManager;
+public:
+    const std::unique_ptr<SystemManager> &GetSystemManager() const;
+private:
 
-    rp3d::PhysicsWorld *_physicsWorld = nullptr;
+    reactphysics3d::PhysicsWorld *_physicsWorld = nullptr;
 
-    std::string _name;
+    std::string_view _name;
 
 
 public:
     World() = delete;
-    explicit World(std::string &name);
+    explicit World(std::string_view &name);
 
     void Init();
 
@@ -63,15 +72,15 @@ public:
     template<typename T>
     void SetSystemSignature(Signature signature);
 
-    rp3d::PhysicsWorld *GetPhysicsWorld() const;
+    reactphysics3d::PhysicsWorld *GetPhysicsWorld() const;
 
-    const std::string &GetName() const;
+    const std::string_view &GetName() const;
 
     const std::unique_ptr<EntityManager> &GetEntityManager() const;
 
 };
 
-inline rp3d::PhysicsWorld *World::GetPhysicsWorld() const
+inline reactphysics3d::PhysicsWorld *World::GetPhysicsWorld() const
 {
     return _physicsWorld;
 }
@@ -84,7 +93,7 @@ inline void World::Clear()
 inline Entity World::CreateEntity(std::string name)
 {
     Entity id = _entityManager->Create();
-    AddComponent(id, Name{std::move(name)});
+    AddComponent(id, Component::Name{std::move(name)});
     return id;
 }
 
@@ -155,7 +164,7 @@ inline void World::SetSystemSignature(Signature signature)
     _systemManager->SetSignature<T>(signature);
 }
 
-inline const std::string &World::GetName() const
+inline const std::string_view &World::GetName() const
 {
     return _name;
 }
@@ -164,6 +173,11 @@ inline const std::string &World::GetName() const
 inline const std::unique_ptr<EntityManager> &World::GetEntityManager() const
 {
     return _entityManager;
+}
+
+inline const std::unique_ptr<SystemManager> &World::GetSystemManager() const
+{
+    return _systemManager;
 }
 
 #endif //QUACKENGINE_WORLD_HPP

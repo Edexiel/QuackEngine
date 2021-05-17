@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Vendor/ImGuizmo" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/assimp" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/flatbuffers" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/glfw" vcs="Git" />
@@ -14,5 +15,6 @@
     <mapping directory="$PROJECT_DIR$/Vendor/reactphysics3d/testbed/extern/nanogui/ext/nanovg_metal" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/reactphysics3d/testbed/extern/nanogui/ext/pybind11" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/reactphysics3d/testbed/extern/nanogui/ext/pybind11/tools/clang" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Vendor/stb" vcs="Git" />
   </component>
 </project>

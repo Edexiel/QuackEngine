@@ -7,31 +7,43 @@
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Material.hpp"
 
+#include "Renderer/Skeleton.hpp"
+
 #include "Scene/Core/Types.hpp"
+
+#include "Resources/Asset.hpp"
+
+#include <memory>
+#include <unordered_map>
 
 namespace Component
 {
-    class Model
+    class Model : public Resources::Asset
     {
 
         std::vector<Renderer::Mesh> _meshList;
         std::vector<Renderer::MaterialInterface> _materialList;
         Renderer::VertexType _vertexType {Renderer::VertexType::V_CLASSIC};
 
+        static std::vector<unsigned int> LoadIndices(const void* loadedScene, unsigned int meshId);
+
         static Model LoadClassicModel(const void *loadedScene);
         static Model LoadNormalMapModel(const void *loadedScene);
+        static Model LoadSkeletalMeshModel(const void *loadedScene);
+
+        static void SetVertexBoneData(Renderer::SkeletalVertex& vertex, int boneID, float weight);
+        static void ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex>& vertices,
+                                          unsigned int meshId,
+                                          const void* loadedScene);
 
     public:
 
-        std::string name;
+        std::unordered_map<std::string, Renderer::Bone> _skeleton;
 
-        Model() = default;
-
+        Model();
         Model(Renderer::VertexType vertexType);
 
         void Destroy();
-
-        //Entity entity;
 
         static Model LoadModel(const char *path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
         static void ReLoadModel(Model& model, const char *path, Renderer::VertexType vertexType);
@@ -40,8 +52,6 @@ namespace Component
         unsigned int AddMaterial(const Renderer::MaterialInterface& newMaterial);
         unsigned int ChangeMaterial(const Renderer::MaterialInterface& newMaterial, unsigned int index);
         void RemoveMaterial(unsigned int index);
-
-        //void SetMaterial(const Renderer::MaterialInterface & newMaterial, unsigned int index);
 
         void SetMeshMaterial(unsigned int meshIndex, unsigned int materialIndex);
 

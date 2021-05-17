@@ -5,8 +5,9 @@
 
 ExplorerWidget::ExplorerWidget()
 {
-    _title="Explorer";
+    _title = "Explorer";
 }
+
 void ExplorerWidget::UpdateVisible()
 {
     Engine &engine = Engine::Instance();
@@ -41,18 +42,21 @@ void ExplorerWidget::UpdateVisible()
 
     if (!ImGui::CollapsingHeader("Model"))
         offset += DisplayList(listName, offset);
+
+    listName = engine.GetResourcesManager().GetAnimationNameList();
+    if (!ImGui::CollapsingHeader("Animation"))
+        offset += DisplayList(listName, offset);
 }
 
 unsigned int ExplorerWidget::DisplayList(std::vector<std::string> &listName, unsigned int offset)
 {
-    for (unsigned int i = 0; i < listName.size() ; i++)
+    for (unsigned int i = 0; i < listName.size(); i++)
     {
         if (ImGui::Selectable(listName[i].c_str(), _selected == i + offset))
         {
             _propertiesSwitch = PROPERTIES_SHOW_ASSET;
             _selected = i + offset;
             _assetName = listName[i];
-            std::cout << _selected << std::endl;
         }
     }
     return listName.size();

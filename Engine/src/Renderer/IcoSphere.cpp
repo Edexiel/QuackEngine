@@ -1,6 +1,7 @@
 #include "Renderer/IcoSphere.hpp"
 #include "Renderer/Vertex.hpp"
 #include "Maths/Vector3.hpp"
+
 #include <cmath>
 
 #define ARRAYSIZE(arr) (sizeof(arr) / sizeof(arr[0]))

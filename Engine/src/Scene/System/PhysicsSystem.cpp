@@ -1,11 +1,7 @@
 #include "Engine.hpp"
 
 #include "Scene/System/PhysicsSystem.hpp"
-#include "Scene/Component/RigidBody.hpp"
-#include "Scene/Component/Transform.hpp"
-#include "Scene/Core/World.hpp"
 
-#include "reactphysics3d/reactphysics3d.h"
 
 using namespace Component;
 
@@ -20,8 +16,10 @@ void PhysicsSystem::Init()
         auto &r = _world->GetComponent<Component::RigidBody>(entity);
 
         if (!r.rb)
+        {
             r.rb = _world->GetPhysicsWorld()->createRigidBody({{t.position.x, t.position.y, t.position.z},
                                                                {t.rotation.x, t.rotation.y, t.rotation.z, t.rotation.w}});
+        }
     }
 }
 
@@ -29,7 +27,18 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
 {
     //todo: faire l'update
     //todo: faire classe de traduction (transform, position, etc)
+    for (Entity entity: _entities)
+    {
+        auto &t = _world->GetComponent<Transform>(entity);
+        auto &r = _world->GetComponent<Component::RigidBody>(entity);
+        rp3d::Transform newTransform({t.position.x, t.position.y, t.position.z}, {t.rotation.w, t.rotation.x, t.rotation.y, t.rotation.z});
+        const rp3d::Transform &transform = r.rb->getTransform();
+        if(newTransform != transform)
+            r.rb->setTransform(newTransform);
+    }
+
     _world->GetPhysicsWorld()->update(fixedDeltaTime);
+
     for (Entity entity: _entities)
     {
         auto &t = _world->GetComponent<Transform>(entity);
@@ -55,7 +64,6 @@ void
 PhysicsSystem::AddSphereCollider(Entity id, float radius, const Maths::Vector3f &position,
                                  const Maths::Quaternion &rotation)
 {
-
     rp3d::SphereShape *sphereShape = Engine::Instance().GetPhysicsManager().createSphereShape(radius);
     rp3d::Transform transform{{position.x, position.y, position.z},
                               {rotation.x, rotation.y, rotation.z, rotation.w}};
@@ -74,12 +82,20 @@ void PhysicsSystem::AddCapsuleCollider(Entity id, float radius, float height, co
 
 void PhysicsSystem::SetType(Entity id, const BodyType &type)
 {
-    _world->GetComponent<Component::RigidBody>(id).rb->setType((rp3d::BodyType) type);
+
+    auto &rb = _world->GetComponent<Component::RigidBody>(id);
+    rb._bodyType = type;
+    rb.rb->setType((rp3d::BodyType) type);
 }
 
+void PhysicsSystem::SetIsTrigger(Entity id, bool isTrigger)
+{
+    _world->GetComponent<Component::RigidBody>(id).rb->getCollider(0)->setIsTrigger(isTrigger);
+}
 void PhysicsSystem::SetRigidBody(Entity id)
 {
     auto &r = _world->GetComponent<Component::RigidBody>(id);
+    auto & name = _world->GetComponent<Component::Name>(id);
 
     if (r.rb)
         return;
@@ -87,4 +103,14 @@ void PhysicsSystem::SetRigidBody(Entity id)
     auto &t = _world->GetComponent<Transform>(id);
     r.rb = _world->GetPhysicsWorld()->createRigidBody({{t.position.x, t.position.y, t.position.z},
                                                        {t.rotation.x, t.rotation.y, t.rotation.z, t.rotation.w}});
+
+    r.rb->setUserData(reinterpret_cast<void*>(static_cast<size_t>(id)));
+}
+
+void PhysicsSystem::SetMass(Entity id, float mass)
+{
+    auto &world = Engine::Instance().GetCurrentWorld();
+    auto rb = world.GetComponent<RigidBody>(id);
+    rb._mass = mass;
+    rb.rb->setMass(mass);
 }

@@ -28,7 +28,6 @@ namespace Component
         unsigned int _width;
         unsigned int _height;
 
-
         float _far;
         float _near;
 
@@ -39,8 +38,8 @@ namespace Component
         float _yaw = 0;
         float _pitch = 0;
 
-        float _speedTranslation = 0.01f;
-        float _speedRotation = 0.01f;
+        float _speedTranslation = 0.1f;
+        float _speedRotation = 0.1f;
 
         Renderer::Framebuffer _framebuffer;
 
@@ -64,7 +63,6 @@ namespace Component
         void SetProjection(unsigned int width, unsigned int height, float far, float near);
         void CreateProjection();
         void SetView(const Maths::Matrix4& view);
-
     };
 }
 #endif // QUACKENGINE_CAMERA_HPP

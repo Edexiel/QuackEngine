@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shape.hpp"
+#include "Scene/Component/Animator.hpp"
 
 #include "Debug/Log.hpp"
 
@@ -21,12 +22,20 @@ void RenderSystem::Draw(Component::Camera& camera)
 {
     camera.GetFramebuffer().Bind();
 
-    RendererPlatform::ClearColor({0.0f, 0.0f, 0.0f, 1.f});
+    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 1.f});
     RendererPlatform::Clear();
 
-    DrawMaterials(camera);
+    DrawMaterials(camera.GetProjection(), camera.GetView());
 
     RendererPlatform::BindFramebuffer(0);
+}
+
+void RenderSystem::Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view)
+{
+    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 1.f});
+    RendererPlatform::Clear();
+
+    DrawMaterials(projection, view);
 }
 
 void RenderSystem::DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex)
@@ -75,7 +84,7 @@ void RenderSystem::SetMaterials()
     }
 }
 
-void RenderSystem::DrawMaterials(Component::Camera& camera)
+void RenderSystem::DrawMaterials(const Maths::Matrix4& projection, const Maths::Matrix4& view)
 {
     if (_lastLinkEntitiesNumbers != _entities.size() || _lastLinkEntitiesNumbers == 0)
     {
@@ -85,17 +94,26 @@ void RenderSystem::DrawMaterials(Component::Camera& camera)
 
     Engine & engine= Engine::Instance();
 
-    for (auto material : _mapMaterial)
+    for (auto it : _mapMaterial)
     {
-        material.first->Apply();
-        material.first->shader.SetMatrix4("projection", camera.GetProjection());
-        material.first->shader.SetMatrix4("view", camera.GetView());
+        it.first->Apply();
+        it.first->shader.SetMatrix4("projection", projection);
+        it.first->shader.SetMatrix4("view", view);
 
-        for (unsigned int i = 0; i < material.second.size(); i++)
+        for (unsigned int i = 0; i < it.second.size(); i++)
         {
-            material.first->shader.SetMatrix4("model", engine.GetCurrentWorld().GetComponent<Transform>(material.second[i].second).GetMatrix());
-            material.second[i].first.Draw();
+            it.first->shader.SetMatrix4("model", engine.GetCurrentWorld().GetComponent<Transform>(it.second[i].second).GetMatrix());
 
+            if (it.second[i].first.GetType() == Renderer::VertexType::V_SKELETAL)
+            {
+                if (it.first->hasSkeleton &&
+                        engine.GetCurrentWorld().HasComponent<Animator>(it.second[i].second))
+                {
+                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).Update(0.01f);
+                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).SetShader(it.first->shader);
+                }
+            }
+            it.second[i].first.Draw();
         }
     }
 }

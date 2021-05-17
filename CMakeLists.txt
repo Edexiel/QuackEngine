@@ -5,24 +5,36 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(OpenGL REQUIRED)
+#find_package(OpenGL REQUIRED)
+
+#option(QUACK_BUILD_EDITOR "Build Editor" OFF)
+option(QUACK_BUILD_TESTS "Build Tests" OFF)
+
+if (QUACK_BUILD_EDITOR)
+    set(QUACK_EDITOR TRUE)
+
+endif ()
+
+message(STATUS ">>> COMPILING IN  ${CMAKE_BUILD_TYPE}")
+message(STATUS ">>> BUILD TEST IS ${QUACK_BUILD_TESTS}")
+
 
 #Platform Specific
-if(UNIX AND NOT APPLE)
+if (UNIX AND NOT APPLE)
     set(LINUX TRUE)
-endif()
+endif ()
 
-if(LINUX)
+if (LINUX)
     message(STATUS ">>> Linux ${CMAKE_SYSTEM}")
     # linux stuff here
     add_definitions(-DLINUX)
-elseif(WIN32)
+elseif (WIN32)
     add_definitions(-DWIN32)
     message(STATUS ">>> Not Linux ${CMAKE_SYSTEM}")
     # stuff that should happen on Win32
-else()
+else ()
     message(FATAL_ERROR ">>> Not supported platform ${CMAKE_SYSTEM}")
-endif()
+endif ()
 
 set(external_lib "Vendor")
 
@@ -37,9 +49,9 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "Build the GLFW test programs" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Build the GLFW example programs" FORCE)
 #set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 set(GLFW_INSTALL OFF CACHE BOOL "Generate installation target" FORCE)
-if(WIN32)
+if (WIN32)
     set(GLFW_USE_HYBRID_HPG ON CACHE BOOL "" FORCE)
-endif()
+endif ()
 
 add_subdirectory(${external_lib}/glfw)
 
@@ -61,6 +73,20 @@ target_sources(imgui INTERFACE
 target_include_directories(imgui INTERFACE ${IMGUI_FOLDER})
 target_link_libraries(imgui INTERFACE glfw glad)
 
+#IMGUIZMO
+#set(IMGUI_IMPL_OPENGL_LOADER_GLAD2 TRUE)
+
+set(IMGUIZMO_FOLDER "${external_lib}/ImGuizmo")
+add_library(ImGuizmo INTERFACE)
+target_sources(ImGuizmo INTERFACE
+        "${IMGUIZMO_FOLDER}/ImCurveEdit.cpp"
+        "${IMGUIZMO_FOLDER}/ImGradient.cpp"
+        "${IMGUIZMO_FOLDER}/ImGuizmo.cpp"
+        "${IMGUIZMO_FOLDER}/ImSequencer.cpp"
+        )
+target_include_directories(ImGuizmo INTERFACE ${IMGUIZMO_FOLDER})
+target_link_libraries(ImGuizmo INTERFACE glfw glad)
+
 #STB
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE ${external_lib}/stb)
@@ -76,13 +102,13 @@ set(ASSIMP_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
-#set(ASSIMP_NO_EXPORT OFF)
+set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_GLTF_IMPORTER ON CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_FBX_IMPORTER ON CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ASSBIN_EXPORTER ON CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ASSXML_EXPORTER ON CACHE BOOL "" FORCE)
-set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(${external_lib}/assimp)
+
 
 #flatbuffer
 #set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -92,14 +118,19 @@ add_subdirectory(${external_lib}/assimp)
 
 #reactphysics3d
 add_subdirectory(${external_lib}/reactphysics3d)
+target_compile_options(reactphysics3d PRIVATE -w --no-warnings)
 
 #gtest
-#todo: create variable test
-add_subdirectory(${external_lib}/googletest)
-add_subdirectory(Test)
+if (QUACK_BUILD_TESTS)
+    add_subdirectory(${external_lib}/googletest)
+    add_subdirectory(Test)
+endif ()
 
-#Editor
 add_subdirectory(Editor)
+
+
+#Runner
+add_subdirectory(Runner)
 
 #Engine
 add_subdirectory(Engine)
@@ -107,13 +138,15 @@ add_subdirectory(Engine)
 #Game
 add_subdirectory(Game)
 
-#Runner
-#add_subdirectory(Runner)
 
-#if(debug)
-#{
-#target_link_libraries(Editor PUBLIC Engine)
-#}
+#if(NOT MSVC)
+#    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Editor PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Engine PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Game PRIVATE -Wall -Wextra -pedantic)
+#endif()
+
+
 
 #Installer
 include(InstallRequiredSystemLibraries)
