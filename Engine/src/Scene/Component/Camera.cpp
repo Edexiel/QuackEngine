@@ -26,8 +26,6 @@ Renderer::Framebuffer Camera::GetFramebuffer() const
     return _framebuffer;
 }
 
-
-
 const Matrix4& Camera::GetProjection() const
 {
     return _projection;

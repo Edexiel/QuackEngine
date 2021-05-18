@@ -62,7 +62,6 @@ inline void ComponentManager::RegisterComponent()
 {
 
     std::string_view typeName = typeid(T).name();
-    std::printf("Register : %s \n",typeName.data(),"\n");
 
     Assert_Fatal_Error(_componentTypes.find(typeName) != _componentTypes.end(),
                        "Registering component type more than once.");

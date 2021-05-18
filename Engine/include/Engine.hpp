@@ -81,7 +81,7 @@ public:
 
 
     class World &CreateWorld(std::string name);
-    void LoadWorld(const std::string &worldName,std::filesystem::path path);
+    void LoadWorld(class World &world, std::filesystem::path path);
     void SaveWorld(const std::string &worldName, std::filesystem::path path) const;
     void RemoveWorld(const std::string &name);
 

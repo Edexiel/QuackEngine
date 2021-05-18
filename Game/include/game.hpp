@@ -14,7 +14,7 @@ public:
     Game() = default;
     virtual ~Game() = default;
 
-    void Init();
+    void Init(class Engine& engine);
     void Update(float deltaTime);
 };
 

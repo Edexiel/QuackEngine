@@ -1,37 +1,14 @@
-
-inline rp3d::PhysicsWorld *World::GetPhysicsWorld() const
-{
-    return _physicsWorld;
-}
-
-inline void World::Clear()
-{
-    //todo:
-}
-
-inline Entity World::CreateEntity(std::string name) const
-{
-    Entity id = _entityManager->Create();
-    AddComponent(id, Component::Name{std::move(name)});
-    return id;
-}
-
-inline void World::DestroyEntity(Entity id)
-{
-    _entityManager->Destroy(id);
-    _componentManager->EntityDestroyed(id);
-    _systemManager->EntityDestroyed(id);
-}
-
 template<typename T>
 inline void World::RegisterComponent()
 {
+    fmt::print(fg(fmt::color::forest_green),"[ECS] Register component : {}\n", demangle(typeid(T).name()));
     _componentManager->RegisterComponent<T>();
 }
 
 template<typename T>
 inline void World::AddComponent(Entity id, T component) const //todo: maybe pass by const ref
 {
+    fmt::print(fg(fmt::color::forest_green),"[ECS] Add Component: {}\n",demangle(typeid(T).name()));
     _componentManager->AddComponent<T>(id, component);
 
     auto signature = _entityManager->GetSignature(id);
@@ -44,6 +21,8 @@ inline void World::AddComponent(Entity id, T component) const //todo: maybe pass
 template<typename T>
 inline void World::RemoveComponent(Entity id)
 {
+    fmt::print(fg(fmt::color::forest_green),"[ECS] Remove component: {} from {}\n",demangle(typeid(T).name()),id);
+
     _componentManager->RemoveComponent<T>(id);
 
     auto signature = _entityManager->GetSignature(id);
@@ -74,6 +53,8 @@ inline ComponentType World::GetComponentType()
 template<typename T>
 inline std::shared_ptr<T> World::RegisterSystem()
 {
+    fmt::print(fg(fmt::color::forest_green),"[ECS] Register system: {}\n",demangle(typeid(T).name()));
+
     return _systemManager->RegisterSystem<T>();
 }
 

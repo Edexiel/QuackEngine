@@ -30,8 +30,7 @@ int main()
     Editor editor{engine.GetWindow()};
 
     Game game;
-    engine.LoadWorld("Main","./");
-    game.Init();
+    game.Init(engine);
 
     // Time && fps
     double tempTime{0.0};

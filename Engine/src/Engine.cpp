@@ -208,21 +208,21 @@ void Engine::SaveWorld(const std::string &worldName, fs::path path) const
 
 }
 
-void Engine::LoadWorld(const std::string &worldName, fs::path path)
+void Engine::LoadWorld(World& world, fs::path path)
 {
     if (!exists(path))
     {
         Log_Error(fmt::format("Path does not exists: {}", path.c_str()).c_str());
     }
 
-    path.append(worldName).replace_extension(".qck");
-    Log_Info(fmt::format("Loading world: {}", path.string()).c_str());
+    path.append(world.GetName()).replace_extension(".qck");
+
+    fmt::print(fg(fmt::color::forest_green),"[Engine] Loading world: {}\n",path.string());
 
     std::ifstream is(path);
     cereal::JSONInputArchive iarchive(is);
 
-    CreateWorld(worldName);
-    iarchive(_worlds[_worldLut[worldName]]);
+    iarchive(world);
 }
 
 void Engine::RemoveWorld(const std::string &name)

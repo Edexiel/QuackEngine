@@ -13,18 +13,20 @@
 
 //Serialization, yeah sorry
 #include <cereal/types/string.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/access.hpp>
+
 #include "Scene/Component/Camera.hpp"
 #include "Scene/Component/Light.hpp"
 #include "Scene/Component/Model.hpp"
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/Component/Transform.hpp"
 #include "Scene/Component/Name.hpp"
-#include "fmt/core.h"
+#include <fmt/core.h>
+#include <fmt/color.h>
+#include "Tools/Type.hpp"
 
-//Serialization
-#include <cereal/types/string.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/access.hpp>
 #include "Engine.hpp"
 
 
@@ -47,7 +49,7 @@ public:
     World() = delete;
     explicit World(std::string &name);
 
-    void Init();
+    void Init(Engine& engine);
 
     void Clear();
 
@@ -139,20 +141,20 @@ public:
             World& w = Engine::Instance().GetCurrentWorld();
             Component::Name name;
             read<Archive, Component::Name>(archive, name, "Name");
-            world->CreateEntity(name.name);
+            w.CreateEntity(name.name);
 
             Component::Transform t;
             Component::Camera c;
-            Component::Light l;
-            Component::Model m;
+//            Component::Light l;
+//            Component::Model m;
 
             read<Archive, Component::Transform>(archive, t, "Transform");
             read<Archive, Component::Camera>(archive, c, "Camera");
-            read<Archive, Component::Light>(archive, l, "Light");
-            read<Archive, Component::Model>(archive, m, "Model");
+//            read<Archive, Component::Light>(archive, l, "Light");
+//            read<Archive, Component::Model>(archive, m, "Model");
 
+            w.AddComponent(id,c);
 
-            //world->AddComponent(id, name.name);
         }
 
     };
