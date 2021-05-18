@@ -19,7 +19,7 @@ namespace reactphysics3d
     class PhysicsCommon;
 }
 
-enum class BodyType {STATIC, KINEMATIC, DYNAMIC};
+
 enum class PhysicsEventType
 {
     OverlapStart,
@@ -47,7 +47,7 @@ public:
     void FixedUpdate(float fixedDeltaTime);
 
     void SetType(Entity id, const BodyType& type);
-
+    void SetMass(Entity id, float mass);
     void SetIsTrigger(Entity id, bool isTrigger);
     template<typename C, typename F>
     void SetPhysicEvent(Entity id, PhysicsEventType type, C *classObject, F && function);
@@ -62,6 +62,8 @@ public:
                             float height,
                             const Maths::Vector3f &position = {0, 0, 0},
                             const Maths::Quaternion &rotation = {1, 0, 0, 0});
+
+    void DeleteCollider(Entity id);
 
 
     //todo: create function to change world settings.

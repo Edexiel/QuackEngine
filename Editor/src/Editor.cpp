@@ -88,9 +88,9 @@ void Editor::Draw()
 
     //int display_w, display_h;
     //glfwGetFramebufferSize(_window, &display_w, &display_h);
-    // glViewport(0, 0, display_w, display_h);
-    // glClearColor(1.f,0.f,0.f,0.f);
-    // glClear(GL_COLOR_BUFFER_BIT);
+//     glViewport(0, 0, display_w, display_h);
+//     glClearColor(1.f,0.f,0.f,0.f);
+//     glClear(GL_COLOR_BUFFER_BIT);
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

@@ -4,6 +4,7 @@
 #include "Scene/Core/World.hpp"
 
 #include "Scene/Component/RigidBody.hpp"
+#include "Scene/System/PhysicsSystem.hpp"
 #include "misc/cpp/imgui_stdlib.h"
 #include "Maths/Common.hpp"
 
@@ -252,6 +253,40 @@ void PropertiesWidget::RigidBodyReader()
 {
     if (ImGui::CollapsingHeader("RigidBody"))
         return;
+    World &world = Engine::Instance().GetCurrentWorld();
+    auto rigidBody = world.GetComponent<RigidBody>(_entity);
+    const char *enumBodyType[]{"Static", "Kinematic", "Dynamic"};
+    int bodyType = (int) rigidBody.GetBodyType();
+    ImGui::Combo("BodyType",&bodyType, enumBodyType, IM_ARRAYSIZE(enumBodyType));
+    switch (bodyType)
+    {
+        case 0:
+        {
+            if(rigidBody.GetBodyType() != BodyType::STATIC)
+                world.GetSystemManager()->GetSystem<PhysicsSystem>()->SetType(_entity, BodyType::STATIC);
+
+            break;
+        }
+        case 1:
+        {
+            if(rigidBody.GetBodyType() != BodyType::KINEMATIC)
+                world.GetSystemManager()->GetSystem<PhysicsSystem>()->SetType(_entity, BodyType::KINEMATIC);
+
+            break;
+        }
+        case 2:
+        {
+            if(rigidBody.GetBodyType() != BodyType::DYNAMIC)
+                world.GetSystemManager()->GetSystem<PhysicsSystem>()->SetType(_entity, BodyType::DYNAMIC);
+
+            break;
+        }
+        default:
+            break;
+    }
+//    float mass = rigidBody.GetMass();
+//    ImGui::DragFloat("Mass", &mass);
+//    world.GetSystemManager()->GetSystem<PhysicsSystem>()->SetMass(_entity, mass);
 }
 
 void PropertiesWidget::AddComponent()
@@ -291,14 +326,9 @@ void PropertiesWidget::AddComponent()
             ImGui::EndMenu();
         }
 
-        if (ImGui::MenuItem("RigidBody"))
-        {
-            world.AddComponent(_entity, RigidBody());
-        }
-        if (ImGui::MenuItem("Animator"))
-        {
-            world.AddComponent(_entity, Animator());
-        }
+        AddRigidBody();
+
+
         ImGui::EndPopup();
     }
 
@@ -362,6 +392,45 @@ void PropertiesWidget::DeleteComponent()
         {
             world.RemoveComponent<Model>(_entity);
         }
+        if (world.HasComponent<RigidBody>(_entity) && ImGui::MenuItem("Rigidbody"))
+        {
+            auto physicsWorld = world.GetPhysicsWorld();
+            physicsWorld->destroyRigidBody(world.GetComponent<RigidBody>(_entity).rb);
+            world.RemoveComponent<RigidBody>(_entity);
+        }
         ImGui::EndPopup();
+    }
+}
+
+void PropertiesWidget::AddRigidBody()
+{
+    if (ImGui::BeginMenu("RigidBody"))
+    {
+        World &world = Engine::Instance().GetCurrentWorld();
+        if (ImGui::MenuItem("Box collider"))
+        {
+            world.AddComponent(_entity, RigidBody());
+            auto physicsSystem = world.GetSystemManager()->GetSystem<PhysicsSystem>();
+            physicsSystem->SetRigidBody(_entity);
+            physicsSystem->SetType(_entity, BodyType::STATIC);
+            physicsSystem->AddBoxCollider(_entity, {1.0f, 1.0f, 1.0f});
+        }
+        if (ImGui::MenuItem("Sphere collider"))
+        {
+            world.AddComponent(_entity, RigidBody());
+            auto physicsSystem = world.GetSystemManager()->GetSystem<PhysicsSystem>();
+            physicsSystem->SetRigidBody(_entity);
+            physicsSystem->SetType(_entity, BodyType::STATIC);
+
+        }
+        if(ImGui::MenuItem("Capsule collider"))
+        {
+            world.AddComponent(_entity, RigidBody());
+            auto physicsSystem = world.GetSystemManager()->GetSystem<PhysicsSystem>();
+            physicsSystem->SetRigidBody(_entity);
+            physicsSystem->SetType(_entity, BodyType::STATIC);
+            physicsSystem->AddCapsuleCollider(_entity, 1.f, 1.0f);
+        }
+        ImGui::EndMenu();
     }
 }

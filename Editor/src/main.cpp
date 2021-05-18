@@ -2,22 +2,11 @@
 
 #include "Editor.hpp"
 #include "Engine.hpp"
-#include "Renderer/Material.hpp"
-#include "Scene/Core/World.hpp"
-#include "Scene/Component/Transform.hpp"
-#include "Renderer/RendererInterface.hpp"
-#include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shape.hpp"
-#include "Scene/Component/RigidBody.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
-#include "Resources/ResourcesManager.hpp"
-
-#include "Scene/Component/Animator.hpp"
 
 #include "Tools/Random.hpp"
-#include "CameraEditor.hpp"
-#include "Scene/System/PhysicsSystem.hpp"
 #include "game.hpp"
 
 using namespace Component;
@@ -41,7 +30,7 @@ int main()
     Editor editor{engine.GetWindow()};
 
     Game game;
-    //engine.LoadWorld("Main","./");
+    engine.LoadWorld("Main","./");
     game.Init();
 
     // Time && fps
@@ -82,14 +71,16 @@ int main()
         /** Editor draw **/
         editor.Draw();
 
+
+
         /** UPDATE **/
-//        engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
+        engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
         engine.GetCurrentWorld().GetSystemManager()->GetSystem<CameraSystem>()->Update();
 
         engine.SwapBuffers();
     }
 
-    engine.SaveWorld("Main","./");
+    //engine.SaveWorld("Main","./");
 
     return 0;
 }
