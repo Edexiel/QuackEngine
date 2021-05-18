@@ -109,6 +109,7 @@ Engine::Engine(const EngineSettings &settings)
     _platformInput = std::make_unique<Input::PlatformInputGLFW>(_window);
     //Assert_Fatal_Error(_platformInput, "Platform input not declared");
     _inputManager.Init(_platformInput.get());
+    _postProcessManager.Init();
 }
 
 GLFWwindow *Engine::GetWindow()
@@ -203,6 +204,11 @@ void Engine::SwapBuffers()
 PhysicsEventManager &Engine::GetPhysicsEventManager()
 {
     return _physicsEventManager;
+}
+
+Renderer::PostProcessManager &Engine::GetPostProcessManager()
+{
+    return _postProcessManager;
 }
 
 

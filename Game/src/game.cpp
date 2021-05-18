@@ -51,7 +51,6 @@ void Game::Init()
     engine.GetResourcesManager().Init();
     engine.GetResourcesManager().LoadFolder(R"(..\..\Game\Asset\)");
 
-
     //Signature Renderer
     {
         Signature signatureRender;
@@ -255,6 +254,8 @@ void Game::Init()
     world.AddComponent(lightID3, tl3);*/
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
+
+    Renderer::Shader pstPrsh = Engine::Instance().GetResourcesManager().LoadShader(R"(..\..\Game\Asset\Shader\RedOnlyPostProcess.qsh)");
 }
 
 void Game::Update(float deltaTime)
