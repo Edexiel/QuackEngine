@@ -8,6 +8,7 @@
 #include "Audio/Sound.hpp"
 
 #include "Debug/Log.hpp"
+#include "Debug/Assertion.hpp"
 
 #include <filesystem>
 #include <iostream>

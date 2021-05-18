@@ -6,19 +6,20 @@
 #include <memory>
 #include <string>
 
-#include <Scene/Core/World.hpp>
+//#include <Scene/Core/World.hpp>
+
+#include <reactphysics3d/engine/PhysicsCommon.h>
 
 #include "Resources/ResourcesManager.hpp"
 #include "Renderer/RendererInterface.hpp"
-#include "Audio/SoundManager.hpp"
-#include <reactphysics3d/engine/PhysicsCommon.h>
 
+#include "Audio/SoundManager.hpp"
 
 #include "Input/InputManager.hpp"
 #include "Input/PlatformInput.hpp"
-
-#include "Input/PlatformInput.hpp"
 #include "Input/PlatformInputGLFW.hpp"
+
+#include "Physics/PhysicsEventManager.hpp"
 
 #include <filesystem>
 
@@ -61,7 +62,7 @@ private:
 
     uint_fast16_t _currentWorld = 0;
     std::map<std::string, uint_fast16_t> _worldLut;
-    std::vector<World> _worlds;
+    std::vector<class World> _worlds;
 
 public:
     static Engine &Instance();
@@ -75,11 +76,11 @@ public:
     void SetWindowSize(int width, int height);
     bool WindowShouldClose();
     void TestWindowShouldClose();
-    World &GetCurrentWorld();
+    class World &GetCurrentWorld();
     void SwapBuffers();
 
 
-    World &CreateWorld(std::string name);
+    class World &CreateWorld(std::string name);
     void LoadWorld(const std::string &worldName,std::filesystem::path path);
     void SaveWorld(const std::string &worldName, std::filesystem::path path) const;
     void RemoveWorld(const std::string &name);

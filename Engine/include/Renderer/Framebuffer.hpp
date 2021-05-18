@@ -1,8 +1,6 @@
 #ifndef QUACKENGINE_FRAMEBUFFER_HPP
 #define QUACKENGINE_FRAMEBUFFER_HPP
 
-#include <string>
-
 namespace Renderer
 {
 

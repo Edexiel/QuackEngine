@@ -1,4 +1,6 @@
 #include "Scene/System/CameraSystem.hpp"
+#include "Scene/Core/World.hpp"
+
 #include "Engine.hpp"
 
 using namespace Maths;

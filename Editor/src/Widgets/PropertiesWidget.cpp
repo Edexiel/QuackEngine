@@ -1,5 +1,7 @@
 #include "Widgets/PropertiesWidget.hpp"
+
 #include "Engine.hpp"
+#include "Scene/Core/World.hpp"
 
 #include "Scene/Component/RigidBody.hpp"
 #include "misc/cpp/imgui_stdlib.h"

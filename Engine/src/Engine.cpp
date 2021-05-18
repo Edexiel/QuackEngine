@@ -1,18 +1,15 @@
 #include "Engine.hpp"
+#include "Scene/Core/World.hpp"
 
 #include "GLFW/glfw3.h"
 #include <algorithm>
-
-#include <Renderer/RendererInterface.hpp>
-#include <Resources/ResourcesManager.hpp>
-#include "Audio/SoundManager.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
 
 #include "Debug/Assertion.hpp"
 #include "Debug/Log.hpp"
 
-//Serialization json for debug only
+//Serialization
 #include <cereal/archives/json.hpp>
 #include <fstream>
 #include <fmt/core.h>

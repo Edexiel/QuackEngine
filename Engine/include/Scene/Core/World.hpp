@@ -2,15 +2,13 @@
 #define QUACKENGINE_WORLD_HPP
 
 #include <utility>
+#include <string>
 
 #include "Types.hpp"
-
 #include "Scene/Core/EntityManager.hpp"
 #include "Scene/Core/SystemManager.hpp"
 #include "Scene/Core/ComponentManager.hpp"
 #include "Physics/PhysicsEventManager.hpp"
-
-#include <string>
 
 
 //Serialization, yeah sorry
