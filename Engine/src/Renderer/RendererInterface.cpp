@@ -22,6 +22,8 @@ Framebuffer RendererInterface::GetSceneUpdatedFramebuffer()
     Component::Camera& camera = cameraSystem->GetActiveCamera();
     renderSystem->Draw(camera);
 
+    Engine::Instance().GetPostProcessManager().ApplyPostProcess(camera.GetFramebuffer());
+
     RendererPlatform::BindFramebuffer(0);
 
     return camera.GetFramebuffer();
@@ -33,7 +35,6 @@ void RendererInterface::UpdateSceneFramebufferEditor(const Maths::Matrix4& proje
 
     lightSystem->Update();
     renderSystem->Draw(projection, view);
-    Engine::Instance().GetPostProcessManager().ApplyPostProcess(framebuffer);
 
     RendererPlatform::BindFramebuffer(0);
 }

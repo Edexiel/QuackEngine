@@ -20,7 +20,7 @@ namespace Renderer
         void Init();
         void AddProcess(ProcessBase* process);
 
-        void ApplyPostProcess(Framebuffer& framebuffer);
+        void ApplyPostProcess(const Framebuffer& framebuffer);
 
         void DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex);
     };

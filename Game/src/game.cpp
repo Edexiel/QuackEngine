@@ -15,6 +15,8 @@
 #include "Renderer/Shape.hpp"
 #include "game.hpp"
 
+#include "Renderer/ProcessBase.hpp"
+
 #include "Scene/Component/Animator.hpp"
 
 using namespace Component;
@@ -255,7 +257,11 @@ void Game::Init()
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
 
-    Renderer::Shader pstPrsh = Engine::Instance().GetResourcesManager().LoadShader(R"(..\..\Game\Asset\Shader\RedOnlyPostProcess.qsh)");
+    Renderer::Shader pstPrsh = Engine::Instance().GetResourcesManager().LoadShader("..\\..\\Game\\Asset\\Shader\\RedOnlyPostProcess.qsh");
+    Renderer::ProcessBase pb("Test", pstPrsh);
+
+    Engine::Instance().GetPostProcessManager().AddProcess(&pb);
+
 }
 
 void Game::Update(float deltaTime)

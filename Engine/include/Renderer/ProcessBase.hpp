@@ -20,7 +20,7 @@ namespace Renderer
         ProcessBase() = default;
         ProcessBase(const std::string& name, const Shader& shader);
 
-        virtual void Process(Framebuffer& buffer, const Mesh& screenMesh);
+        virtual void Process(const Framebuffer& buffer, const Mesh& screenMesh);
     };
 }
 
