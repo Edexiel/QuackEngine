@@ -10,7 +10,9 @@
 using namespace Renderer;
 using namespace Component;
 
-Shader::Shader(unsigned int ID) : _ID {ID} {}
+Shader::Shader() : Resources::Asset(Resources::AssetType::A_SHADER) {}
+
+Shader::Shader(unsigned int ID) : Resources::Asset(Resources::AssetType::A_SHADER), _ID {ID} {}
 
 Shader::~Shader()
 {
@@ -125,6 +127,39 @@ Shader Shader::LoadShader(const char* vertexPath, const char* fragmentPath)
 
 }
 
+Shader Shader::LoadShader(const char *path)
+{
+    std::string vertexShaderCode;
+    std::string fragmentShaderCode;
+
+    // Read the Vertex Shader code from the file
+    std::ifstream shaderStream(path, std::ios::in);
+    if (!shaderStream.is_open())
+    {
+        printf("Impossible to open %s.\n", path);
+        getchar();
+        return {0};
+    }
+
+    std::string line;
+    std::string check;
+    while (getline(shaderStream, line))
+    {
+        if (line.substr(0, 6) == "Vertex")
+            vertexShaderCode = GetStringInFile(shaderStream, "{", "}");
+        if (line.substr(0, 8) == "Fragment")
+            fragmentShaderCode = GetStringInFile(shaderStream, "{", "}");
+    }
+
+    //vertexShaderCode = sstr.str();
+    shaderStream.close();
+
+    std::cout << vertexShaderCode << std::endl;
+    std::cout << fragmentShaderCode << std::endl;
+
+    return RendererPlatform::CreateShader(vertexShaderCode.c_str(), fragmentShaderCode.c_str());
+}
+
 Shader Shader::LoadObjectShader(const ShaderConstructData& shaderData)
 {
     std::string vertexShaderCode;
@@ -132,7 +167,10 @@ Shader Shader::LoadObjectShader(const ShaderConstructData& shaderData)
     // Read the Vertex Shader code from the file
     if (shaderData.hasNormalMap)
     {
-        vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Light/VertexNormalMap.vs");
+        if (shaderData.hasSkeleton)
+            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Light/VertexNormalMap.vs");
+        else
+            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Skeletal/SkeletalVertex.vs");
     }
     else
     {
@@ -256,4 +294,20 @@ std::string Shader::LoadStringFromFile(const char* path)
         return {0};
     }
     return fileData;
+}
+
+std::string Shader::GetStringInFile(std::ifstream& file, const std::string& start, const std::string& end)
+{
+    std::string result;
+    std::string line;
+    while (getline(file, line))
+        if (line.substr(0, start.size()) == start)
+            while (getline(file, line))
+            {
+                if (line.substr(0, end.size()) == end)
+                    return result;
+                result += line + "\n";
+            }
+
+    return result;
 }

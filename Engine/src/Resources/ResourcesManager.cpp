@@ -147,42 +147,29 @@ Texture ResourcesManager::LoadTexture(const char* path)
     return texture;
 }
 
-Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const char* fragmentShader)
+Renderer::Shader ResourcesManager::LoadShader(std::filesystem::path path)
 {
-  // Check if the file exist
-  if (access(vertexShader, F_OK) == -1)
-  {
-    std::cout << "File : " << vertexShader << " doesn't exist" << std::endl;
-    return Shader();
-  }
-  if (access(fragmentShader, F_OK) == -1)
-  {
-    std::cout << "File : " << fragmentShader << " doesn't exist" << std::endl;
-    return Shader();
-  }
+    // Check if the Texture already exist
+    auto it = _mapShader.find(path.string());
 
-    // find if the Shader already exist
-
-    for (auto & i : _listShader)
+    // Check if the shader already exist
+    if (it != _mapShader.end())
     {
-        if (i.fragmentShader == fragmentShader && i.vertexShader == vertexShader)
-        {
-            return i.shader;
-        }
+        return it->second;
     }
 
-    // Charge new Shader
+    // return null Shader if the file doesn't exist
+    if (!std::filesystem::exists(path.string()))
+    {
+        std::cout << "File : " << path << " doesn't exist" << std::endl;
+        return Shader();
+    }
 
-    Shader shader = Shader::LoadShader(vertexShader, fragmentShader);
-    _listShader.push_back(ReferenceShader{vertexShader, fragmentShader, shader});
+    // Create a new Shader
 
-    return shader;
-}
-
-Renderer::Shader ResourcesManager::LoadObjectShader(const char* vertexShader, const char* fragmentShader)
-{
-    Shader shader = LoadShader(vertexShader, fragmentShader);
-    Engine::Instance().GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
+    Shader shader = Shader::LoadShader(path.string().c_str());
+    _mapShader.insert({path.string(), shader});
+    _globalAssetMap.insert({path.string(), &_mapShader.find(path.string())->second});
 
     return shader;
 }
@@ -283,27 +270,24 @@ Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const char* name,
     return materialInterface;
 }
 
-void ResourcesManager::LoadFolder(const char *path)
+void ResourcesManager::LoadFolder(std::filesystem::path path)
 {
-    std::vector<std::string> r;
+    std::string type;
     for(auto& p : std::filesystem::recursive_directory_iterator(path))
     {
         if (!p.is_directory())
-            r.push_back(p.path().string());
-    }
-
-    std::string type;
-
-    for (auto & i : r)
-    {
-        std::cout << i << std::endl;
-        type = GetFileType(i);
-        if (type == "fbx" || type == "glb")
-            LoadModel(i.c_str(), VertexType::V_NORMALMAP);
-        else if (type == "ogg" || type == "mp3" || type == "wav")
-            LoadSound(i.c_str(), Audio::SoundType::S_MASTER);
-        else if (type == "png" || type == "jpg" || type == "epg")
-            LoadTexture(i.c_str());
+        {
+            std::cout << p.path() << std::endl;
+            type = p.path().extension().string();
+            if (type == ".fbx" || type == ".glb")
+                LoadModel(p.path().string().c_str(), VertexType::V_NORMALMAP);
+            else if (type == ".ogg" || type == ".mp3" || type == ".wav")
+                LoadSound(p.path().string().c_str(), Audio::SoundType::S_MASTER);
+            else if (type == ".png" || type == ".jpg" || type == ".jepg")
+                LoadTexture(p.path().string().c_str());
+            else if (type == ".qsh")
+                Shader::LoadShader(p.path().string().c_str());
+        }
     }
 }
 
