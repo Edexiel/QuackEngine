@@ -1,4 +1,4 @@
-#include "Resources/Model.hpp"
+#include "Renderer/ModelRenderer.hpp"
 
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
@@ -18,13 +18,13 @@
 using namespace Resources;
 using namespace Renderer;
 
-Model::Model() : Asset(ASSET_TYPE::A_MODEL)
+ModelRenderer::ModelRenderer() : Asset(ASSET_TYPE::A_MODEL)
 {}
 
-Model::Model(VertexType vertexType) : Asset(ASSET_TYPE::A_MODEL), _vertexType{vertexType}
+ModelRenderer::ModelRenderer(VertexType vertexType) : Asset(ASSET_TYPE::A_MODEL), _vertexType{vertexType}
 {}
 
-void Model::Destroy()
+void ModelRenderer::Destroy()
 {
     for (const auto &i : _meshList)
     {
@@ -33,7 +33,7 @@ void Model::Destroy()
     _meshList.clear();
 }
 
-Model Model::LoadModel(const std::filesystem::path& path, VertexType vertexType)
+ModelRenderer ModelRenderer::LoadModel(const std::filesystem::path& path, VertexType vertexType)
 {
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile(path,
@@ -50,7 +50,7 @@ Model Model::LoadModel(const std::filesystem::path& path, VertexType vertexType)
         return {};
     }
 
-    Model loadedModel;
+    ModelRenderer loadedModel;
 
     switch (vertexType)
     {
@@ -69,26 +69,26 @@ Model Model::LoadModel(const std::filesystem::path& path, VertexType vertexType)
     return loadedModel;
 }
 
-void Model::ReLoadModel(Model &model, const std::filesystem::path& path, Renderer::VertexType vertexType)
+void ModelRenderer::ReLoadModel(ModelRenderer &model, const std::filesystem::path& path, Renderer::VertexType vertexType)
 {
     model.Destroy();
-    Model newModel = LoadModel(path, vertexType);
+    ModelRenderer newModel = LoadModel(path, vertexType);
     newModel._materialList = model._materialList;
 
     model = newModel;
 }
 
-void Model::ReLoadModel(Model &oldModel, Model newModel)
+void ModelRenderer::ReLoadModel(ModelRenderer &oldModel, ModelRenderer newModel)
 {
     newModel._materialList = oldModel._materialList;
     oldModel = newModel;
 }
 
-Model Model::LoadClassicModel(const void *loadedScene)
+ModelRenderer ModelRenderer::LoadClassicModel(const void *loadedScene)
 {
     const aiScene *scene = (aiScene *) loadedScene;
 
-    Model model(VertexType::V_CLASSIC);
+    ModelRenderer model(VertexType::V_CLASSIC);
     model._meshList.resize(scene->mNumMeshes);
 
     unsigned int count;
@@ -134,11 +134,11 @@ Model Model::LoadClassicModel(const void *loadedScene)
 }
 
 
-Model Model::LoadNormalMapModel(const void *loadedScene)
+ModelRenderer ModelRenderer::LoadNormalMapModel(const void *loadedScene)
 {
     const aiScene *scene = (aiScene *) loadedScene;
 
-    Model model(VertexType::V_NORMALMAP);
+    ModelRenderer model(VertexType::V_NORMALMAP);
     model._meshList.resize(scene->mNumMeshes);
 
     unsigned int count;
@@ -194,7 +194,7 @@ Model Model::LoadNormalMapModel(const void *loadedScene)
     return model;
 }
 
-std::vector<unsigned int> Model::LoadIndices(const void *loadedScene, unsigned int meshId)
+std::vector<unsigned int> ModelRenderer::LoadIndices(const void *loadedScene, unsigned int meshId)
 {
     const aiScene *scene = (aiScene *) loadedScene;
 
@@ -214,11 +214,11 @@ std::vector<unsigned int> Model::LoadIndices(const void *loadedScene, unsigned i
     return indices;
 }
 
-Model Model::LoadSkeletalMeshModel(const void *loadedScene)
+ModelRenderer ModelRenderer::LoadSkeletalMeshModel(const void *loadedScene)
 {
     const aiScene *scene = (aiScene *) loadedScene;
 
-    Model model(VertexType::V_SKELETAL);
+    ModelRenderer model(VertexType::V_SKELETAL);
     model._meshList.resize(scene->mNumMeshes);
 
     unsigned int count;
@@ -268,7 +268,7 @@ Model Model::LoadSkeletalMeshModel(const void *loadedScene)
     return model;
 }
 
-void Model::SetVertexBoneData(SkeletalVertex &vertex, int boneID, float weight)
+void ModelRenderer::SetVertexBoneData(SkeletalVertex &vertex, int boneID, float weight)
 {
     for (int i = 0; i < 4; ++i)
     {
@@ -282,9 +282,9 @@ void Model::SetVertexBoneData(SkeletalVertex &vertex, int boneID, float weight)
     }
 }
 
-void Model::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &vertices,
-                                         unsigned int meshId,
-                                         const void *loadedScene)
+void ModelRenderer::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &vertices,
+                                                 unsigned int meshId,
+                                                 const void *loadedScene)
 {
     const aiScene *scene = (aiScene *) loadedScene;
     aiMesh *mesh = scene->mMeshes[meshId];
@@ -317,7 +317,7 @@ void Model::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &
     }
 }
 
-unsigned int Model::AddMaterial(const MaterialInterface &newMaterial)
+unsigned int ModelRenderer::AddMaterial(const MaterialInterface &newMaterial)
 {
     // todo put back when the PropertiesWidget allow material selection for the "Add Material" button
     /*for (unsigned int i = 0; i < _materialList.size(); i++)
@@ -331,7 +331,7 @@ unsigned int Model::AddMaterial(const MaterialInterface &newMaterial)
     return _materialList.size() - 1;
 }
 
-void Model::RemoveMaterial(unsigned int index)
+void ModelRenderer::RemoveMaterial(unsigned int index)
 {
     _materialList.erase(_materialList.cbegin() + index);
 
@@ -344,7 +344,7 @@ void Model::RemoveMaterial(unsigned int index)
     }
 }
 
-Renderer::MaterialInterface &Model::GetMaterial(unsigned int index)
+Renderer::MaterialInterface &ModelRenderer::GetMaterial(unsigned int index)
 {
     if (_materialList.size() <= index)
     {
@@ -358,7 +358,7 @@ Renderer::MaterialInterface &Model::GetMaterial(unsigned int index)
     return _materialList[index];
 }
 
-void Model::Draw(const Maths::Matrix4 &projection, const Maths::Matrix4 &view, const Maths::Matrix4 &transform)
+void ModelRenderer::Draw(const Maths::Matrix4 &projection, const Maths::Matrix4 &view, const Maths::Matrix4 &transform)
 {
     for (auto &i : _meshList)
     {
@@ -374,7 +374,7 @@ void Model::Draw(const Maths::Matrix4 &projection, const Maths::Matrix4 &view, c
     }
 }
 
-unsigned int Model::ChangeMaterial(const MaterialInterface &newMaterial, unsigned int index)
+unsigned int ModelRenderer::ChangeMaterial(const MaterialInterface &newMaterial, unsigned int index)
 {
     if ((index >= _materialList.size()))
     {
@@ -386,7 +386,7 @@ unsigned int Model::ChangeMaterial(const MaterialInterface &newMaterial, unsigne
     return index;
 }
 
-void Model::SetMeshMaterial(unsigned int meshIndex, unsigned int materialIndex)
+void ModelRenderer::SetMeshMaterial(unsigned int meshIndex, unsigned int materialIndex)
 {
     if (meshIndex >= _meshList.size())
     {
@@ -400,7 +400,7 @@ void Model::SetMeshMaterial(unsigned int meshIndex, unsigned int materialIndex)
     _meshList[meshIndex].materialIndex = materialIndex;
 }
 
-const Renderer::Mesh &Model::GetMesh(unsigned int index) const
+const Renderer::Mesh &ModelRenderer::GetMesh(unsigned int index) const
 {
     if (index >= _meshList.size())
     {
@@ -411,7 +411,7 @@ const Renderer::Mesh &Model::GetMesh(unsigned int index) const
     return _meshList[index];
 }
 
-unsigned int *Model::GetMeshMaterialIndex(unsigned int index)
+unsigned int *ModelRenderer::GetMeshMaterialIndex(unsigned int index)
 {
     if (index >= _meshList.size())
     {
@@ -421,17 +421,17 @@ unsigned int *Model::GetMeshMaterialIndex(unsigned int index)
     return &_meshList[index].materialIndex;
 }
 
-unsigned int Model::GetNumberMesh() const
+unsigned int ModelRenderer::GetNumberMesh() const
 {
     return _meshList.size();
 }
 
-unsigned int Model::GetNumberMaterial() const
+unsigned int ModelRenderer::GetNumberMaterial() const
 {
     return _materialList.size();
 }
 
-Renderer::VertexType Model::GetVertexType() const
+Renderer::VertexType ModelRenderer::GetVertexType() const
 {
     return _vertexType;
 }

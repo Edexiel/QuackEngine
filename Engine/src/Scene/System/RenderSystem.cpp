@@ -5,8 +5,10 @@
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Shape.hpp"
+#include "Renderer/ModelRenderer.hpp"
 
 #include "Scene/Component/Animator.hpp"
+#include "Scene/Component/Camera.hpp"
 
 #include "Debug/Log.hpp"
 
@@ -78,7 +80,7 @@ void RenderSystem::SetMaterials()
     for (Entity entity: _entities)
     {
         auto &t = world.GetComponent<Transform>(entity);
-        auto &m = world.GetComponent<Model>(entity);
+        auto &m = world.GetComponent<Model>(entity).model;
 
         for (unsigned int i = 0; i < m.GetNumberMesh(); i++)
         {
@@ -122,16 +124,16 @@ void RenderSystem::DrawMaterials(const Maths::Matrix4& projection, const Maths::
     }
 }
 
-void RenderSystem::UpdateModel(const Model &newModel)
+void RenderSystem::UpdateModel(const Renderer::ModelRenderer &newModel)
 {
     World& world = Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)
     {
-        auto &m = world.GetComponent<Model>(entity);
+        auto &m = world.GetComponent<Model>(entity).model;
 
         if (m.name == newModel.name)
         {
-            Model::ReLoadModel(m, newModel);
+            Renderer::ModelRenderer::ReLoadModel(m, newModel);
         }
     }
 }

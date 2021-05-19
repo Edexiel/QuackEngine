@@ -1,5 +1,5 @@
-#ifndef QUACKENGINE_MODEL_HPP
-#define QUACKENGINE_MODEL_HPP
+#ifndef QUACKENGINE_MODELRENDERER_HPP
+#define QUACKENGINE_MODELRENDERER_HPP
 
 #include <vector>
 
@@ -10,28 +10,24 @@
 #include "Renderer/Skeleton.hpp"
 
 #include "Scene/Core/Types.hpp"
-#include <cereal/access.hpp>
-
-#include "Resources/Asset.hpp"
 
 #include <memory>
 #include <unordered_map>
 #include <filesystem>
 
-namespace Resources
+namespace Renderer
 {
-    class Model : public Asset
+    class ModelRenderer : public Resources::Asset
     {
 
         std::vector<Renderer::Mesh> _meshList;
         std::vector<Renderer::MaterialInterface> _materialList;
-        Renderer::VertexType _vertexType{Renderer::VertexType::V_CLASSIC};
 
         static std::vector<unsigned int> LoadIndices(const void *loadedScene, unsigned int meshId);
 
-        static Model LoadClassicModel(const void *loadedScene);
-        static Model LoadNormalMapModel(const void *loadedScene);
-        static Model LoadSkeletalMeshModel(const void *loadedScene);
+        static ModelRenderer LoadClassicModel(const void *loadedScene);
+        static ModelRenderer LoadNormalMapModel(const void *loadedScene);
+        static ModelRenderer LoadSkeletalMeshModel(const void *loadedScene);
 
         static void SetVertexBoneData(Renderer::SkeletalVertex &vertex, int boneID, float weight);
         static void ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &vertices,
@@ -41,15 +37,17 @@ namespace Resources
     public:
 
         std::unordered_map<std::string, Renderer::Bone> _skeleton;
+        Renderer::VertexType _vertexType{Renderer::VertexType::V_CLASSIC};
 
-        Model();
-        Model(Renderer::VertexType vertexType);
+
+        ModelRenderer();
+        ModelRenderer(Renderer::VertexType vertexType);
 
         void Destroy();
 
-        static Model LoadModel(const std::filesystem::path& path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
-        static void ReLoadModel(Model &model, const std::filesystem::path& path, Renderer::VertexType vertexType);
-        static void ReLoadModel(Model &oldModel, Model newModel);
+        static ModelRenderer LoadModel(const std::filesystem::path& path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
+        static void ReLoadModel(ModelRenderer &model, const std::filesystem::path& path, Renderer::VertexType vertexType);
+        static void ReLoadModel(ModelRenderer &oldModel, ModelRenderer newModel);
 
         unsigned int AddMaterial(const Renderer::MaterialInterface &newMaterial);
         unsigned int ChangeMaterial(const Renderer::MaterialInterface &newMaterial, unsigned int index);
@@ -69,4 +67,4 @@ namespace Resources
 
     };
 }
-#endif //QUACKENGINE_MODEL_HPP
+#endif //QUACKENGINE_MODELRENDERER_HPP

@@ -29,7 +29,7 @@ void ResourcesManager::Init()
     MaterialInterface materialInterface = GenerateMaterial("Default material", material);
 }
 
-Model ResourcesManager::LoadModel(const std::filesystem::path &path, VertexType vertexType)
+ModelRenderer ResourcesManager::LoadModel(const std::filesystem::path &path, VertexType vertexType)
 {
     // Check if the Model already exist
 
@@ -44,11 +44,11 @@ Model ResourcesManager::LoadModel(const std::filesystem::path &path, VertexType 
     if (!exists(path))
     {
         std::cout << "File : " << path << " doesn't exist" << std::endl;
-        return Model();
+        return ModelRenderer();
     }
 
     // Create a new Model
-    Model model = Model::LoadModel(path, vertexType);
+    ModelRenderer model = ModelRenderer::LoadModel(path, vertexType);
     _mapModel.insert({path, model});
     _globalAssetMap.insert({path, &_mapModel.find(path)->second});
 
@@ -63,7 +63,7 @@ void ResourcesManager::ReLoadModel(const std::filesystem::path &path, Renderer::
 
     if (it != _mapModel.end())
     {
-        Model::ReLoadModel(it->second, path, vertexType);
+        Renderer::ModelRenderer::ReLoadModel(it->second, path, vertexType);
         Engine::Instance().GetRendererInterface().renderSystem->UpdateModel(it->second);
         Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
         return;

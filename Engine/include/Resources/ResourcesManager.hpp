@@ -7,7 +7,7 @@
 #include <filesystem>
 
 #include "Resources/Asset.hpp"
-#include "Resources/Model.hpp"
+#include "Renderer/ModelRenderer.hpp"
 
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
@@ -38,7 +38,7 @@ namespace Resources
     {
     private:
 
-        std::unordered_map<std::string, Model> _mapModel;
+        std::unordered_map<std::string, Renderer::ModelRenderer> _mapModel;
         std::unordered_map<std::string, Renderer::Texture> _mapTexture;
         std::vector<ReferenceShader> _listShader;
         std::unordered_map<unsigned int, Renderer::Shader> _mapDynamicShader;
@@ -63,7 +63,7 @@ namespace Resources
 
         void Init();
 
-        Model LoadModel(const std::filesystem::path& path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
+        Renderer::ModelRenderer LoadModel(const std::filesystem::path& path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
         void ReLoadModel(const std::filesystem::path& path, Renderer::VertexType vertexType);
         Renderer::Animation LoadAnimation(const std::filesystem::path& path);
         Renderer::Texture LoadTexture(const std::filesystem::path& path);

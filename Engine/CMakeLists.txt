@@ -26,7 +26,6 @@ add_library(${PROJECT_NAME} STATIC
         src/Scene/Component/Animator.cpp
 
         src/Scene/Core/World.cpp
-        src/Scene/Component/Model.cpp
         src/Scene/Component/Camera.cpp
 
         src/Scene/System/ScriptSystem.cpp
@@ -40,7 +39,7 @@ add_library(${PROJECT_NAME} STATIC
 
         src/Physics/PhysicsEventManager.cpp
         src/Tools/Type.cpp
-        src/Resources/Model.cpp)
+        )
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
