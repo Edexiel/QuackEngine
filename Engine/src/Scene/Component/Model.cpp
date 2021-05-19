@@ -16,9 +16,9 @@
 using namespace Component;
 using namespace Renderer;
 
-Model::Model() : Resources::Asset(Resources::ASSET_TYPE::A_MODEL){}
+Model::Model() : Resources::Asset(Resources::AssetType::A_MODEL){}
 
-Model::Model(VertexType vertexType) : Resources::Asset(Resources::ASSET_TYPE::A_MODEL), _vertexType{vertexType} {}
+Model::Model(VertexType vertexType) : Resources::Asset(Resources::AssetType::A_MODEL), _vertexType{vertexType} {}
 
 void Model::Destroy()
 {

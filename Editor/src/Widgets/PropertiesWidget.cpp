@@ -4,8 +4,11 @@
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
 #include "misc/cpp/imgui_stdlib.h"
+#include "Maths/Common.hpp"
 
 #include "Scene/Component/Animator.hpp"
+
+#include <algorithm>
 
 
 using namespace Component;

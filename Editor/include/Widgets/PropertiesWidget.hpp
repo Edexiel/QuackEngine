@@ -28,8 +28,8 @@ private:
     static void DeleteComponent();
 
     static void AddLight();
-
     static void AddRigidBody();
+
     static void RigidBodyChangeBodyType(Component::RigidBody &rigidBody);
     static void RigidBodyResizeShape(Component::RigidBody &rigidBody);
     static void RigidBodySetIsTrigger(Component::RigidBody &rigidBody);

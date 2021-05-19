@@ -15,6 +15,8 @@
 #include "Renderer/Shape.hpp"
 #include "game.hpp"
 
+#include "Renderer/ProcessBase.hpp"
+
 #include "Scene/Component/Animator.hpp"
 
 using namespace Component;
@@ -50,7 +52,6 @@ void Game::Init()
     engine.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
     engine.GetResourcesManager().Init();
     engine.GetResourcesManager().LoadFolder(R"(..\..\Game\Asset\)");
-
 
     //Signature Renderer
     {
@@ -103,7 +104,7 @@ void Game::Init()
     }
     ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
 
-    Transform t = {Maths::Vector3f{0, -1, 0}, Maths::Vector3f::One(), Maths::Quaternion({0,1,0}, Pi<float>())};
+    Transform t = {Maths::Vector3f{0, -1, 0}, Maths::Vector3f::One() * 0.2f, Maths::Quaternion({0,1,0}, Pi<float>())};
     engine.GetResourcesManager().ReLoadModel(R"(..\..\Game\Asset\Model\Vampire.fbx)", Renderer::VertexType::V_SKELETAL);
     Component::Model md = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Vampire.fbx)", Renderer::VertexType::V_SKELETAL);
 
@@ -132,8 +133,8 @@ void Game::Init()
             for (int z = 0; z < 1; z++)
             {
                 t.position.x = 0;
-                t.position.y = 0.f /*- (float)y * 2*/;
-                t.position.z = 20.f /*+ (float)z * 2*/;
+                //t.position.y = 50.f /*- (float)y * 2*/;
+                //t.position.z = 20.f /*+ (float)z * 2*/;
 
                 Entity id = world.CreateEntity("Sphere");
 
@@ -142,15 +143,16 @@ void Game::Init()
 
                 world.AddComponent(id, t);
                 world.AddComponent(id, md);
-                world.AddComponent(id, rb);
+                //world.AddComponent(id, rb);
 
-                //Component::Animator animator(animation);
+                Component::Animator animator(animation);
                 //animator.PlayAnimation(animation);
-                //world.AddComponent(id, animator);
+                world.AddComponent(id, animator);
 
-                PhysicsSystem::SetRigidBody(id);
-                PhysicsSystem::SetType(id, BodyType::STATIC);
-                PhysicsSystem::AddSphereCollider(id, 1);
+                /*physicsSystem->SetRigidBody(id);
+                physicsSystem->SetType(id, BodyType::DYNAMIC);
+                physicsSystem->AddSphereCollider(id, 1.5f);*/
+
             }
         }
     }
@@ -255,6 +257,12 @@ void Game::Init()
     world.AddComponent(lightID3, tl3);*/
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
+
+    Renderer::Shader pstPrsh = Engine::Instance().GetResourcesManager().LoadShader("..\\..\\Game\\Asset\\Shader\\RedOnlyPostProcess.qsh");
+    Renderer::ProcessBase pb("Test", pstPrsh);
+
+    Engine::Instance().GetPostProcessManager().AddProcess(&pb);
+
 }
 
 void Game::Update(float deltaTime)
