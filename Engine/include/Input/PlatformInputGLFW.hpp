@@ -10,7 +10,7 @@ namespace Input
     class PlatformInputGLFW : public PlatformInput
     {
     private:
-        GLFWwindow *_window= nullptr;
+        GLFWwindow *_window {nullptr};
 
         void OnKeyEvent(int key, int scancode, int action, int mods);
         void OnMouseButtonCallback(int button, int action, int mods);
