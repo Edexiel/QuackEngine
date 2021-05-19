@@ -15,6 +15,8 @@
 #include "Renderer/Shape.hpp"
 #include "game.hpp"
 
+#include "Renderer/ProcessBase.hpp"
+
 #include "Scene/Component/Animator.hpp"
 
 using namespace Component;
@@ -50,7 +52,6 @@ void Game::Init()
     engine.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
     engine.GetResourcesManager().Init();
     engine.GetResourcesManager().LoadFolder(R"(..\..\Game\Asset\)");
-
 
     //Signature Renderer
     {
@@ -255,6 +256,12 @@ void Game::Init()
     world.AddComponent(lightID3, tl3);*/
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
+
+    Renderer::Shader pstPrsh = Engine::Instance().GetResourcesManager().LoadShader("..\\..\\Game\\Asset\\Shader\\RedOnlyPostProcess.qsh");
+    Renderer::ProcessBase pb("Test", pstPrsh);
+
+    Engine::Instance().GetPostProcessManager().AddProcess(&pb);
+
 }
 
 void Game::Update(float deltaTime)

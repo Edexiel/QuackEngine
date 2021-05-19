@@ -142,7 +142,6 @@ Shader Shader::LoadShader(const char *path)
     }
 
     std::string line;
-    std::string check;
     while (getline(shaderStream, line))
     {
         if (line.substr(0, 6) == "Vertex")
@@ -151,11 +150,10 @@ Shader Shader::LoadShader(const char *path)
             fragmentShaderCode = GetStringInFile(shaderStream, "{", "}");
     }
 
-    //vertexShaderCode = sstr.str();
     shaderStream.close();
 
-    std::cout << vertexShaderCode << std::endl;
-    std::cout << fragmentShaderCode << std::endl;
+    //std::cout << vertexShaderCode << std::endl;
+    //std::cout << fragmentShaderCode << std::endl;
 
     return RendererPlatform::CreateShader(vertexShaderCode.c_str(), fragmentShaderCode.c_str());
 }
