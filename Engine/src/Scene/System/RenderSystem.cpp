@@ -86,7 +86,7 @@ void RenderSystem::DrawMaterials(const Maths::Matrix4& projection, const Maths::
                 if (it.first->hasSkeleton &&
                         engine.GetCurrentWorld().HasComponent<Animator>(it.second[i].second))
                 {
-                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).Update(0.01f);
+                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).Update(engine.GetTimeManager().GetDeltaTime());
                     engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).SetShader(it.first->shader);
                 }
             }
