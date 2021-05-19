@@ -3,6 +3,8 @@
 
 using namespace Time;
 
+TimePlatformGLFW::TimePlatformGLFW(GLFWwindow *window) : _window{window} {}
+
 double TimePlatformGLFW::GetTime() const
 {
     return glfwGetTime();

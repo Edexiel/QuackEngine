@@ -12,6 +12,8 @@ namespace Time
         GLFWwindow *_window {nullptr};
 
     public:
+        TimePlatformGLFW(GLFWwindow* window);
+
         double GetTime() const final;
         void SetTime(double time) final;
     };
