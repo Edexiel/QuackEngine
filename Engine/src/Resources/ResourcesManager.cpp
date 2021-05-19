@@ -1,6 +1,6 @@
-#include "Resources/ResourcesManager.hpp"
-
 #include "Engine.hpp"
+
+#include "Resources/ResourcesManager.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
 
@@ -10,23 +10,12 @@
 #include "Debug/Log.hpp"
 #include "Debug/Assertion.hpp"
 
-#include <filesystem>
-#include <iostream>
-
-#define F_OK 0
-
-#ifdef WIN32
-# include <io.h>
-# define access(path,mode) _access(path,mode)
-#endif
-#ifdef LINUX
-# include <unistd.h>
-#endif
+#include <fmt/core.h>
+#include <fmt/color.h>
 
 
 using namespace Resources;
 using namespace Renderer;
-using namespace Component;
 
 void ResourcesManager::Init()
 {
@@ -40,7 +29,7 @@ void ResourcesManager::Init()
     MaterialInterface materialInterface = GenerateMaterial("Default material", material);
 }
 
-Model ResourcesManager::LoadModel(const char* path, VertexType vertexType)
+Model ResourcesManager::LoadModel(const std::filesystem::path &path, VertexType vertexType)
 {
     // Check if the Model already exist
 
@@ -51,8 +40,8 @@ Model ResourcesManager::LoadModel(const char* path, VertexType vertexType)
         return (it->second);
     }
 
-  // return null Texture if the file doesn't exist
-    if (access(path, F_OK) == -1)
+    // return null Texture if the file doesn't exist
+    if (!exists(path))
     {
         std::cout << "File : " << path << " doesn't exist" << std::endl;
         return Model();
@@ -66,11 +55,11 @@ Model ResourcesManager::LoadModel(const char* path, VertexType vertexType)
     return model;
 }
 
-void ResourcesManager::ReLoadModel(const char *path, Renderer::VertexType vertexType)
+void ResourcesManager::ReLoadModel(const std::filesystem::path &path, Renderer::VertexType vertexType)
 {
     // Check if the Model already exist
 
-    auto it = _mapModel.find(path);
+    auto it = _mapModel.find(path.string());
 
     if (it != _mapModel.end())
     {
@@ -80,10 +69,10 @@ void ResourcesManager::ReLoadModel(const char *path, Renderer::VertexType vertex
         return;
     }
 
-    Assert_Error(true, (std::string("The model : ") + path + " to reload doesn't exist").c_str());
+    Assert_Error(true, fmt::format("Trying to reload a model that doesn't exists: {}\n", path.string()).c_str());
 }
 
-Animation ResourcesManager::LoadAnimation(const char* path)
+Animation ResourcesManager::LoadAnimation(const std::filesystem::path &path)
 {
     // Check if the Model already exist
 
@@ -104,10 +93,9 @@ Animation ResourcesManager::LoadAnimation(const char* path)
         return (it->second);
     }
 
-    // return null Texture if the file doesn't exist
-    if (access(path, F_OK) == -1)
+    if (!exists(path))
     {
-        std::cout << "File : " << path << " doesn't exist" << std::endl;
+        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", path.string());
         return Animation();
     }
 
@@ -120,7 +108,7 @@ Animation ResourcesManager::LoadAnimation(const char* path)
     return animation;
 }
 
-Texture ResourcesManager::LoadTexture(const char* path)
+Texture ResourcesManager::LoadTexture(const std::filesystem::path &path)
 {
     // Check if the Texture already exist
     auto it = _mapTexture.find(path);
@@ -128,13 +116,14 @@ Texture ResourcesManager::LoadTexture(const char* path)
     // Check if the texture already exist
     if (it != _mapTexture.end())
     {
-      return it->second;
+        return it->second;
     }
 
     // return null Texture if the file doesn't exist
-    if (access(path, F_OK) == -1)
+    if (!exists(path))
     {
-        std::cout << "File : " << path << " doesn't exist" << std::endl;
+        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", path.string());
+        //todo : no
         return Texture();
     }
 
@@ -148,23 +137,28 @@ Texture ResourcesManager::LoadTexture(const char* path)
     return texture;
 }
 
-Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const char* fragmentShader)
+Renderer::Shader
+ResourcesManager::LoadShader(const std::filesystem::path &vertexShader, const std::filesystem::path &fragmentShader)
 {
-  // Check if the file exist
-  if (access(vertexShader, F_OK) == -1)
-  {
-    std::cout << "File : " << vertexShader << " doesn't exist" << std::endl;
-    return Shader();
-  }
-  if (access(fragmentShader, F_OK) == -1)
-  {
-    std::cout << "File : " << fragmentShader << " doesn't exist" << std::endl;
-    return Shader();
-  }
+    bool vs, fs = false;
+    vs = exists(vertexShader);
+    fs = exists(fragmentShader);
+
+    // Check if the file exist
+    if (!vs || !fs)
+    {
+        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: ");
+        if (!vs)
+            fmt::print(fg(fmt::color::red), "Vertex Shader : {}\n", vertexShader.string());
+        if (!fs)
+            fmt::print(fg(fmt::color::red), "Fragment Shader : {}\n", fragmentShader.string());
+
+        //todo : no
+        return Shader();
+    }
 
     // find if the Shader already exist
-
-    for (auto & i : _listShader)
+    for (auto &i : _listShader)
     {
         if (i.fragmentShader == fragmentShader && i.vertexShader == vertexShader)
         {
@@ -180,7 +174,8 @@ Renderer::Shader ResourcesManager::LoadShader(const char* vertexShader, const ch
     return shader;
 }
 
-Renderer::Shader ResourcesManager::LoadObjectShader(const char* vertexShader, const char* fragmentShader)
+Renderer::Shader ResourcesManager::LoadObjectShader(const std::filesystem::path &vertexShader,
+                                                    const std::filesystem::path &fragmentShader)
 {
     Shader shader = LoadShader(vertexShader, fragmentShader);
     Engine::Instance().GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
@@ -189,62 +184,61 @@ Renderer::Shader ResourcesManager::LoadObjectShader(const char* vertexShader, co
 }
 
 
-Renderer::Shader  ResourcesManager::LoadObjectShader(const Renderer::ShaderConstructData& constructData)
+Renderer::Shader ResourcesManager::LoadObjectShader(const Renderer::ShaderConstructData &constructData)
 {
-  // Check if the Shader already exist
+    // Check if the Shader already exist
 
-  auto it = _mapDynamicShader.find(constructData.GetKey());
+    auto it = _mapDynamicShader.find(constructData.GetKey());
 
-  if (it != _mapDynamicShader.end())
-  {
-    return Shader(it->second.GetID());
-  }
+    if (it != _mapDynamicShader.end())
+    {
+        return Shader(it->second.GetID());
+    }
 
-  Shader shader = Shader::LoadObjectShader(constructData);
-  _mapDynamicShader.insert({constructData.GetKey(), shader});
+    Shader shader = Shader::LoadObjectShader(constructData);
+    _mapDynamicShader.insert({constructData.GetKey(), shader});
 
-  if(constructData.hasLight)
-      Engine::Instance().GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
+    if (constructData.hasLight)
+        Engine::Instance().GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
 
-  return shader;
+    return shader;
 }
 
-Audio::Sound ResourcesManager::LoadSound(const char* path, Audio::SoundType soundType)
+Audio::Sound ResourcesManager::LoadSound(const std::filesystem::path &path, Audio::SoundType soundType)
 {
-  // Check if the Sound already exist
+    // Check if the Sound already exist
 
-  auto it = _mapSound.find(path);
+    auto it = _mapSound.find(path);
 
-  // Check if the sound already exist
-  if (it != _mapSound.end())
-  {
-    return it->second;
-  }
+    // Check if the sound already exist
+    if (it != _mapSound.end())
+    {
+        return it->second;
+    }
 
-  // return null sound if the file doesn't exist
-  if (access(path, F_OK) == -1)
-  {
-    std::cout << "File : " << path << " doesn't exist" << std::endl;
-    return Audio::Sound();
-  }
+    // todo :: return null sound if the file doesn't exist
+    if (!exists(path))
+    {
+        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", path.string());
+        return Audio::Sound();
+    }
 
-  Audio::Sound sound = Engine::Instance().GetSoundManager().CreateSound(path, soundType);
-  _mapSound.insert({path, sound});
-  _soundToName.insert({sound.GetID(), path});
+    Audio::Sound sound = Engine::Instance().GetSoundManager().CreateSound(path, soundType);
+    _mapSound.insert({path, sound});
+    _soundToName.insert({sound.GetID(), path});
 
-  return sound;
+    return sound;
 }
 
-Mesh& ResourcesManager::AddShape(Renderer::Mesh& mesh)
+Mesh &ResourcesManager::AddShape(Renderer::Mesh &mesh)
 {
     listLoadedShape.push_back(mesh);
     return listLoadedShape[listLoadedShape.size() - 1];
 }
 
-Renderer::MaterialInterface ResourcesManager::LoadMaterial(const char *path)
+Renderer::MaterialInterface ResourcesManager::LoadMaterial(const std::filesystem::path &path)
 {
     // Check if the Material already exist
-
     auto it = _mapMaterial.find(path);
 
     // Check if the texture already exist
@@ -254,9 +248,9 @@ Renderer::MaterialInterface ResourcesManager::LoadMaterial(const char *path)
     }
 
     // return null Material if the file doesn't exist
-    if (access(path, F_OK) == -1)
+    if (!exists(path))
     {
-        std::cout << "File : " << path << " doesn't exist" << std::endl;
+        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", path.string());
         return nullptr;
     }
 
@@ -267,7 +261,7 @@ Renderer::MaterialInterface ResourcesManager::LoadMaterial(const char *path)
     return material;
 }
 
-Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const char* name, const Material& material)
+Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const char *name, const Material &material)
 {
 
     MaterialInterface materialInterface = std::make_shared<Material>(material);
@@ -279,108 +273,75 @@ Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const char* name,
     materialInterface->shader = LoadObjectShader(materialInterface->GetConstructData());
     _globalAssetMap.insert({name, _mapMaterial.find(name)->second.get()});
 
-    std::cout << "materialLoading : " << name << std::endl;
+    fmt::print(fg(fmt::color::green), "[Resource Manager] Loading material: {}\n", name);
+
 
     return materialInterface;
 }
 
-void ResourcesManager::LoadFolder(const char *path)
+void ResourcesManager::LoadFolder(const std::filesystem::path &path)
 {
-    std::vector<std::string> r;
-    for(auto& p : std::filesystem::recursive_directory_iterator(path))
+    std::vector<std::filesystem::path> results;
+    for (auto &p : std::filesystem::recursive_directory_iterator(path))
     {
         if (!p.is_directory())
-            r.push_back(p.path().string());
-    }
+        {
+            std::string extension = p.path().extension();
 
-    std::string type;
+            if (extension == ".fbx" || extension == ".glb" || extension == ".gltf")
+                LoadModel(p.path(), VertexType::V_NORMALMAP);
+            else if (extension == ".ogg" || extension == ".mp3" || extension == ".wav")
+                LoadSound(p.path(), Audio::SoundType::S_MASTER);
+            else if (extension == ".png" || extension == ".jpg" || extension == ".epg")
+                LoadTexture(p.path());
 
-    for (auto & i : r)
-    {
-        std::cout << i << std::endl;
-        type = GetFileType(i);
-        if (type == "fbx" || type == "glb")
-            LoadModel(i.c_str(), VertexType::V_NORMALMAP);
-        else if (type == "ogg" || type == "mp3" || type == "wav")
-            LoadSound(i.c_str(), Audio::SoundType::S_MASTER);
-        else if (type == "png" || type == "jpg" || type == "epg")
-            LoadTexture(i.c_str());
+        }
     }
 }
 
-std::string ResourcesManager::GetFileType(const std::string& file)
+std::string ResourcesManager::GetFileType(const std::filesystem::path &path)
 {
-    if (file.size() < 3)
-        return std::string(NO_TYPE_STRING);
-
-    return file.substr(file.size() - 3);
+    return path.extension();
 }
 
 std::vector<std::string> ResourcesManager::GetModelNameList() const
 {
-    std::vector<std::string> list;
-
-    for (auto it : _mapModel)
-    {
-        list.emplace_back(it.first.c_str());
-    }
-
-    return list;
+    return GetList(_mapModel);
 }
 
 std::vector<std::string> ResourcesManager::GetMaterialNameList() const
 {
-    std::vector<std::string> list;
-
-    for (auto it : _mapMaterial)
-    {
-        list.emplace_back(it.first.c_str());
-    }
-
-    return list;
+    return GetList(_mapMaterial);
 }
 
 std::vector<std::string> ResourcesManager::GetTextureNameList() const
 {
-    std::vector<std::string> list;
-
-    for (const auto& it : _mapTexture)
-    {
-        list.emplace_back(it.first.c_str());
-    }
-
-    return list;
+    return GetList(_mapTexture);
 }
 
 std::vector<std::string> ResourcesManager::GetAnimationNameList() const
 {
-    std::vector<std::string> list;
-
-    for (const auto& it : _mapAnimation)
-    {
-        list.emplace_back(it.first.c_str());
-    }
-
-    return list;
+    return GetList(_mapAnimation);
 }
 
-std::string ResourcesManager::GetName(const Renderer::Texture& texture) const
+
+std::string ResourcesManager::GetName(const Renderer::Texture &texture) const
 {
     auto it = _textureToName.find(texture.GetID());
-    if(it == _textureToName.end())
+    if (it == _textureToName.end())
         return std::string(EMPTY_TEXTURE_STRING);
     return it->second;
 }
 
-std::string ResourcesManager::GetName(const Audio::Sound& sound) const
+std::string ResourcesManager::GetName(const Audio::Sound &sound) const
 {
     auto it = _soundToName.find(sound.GetID());
-    if(it == _soundToName.end())
+    if (it == _soundToName.end())
         return std::string(EMPTY_TEXTURE_STRING);
     return it->second;
 }
 
-const Asset *ResourcesManager::GetAsset(const std::string& name)
+const Asset *ResourcesManager::GetAsset(const std::string &name)
 {
     return _globalAssetMap.find(name)->second;
 }

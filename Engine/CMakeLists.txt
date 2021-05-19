@@ -40,7 +40,7 @@ add_library(${PROJECT_NAME} STATIC
 
         src/Physics/PhysicsEventManager.cpp
         src/Tools/Type.cpp
-        )
+        src/Resources/Model.cpp)
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

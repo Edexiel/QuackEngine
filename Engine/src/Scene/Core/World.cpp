@@ -22,11 +22,16 @@ void World::Clear()
 {
     //todo:
 }
-
 Entity World::CreateEntity(std::string name) const
 {
     Entity id = _entityManager->Create();
     AddComponent(id, Component::Name{std::move(name)});
+    return id;
+}
+
+Entity World::CreateEntity() const
+{
+    Entity id = _entityManager->Create();
     return id;
 }
 

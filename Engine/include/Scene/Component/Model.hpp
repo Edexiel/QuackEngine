@@ -1,84 +1,27 @@
-#ifndef _MODEL_
-#define _MODEL_
-
-#include <vector>
-
-#include "Renderer/Mesh.hpp"
-#include "Renderer/Vertex.hpp"
-#include "Renderer/Material.hpp"
-
-#include "Renderer/Skeleton.hpp"
-
-#include "Scene/Core/Types.hpp"
-#include <cereal/access.hpp>
-
-#include "Resources/Asset.hpp"
-
-#include <memory>
-#include <unordered_map>
+#ifndef _COMPONENT_MODEL_
+#define _COMPONENT_MODEL_
 
 namespace Component
 {
-    class Model : public Resources::Asset
-    {
 
-        std::vector<Renderer::Mesh> _meshList;
-        std::vector<Renderer::MaterialInterface> _materialList;
-        Renderer::VertexType _vertexType {Renderer::VertexType::V_CLASSIC};
 
-        static std::vector<unsigned int> LoadIndices(const void* loadedScene, unsigned int meshId);
-
-        static Model LoadClassicModel(const void *loadedScene);
-        static Model LoadNormalMapModel(const void *loadedScene);
-        static Model LoadSkeletalMeshModel(const void *loadedScene);
-
-        static void SetVertexBoneData(Renderer::SkeletalVertex& vertex, int boneID, float weight);
-        static void ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex>& vertices,
-                                          unsigned int meshId,
-                                          const void* loadedScene);
-
-    public:
-
-        std::unordered_map<std::string, Renderer::Bone> _skeleton;
-
-        Model();
-        Model(Renderer::VertexType vertexType);
-
-        void Destroy();
-
-        static Model LoadModel(const char *path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
-        static void ReLoadModel(Model& model, const char *path, Renderer::VertexType vertexType);
-        static void ReLoadModel(Model& oldModel, Model newModel);
-
-        unsigned int AddMaterial(const Renderer::MaterialInterface& newMaterial);
-        unsigned int ChangeMaterial(const Renderer::MaterialInterface& newMaterial, unsigned int index);
-        void RemoveMaterial(unsigned int index);
-
-        void SetMeshMaterial(unsigned int meshIndex, unsigned int materialIndex);
-
-        Renderer::MaterialInterface& GetMaterial(unsigned int index);
-
-        void Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view, const Maths::Matrix4& transform);
-
-        const Renderer::Mesh& GetMesh(unsigned int index) const;
-        unsigned int* GetMeshMaterialIndex(unsigned int index);
-        unsigned int GetNumberMesh() const;
-        unsigned int GetNumberMaterial() const;
-        Renderer::VertexType GetVertexType() const;
-
-        /********** Serialization ***********/
-
-        friend class cereal::access;
 
         template<class Archive>
-        void serialize(Archive &archive)
+        void save(Archive &archive)
         {
             archive(CEREAL_NVP(name), cereal::make_nvp("type", _vertexType));
         }
 
+//        template<class Archive>
+//        void load(Archive &archive)
+//        {
+//            archive(CEREAL_NVP(name), cereal::make_nvp("type", _vertexType));
+//            this =
+//        }
 
-    };
+
+
 }
 
 
-#endif // _MODEL_
+#endif // _COMPONENT_MODEL_

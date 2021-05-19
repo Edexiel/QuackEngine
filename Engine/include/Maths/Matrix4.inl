@@ -92,7 +92,7 @@ inline Matrix4 Matrix4::Rotation(const Vector3f &rotation)
     return RotateY(rotation.y) * RotateX(rotation.x) * RotateZ(rotation.z);
 }
 
-inline Matrix4 Matrix4::AxisRotation(const float angle, const Vector3f &axis)
+inline Matrix4 Matrix4::AxisRotation(float angle, const Vector3f &axis)
 {
     Matrix4 first;
 
@@ -129,7 +129,7 @@ inline Matrix4 Matrix4::AxisRotation(const float angle, const Vector3f &axis)
 }
 
 inline Matrix4
-Matrix4::Perspective(const int &width, const int &height, float near, float far, float fov)
+Matrix4::Perspective(unsigned int width, unsigned int height, float near, float far, float fov)
 {
     Matrix4 projection;
     float const a = 1.f / tanf(fov / 2.f);
@@ -147,7 +147,7 @@ Matrix4::Perspective(const int &width, const int &height, float near, float far,
     return projection;
 }
 
-inline Matrix4 Matrix4::OrthoMatrix(const int &width, const int &height, float near, float far)
+inline Matrix4 Matrix4::OrthoMatrix(unsigned int width, unsigned int height, float near, float far)
 {
     Matrix4 ortho;
 
@@ -163,7 +163,7 @@ inline Matrix4 Matrix4::OrthoMatrix(const int &width, const int &height, float n
     return ortho;
 }
 
-inline Matrix4 Matrix4::ViewportMatrix(const int &x, const int &y, const int &width, const int &height)
+inline Matrix4 Matrix4::ViewportMatrix(int x, int y,unsigned int width,unsigned int height)
 {
     Matrix4 view;
 

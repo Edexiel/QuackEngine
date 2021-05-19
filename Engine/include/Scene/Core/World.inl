@@ -1,7 +1,7 @@
 template<typename T>
 inline void World::RegisterComponent()
 {
-    fmt::print(fg(fmt::color::forest_green),"[ECS] Register component : {}\n", demangle(typeid(T).name()));
+    fmt::print(fg(fmt::color::forest_green),"[ECS] Register: {}\n", demangle(typeid(T).name()));
     _componentManager->RegisterComponent<T>();
 }
 

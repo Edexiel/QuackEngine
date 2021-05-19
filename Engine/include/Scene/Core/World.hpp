@@ -10,7 +10,6 @@
 #include "Scene/Core/ComponentManager.hpp"
 #include "Physics/PhysicsEventManager.hpp"
 
-
 //Serialization, yeah sorry
 #include <cereal/types/string.hpp>
 #include <cereal/types/string.hpp>
@@ -49,12 +48,14 @@ public:
     World() = delete;
     explicit World(std::string &name);
 
-    void Init(Engine& engine);
+    void Init(Engine &engine);
 
     void Clear();
 
     // Entity methods
     Entity CreateEntity(std::string name) const;
+
+    Entity CreateEntity() const;
 
     void DestroyEntity(Entity id);
 
@@ -116,9 +117,19 @@ public:
         }
 
         template<class Archive, class T>
-        void read(Archive &archive, T &component, const char *name) const
+        void read(Archive &archive, World &w, Entity entity, const char *name) const
         {
-            archive(cereal::make_nvp(name, component));
+            T component;
+            try
+            {
+                archive(cereal::make_nvp(name, component));
+            }
+            catch (const cereal::Exception &e)
+            {
+                return;
+            }
+            w.AddComponent(entity, component);
+
         }
 
         template<class Archive>
@@ -137,24 +148,14 @@ public:
         template<class Archive>
         void load(Archive &archive)
         {
-            archive(CEREAL_NVP(id));
-            World& w = Engine::Instance().GetCurrentWorld();
-            Component::Name name;
-            read<Archive, Component::Name>(archive, name, "Name");
-            w.CreateEntity(name.name);
+            World &w = Engine::Instance().GetCurrentWorld();
+            Entity e = w.CreateEntity();
 
-            Component::Transform t;
-            Component::Camera c;
-//            Component::Light l;
-//            Component::Model m;
-
-            read<Archive, Component::Transform>(archive, t, "Transform");
-            read<Archive, Component::Camera>(archive, c, "Camera");
-//            read<Archive, Component::Light>(archive, l, "Light");
-//            read<Archive, Component::Model>(archive, m, "Model");
-
-            w.AddComponent(id,c);
-
+            read<Archive, Component::Name>(archive, w, e, "Name");
+            read<Archive, Component::Transform>(archive, w, e, "Transform");
+            read<Archive, Component::Camera>(archive, w, e, "Camera");
+            read<Archive, Component::Light>(archive, w, e, "Light");
+            read<Archive, Component::Model>(archive, w, e, "Model");
         }
 
     };

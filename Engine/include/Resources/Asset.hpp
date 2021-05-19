@@ -15,9 +15,12 @@ namespace Resources
     public:
 
         std::string name;
+        //todo : private
 
         Asset(ASSET_TYPE assetType);
         ASSET_TYPE GetType() const;
+        const std::string &GetPath() const;
+
     };
 
     inline Asset::Asset(ASSET_TYPE assetType) : _type{assetType}{}
@@ -25,6 +28,11 @@ namespace Resources
     inline ASSET_TYPE Asset::GetType() const
     {
         return _type;
+    }
+
+    const std::string &Asset::GetPath() const
+    {
+        return name;
     }
 }
 

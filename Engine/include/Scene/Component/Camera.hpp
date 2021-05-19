@@ -77,23 +77,19 @@ namespace Component
             archive(CEREAL_NVP(isActive), CEREAL_NVP(_width), CEREAL_NVP(_height), CEREAL_NVP(_far), CEREAL_NVP(_near),
                     CEREAL_NVP(_fov));
         }
+
         template<class Archive>
         void load(Archive &archive)
         {
             archive(CEREAL_NVP(isActive), CEREAL_NVP(_width), CEREAL_NVP(_height), CEREAL_NVP(_far), CEREAL_NVP(_near),
                     CEREAL_NVP(_fov));
 
-            if(_isPerspective)
-            {
+            if (_isPerspective)
                 _projection = Maths::Matrix4::Perspective(_width, _height, _near, _far, _fov);
-            }
             else
-            {
                 _projection = Maths::Matrix4::OrthoMatrix(_width, _height, _near, _far);
 
-            }
             _view = Maths::Matrix4::Identity();
-
 
         }
 

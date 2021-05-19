@@ -192,7 +192,7 @@ void Engine::SaveWorld(const std::string &worldName, fs::path path) const
 {
     if (_worldLut.find(worldName) == _worldLut.end())
     {
-        Log_Error("Trying to save a world that does not exists");
+        fmt::print(fg(fmt::color::yellow),"[Engine] Trying to save a world that does not exists: {}\n", path.string());
         return;
     }
     Log_Info(fmt::format("Saving world : {}", worldName).c_str());
@@ -212,7 +212,8 @@ void Engine::LoadWorld(World& world, fs::path path)
 {
     if (!exists(path))
     {
-        Log_Error(fmt::format("Path does not exists: {}", path.c_str()).c_str());
+        fmt::print(fg(fmt::color::red),"[Engine]Path does not exists: {}\n", path.string());
+        Log_Error("");
     }
 
     path.append(world.GetName()).replace_extension(".qck");
