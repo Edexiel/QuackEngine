@@ -36,8 +36,8 @@ namespace Renderer
         void Set(std::shared_ptr<RenderSystem> _renderSystem, std::shared_ptr<CameraSystem> _cameraSystem, std::shared_ptr<LightSystem> _lightSystem);
 
         Framebuffer GetSceneUpdatedFramebuffer();
-        void UpdateSceneFramebufferEditor(const Maths::Matrix4& projection, const Maths::Matrix4& view, unsigned int idFramebuffer);
-        void DrawFramebufferinFramebuffer(const Framebuffer& framebufferDrawIn, const Framebuffer& framebuffer2DrawOut);
+        void UpdateSceneFramebufferEditor(const Maths::Matrix4& projection, const Maths::Matrix4& view, Framebuffer& framebuffer);
+        void DrawFramebufferinFramebuffer(const Framebuffer& framebufferDrawIn, const Framebuffer& framebufferDrawOut);
         void DrawTextureinFramebuffer(const Framebuffer& framebufferDrawIn, const Texture& textureDrawOut);
 
 

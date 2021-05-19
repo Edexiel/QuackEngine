@@ -2,21 +2,12 @@
 
 #include "Engine.hpp"
 #include "Renderer/RendererPlatform.hpp"
-#include "Renderer/Shape.hpp"
 #include "Scene/Component/Animator.hpp"
 
-#include "Debug/Log.hpp"
 
 using namespace Renderer;
 using namespace Component;
 
-RenderSystem::RenderSystem()
-{
-    _quadMesh = Shape::CreateQuad();
-    _shader = Engine::Instance().GetResourcesManager().LoadShader(
-            "../../Engine/Shader/Framebuffer/BasicVertex.vs",
-            "../../Engine/Shader/Framebuffer/BasicFragment.fs");
-}
 
 void RenderSystem::Draw(Component::Camera& camera)
 {
@@ -36,20 +27,6 @@ void RenderSystem::Draw(const Maths::Matrix4& projection, const Maths::Matrix4& 
     RendererPlatform::Clear();
 
     DrawMaterials(projection, view);
-}
-
-void RenderSystem::DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex)
-{
-    RendererPlatform::BindFramebuffer(framebufferIndex);
-
-    RendererPlatform::ClearColor({0.2f, 0.2f, 0.2f, 1.f});
-    RendererPlatform::Clear();
-
-    _shader.Use();
-    _shader.SetMatrix4("view", Maths::Matrix4::Identity());
-    RendererPlatform::BindTexture(textureIndex, 0);
-
-    _quadMesh.Draw();
 }
 
 void RenderSystem::AddMesh(const Renderer::MaterialInterface& materialInterface, const Renderer::Mesh& mesh, Entity entity)

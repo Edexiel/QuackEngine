@@ -19,15 +19,12 @@ namespace Component
 
 class RenderSystem : public System
 {
-    Renderer::Shader _shader;
-    Renderer::Mesh _quadMesh;
-
     std::unordered_map<Renderer::MaterialInterface, std::vector<std::pair<Renderer::Mesh, Entity>>> _mapMaterial;
     unsigned int _lastLinkEntitiesNumbers {0};
 
 public:
 
-    RenderSystem();
+    RenderSystem() = default;
     ~RenderSystem() = default;
 
     /**
@@ -36,7 +33,6 @@ public:
      */
     void Draw(Component::Camera& camera);
     void Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view);
-    void DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex);
 
     void UpdateModel(const Component::Model& newModel);
 

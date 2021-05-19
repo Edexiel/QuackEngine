@@ -40,7 +40,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Audio/SoundManager.cpp
 
         src/Physics/PhysicsEventManager.cpp
-        )
+        src/Renderer/ProcessBase.cpp src/Renderer/PostProcessManager.cpp include/Renderer/PostProcess/Mat4PostProcess.hpp)
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
