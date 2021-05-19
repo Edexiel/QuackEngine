@@ -40,7 +40,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Audio/SoundManager.cpp
 
         src/Physics/PhysicsEventManager.cpp
-        )
+        include/Time/TimePlatform.hpp src/Time/TimePlatformGLFW.cpp)
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

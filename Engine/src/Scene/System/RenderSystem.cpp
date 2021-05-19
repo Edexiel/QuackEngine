@@ -13,7 +13,7 @@ using namespace Component;
 RenderSystem::RenderSystem()
 {
     _quadMesh = Shape::CreateQuad();
-    _shader = Engine::Instance().GetResourcesManager().LoadShader(
+    _shader = Shader::LoadShader(
             "../../Engine/Shader/Framebuffer/BasicVertex.vs",
             "../../Engine/Shader/Framebuffer/BasicFragment.fs");
 }
