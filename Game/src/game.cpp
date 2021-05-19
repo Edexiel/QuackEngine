@@ -103,7 +103,7 @@ void Game::Init()
     }
     ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
 
-    Transform t = {Maths::Vector3f{0, -1, 0}, Maths::Vector3f::One() * 0.2f, Maths::Quaternion({0,1,0}, Pi<float>())};
+    Transform t = {Maths::Vector3f{0, -1, 0}, Maths::Vector3f::One(), Maths::Quaternion({0,1,0}, Pi<float>())};
     engine.GetResourcesManager().ReLoadModel(R"(..\..\Game\Asset\Model\Vampire.fbx)", Renderer::VertexType::V_SKELETAL);
     Component::Model md = engine.GetResourcesManager().LoadModel(R"(..\..\Game\Asset\Model\Vampire.fbx)", Renderer::VertexType::V_SKELETAL);
 
@@ -132,8 +132,8 @@ void Game::Init()
             for (int z = 0; z < 1; z++)
             {
                 t.position.x = 0;
-                //t.position.y = 50.f /*- (float)y * 2*/;
-                //t.position.z = 20.f /*+ (float)z * 2*/;
+                t.position.y = 0.f /*- (float)y * 2*/;
+                t.position.z = 20.f /*+ (float)z * 2*/;
 
                 Entity id = world.CreateEntity("Sphere");
 
@@ -142,15 +142,15 @@ void Game::Init()
 
                 world.AddComponent(id, t);
                 world.AddComponent(id, md);
-                //world.AddComponent(id, rb);
+                world.AddComponent(id, rb);
 
-                Component::Animator animator(animation);
+                //Component::Animator animator(animation);
                 //animator.PlayAnimation(animation);
-                world.AddComponent(id, animator);
+                //world.AddComponent(id, animator);
 
-                /*physicsSystem->SetRigidBody(id);
-                physicsSystem->SetType(id, BodyType::DYNAMIC);
-                physicsSystem->AddSphereCollider(id, 1.5f);*/
+                PhysicsSystem::SetRigidBody(id);
+                PhysicsSystem::SetType(id, BodyType::STATIC);
+                PhysicsSystem::AddSphereCollider(id, 1);
             }
         }
     }
@@ -167,10 +167,10 @@ void Game::Init()
     world.AddComponent(idTrigger, mdTrigger);
     world.AddComponent(idTrigger, rbTrigger);
 
-    physicsSystem->SetRigidBody(idTrigger);
-    physicsSystem->SetType(idTrigger, BodyType::STATIC);
-    physicsSystem->AddBoxCollider(idTrigger,{1,1,1});
-    physicsSystem->SetIsTrigger(idTrigger, true);
+    PhysicsSystem::SetRigidBody(idTrigger);
+    PhysicsSystem::SetType(idTrigger, BodyType::STATIC);
+    PhysicsSystem::AddBoxCollider(idTrigger,{1,1,1});
+    PhysicsSystem::SetIsTrigger(idTrigger, true);
 
 //Test contactCollision
     Component::RigidBody rbContact;
@@ -182,9 +182,9 @@ void Game::Init()
     world.AddComponent(idContact, mdContact);
     world.AddComponent(idContact, rbContact);
 
-    physicsSystem->SetRigidBody(idContact);
-    physicsSystem->SetType(idContact, BodyType::STATIC);
-    physicsSystem->AddBoxCollider(idContact,{1,1,1});
+    PhysicsSystem::SetRigidBody(idContact);
+    PhysicsSystem::SetType(idContact, BodyType::STATIC);
+    PhysicsSystem::AddBoxCollider(idContact,{1,1,1});
 
     Entity idFloor = world.CreateEntity("Floor");
 
@@ -206,9 +206,9 @@ void Game::Init()
     world.AddComponent(idFloor, mdFloor);
     world.AddComponent(idFloor, rbFloor);
 
-    physicsSystem->SetRigidBody(idFloor);
-    physicsSystem->SetType(idFloor, BodyType::STATIC);
-    physicsSystem->AddBoxCollider(idFloor, scale);
+    PhysicsSystem::SetRigidBody(idFloor);
+    PhysicsSystem::SetType(idFloor, BodyType::STATIC);
+    PhysicsSystem::AddBoxCollider(idFloor, scale);
 
 
     Entity lightID = world.CreateEntity("Light");

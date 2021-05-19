@@ -29,6 +29,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Scene/Component/Model.cpp
         src/Scene/Component/Light.cpp
         src/Scene/Component/Camera.cpp
+        src/Scene/Component/RigidBody.cpp
 
         src/Scene/System/ScriptSystem.cpp
         src/Scene/System/PhysicsSystem.cpp
