@@ -111,6 +111,7 @@ Engine::Engine(const EngineSettings &settings)
     //Assert_Fatal_Error(_platformInput, "Platform input not declared");
     _inputManager.Init(_platformInput.get());
     _timeManager.Init(new Time::TimePlatformGLFW(_window));
+    _postProcessManager.Init();
 }
 
 GLFWwindow *Engine::GetWindow()
@@ -210,6 +211,11 @@ PhysicsEventManager &Engine::GetPhysicsEventManager()
 Time::TimeManager &Engine::GetTimeManager()
 {
     return _timeManager;
+}
+
+Renderer::PostProcessManager &Engine::GetPostProcessManager()
+{
+    return _postProcessManager;
 }
 
 

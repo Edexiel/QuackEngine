@@ -38,7 +38,7 @@ void Animator::SetShader(Renderer::Shader &shader)
 void Animator::Update(float deltaTime)
 {
     _currentTime += _currentAnimation.GetTickPerSecond() * deltaTime * 10.0f;
-    if (_currentTime > _currentAnimation.GetDuration())
+    if (_currentTime > _currentAnimation.GetDuration() - 1)
         _currentTime = 0;
 
     Maths::Matrix4 identity = Maths::Matrix4::Identity();

@@ -24,6 +24,9 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/Skeleton.cpp 
         src/Renderer/Animation.cpp 
         src/Scene/Component/Animator.cpp
+        
+        src/Renderer/ProcessBase.cpp
+        src/Renderer/PostProcessManager.cpp
 
         src/Scene/Core/World.cpp
         src/Scene/Component/Model.cpp
@@ -40,7 +43,9 @@ add_library(${PROJECT_NAME} STATIC
         src/Audio/SoundManager.cpp
 
         src/Physics/PhysicsEventManager.cpp
-        include/Time/TimePlatform.hpp src/Time/TimePlatformGLFW.cpp src/Time/TimeManager.cpp)
+        src/Time/TimePlatformGLFW.cpp
+        src/Time/TimeManager.cpp)
+        
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
