@@ -8,9 +8,13 @@
 
 using namespace Audio;
 
-Sound::Sound(SoundManager* soundManager, unsigned int indexSound) : _soundManager{soundManager}, _ID{indexSound} {}
+Sound::Sound() : Resources::Asset(Resources::AssetType::A_SOUND){}
 
-unsigned int Sound::GetID()
+Sound::Sound(SoundManager* soundManager, unsigned int indexSound) :
+Resources::Asset(Resources::AssetType::A_SOUND),
+_soundManager{soundManager}, _ID{indexSound} {}
+
+unsigned int Sound::GetID() const
 {
   return _ID;
 }

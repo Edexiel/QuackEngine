@@ -1,7 +1,7 @@
 #ifndef _MESH_
 #define _MESH_
 
-typedef unsigned int Gluint;
+//typedef unsigned int Gluint;
 
 #include "Renderer/Vertex.hpp"
 
@@ -9,7 +9,7 @@ namespace Renderer
 {
   class Mesh
   {
-  private:
+  protected:
     unsigned int _vao {0};
     unsigned int _vbo {0};
     unsigned int _ebo {0};
@@ -27,9 +27,12 @@ namespace Renderer
     Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbVertices, unsigned int nbIndices, VertexType vertexType)
             : _vao{vao},_vbo{vbo}, _ebo{ebo}, _nbVertices{nbVertices}, _nbIndices{nbIndices}, _vertexType{vertexType} {}
     ~Mesh();
+    void Destroy();
 
     void Draw() const;
-    void Draw(VertexType vertexType) const;
+
+    VertexType GetType() const;
+
   };
 }
 

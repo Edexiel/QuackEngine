@@ -10,7 +10,9 @@
 using namespace Renderer;
 using namespace Component;
 
-Shader::Shader(unsigned int ID) : _ID {ID} {}
+Shader::Shader() : Resources::Asset(Resources::AssetType::A_SHADER) {}
+
+Shader::Shader(unsigned int ID) : Resources::Asset(Resources::AssetType::A_SHADER), _ID {ID} {}
 
 Shader::~Shader()
 {
@@ -125,64 +127,102 @@ Shader Shader::LoadShader(const char* vertexPath, const char* fragmentPath)
 
 }
 
+Shader Shader::LoadShader(const char *path)
+{
+    std::string vertexShaderCode("#version 330 core\n#define VERTEX_SHADER\n");
+    std::string fragmentShaderCode("#version 330 core\n#define FRAGMENT_SHADER\n");
+
+    // Read the Shader code from the file
+    std::ifstream shaderStream(path, std::ios::in);
+    if (!shaderStream.is_open())
+    {
+        printf("Impossible to open %s.\n", path);
+        getchar();
+        return {0};
+    }
+
+    std::stringstream sstr;
+    sstr << shaderStream.rdbuf();
+
+
+    vertexShaderCode += sstr.str();
+    fragmentShaderCode += sstr.str();
+
+    shaderStream.close();
+
+    //std::cout << vertexShaderCode << std::endl;
+    //std::cout << fragmentShaderCode << std::endl;
+
+    return RendererPlatform::CreateShader(vertexShaderCode.c_str(), fragmentShaderCode.c_str());
+}
+
 Shader Shader::LoadObjectShader(const ShaderConstructData& shaderData)
 {
-  std::string FragmentShaderCode = "#version 330 core\n";
+    std::string vertexShaderCode;
+
+    // Read the Vertex Shader code from the file
+    if (shaderData.hasNormalMap)
+    {
+        if (shaderData.hasSkeleton)
+            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Light/VertexNormalMap.vs");
+        else
+            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Skeletal/SkeletalVertex.vs");
+    }
+    else
+    {
+        if (shaderData.hasSkeleton)
+            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Skeletal/SkeletalVertex.vs");
+        else
+            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Base/Vertex.vs");
+    }
+
+
+    std::string fragmentShaderCode = "#version 330 core\n";
   if (shaderData.hasLight)
   {
-    FragmentShaderCode += "#define NB_MAX_DIRECTIONAL_LIGHT " +
-                          std::to_string(MAX_DIRECTIONAL_LIGHT_NB) + "\n";
-    FragmentShaderCode += "#define NB_MAX_POINT_LIGHT " +
-                          std::to_string(MAX_POINT_LIGHT_NB) + "\n";
-    FragmentShaderCode += "#define NB_MAX_SPOT_LIGHT " +
-                          std::to_string(MAX_SPOT_LIGHT_NB) + "\n";
+      fragmentShaderCode += "#define NB_MAX_DIRECTIONAL_LIGHT " +
+                            std::to_string(MAX_DIRECTIONAL_LIGHT_NB) + "\n";
+      fragmentShaderCode += "#define NB_MAX_POINT_LIGHT " +
+                            std::to_string(MAX_POINT_LIGHT_NB) + "\n";
+      fragmentShaderCode += "#define NB_MAX_SPOT_LIGHT " +
+                            std::to_string(MAX_SPOT_LIGHT_NB) + "\n";
 
-    FragmentShaderCode +=
+      fragmentShaderCode +=
         LoadStringFromFile("../../Engine/Shader/Object/Light/FragmentStartLight.fs");
   }
   else
   {
-      FragmentShaderCode +=
+      fragmentShaderCode +=
               LoadStringFromFile("../../Engine/Shader/Object/Base/FragmentStart.fs");
   }
 
-  FragmentShaderCode += CreateMaterial(shaderData);
-  FragmentShaderCode += "uniform Material material;\n\n";
-  FragmentShaderCode += CreateColorFunctions(shaderData);
+    fragmentShaderCode += CreateMaterial(shaderData);
+    fragmentShaderCode += "uniform Material material;\n\n";
+    fragmentShaderCode += CreateColorFunctions(shaderData);
 
   if (shaderData.hasLight)
   {
     if (shaderData.hasNormalMap)
     {
-      FragmentShaderCode +=
+        fragmentShaderCode +=
           LoadStringFromFile("../../Engine/Shader/Object/Light/FragmentNormalMapLight.fs");
-      FragmentShaderCode += LoadStringFromFile(
+        fragmentShaderCode += LoadStringFromFile(
           "../../Engine/Shader/Object/Light/FragmentMainLightNormal.fs");
     }
     else
     {
-      FragmentShaderCode +=
+        fragmentShaderCode +=
           LoadStringFromFile("../../Engine/Shader/Object/Light/FragmentBasicLight.fs");
-      FragmentShaderCode += LoadStringFromFile(
+        fragmentShaderCode += LoadStringFromFile(
           "../../Engine/Shader/Object/Light/FragmentMainLight.fs");
     }
   }
   else
-    FragmentShaderCode += LoadStringFromFile("../../Engine/Shader/Object/Base/FragmentMain.fs");
+      fragmentShaderCode += LoadStringFromFile("../../Engine/Shader/Object/Base/FragmentMain.fs");
 
   //std::cout << FragmentShaderCode << std::endl;
 
-
-  std::string VertexShaderCode;
-
-  // Read the Vertex Shader code from the file
-  if (shaderData.hasNormalMap)
-    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Light/VertexNormalMap.vs");
-  else
-    VertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Base/Vertex.vs");
-
-
-  return RendererPlatform::CreateShader(VertexShaderCode.c_str(), FragmentShaderCode.c_str());
+  return RendererPlatform::CreateShader(vertexShaderCode.c_str(), fragmentShaderCode.c_str());
 
 }
 
@@ -250,4 +290,20 @@ std::string Shader::LoadStringFromFile(const char* path)
         return {0};
     }
     return fileData;
+}
+
+std::string Shader::GetStringInFile(std::ifstream& file, const std::string& start, const std::string& end)
+{
+    std::string result;
+    std::string line;
+    while (getline(file, line))
+        if (line.substr(0, start.size()) == start)
+            while (getline(file, line))
+            {
+                if (line.substr(0, end.size()) == end)
+                    return result;
+                result += line + "\n";
+            }
+
+    return result;
 }

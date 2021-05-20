@@ -7,7 +7,9 @@
 
 using namespace Renderer;
 
-Texture::Texture(const unsigned int& ID): _ID{ID} {}
+Texture::Texture() : Asset(Resources::AssetType::A_TEXTURE){}
+
+Texture::Texture(unsigned int ID): Asset(Resources::AssetType::A_TEXTURE), _ID{ID} {}
 
 Texture::~Texture()
 {

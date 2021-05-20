@@ -2,8 +2,7 @@
 #include "Renderer/RendererPlatform.hpp"
 #include "Engine.hpp"
 
-#define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
 
 using namespace Renderer;
 
@@ -28,7 +27,7 @@ Mesh Shape::CreateQuad()
 
     RendererPlatform::VerticesReading();
 
-    return Engine::Instance().GetResourcesManager().AddShape(quadMesh);
+    return quadMesh;
 }
 
 Mesh Shape::CreateCube()
@@ -99,14 +98,14 @@ Mesh Shape::CreateSphere(int sectorCount, int stackCount)
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 
-    float sectorStep = 2 * (float)M_PI / (float)sectorCount;
-    float stackStep = (float)M_PI / (float)stackCount;
+    float sectorStep = 2 * Pi<float>() / (float)sectorCount;
+    float stackStep = Pi<float>() / (float)stackCount;
     float sectorAngle, stackAngle;
 
     //Vertices
     for(int i = 0; i <= stackCount; ++i)
     {
-        stackAngle = (float)M_PI / 2.f - (float)i * stackStep; // starting from pi/2 to -pi/2
+        stackAngle = Pi<float>() / 2.f - (float)i * stackStep; // starting from pi/2 to -pi/2
         float xy = cosf(stackAngle);           // r * cos(u)
         float z = sinf(stackAngle);            // r * sin(u)
 

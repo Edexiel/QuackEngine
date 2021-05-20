@@ -14,10 +14,11 @@ add_executable(${PROJECT_NAME}
         src/Widgets/LogWidget.cpp
         src/Widgets/ExplorerWidget.cpp
         src/Widgets/ViewerWidget.cpp
+        src/Widgets/AssetWidget.cpp
         src/CameraEditor.cpp
         )
 
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw imgui reactphysics3d Engine)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw imgui ImGuizmo Engine Game)

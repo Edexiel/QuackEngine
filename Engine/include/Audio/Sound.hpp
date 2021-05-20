@@ -1,6 +1,7 @@
 #ifndef _SOUND_
 #define _SOUND_
 
+#include "Resources/Asset.hpp"
 
 struct ma_decoder;
 
@@ -9,7 +10,7 @@ namespace Audio
     enum class SoundType;
 
     class SoundManager;
-    class Sound
+    class Sound : public Resources::Asset
     {
         SoundManager* _soundManager;
         unsigned int _ID {0};
@@ -17,10 +18,10 @@ namespace Audio
 
     public:
 
-        Sound() = default;
+        Sound();
         Sound(SoundManager* soundManager, unsigned int index);
 
-        unsigned int GetID();
+        unsigned int GetID() const;
 
         void Play();
         void Stop();

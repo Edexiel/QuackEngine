@@ -6,6 +6,8 @@
 #include "Widgets/SceneWidget.hpp"
 #include "Widgets/ViewportWidget.hpp"
 #include "Widgets/ViewerWidget.hpp"
+#include "Widgets/AssetWidget.hpp"
+
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -13,7 +15,7 @@
 #include "imgui.h"
 
 
-Editor::Editor(GLFWwindow * window)
+Editor::Editor(GLFWwindow *window)
 {
     InitWidgets();
     InitImGui(window);
@@ -29,15 +31,16 @@ Editor::~Editor()
 //todo : init from config.ini
 void Editor::InitWidgets()
 {
-    _widgets.emplace_back(std::make_unique<ExplorerWidget>());
     _widgets.emplace_back(std::make_unique<LogWidget>());
+    _widgets.emplace_back(std::make_unique<ExplorerWidget>());
     _widgets.emplace_back(std::make_unique<PropertiesWidget>());
     _widgets.emplace_back(std::make_unique<SceneWidget>());
     _widgets.emplace_back(std::make_unique<ViewportWidget>());
     _widgets.emplace_back(std::make_unique<ViewerWidget>());
+    _widgets.emplace_back(std::make_unique<AssetWidget>());
 }
 
-void Editor::InitImGui(GLFWwindow * window)
+void Editor::InitImGui(GLFWwindow *window)
 {
     // Init ImGui
     IMGUI_CHECKVERSION();
@@ -64,7 +67,7 @@ void Editor::InitImGui(GLFWwindow * window)
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
-    ImGui_ImplGlfw_InitForOpenGL(window,true);
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 460");
 }
 
