@@ -9,16 +9,12 @@ using namespace Renderer;
 
 Texture::Texture() : Asset(Resources::AssetType::A_TEXTURE){}
 
-Texture::Texture(unsigned int ID): Asset(Resources::AssetType::A_TEXTURE), _ID{ID} {}
+Texture::Texture(unsigned int id): Asset(Resources::AssetType::A_TEXTURE), _id{id} {}
 
-Texture::~Texture()
-{
-  //RendererPlatform::DeleteTexture(_ID);
-}
 
 unsigned int Texture::GetID() const
 {
-  return _ID;
+  return _id;
 }
 
 Texture Texture::LoadTexture(const char* filepath)
@@ -44,5 +40,5 @@ Texture Texture::LoadTexture(const char* filepath)
 
 void Texture::Bind(unsigned int index)
 {
-  RendererPlatform::BindTexture(_ID, index);
+  RendererPlatform::BindTexture(_id, index);
 }

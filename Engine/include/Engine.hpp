@@ -93,6 +93,7 @@ public:
     reactphysics3d::PhysicsCommon &GetPhysicsManager();
     Time::TimeManager &GetTimeManager();
     Renderer::PostProcessManager &GetPostProcessManager();
+    
 };
 
 #endif //QUACKENGINE_ENGINE_HPP

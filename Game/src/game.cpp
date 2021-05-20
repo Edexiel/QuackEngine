@@ -20,13 +20,20 @@
 
 #include "Scene/Component/Animator.hpp"
 
+#include "Thread/ThreadPool.hpp"
+
 using namespace Component;
 using namespace Resources;
 using namespace Renderer;
 
+void doStuff(int i)
+{
+    std::cout << "try " << i << std::endl;
+}
+
 void Game::Init()
 {
-    printf("Init");
+    printf("T_INIT");
 
 
     World &world = Engine::Instance().CreateWorld("Main");
@@ -272,6 +279,17 @@ void Game::Init()
     kP->array[7] = 1;
     kP->array[8] = 0;
 
+    //Thread::Task<int>* tsk = new Thread::Task<int>(doStuff, {1});
+
+    Thread::TaskSystem tskSys;
+
+    for (unsigned int i = 0; i < 9; i++)
+    {
+        tskSys.AddTask(new Thread::Task<int>(doStuff, {i}));
+    }
+
+    Thread::ThreadPool threadPool;
+    threadPool.Run(&tskSys);
 
     Engine::Instance().GetPostProcessManager().AddProcess(kP);
 
