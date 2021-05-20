@@ -12,7 +12,6 @@
 
 #include "Debug/Assertion.hpp"
 
-
 inline Engine *instance = nullptr;
 
 Engine &Engine::Instance()
@@ -217,5 +216,3 @@ Renderer::PostProcessManager &Engine::GetPostProcessManager()
 {
     return _postProcessManager;
 }
-
-
