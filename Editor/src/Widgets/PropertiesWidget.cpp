@@ -447,25 +447,24 @@ void PropertiesWidget::RigidBodyResizeShape(Component::RigidBody& rigidBody)
     {
         Maths::Vector3<float> halfExtend = rigidBody.GetHalfExtends();
         if(ImGui::DragFloat3("Half extend", halfExtend.e))
-        {
             PhysicsSystem::ResizeBoxCollider(_entity, halfExtend);
-        }
     }
     if(rigidBody.GetCollisionShapeType() == CollisionShapeType::SPHERE)
     {
         float radius = rigidBody.GetRadius();
-        ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX);
-        PhysicsSystem::ResizeSphereCollider(_entity, radius);
+        if(ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX))
+            PhysicsSystem::ResizeSphereCollider(_entity, radius);
     }
     if(rigidBody.GetCollisionShapeType() == CollisionShapeType::CAPSULE)
     {
         float radius = rigidBody.GetRadius();
         float height = rigidBody.GetHeight();
 
-        ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX);
-        ImGui::DragFloat("height", &height, 0.1f, 0.001f, FLT_MAX);
-
-        PhysicsSystem::ResizeCapsuleCollider(_entity, radius, height);
+        if(ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX)
+           || ImGui::DragFloat("height", &height, 0.1f, 0.001f, FLT_MAX))
+        {
+            PhysicsSystem::ResizeCapsuleCollider(_entity, radius, height);
+        }
     }
 }
 
