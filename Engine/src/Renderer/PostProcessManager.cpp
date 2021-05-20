@@ -37,3 +37,8 @@ void PostProcessManager::ApplyPostProcess(const Framebuffer& framebuffer)
         _listProcess[i]->Process(framebuffer, _quadMesh);
     }
 }
+
+void PostProcessManager::AddProcess(ProcessBase *process)
+{
+    _listProcess.emplace_back(process);
+}
