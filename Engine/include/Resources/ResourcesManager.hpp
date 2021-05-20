@@ -82,6 +82,7 @@ namespace Resources
         static std::string GetFileType(const std::string& file);
 
         const Asset* GetAsset(const std::string& name);
+
     };
 }
 
