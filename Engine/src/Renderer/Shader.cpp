@@ -129,10 +129,10 @@ Shader Shader::LoadShader(const char* vertexPath, const char* fragmentPath)
 
 Shader Shader::LoadShader(const char *path)
 {
-    std::string vertexShaderCode;
-    std::string fragmentShaderCode;
+    std::string vertexShaderCode("#version 330 core\n#define VERTEX_SHADER\n");
+    std::string fragmentShaderCode("#version 330 core\n#define FRAGMENT_SHADER\n");
 
-    // Read the Vertex Shader code from the file
+    // Read the Shader code from the file
     std::ifstream shaderStream(path, std::ios::in);
     if (!shaderStream.is_open())
     {
@@ -141,14 +141,12 @@ Shader Shader::LoadShader(const char *path)
         return {0};
     }
 
-    std::string line;
-    while (getline(shaderStream, line))
-    {
-        if (line.substr(0, 6) == "Vertex")
-            vertexShaderCode = GetStringInFile(shaderStream, "{", "}");
-        if (line.substr(0, 8) == "Fragment")
-            fragmentShaderCode = GetStringInFile(shaderStream, "{", "}");
-    }
+    std::stringstream sstr;
+    sstr << shaderStream.rdbuf();
+
+
+    vertexShaderCode += sstr.str();
+    fragmentShaderCode += sstr.str();
 
     shaderStream.close();
 

@@ -45,7 +45,7 @@ add_library(${PROJECT_NAME} STATIC
 
         src/Physics/PhysicsEventManager.cpp
         src/Time/TimePlatformGLFW.cpp
-        src/Time/TimeManager.cpp)
+        src/Time/TimeManager.cpp src/Renderer/PostProcess/KernelPostProcess.cpp)
         
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

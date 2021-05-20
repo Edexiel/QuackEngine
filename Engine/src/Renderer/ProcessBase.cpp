@@ -7,6 +7,11 @@ using namespace Renderer;
 ProcessBase::ProcessBase(const std::string &name, const Shader &shader) :
 _name{name}, _shader{shader} {}
 
+const std::string &ProcessBase::GetName() const
+{
+    return _name;
+}
+
 void ProcessBase::Process(const Framebuffer &buffer, const Mesh& screenMesh)
 {
     buffer.Bind();

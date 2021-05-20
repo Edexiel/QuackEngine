@@ -16,6 +16,7 @@
 #include "game.hpp"
 
 #include "Renderer/ProcessBase.hpp"
+#include "Renderer/PostProcess/KernelPostProcess.hpp"
 
 #include "Scene/Component/Animator.hpp"
 
@@ -258,10 +259,21 @@ void Game::Init()
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
 
-    Renderer::Shader pstPrsh = Engine::Instance().GetResourcesManager().LoadShader("..\\..\\Game\\Asset\\Shader\\RedOnlyPostProcess.qsh");
-    Renderer::ProcessBase pb("Test", pstPrsh);
+    Renderer::KernelPostProcess* kP = new Renderer::KernelPostProcess("Kernel 1");
 
-    Engine::Instance().GetPostProcessManager().AddProcess(&pb);
+    kP->offset = 1.0f/300;
+    kP->array[0] = 0;
+    kP->array[1] = 1;
+    kP->array[2] = 0;
+    kP->array[3] = 1;
+    kP->array[4] = -4;
+    kP->array[5] = 1;
+    kP->array[6] = 0;
+    kP->array[7] = 1;
+    kP->array[8] = 0;
+
+
+    Engine::Instance().GetPostProcessManager().AddProcess(kP);
 
 }
 
