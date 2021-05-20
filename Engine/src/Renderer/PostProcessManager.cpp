@@ -30,11 +30,6 @@ void PostProcessManager::Init()
             "../../Engine/Shader/Framebuffer/BasicFragment.fs");
 }
 
-void PostProcessManager::AddProcess(ProcessBase* process)
-{
-    _listProcess.push_back(std::make_unique<ProcessBase>(*process));
-}
-
 void PostProcessManager::ApplyPostProcess(const Framebuffer& framebuffer)
 {
     for (unsigned int i = 0; i < _listProcess.size(); i++)

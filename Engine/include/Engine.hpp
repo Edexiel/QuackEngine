@@ -80,7 +80,6 @@ public:
     World &GetCurrentWorld();
     void SwapBuffers();
 
-
     World &CreateWorld(std::string_view name);
     void LoadWorld(const std::string &name);
     void UnloadWorld(const std::string &name);
