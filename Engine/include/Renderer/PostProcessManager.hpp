@@ -18,7 +18,11 @@ namespace Renderer
 
     public:
         void Init();
-        void AddProcess(ProcessBase* process);
+
+        void AddProcess(ProcessBase* process)
+        {
+            _listProcess.emplace_back(process);
+        }
 
         void ApplyPostProcess(const Framebuffer& framebuffer);
 
