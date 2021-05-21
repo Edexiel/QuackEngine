@@ -3,8 +3,8 @@
 
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
+#include "Scene/System/CharacterControllerSystem.hpp"
 #include "misc/cpp/imgui_stdlib.h"
-#include "Maths/Common.hpp"
 
 #include "Scene/Component/Animator.hpp"
 
@@ -259,6 +259,10 @@ void PropertiesWidget::RigidBodyReader()
     RigidBodySetIsTrigger(rigidBody);
     RigidBodySetIsGravityEnabled(rigidBody);
     RigidBodySetMass(rigidBody);
+
+    PhysicsSystem::SetVelocity(_entity,{-1,0,0});
+    if(CharacterControllerSystem::RaycastTest(_entity))
+        std::cout << "raycast is colliding\n";
 
 }
 

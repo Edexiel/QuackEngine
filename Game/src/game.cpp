@@ -6,6 +6,7 @@
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
+#include "Scene/System/CharacterControllerSystem.hpp"
 
 #include "Resources/ResourcesManager.hpp"
 
@@ -54,6 +55,7 @@ void Game::Init()
     auto cameraSystem = world.RegisterSystem<CameraSystem>();
     auto lightSystem = world.RegisterSystem<LightSystem>();
     auto physicsSystem = world.RegisterSystem<PhysicsSystem>();
+    world.RegisterSystem<CharacterControllerSystem>();
 
     Engine &engine = Engine::Instance();
 
@@ -84,7 +86,13 @@ void Game::Init()
         signatureLight.set(world.GetComponentType<Transform>());
         world.SetSystemSignature<LightSystem>(signatureLight);
     }
-
+    //Signature CharacterController
+    {
+        Signature signatureCharacterController;
+        signatureCharacterController.set(world.GetComponentType<Transform>());
+        signatureCharacterController.set(world.GetComponentType<RigidBody>());
+        world.SetSystemSignature<CharacterControllerSystem>(signatureCharacterController);
+    }
     //Signature Physics
     {
         Signature signaturePhysics;
@@ -94,8 +102,6 @@ void Game::Init()
     }
 
     physicsSystem->Init();
-//    CameraEditor cam;
-//    cam.SetInput(engine.GetInputManager());
 
     {
         Entity CameraEntity = world.CreateEntity("Camera");

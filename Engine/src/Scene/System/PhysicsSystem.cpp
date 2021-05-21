@@ -196,3 +196,9 @@ void PhysicsSystem::SetIsGravityEnable(Entity id, bool isGravityEnabled)
     rigidBody.rb->enableGravity(isGravityEnabled);
     rigidBody._isGravityEnabled = isGravityEnabled;
 }
+
+void PhysicsSystem::SetVelocity(Entity id, const Maths::Vector3f &velocity)
+{
+    auto &rigidBody = Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id);
+    rigidBody.rb->setLinearVelocity({velocity.x, velocity.y, velocity.z});
+}
