@@ -4,6 +4,12 @@
 #include "Widgets/Widget.hpp"
 #include "Maths/Vector3.hpp"
 
+
+namespace Component
+{
+    class RigidBody;
+}
+
 class PropertiesWidget : public Widget
 {
 public:
@@ -23,6 +29,12 @@ private:
 
     static void AddLight();
     static void AddRigidBody();
+
+    static void RigidBodyChangeBodyType(Component::RigidBody &rigidBody);
+    static void RigidBodyResizeShape(Component::RigidBody &rigidBody);
+    static void RigidBodySetIsTrigger(Component::RigidBody &rigidBody);
+    static void RigidBodySetMass(Component::RigidBody &rigidBody);
+    static void RigidBodySetIsGravityEnabled(Component::RigidBody &rigidBody);
 
     Maths::Vector3f _eulerRot{0,0,0};
 };

@@ -6,7 +6,7 @@
 
 using namespace Renderer;
 
-Animation::Animation() : Resources::Asset(Resources::ASSET_TYPE::A_ANIMATION){}
+Animation::Animation() : Resources::Asset(Resources::AssetType::A_ANIMATION){}
 
 
 Animation Animation::LoadAnimation(const char *path)

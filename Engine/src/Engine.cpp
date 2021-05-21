@@ -6,11 +6,11 @@
 #include <Renderer/RendererInterface.hpp>
 #include <Resources/ResourcesManager.hpp>
 #include "Audio/SoundManager.hpp"
+#include "Time/TimePlatformGLFW.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
 
 #include "Debug/Assertion.hpp"
-
 
 inline Engine *instance = nullptr;
 
@@ -109,6 +109,8 @@ Engine::Engine(const EngineSettings &settings)
     _platformInput = std::make_unique<Input::PlatformInputGLFW>(_window);
     //Assert_Fatal_Error(_platformInput, "Platform input not declared");
     _inputManager.Init(_platformInput.get());
+    _timeManager.Init(new Time::TimePlatformGLFW(_window));
+    _postProcessManager.Init();
 }
 
 GLFWwindow *Engine::GetWindow()
@@ -203,6 +205,16 @@ void Engine::SwapBuffers()
 PhysicsEventManager &Engine::GetPhysicsEventManager()
 {
     return _physicsEventManager;
+}
+
+Time::TimeManager &Engine::GetTimeManager()
+{
+    return _timeManager;
+}
+
+Renderer::PostProcessManager &Engine::GetPostProcessManager()
+{
+    return _postProcessManager;
 }
 
 

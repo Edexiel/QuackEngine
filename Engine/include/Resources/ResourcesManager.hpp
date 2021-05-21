@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <filesystem>
 
 #include "Resources/Asset.hpp"
 
@@ -25,13 +26,6 @@ class World;
 
 namespace Resources
 {
-    struct ReferenceShader
-    {
-        std::string vertexShader;
-        std::string fragmentShader;
-
-        Renderer::Shader shader;
-    };
 
     class ResourcesManager
     {
@@ -39,7 +33,7 @@ namespace Resources
 
         std::unordered_map<std::string, Component::Model>     _mapModel;
         std::unordered_map<std::string, Renderer::Texture>    _mapTexture;
-        std::vector<ReferenceShader>                          _listShader;
+        std::unordered_map<std::string, Renderer::Shader>     _mapShader;
         std::unordered_map<unsigned int, Renderer::Shader>    _mapDynamicShader;
         std::unordered_map<std::string, Audio::Sound>         _mapSound;
         std::unordered_map<std::string, Renderer::MaterialInterface>   _mapMaterial;
@@ -64,8 +58,7 @@ namespace Resources
         void  ReLoadModel   (const char* path, Renderer::VertexType vertexType);
         Renderer::Animation LoadAnimation     (const char* path);
         Renderer::Texture   LoadTexture   (const char* path);
-        Renderer::Shader    LoadShader    (const char* vertexShader, const char* fragmentShader);
-        Renderer::Shader    LoadObjectShader    (const char* vertexShader, const char* fragmentShader);
+        Renderer::Shader    LoadShader    (std::filesystem::path path);
         Renderer::Shader    LoadObjectShader    (const Renderer::ShaderConstructData& constructData);
 
         Renderer::MaterialInterface LoadMaterial(const char* path);
@@ -76,7 +69,7 @@ namespace Resources
 
         Renderer::Mesh& AddShape(Renderer::Mesh& mesh);
 
-        void LoadFolder(const char* path);
+        void LoadFolder(std::filesystem::path path);
 
         std::vector<std::string> GetModelNameList() const;
         std::vector<std::string> GetMaterialNameList() const;
@@ -89,6 +82,7 @@ namespace Resources
         static std::string GetFileType(const std::string& file);
 
         const Asset* GetAsset(const std::string& name);
+
     };
 }
 
