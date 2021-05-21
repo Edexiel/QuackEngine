@@ -15,6 +15,7 @@ Component::Camera& CameraSystem::GetActiveCamera()
     World& world = _engine.GetCurrentWorld();
     for (Entity entity: _entities) {
         auto &cam = world.GetComponent<Component::Camera>(entity);
+
         if (cam.isActive)
         {
             _activeCamera = entity;

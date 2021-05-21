@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <string>
+#include <map>
 
 #include "Types.hpp"
 #include "Scene/Core/EntityManager.hpp"
@@ -12,8 +13,8 @@
 
 //Serialization, yeah sorry
 #include <cereal/types/string.hpp>
-#include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>
+#include <cereal/types/map.hpp>
 #include <cereal/access.hpp>
 
 #include "Scene/Component/Camera.hpp"
@@ -22,6 +23,7 @@
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/Component/Transform.hpp"
 #include "Scene/Component/Name.hpp"
+
 #include <fmt/core.h>
 #include <fmt/color.h>
 #include "Tools/Type.hpp"
@@ -104,45 +106,33 @@ public:
         explicit EntityHandler(Entity id, const World *world) : id(id), world(world)
         {}
 
-        const World *world;
-        Entity id;
+        const World *world = nullptr;
+        Entity id{0};
+        std::map<std::string, bool> components{};
 
-        template<class Archive, class T>
-        void write(Archive &archive, const Entity &e, const char *name) const
+
+        void BuildArray()
         {
-            if (world->HasComponent<T>(e))
-            {
-                archive(cereal::make_nvp(name, world->GetComponent<T>(e)));
-            }
-        }
-
-        template<class Archive, class T>
-        void read(Archive &archive, World &w, Entity entity, const char *name) const
-        {
-            T component;
-            try
-            {
-                archive(cereal::make_nvp(name, component));
-            }
-            catch (const cereal::Exception &e)
-            {
-                return;
-            }
-            w.AddComponent(entity, component);
-
+            build<Component::Name>("Name");
+            build<Component::Transform>("Transform");
+            build<Component::Camera>("Camera");
+            build<Component::Light>("Light");
+            build<Component::Model>("Model");
+//            build<Component::RigidBody>("Rigidbody");
         }
 
         template<class Archive>
         void save(Archive &archive) const
         {
-            archive(CEREAL_NVP(id));
+            //archive(CEREAL_NVP(id));
 
+            archive(CEREAL_NVP(components));
             write<Archive, Component::Name>(archive, id, "Name");
             write<Archive, Component::Transform>(archive, id, "Transform");
             write<Archive, Component::Camera>(archive, id, "Camera");
             write<Archive, Component::Light>(archive, id, "Light");
             write<Archive, Component::Model>(archive, id, "Model");
-//        save<Archive,Component::RigidBody>(archive, id,"RigidBody");
+            //write<Archive,Component::RigidBody>(archive, id,"RigidBody");
         }
 
         template<class Archive>
@@ -151,11 +141,41 @@ public:
             World &w = Engine::Instance().GetCurrentWorld();
             Entity e = w.CreateEntity();
 
+            archive(CEREAL_NVP(components));
+
             read<Archive, Component::Name>(archive, w, e, "Name");
             read<Archive, Component::Transform>(archive, w, e, "Transform");
             read<Archive, Component::Camera>(archive, w, e, "Camera");
             read<Archive, Component::Light>(archive, w, e, "Light");
             read<Archive, Component::Model>(archive, w, e, "Model");
+        }
+
+    private:
+
+        template<class Archive, class T>
+        void write(Archive &archive, Entity e, const std::string& name) const
+        {
+            if (components.at(name))
+            {
+                archive(cereal::make_nvp(name, world->GetComponent<T>(e)));
+            }
+        }
+
+        template<class Archive, class T>
+        void read(Archive &archive, World &w, Entity entity,const std::string& name) const
+        {
+            if(components.at(name))
+            {
+                T component;
+                archive(cereal::make_nvp(name, component));
+                w.AddComponent(entity, component);
+            }
+        }
+
+        template<typename T>
+        void build(const std::string& name)
+        {
+            components[name] = world->HasComponent<T>(id);
         }
 
     };
@@ -168,6 +188,9 @@ public:
         std::vector<EntityHandler> entities;
         for (Entity &entity : _entityManager->GetEntities())
             entities.emplace_back(entity, this);
+
+        for (auto &item : entities)
+            item.BuildArray();
 
         archive(CEREAL_NVP(entities));
     }

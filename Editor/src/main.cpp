@@ -79,7 +79,7 @@ int main()
         engine.SwapBuffers();
     }
 
-    engine.SaveWorld("Main","./");
+    //engine.SaveWorld("Main","./");
 
     return 0;
 }

@@ -2,18 +2,19 @@
 #define QUACKENGINE_MODELRENDERER_HPP
 
 #include <vector>
+#include <memory>
+#include <unordered_map>
+#include <filesystem>
+
 
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Material.hpp"
-
 #include "Renderer/Skeleton.hpp"
+#include "Resources/Asset.hpp"
 
 #include "Scene/Core/Types.hpp"
 
-#include <memory>
-#include <unordered_map>
-#include <filesystem>
 
 namespace Renderer
 {

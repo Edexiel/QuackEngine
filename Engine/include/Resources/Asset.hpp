@@ -30,7 +30,7 @@ namespace Resources
         return _type;
     }
 
-    const std::string &Asset::GetPath() const
+    inline const std::string &Asset::GetPath() const
     {
         return name;
     }

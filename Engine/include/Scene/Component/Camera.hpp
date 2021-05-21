@@ -90,6 +90,7 @@ namespace Component
                 _projection = Maths::Matrix4::OrthoMatrix(_width, _height, _near, _far);
 
             _view = Maths::Matrix4::Identity();
+            _framebuffer = Renderer::Framebuffer::LoadFramebuffer(_width, _height);
 
         }
 

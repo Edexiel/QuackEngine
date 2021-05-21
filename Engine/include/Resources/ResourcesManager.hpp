@@ -7,8 +7,8 @@
 #include <filesystem>
 
 #include "Resources/Asset.hpp"
-#include "Renderer/ModelRenderer.hpp"
 
+#include "Renderer/ModelRenderer.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
 #include "Renderer/Material.hpp"

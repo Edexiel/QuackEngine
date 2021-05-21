@@ -9,6 +9,7 @@
 #include "Maths/Common.hpp"
 
 #include "Scene/Component/Animator.hpp"
+#include "Renderer/ModelRenderer.hpp"
 
 #include <algorithm>
 
@@ -67,13 +68,13 @@ void PropertiesWidget::TransformReader()
 
     if (!ImGui::IsMouseDragging(0) && !isRotationChange)
         _eulerRot = transform.rotation.ToEuler() * RadToDeg<float>();
-    if(isRotationChange)
+    if (isRotationChange)
         transform.rotation = Maths::Quaternion::EulerToQuaternion(_eulerRot * DegToRad<float>());
 }
 
 void PropertiesWidget::LightReader()
 {
-    Component::Light &light = Engine::Instance().GetCurrentWorld().GetComponent<Component::Light>(_entity);
+    auto &light = Engine::Instance().GetCurrentWorld().GetComponent<Component::Light>(_entity);
 
     if (ImGui::CollapsingHeader("Light"))
         return;
@@ -142,20 +143,20 @@ void PropertiesWidget::ModelReader()
     if (ImGui::CollapsingHeader("Model"))
         return;
 
-    Component::Model &model = Engine::Instance().GetCurrentWorld().GetComponent<Component::Model>(_entity);
+    Renderer::ModelRenderer &model = Engine::Instance().GetCurrentWorld().GetComponent<Component::Model>(_entity).model;
 
     std::vector<std::string> listModel = Engine::Instance().GetResourcesManager().GetModelNameList();
 
-    if  (ImGui::BeginCombo("##ModelCombo", model.name.c_str()))
+    if (ImGui::BeginCombo("##ModelCombo", model.name.c_str()))
     {
-        for (int n = 0; n < listModel.size(); n++)
+        for (auto &n : listModel)
         {
             bool isSelected = (model.name ==
-                               listModel[n]); // You can store your selection however you want, outside or inside your objects
-            if (ImGui::Selectable(listModel[n].c_str(), isSelected))
+                               n); // You can store your selection however you want, outside or inside your objects
+            if (ImGui::Selectable(n.c_str(), isSelected))
             {
-                model.name = listModel[n];
-                model = Engine::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(),
+                model.name = n;
+                model = Engine::Instance().GetResourcesManager().LoadModel(n.c_str(),
                                                                            Renderer::VertexType::V_NORMALMAP);
                 Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
             }
@@ -180,14 +181,14 @@ void PropertiesWidget::ModelReader()
         if (ImGui::BeginCombo((std::string("##comboMaterial") + std::to_string(i)).c_str(),
                               model.GetMaterial(i)->name.c_str()))
         {
-            for (int n = 0; n < listMaterial.size(); n++)
+            for (auto & n : listMaterial)
             {
                 bool is_selected = (model.name ==
-                                    listMaterial[n]); // You can store your selection however you want, outside or inside your objects
-                if (ImGui::Selectable(listMaterial[n].c_str(), is_selected))
+                                    n); // You can store your selection however you want, outside or inside your objects
+                if (ImGui::Selectable(n.c_str(), is_selected))
                 {
                     Renderer::MaterialInterface materialInterface = Engine::Instance().GetResourcesManager().LoadMaterial(
-                            listMaterial[n].c_str());
+                            n.c_str());
                     model.ChangeMaterial(materialInterface, i);
                     Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
                 }
@@ -212,18 +213,20 @@ void PropertiesWidget::AnimatorReader()
     if (ImGui::CollapsingHeader("Animator"))
         return;
 
-    Component::Animator& animator = Engine::Instance().GetCurrentWorld().GetComponent<Component::Animator>(_entity);
+    auto &animator = Engine::Instance().GetCurrentWorld().GetComponent<Component::Animator>(_entity);
 
     std::vector<std::string> listAnimation = Engine::Instance().GetResourcesManager().GetAnimationNameList();
 
-    if  (ImGui::BeginCombo("##AnimatorCombo", animator.GetAnimation().name.c_str()))
+    if (ImGui::BeginCombo("##AnimatorCombo", animator.GetAnimation().name.c_str()))
     {
-        for (int n = 0; n < listAnimation.size(); n++)
+        for (auto & n : listAnimation)
         {
-            bool isSelected = (animator.GetAnimation().name == listAnimation[n]); // You can store your selection however you want, outside or inside your objects
-            if (ImGui::Selectable(listAnimation[n].c_str(), isSelected))
+            bool isSelected = (animator.GetAnimation().name ==
+                               n); // You can store your selection however you want, outside or inside your objects
+            if (ImGui::Selectable(n.c_str(), isSelected))
             {
-                animator.SetAnimation(*(Renderer::Animation*)(Engine::Instance().GetResourcesManager().GetAsset(listAnimation[n].c_str())));
+                animator.SetAnimation(*(Renderer::Animation *) (Engine::Instance().GetResourcesManager().GetAsset(
+                        n)));
                 Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
             }
 
@@ -257,26 +260,26 @@ void PropertiesWidget::RigidBodyReader()
     auto rigidBody = world.GetComponent<RigidBody>(_entity);
     const char *enumBodyType[]{"Static", "Kinematic", "Dynamic"};
     int bodyType = (int) rigidBody.GetBodyType();
-    ImGui::Combo("BodyType",&bodyType, enumBodyType, IM_ARRAYSIZE(enumBodyType));
+    ImGui::Combo("BodyType", &bodyType, enumBodyType, IM_ARRAYSIZE(enumBodyType));
     switch (bodyType)
     {
         case 0:
         {
-            if(rigidBody.GetBodyType() != BodyType::STATIC)
+            if (rigidBody.GetBodyType() != BodyType::STATIC)
                 world.GetSystemManager()->GetSystem<PhysicsSystem>()->SetType(_entity, BodyType::STATIC);
 
             break;
         }
         case 1:
         {
-            if(rigidBody.GetBodyType() != BodyType::KINEMATIC)
+            if (rigidBody.GetBodyType() != BodyType::KINEMATIC)
                 world.GetSystemManager()->GetSystem<PhysicsSystem>()->SetType(_entity, BodyType::KINEMATIC);
 
             break;
         }
         case 2:
         {
-            if(rigidBody.GetBodyType() != BodyType::DYNAMIC)
+            if (rigidBody.GetBodyType() != BodyType::DYNAMIC)
                 world.GetSystemManager()->GetSystem<PhysicsSystem>()->SetType(_entity, BodyType::DYNAMIC);
 
             break;
@@ -315,11 +318,11 @@ void PropertiesWidget::AddComponent()
         if (ImGui::BeginMenu("Model"))
         {
             std::vector<std::string> listModel = Engine::Instance().GetResourcesManager().GetModelNameList();
-            for (int n = 0; n < listModel.size(); n++)
+            for (auto & n : listModel)
             {
-                if (ImGui::MenuItem(listModel[n].c_str()))
+                if (ImGui::MenuItem(n.c_str()))
                 {
-                    world.AddComponent(_entity, Engine::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(),
+                    world.AddComponent(_entity, Engine::Instance().GetResourcesManager().LoadModel(n.c_str(),
                                                                                                    Renderer::VertexType::V_NORMALMAP));
                 }
             }
@@ -423,7 +426,7 @@ void PropertiesWidget::AddRigidBody()
             physicsSystem->SetType(_entity, BodyType::STATIC);
 
         }
-        if(ImGui::MenuItem("Capsule collider"))
+        if (ImGui::MenuItem("Capsule collider"))
         {
             world.AddComponent(_entity, RigidBody());
             auto physicsSystem = world.GetSystemManager()->GetSystem<PhysicsSystem>();

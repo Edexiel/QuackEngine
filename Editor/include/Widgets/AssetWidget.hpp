@@ -4,6 +4,7 @@
 #include "Widgets/Widget.hpp"
 #include "Scene/Component/Camera.hpp"
 #include <vector>
+#include <Scene/Component/Model.hpp>
 
 namespace Renderer
 {

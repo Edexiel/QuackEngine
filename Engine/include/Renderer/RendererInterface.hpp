@@ -5,12 +5,6 @@
 #include "Scene/System/RenderSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
 
-#include "Scene/Component/Model.hpp"
-
-//#include "Renderer/Mesh.hpp"
-//#include "Renderer/Shader.hpp"
-
-
 #include <memory>
 
 class World;
@@ -18,7 +12,6 @@ class World;
 namespace Component
 {
     class Light;
-    class Model;
     class Camera;
 }
 

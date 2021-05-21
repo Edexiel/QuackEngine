@@ -23,11 +23,11 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/Shape.cpp
         src/Renderer/Skeleton.cpp
         src/Renderer/Animation.cpp
-        src/Scene/Component/Animator.cpp
+        src/Renderer/ModelRenderer.cpp
 
+        src/Scene/Component/Animator.cpp
         src/Scene/Core/World.cpp
         src/Scene/Component/Camera.cpp
-
         src/Scene/System/ScriptSystem.cpp
         src/Scene/System/PhysicsSystem.cpp
         src/Scene/System/RenderSystem.cpp

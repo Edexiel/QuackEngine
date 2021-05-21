@@ -1,6 +1,10 @@
-#include <Widgets/AssetWidget.hpp>
+#include "Widgets/AssetWidget.hpp"
+
 #include "Scene/Core/World.hpp"
-#include "Renderer/Framebuffer.hpp"
+#include "Renderer/ModelRenderer.hpp"
+#include "Scene/Component/Model.hpp"
+#include "Renderer/Vertex.hpp"
+
 #include "Engine.hpp"
 
 AssetWidget::AssetWidget() :
@@ -44,7 +48,7 @@ void AssetWidget::UpdateVisible()
 void AssetWidget::DisplayMaterial(const Resources::Asset* asset)
 {
     Engine& engine = Engine::Instance();
-    Renderer::Material* material = (Renderer::Material*)asset;
+    auto* material = (Renderer::Material*)asset;
 
     if (ImGui::Checkbox("Check Lights", &material->checkLight))
     {
@@ -107,12 +111,12 @@ AssetWidget::SelectInList(const std::vector<std::string> &list, const char *curr
 
     if (ImGui::BeginCombo(comboName, currentlySelected))
     {
-        for (int n = 0; n < list.size(); n++)
+        for (const auto & n : list)
         {
-            bool isSelected = (currentlySelected == list[n]);
-            if (ImGui::Selectable(list[n].c_str(), isSelected))
+            bool isSelected = (currentlySelected == n);
+            if (ImGui::Selectable(n.c_str(), isSelected))
             {
-                selected = list[n];
+                selected = n;
                 break;
             }
 
@@ -144,7 +148,7 @@ AssetWidget::SelectTexture(Renderer::Texture &texture, const std::vector<std::st
 
 void AssetWidget::DisplayTexture(const Resources::Asset* asset)
 {
-    Renderer::Texture* texture = (Renderer::Texture*)asset;
+    auto* texture = (Renderer::Texture*)asset;
     //Renderer::Texture texture = Engine::Instance().GetResourcesManager().LoadTexture(_assetName.c_str());
     ImVec2 wsize = ImGui::GetWindowSize();
     if (wsize.x < wsize.y)
@@ -156,16 +160,16 @@ void AssetWidget::DisplayTexture(const Resources::Asset* asset)
 
 void AssetWidget::DisplayModel(const Resources::Asset* asset)
 {
-    Component::Model* model = (Component::Model*)asset;
+    Renderer::ModelRenderer& model = ((Component::Model*)asset)->model;
 
     std::vector<std::string> listModelType;
     listModelType.emplace_back("CLASSIC");
     listModelType.emplace_back("NORMAL_MAP");
     listModelType.emplace_back("SKELETAL");
 
-    std::string selected = SelectInList(listModelType, listModelType[(int)model->GetVertexType()].c_str(), "Model Vertex Type");
+    std::string selected = SelectInList(listModelType, listModelType[(int)model.GetVertexType()].c_str(), "Model Vertex Type");
 
-    if (selected != listModelType[(int)model->GetVertexType()])
+    if (selected != listModelType[(int)model.GetVertexType()])
     {
         if (selected == "CLASSIC")
             Engine::Instance().GetResourcesManager().ReLoadModel(_assetName.c_str(), Renderer::VertexType::V_CLASSIC);

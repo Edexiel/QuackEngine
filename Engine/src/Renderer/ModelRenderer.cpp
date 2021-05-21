@@ -4,11 +4,11 @@
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
 
-#include "Renderer/RendererPlatform.hpp"
 #include "Engine.hpp"
 
 #include "Debug/Assertion.hpp"
 
+#include "Renderer/RendererPlatform.hpp"
 #include "Renderer/Skeleton.hpp"
 
 #include <iostream>
@@ -252,8 +252,7 @@ ModelRenderer ModelRenderer::LoadSkeletalMeshModel(const void *loadedScene)
 
             vertices[e] = {position, normal, texture};
 
-            //todo : this should not event be working, calling a static function as instanced
-            model.ExtractBoneWeightForVertices(vertices, i, scene);
+            ExtractBoneWeightForVertices(vertices, i, scene);
         }
 
         // Put loaded data in buffers
@@ -272,8 +271,7 @@ void ModelRenderer::SetVertexBoneData(SkeletalVertex &vertex, int boneID, float 
 {
     for (int i = 0; i < 4; ++i)
     {
-        //todo sketchy as fuck could explode at any moment
-        if (vertex.boneId.e[i] == -1.0f)
+        if (vertex.boneId.e[i] == -1)
         {
             vertex.weights.e[i] = weight;
             vertex.boneId.e[i] = boneID;
@@ -406,7 +404,7 @@ const Renderer::Mesh &ModelRenderer::GetMesh(unsigned int index) const
     {
         Assert_Error(true, "Invalid mesh index");
         //todo: urgent à fix
-        return Mesh();
+        return _meshList[0];
     }
     return _meshList[index];
 }
