@@ -6,43 +6,43 @@ using namespace Thread;
 
 /* ==== Thread Interface ==== */
 
-void ThreadInterface::Initialise(std::shared_ptr<TaskInterface> tsk)
+void ThreadInterface::Initialise(std::unique_ptr<TaskInterface>& tsk)
 {
-    if (state == THREAD_STATE::running || state == THREAD_STATE::paused)
+    if (_state == ThreadState::T_RUNNING || _state == ThreadState::T_PAUSED)
     {
         return;
     }
 
-    task = std::move(tsk);
-    state = THREAD_STATE::running;
+    _task = std::move(tsk);
+    _state = ThreadState::T_RUNNING;
 
-    thread = std::make_unique<std::thread>(&ThreadInterface::Execute, this);
+    _thread = std::make_unique<std::thread>(&ThreadInterface::Execute, this);
 }
 
 
 void ThreadInterface::Execute()
 {
-    if (state == THREAD_STATE::running)
+    if (_state == ThreadState::T_RUNNING)
     {
-        if (task)
+        if (_task)
         {
-            (*task).Execute();
+            (*_task).Execute();
         }
 
-        if(threadPool->GetTask(this))
+        if(_threadPool->GetTask(this))
         {
             Execute();
         }
         else
         {
-            state = THREAD_STATE::completed;
+            _state = ThreadState::T_COMPLETE;
         }
     }
 }
 
 void ThreadInterface::Reset()
 {
-    state = THREAD_STATE::init;
+    _state = ThreadState::T_INIT;
 }
 
 
@@ -51,44 +51,34 @@ void ThreadInterface::Reset()
 
 ThreadPool::ThreadPool()
 {
-    for (unsigned int i = 0u; i < MAX_THREAD; i++)
+    for (unsigned int i = 0u; i < maxThread; i++)
     {
-        threadList.push_back(std::make_unique<ThreadInterface>(this));
+        _threadList.push_back(std::make_unique<ThreadInterface>(this));
     }
-}
-
-
-bool ThreadPool::TaskAvailable()
-{
-    if (taskSystem->taskList.size() > 0)
-    {
-        return true;
-    }
-    return false;
 }
 
 bool ThreadPool::GetTask(ThreadInterface* thd)
 {
-    m.lock();
+    _mutex.lock();
 
-    if (taskSystem->taskList.size() > 0)
+    if (_taskSystem->_taskList.size() > 0)
     {
-        if (taskSystem->taskList.front())
+        if (_taskSystem->_taskList.front())
         {
 
-            thd->task = std::move(taskSystem->taskList.front());
-            taskSystem->taskList.pop();
+            thd->_task = std::move(_taskSystem->_taskList.front());
+            _taskSystem->_taskList.pop();
 
-            m.unlock();
+            _mutex.unlock();
             return true;
         }
     }
     else
     {
-        taskSystem->taskList.empty();
+        _taskSystem->_taskList.empty();
     }
 
-    m.unlock();
+    _mutex.unlock();
     return false;
 }
 
@@ -97,34 +87,34 @@ void ThreadPool::Run(TaskSystem* taskSys)
 {
     bool init = true;
 
-    taskSystem = taskSys;
+    _taskSystem = taskSys;
 
-    while (taskSys->taskList.size() > 0)
+    while (taskSys->_taskList.size() > 0)
     {
         if (init)
         {
-           for (int i = 0; i < threadList.size(); i++)
+           for (int i = 0; i < _threadList.size(); i++)
            {
-                if (taskSys->taskList.empty())
+                if (taskSys->_taskList.empty())
                 {
                     break;
                 }
 
-                threadList[i]->Initialise(taskSys->taskList.front());
-                taskSys->taskList.pop();
+                _threadList[i]->Initialise(taskSys->_taskList.front());
+                taskSys->_taskList.pop();
            }
            init = false;
         }
     }
-    for (int i = 0; i < threadList.size(); i++) // Join all thread to make sure they all finish
+    for (int i = 0; i < _threadList.size(); i++) // Join all thread to make sure they all finish when the function finish
     {
-        if (threadList[i]->state != THREAD_STATE::init)
+        if (_threadList[i]->_state != ThreadState::T_INIT)
         {
-            threadList[i]->thread->join();
+            _threadList[i]->_thread->join();
         }
     }
-    for (int i = 0; i < threadList.size(); i++) // Reset all ThreadInterface
+    for (int i = 0; i < _threadList.size(); i++) // Reset all ThreadInterface for a next usage
     {
-        threadList[i]->Reset();
+        _threadList[i]->Reset();
     }
 }

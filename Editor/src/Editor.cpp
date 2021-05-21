@@ -42,7 +42,7 @@ void Editor::InitWidgets()
 
 void Editor::InitImGui(GLFWwindow *window)
 {
-    // Init ImGui
+    // T_INIT ImGui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();

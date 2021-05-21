@@ -10,8 +10,10 @@
 
 #include "Resources/ResourcesManager.hpp"
 #include "Renderer/RendererInterface.hpp"
+#include "Renderer/PostProcessManager.hpp"
 #include "Audio/SoundManager.hpp"
 #include <reactphysics3d/engine/PhysicsCommon.h>
+#include "Time/TimeManager.hpp"
 
 
 #include "Input/InputManager.hpp"
@@ -56,6 +58,8 @@ private:
     PhysicsEventManager _physicsEventManager;
     reactphysics3d::PhysicsCommon _physicsManager;
     Input::InputManager _inputManager;
+    Time::TimeManager _timeManager;
+    Renderer::PostProcessManager _postProcessManager;
 
     uint_fast16_t _currentWorld = 0;
     std::map<std::string_view , uint_fast16_t> _worldLut;
@@ -76,7 +80,6 @@ public:
     World &GetCurrentWorld();
     void SwapBuffers();
 
-
     World &CreateWorld(std::string_view name);
     void LoadWorld(const std::string &name);
     void UnloadWorld(const std::string &name);
@@ -88,6 +91,9 @@ public:
     Audio::SoundManager &GetSoundManager();
     PhysicsEventManager &GetPhysicsEventManager();
     reactphysics3d::PhysicsCommon &GetPhysicsManager();
+    Time::TimeManager &GetTimeManager();
+    Renderer::PostProcessManager &GetPostProcessManager();
+    
 };
 
 #endif //QUACKENGINE_ENGINE_HPP
