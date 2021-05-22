@@ -78,15 +78,18 @@ int main()
         engine.GetInputManager().Update();
         engine.TestWindowShouldClose();
 
+        /** Time Update **/
+        engine.GetTimeManager().Update();
 
         /** Editor draw **/
         editor.Draw();
 
         /** UPDATE **/
-//        engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
+        engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
         engine.GetCurrentWorld().GetSystemManager()->GetSystem<CameraSystem>()->Update();
 
         engine.SwapBuffers();
+
     }
 
     return 0;

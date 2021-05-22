@@ -15,15 +15,25 @@
 #include "Renderer/Shape.hpp"
 #include "game.hpp"
 
+#include "Renderer/ProcessBase.hpp"
+#include "Renderer/PostProcess/KernelPostProcess.hpp"
+
 #include "Scene/Component/Animator.hpp"
+
+#include "Thread/ThreadPool.hpp"
 
 using namespace Component;
 using namespace Resources;
 using namespace Renderer;
 
+void doStuff(int i)
+{
+    std::cout << "try " << i << std::endl;
+}
+
 void Game::Init()
 {
-    printf("Init");
+    printf("T_INIT");
 
 
     World &world = Engine::Instance().CreateWorld("Main");
@@ -50,7 +60,6 @@ void Game::Init()
     engine.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
     engine.GetResourcesManager().Init();
     engine.GetResourcesManager().LoadFolder(R"(..\..\Game\Asset\)");
-
 
     //Signature Renderer
     {
@@ -151,6 +160,7 @@ void Game::Init()
                 /*physicsSystem->SetRigidBody(id);
                 physicsSystem->SetType(id, BodyType::DYNAMIC);
                 physicsSystem->AddSphereCollider(id, 1.5f);*/
+
             }
         }
     }
@@ -167,10 +177,10 @@ void Game::Init()
     world.AddComponent(idTrigger, mdTrigger);
     world.AddComponent(idTrigger, rbTrigger);
 
-    physicsSystem->SetRigidBody(idTrigger);
-    physicsSystem->SetType(idTrigger, BodyType::STATIC);
-    physicsSystem->AddBoxCollider(idTrigger,{1,1,1});
-    physicsSystem->SetIsTrigger(idTrigger, true);
+    PhysicsSystem::SetRigidBody(idTrigger);
+    PhysicsSystem::SetType(idTrigger, BodyType::STATIC);
+    PhysicsSystem::AddBoxCollider(idTrigger,{1,1,1});
+    PhysicsSystem::SetIsTrigger(idTrigger, true);
 
 //Test contactCollision
     Component::RigidBody rbContact;
@@ -182,9 +192,9 @@ void Game::Init()
     world.AddComponent(idContact, mdContact);
     world.AddComponent(idContact, rbContact);
 
-    physicsSystem->SetRigidBody(idContact);
-    physicsSystem->SetType(idContact, BodyType::STATIC);
-    physicsSystem->AddBoxCollider(idContact,{1,1,1});
+    PhysicsSystem::SetRigidBody(idContact);
+    PhysicsSystem::SetType(idContact, BodyType::STATIC);
+    PhysicsSystem::AddBoxCollider(idContact,{1,1,1});
 
     Entity idFloor = world.CreateEntity("Floor");
 
@@ -206,9 +216,9 @@ void Game::Init()
     world.AddComponent(idFloor, mdFloor);
     world.AddComponent(idFloor, rbFloor);
 
-    physicsSystem->SetRigidBody(idFloor);
-    physicsSystem->SetType(idFloor, BodyType::STATIC);
-    physicsSystem->AddBoxCollider(idFloor, scale);
+    PhysicsSystem::SetRigidBody(idFloor);
+    PhysicsSystem::SetType(idFloor, BodyType::STATIC);
+    PhysicsSystem::AddBoxCollider(idFloor, scale);
 
 
     Entity lightID = world.CreateEntity("Light");
@@ -255,6 +265,7 @@ void Game::Init()
     world.AddComponent(lightID3, tl3);*/
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
+
 }
 
 void Game::Update(float deltaTime)

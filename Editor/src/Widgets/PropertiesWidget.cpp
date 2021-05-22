@@ -2,6 +2,7 @@
 #include "Engine.hpp"
 
 #include "Scene/Component/RigidBody.hpp"
+#include "Scene/System/PhysicsSystem.hpp"
 #include "misc/cpp/imgui_stdlib.h"
 #include "Maths/Common.hpp"
 
@@ -250,6 +251,15 @@ void PropertiesWidget::RigidBodyReader()
 {
     if (ImGui::CollapsingHeader("RigidBody"))
         return;
+
+    auto &rigidBody = Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(_entity);
+
+    RigidBodyChangeBodyType(rigidBody);
+    RigidBodyResizeShape(rigidBody);
+    RigidBodySetIsTrigger(rigidBody);
+    RigidBodySetIsGravityEnabled(rigidBody);
+    RigidBodySetMass(rigidBody);
+
 }
 
 void PropertiesWidget::AddComponent()
@@ -289,14 +299,9 @@ void PropertiesWidget::AddComponent()
             ImGui::EndMenu();
         }
 
-        if (ImGui::MenuItem("RigidBody"))
-        {
-            world.AddComponent(_entity, RigidBody());
-        }
-        if (ImGui::MenuItem("Animator"))
-        {
-            world.AddComponent(_entity, Animator());
-        }
+        AddRigidBody();
+
+
         ImGui::EndPopup();
     }
 
@@ -360,6 +365,141 @@ void PropertiesWidget::DeleteComponent()
         {
             world.RemoveComponent<Model>(_entity);
         }
+        if (world.HasComponent<RigidBody>(_entity) && ImGui::MenuItem("Rigidbody"))
+        {
+            auto physicsWorld = world.GetPhysicsWorld();
+            physicsWorld->destroyRigidBody(world.GetComponent<RigidBody>(_entity).rb);
+            world.RemoveComponent<RigidBody>(_entity);
+        }
         ImGui::EndPopup();
     }
+}
+
+void PropertiesWidget::AddRigidBody()
+{
+    if (ImGui::BeginMenu("RigidBody"))
+    {
+        World &world = Engine::Instance().GetCurrentWorld();
+        if (ImGui::MenuItem("Box collider"))
+        {
+            world.AddComponent(_entity, RigidBody());
+            PhysicsSystem::SetRigidBody(_entity);
+            PhysicsSystem::SetType(_entity, BodyType::STATIC);
+            PhysicsSystem::AddBoxCollider(_entity, {1.0f, 1.0f, 1.0f});
+        }
+        if (ImGui::MenuItem("Sphere collider"))
+        {
+            world.AddComponent(_entity, RigidBody());
+            PhysicsSystem::SetRigidBody(_entity);
+            PhysicsSystem::SetType(_entity, BodyType::STATIC);
+            PhysicsSystem::AddSphereCollider(_entity, 1.f);
+
+        }
+        if(ImGui::MenuItem("Capsule collider"))
+        {
+            world.AddComponent(_entity, RigidBody());
+            PhysicsSystem::SetRigidBody(_entity);
+            PhysicsSystem::SetType(_entity, BodyType::STATIC);
+            PhysicsSystem::AddCapsuleCollider(_entity, 1.f, 1.0f);
+        }
+        ImGui::EndMenu();
+    }
+}
+
+void PropertiesWidget::RigidBodyChangeBodyType(Component::RigidBody& rigidBody)
+{
+    const char *enumBodyType[]{"Static", "Kinematic", "Dynamic"};
+    int bodyType = (int) rigidBody.GetBodyType();
+    if(ImGui::Combo("BodyType",&bodyType, enumBodyType, IM_ARRAYSIZE(enumBodyType)))
+    {
+        switch (bodyType)
+        {
+            case 0:
+            {
+                if (rigidBody.GetBodyType() != BodyType::STATIC)
+                    PhysicsSystem::SetType(_entity, BodyType::STATIC);
+
+                break;
+            }
+            case 1:
+            {
+                if (rigidBody.GetBodyType() != BodyType::KINEMATIC)
+                    PhysicsSystem::SetType(_entity, BodyType::KINEMATIC);
+
+                break;
+            }
+            case 2:
+            {
+                if (rigidBody.GetBodyType() != BodyType::DYNAMIC)
+                    PhysicsSystem::SetType(_entity, BodyType::DYNAMIC);
+
+                break;
+            }
+            default:
+                break;
+        }
+    }
+}
+
+void PropertiesWidget::RigidBodyResizeShape(Component::RigidBody& rigidBody)
+{
+    if(rigidBody.GetCollisionShapeType() == CollisionShapeType::CONVEX_POLYHEDRON)
+    {
+        Maths::Vector3<float> halfExtend = rigidBody.GetHalfExtends();
+        if(ImGui::DragFloat3("Half extend", halfExtend.e))
+            PhysicsSystem::ResizeBoxCollider(_entity, halfExtend);
+    }
+    if(rigidBody.GetCollisionShapeType() == CollisionShapeType::SPHERE)
+    {
+        float radius = rigidBody.GetRadius();
+        if(ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX))
+            PhysicsSystem::ResizeSphereCollider(_entity, radius);
+    }
+    if(rigidBody.GetCollisionShapeType() == CollisionShapeType::CAPSULE)
+    {
+        float radius = rigidBody.GetRadius();
+        float height = rigidBody.GetHeight();
+
+        if(ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX)
+           || ImGui::DragFloat("height", &height, 0.1f, 0.001f, FLT_MAX))
+        {
+            PhysicsSystem::ResizeCapsuleCollider(_entity, radius, height);
+        }
+    }
+}
+
+void PropertiesWidget::RigidBodySetIsTrigger(Component::RigidBody& rigidBody)
+{
+    bool isTrigger = rigidBody.GetIsTrigger();
+    if(ImGui::Checkbox("Trigger", &isTrigger))
+        PhysicsSystem::SetIsTrigger(_entity, isTrigger);
+
+}
+
+void PropertiesWidget::RigidBodySetMass(RigidBody &rigidBody)
+{
+    float mass = rigidBody.GetMass();
+    if(ImGui::DragFloat("mass", &mass))
+    {
+        PhysicsSystem::SetMass(_entity, mass);
+
+        //todo: change this code if the dev of reactphysics3d fix this bug.
+        if(rigidBody.GetBodyType() == BodyType::STATIC)
+        {
+            PhysicsSystem::SetType(_entity, BodyType::DYNAMIC);// Sorcellerie Obligatoire due a reactphysics3d
+            PhysicsSystem::SetType(_entity, BodyType::STATIC);// Sorcellerie Obligatoire due a reactphysics3d
+        }
+        else if (rigidBody.GetBodyType() == BodyType::KINEMATIC)
+        {
+            PhysicsSystem::SetType(_entity, BodyType::DYNAMIC);// Sorcellerie Obligatoire due a reactphysics3d
+            PhysicsSystem::SetType(_entity, BodyType::KINEMATIC);// Sorcellerie Obligatoire due a reactphysics3d
+        }
+    }
+}
+
+void PropertiesWidget::RigidBodySetIsGravityEnabled(RigidBody &rigidBody)
+{
+    bool isGravityEnabled = rigidBody.GetIsGravityEnabled();
+    if(ImGui::Checkbox("Gravity Enabled", &isGravityEnabled))
+        PhysicsSystem::SetIsGravityEnable(_entity, isGravityEnabled);
 }
