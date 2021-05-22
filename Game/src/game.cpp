@@ -266,33 +266,6 @@ void Game::Init()
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
 
-    Renderer::KernelPostProcess* kP = new Renderer::KernelPostProcess("Kernel 1");
-
-    kP->offset = 1.0f/300;
-    kP->array[0] = 0;
-    kP->array[1] = 1;
-    kP->array[2] = 0;
-    kP->array[3] = 1;
-    kP->array[4] = -4;
-    kP->array[5] = 1;
-    kP->array[6] = 0;
-    kP->array[7] = 1;
-    kP->array[8] = 0;
-
-    //Thread::Task<int>* tsk = new Thread::Task<int>(doStuff, {1});
-
-    Thread::TaskSystem tskSys;
-
-    for (unsigned int i = 0; i < 9; i++)
-    {
-        tskSys.AddTask(new Thread::Task<int>(doStuff, {i}));
-    }
-
-    Thread::ThreadPool threadPool;
-    threadPool.Run(&tskSys);
-
-    Engine::Instance().GetPostProcessManager().AddProcess(kP);
-
 }
 
 void Game::Update(float deltaTime)
