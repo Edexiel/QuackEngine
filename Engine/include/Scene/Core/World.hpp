@@ -118,7 +118,7 @@ public:
             build<Component::Camera>("Camera");
             build<Component::Light>("Light");
             build<Component::Model>("Model");
-//            build<Component::RigidBody>("Rigidbody");
+            build<Component::RigidBody>("Rigidbody");
         }
 
         template<class Archive>

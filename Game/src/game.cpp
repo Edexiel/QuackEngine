@@ -42,7 +42,6 @@ void Game::Init(Engine &engine) const
     engine.GetResourcesManager().LoadFolder(R"(../../Game/Asset)");
 
 
-
     //Signature Renderer
     {
         Signature signatureRender;
@@ -75,10 +74,8 @@ void Game::Init(Engine &engine) const
         world.SetSystemSignature<PhysicsSystem>(signaturePhysics);
     }
     engine.LoadWorld(world, "./");
+    physicsSystem->Init();
 
-
-//
-        physicsSystem->Init();
 //
 //        {
 //
