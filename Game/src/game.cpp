@@ -20,6 +20,9 @@
 
 #include "Scene/Component/Animator.hpp"
 
+#include "NoteDisplaySystem.hpp"
+#include "EnemyWeaknessDisplay.hpp"
+
 #include "Thread/ThreadPool.hpp"
 
 using namespace Component;
@@ -263,6 +266,25 @@ void Game::Init()
 
     world.AddComponent(lightID3, light);
     world.AddComponent(lightID3, tl3);*/
+
+    auto noteDisplaySystem = world.RegisterSystem<NoteDisplaySystem>();
+    world.RegisterComponent<EnemyWeaknessDisplay>();
+
+    {
+        Signature signatureRender;
+        signatureRender.set(world.GetComponentType<EnemyWeaknessDisplay>());
+        signatureRender.set(world.GetComponentType<Transform>());
+        world.SetSystemSignature<NoteDisplaySystem>(signatureRender);
+    }
+
+    engine.GetPostProcessManager().AddProcess(noteDisplaySystem.get());
+
+    Entity id = world.CreateEntity("Enemy Test");
+    world.AddComponent(id, t);
+
+    EnemyWeaknessDisplay enemyWeaknessDisplay;
+    enemyWeaknessDisplay.AddNote(NoteType::M_UP);
+
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
 
