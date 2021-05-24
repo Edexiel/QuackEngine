@@ -66,15 +66,15 @@ void Game::Init(Engine &engine) const
         world.SetSystemSignature<LightSystem>(signatureLight);
     }
 
-    //Signature Physics
-    {
-        Signature signaturePhysics;
-        signaturePhysics.set(world.GetComponentType<Component::Transform>());
-        signaturePhysics.set(world.GetComponentType<Component::RigidBody>());
-        world.SetSystemSignature<PhysicsSystem>(signaturePhysics);
-    }
+//    //Signature Physics
+//    {
+//        Signature signaturePhysics;
+//        signaturePhysics.set(world.GetComponentType<Component::Transform>());
+//        signaturePhysics.set(world.GetComponentType<Component::RigidBody>());
+//        world.SetSystemSignature<PhysicsSystem>(signaturePhysics);
+//    }
     engine.LoadWorld(world, "./");
-    physicsSystem->Init();
+    //physicsSystem->Init();
 
 //
 //        {
