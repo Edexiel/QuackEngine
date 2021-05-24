@@ -20,8 +20,8 @@
 
 #include "Scene/Component/Animator.hpp"
 
-#include "NoteDisplaySystem.hpp"
-#include "EnemyWeaknessDisplay.hpp"
+#include "Enemy/EnemyManagerSystem.hpp"
+#include "Enemy/EnemyComponent.hpp"
 
 #include "Thread/ThreadPool.hpp"
 
@@ -68,7 +68,7 @@ void Game::Init()
     {
         Signature signatureRender;
         signatureRender.set(world.GetComponentType<Component::Model>());
-        signatureRender.set(world.GetComponentType<Transform>());
+        signatureRender.set(world.GetComponentType<Component::Transform>());
         world.SetSystemSignature<RenderSystem>(signatureRender);
     }
 
@@ -76,7 +76,7 @@ void Game::Init()
     {
         Signature signatureCamera;
         signatureCamera.set(world.GetComponentType<Component::Camera>());
-        signatureCamera.set(world.GetComponentType<Transform>());
+        signatureCamera.set(world.GetComponentType<Component::Transform>());
         world.SetSystemSignature<CameraSystem>(signatureCamera);
     }
 
@@ -84,14 +84,14 @@ void Game::Init()
     {
         Signature signatureLight;
         signatureLight.set(world.GetComponentType<Component::Light>());
-        signatureLight.set(world.GetComponentType<Transform>());
+        signatureLight.set(world.GetComponentType<Component::Transform>());
         world.SetSystemSignature<LightSystem>(signatureLight);
     }
 
     //Signature Physics
     {
         Signature signaturePhysics;
-        signaturePhysics.set(world.GetComponentType<Transform>());
+        signaturePhysics.set(world.GetComponentType<Component::Transform>());
         signaturePhysics.set(world.GetComponentType<Component::RigidBody>());
         world.SetSystemSignature<PhysicsSystem>(signaturePhysics);
     }
@@ -267,23 +267,28 @@ void Game::Init()
     world.AddComponent(lightID3, light);
     world.AddComponent(lightID3, tl3);*/
 
-    auto noteDisplaySystem = world.RegisterSystem<NoteDisplaySystem>();
-    world.RegisterComponent<EnemyWeaknessDisplay>();
+    auto noteDisplaySystem = world.RegisterSystem<EnemyManagerSystem>();
+    world.RegisterComponent<EnemyComponent>();
 
     {
         Signature signatureRender;
-        signatureRender.set(world.GetComponentType<EnemyWeaknessDisplay>());
-        signatureRender.set(world.GetComponentType<Transform>());
-        world.SetSystemSignature<NoteDisplaySystem>(signatureRender);
+        signatureRender.set(world.GetComponentType<EnemyComponent>());
+        signatureRender.set(world.GetComponentType<Component::Transform>());
+        world.SetSystemSignature<EnemyManagerSystem>(signatureRender);
     }
 
-    engine.GetPostProcessManager().AddProcess(noteDisplaySystem.get());
+    NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();
+
+    engine.GetPostProcessManager().AddProcess(noteDisplayProcess);
 
     Entity id = world.CreateEntity("Enemy Test");
     world.AddComponent(id, t);
 
-    EnemyWeaknessDisplay enemyWeaknessDisplay;
-    enemyWeaknessDisplay.AddNote(NoteType::M_UP);
+    EnemyComponent enemyWeaknessDisplay;
+    enemyWeaknessDisplay.AddNote(NoteType::M_DOWN);
+    enemyWeaknessDisplay.AddNote(NoteType::M_LEFT);
+    enemyWeaknessDisplay.AddNote(NoteType::M_DOWN);
+    world.AddComponent(id, enemyWeaknessDisplay);
 
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);

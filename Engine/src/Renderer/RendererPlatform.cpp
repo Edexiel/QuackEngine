@@ -59,6 +59,19 @@ void RendererPlatform::EnableDepthBuffer(bool isEnable)
   }
 }
 
+void RendererPlatform::SetTransparency(bool transparency)
+{
+    if (transparency)
+    {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+    else
+    {
+        glDisable(GL_BLEND);
+    }
+}
+
 Mesh RendererPlatform::CreateMesh(const Vertex *vertices, unsigned int verticesSize, const unsigned int *indices, unsigned int indicesSize, VertexType vertexType)
 {
   unsigned int vao{0}, vbo{0};
@@ -443,4 +456,3 @@ void RendererPlatform::SetPointLight(unsigned int shaderID, unsigned int index, 
   glUniform1f(location, light.quadratic);
 
 }
-
