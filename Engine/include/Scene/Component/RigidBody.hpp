@@ -33,6 +33,7 @@ namespace Component
         bool _isTrigger {false};
         bool _isGravityEnabled {true};
         float _mass{1};
+        float _bounciness{0};
 
         union ShapeParams
         {
@@ -54,6 +55,7 @@ namespace Component
         CollisionShapeType GetCollisionShapeType() const;
         float GetRadius() const;
         float GetHeight() const;
+        float GetBounciness() const;
         Maths::Vector3<float> GetHalfExtends() const;
     };
 }

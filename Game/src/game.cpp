@@ -1,9 +1,11 @@
 #include <cstdio>
+#include <Scene/System/CharacterControllerSystem.hpp>
 #include "Engine.hpp"
 
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/Transform.hpp"
 #include "Scene/Component/RigidBody.hpp"
+#include "Scene/Component/CharacterController.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
 #include "Scene/System/CharacterControllerSystem.hpp"
@@ -49,6 +51,7 @@ void Game::Init()
         world.RegisterComponent<Light>();
         world.RegisterComponent<RigidBody>();
         world.RegisterComponent<Animator>();
+        world.RegisterComponent<CharacterController>();
     }
 
     auto renderSystem = world.RegisterSystem<RenderSystem>();
@@ -91,6 +94,7 @@ void Game::Init()
         Signature signatureCharacterController;
         signatureCharacterController.set(world.GetComponentType<Transform>());
         signatureCharacterController.set(world.GetComponentType<RigidBody>());
+        signatureCharacterController.set(world.GetComponentType<CharacterController>());
         world.SetSystemSignature<CharacterControllerSystem>(signatureCharacterController);
     }
     //Signature Physics
@@ -192,11 +196,14 @@ void Game::Init()
     Component::RigidBody rbContact;
     Component::Model mdContact = engine.GetResourcesManager().LoadModel(R"(../../Game/Asset/Model/Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
     Transform tContact = {Maths::Vector3f{0, -5.f, 20}, {1,1,1}, Maths::Quaternion{}};
+    CharacterController characterController;
+    characterController.speed = 0.20f;
     Entity idContact = world.CreateEntity("ContactBox");
 
     world.AddComponent(idContact, tContact);
     world.AddComponent(idContact, mdContact);
     world.AddComponent(idContact, rbContact);
+    world.AddComponent(idContact, characterController);
 
     PhysicsSystem::SetRigidBody(idContact);
     PhysicsSystem::SetType(idContact, BodyType::STATIC);

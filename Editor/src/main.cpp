@@ -10,6 +10,7 @@
 #include "Renderer/Shape.hpp"
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
+#include "Scene/System/CharacterControllerSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
 #include "Resources/ResourcesManager.hpp"
 
@@ -86,6 +87,7 @@ int main()
 
         /** UPDATE **/
         engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
+        engine.GetCurrentWorld().GetSystemManager()->GetSystem<CharacterControllerSystem>()->Update();
         engine.GetCurrentWorld().GetSystemManager()->GetSystem<CameraSystem>()->Update();
 
         engine.SwapBuffers();

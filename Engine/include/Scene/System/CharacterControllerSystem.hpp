@@ -1,4 +1,4 @@
-#ifndef QUACKENGINE_CHARACTERCONTROLLERSYSTEM_HPP
+#ifndef QUACKENGINE_CHARACTERCONTROLLER_HPP
 #define QUACKENGINE_CHARACTERCONTROLLERSYSTEM_HPP
 
 #include "Scene/Core/System.hpp"
@@ -7,7 +7,7 @@
 class CharacterControllerSystem: public System
 {
 public:
-    static bool RaycastTest(Entity id);
+    void Update();
 };
 
-#endif //QUACKENGINE_CHARACTERCONTROLLERSYSTEM_HPP
+#endif //QUACKENGINE_CHARACTERCONTROLLER_HPP

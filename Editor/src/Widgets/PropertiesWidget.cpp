@@ -3,7 +3,6 @@
 
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
-#include "Scene/System/CharacterControllerSystem.hpp"
 #include "misc/cpp/imgui_stdlib.h"
 
 #include "Scene/Component/Animator.hpp"
@@ -259,11 +258,7 @@ void PropertiesWidget::RigidBodyReader()
     RigidBodySetIsTrigger(rigidBody);
     RigidBodySetIsGravityEnabled(rigidBody);
     RigidBodySetMass(rigidBody);
-
-    PhysicsSystem::SetVelocity(_entity,{-1,0,0});
-    if(CharacterControllerSystem::RaycastTest(_entity))
-        std::cout << "raycast is colliding\n";
-
+    RigidBodySetBounciness(rigidBody);
 }
 
 void PropertiesWidget::AddComponent()
@@ -506,4 +501,11 @@ void PropertiesWidget::RigidBodySetIsGravityEnabled(RigidBody &rigidBody)
     bool isGravityEnabled = rigidBody.GetIsGravityEnabled();
     if(ImGui::Checkbox("Gravity Enabled", &isGravityEnabled))
         PhysicsSystem::SetIsGravityEnable(_entity, isGravityEnabled);
+}
+
+void PropertiesWidget::RigidBodySetBounciness(RigidBody &rigidBody)
+{
+    float bounciness = rigidBody.GetBounciness();
+    if(ImGui::DragFloat("Bounciness", &bounciness, 0.1f, 0.0f, 1.0f))
+        PhysicsSystem::SetBounciness(_entity, bounciness);
 }

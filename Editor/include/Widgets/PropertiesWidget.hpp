@@ -35,6 +35,7 @@ private:
     static void RigidBodySetIsTrigger(Component::RigidBody &rigidBody);
     static void RigidBodySetMass(Component::RigidBody &rigidBody);
     static void RigidBodySetIsGravityEnabled(Component::RigidBody &rigidBody);
+    static void RigidBodySetBounciness(Component::RigidBody &rigidBody);
 
     Maths::Vector3f _eulerRot{0,0,0};
 };

@@ -49,3 +49,8 @@ bool RigidBody::GetIsGravityEnabled() const
 {
     return _isGravityEnabled;
 }
+
+float RigidBody::GetBounciness() const
+{
+    return _bounciness;
+}

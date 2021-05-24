@@ -138,6 +138,10 @@ void PhysicsSystem::SetRigidBody(Entity id)
     auto &t = world->GetComponent<Transform>(id);
     rigidBody.rb = world->GetPhysicsWorld()->createRigidBody({{t.position.x, t.position.y, t.position.z},
                                                        {t.rotation.x, t.rotation.y, t.rotation.z, t.rotation.w}});
+    PhysicsSystem::SetType(id, rigidBody._bodyType);
+    PhysicsSystem::SetBounciness(id, rigidBody._bounciness);
+//    PhysicsSystem::SetMass();
+//    PhysicsSystem::SetIsGravityEnable();
 
     rigidBody.rb->setUserData(reinterpret_cast<void*>(static_cast<size_t>(id)));
 }
@@ -201,4 +205,13 @@ void PhysicsSystem::SetVelocity(Entity id, const Maths::Vector3f &velocity)
 {
     auto &rigidBody = Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id);
     rigidBody.rb->setLinearVelocity({velocity.x, velocity.y, velocity.z});
+}
+
+void PhysicsSystem::SetBounciness(Entity id, float bounciness)
+{
+    bounciness <= 0? bounciness = 0 : (bounciness >= 1 ? bounciness = 1 : bounciness);
+    auto &rigidBody = Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id);
+    rigidBody._bounciness = bounciness;
+    if(rigidBody.rb->getNbColliders() > 0)
+        rigidBody.rb->getCollider(0)->getMaterial().setBounciness(bounciness);
 }
