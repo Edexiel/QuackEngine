@@ -19,21 +19,19 @@ class AssetWidget : public Widget
 {
 private:
     Component::Camera _camera;
-
-public:
-    AssetWidget();
-
-    void UpdateVisible() final;
-
-private:
     static void DisplayMaterial(const Resources::Asset* asset);
     static void DisplayTexture(const Resources::Asset* asset);
     static void DisplayModel(const Resources::Asset* asset);
     static void DisplaySound(const Resources::Asset* asset);
 
-private:
     static std::string SelectInList(const std::vector<std::string>& list, const char* currentlySelected, const char* comboName);
     static bool SelectTexture(Renderer::Texture& texture, const std::vector<std::string>& list, const char* currentTexture, const char* comboName);
+
+
+public:
+    AssetWidget();
+
+    void UpdateVisible() final;
 
 };
 

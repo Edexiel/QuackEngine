@@ -7,6 +7,7 @@
 #include "Widgets/ViewportWidget.hpp"
 #include "Widgets/ViewerWidget.hpp"
 #include "Widgets/AssetWidget.hpp"
+#include "Widgets/ToolboxWidget.hpp"
 
 
 #include "backends/imgui_impl_glfw.h"
@@ -38,6 +39,7 @@ void Editor::InitWidgets()
     _widgets.emplace_back(std::make_unique<ViewportWidget>());
     _widgets.emplace_back(std::make_unique<ViewerWidget>());
     _widgets.emplace_back(std::make_unique<AssetWidget>());
+    _widgets.emplace_back(std::make_unique<ToolboxWidget>());
 }
 
 void Editor::InitImGui(GLFWwindow *window)

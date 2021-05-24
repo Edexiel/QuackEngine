@@ -83,7 +83,7 @@ int main()
 
     }
 
-    //engine.SaveWorld("Main","./");
+    engine.SaveWorld("Main","./");
 
     return 0;
 }

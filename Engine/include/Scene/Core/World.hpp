@@ -23,6 +23,7 @@
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/Component/Transform.hpp"
 #include "Scene/Component/Name.hpp"
+#include "Scene/Component/Animator.hpp"
 
 #include <fmt/core.h>
 #include <fmt/color.h>
@@ -118,7 +119,8 @@ public:
             build<Component::Camera>("Camera");
             build<Component::Light>("Light");
             build<Component::Model>("Model");
-            build<Component::RigidBody>("Rigidbody");
+            build<Component::Animator>("Animator");
+            build<Component::RigidBody>("RigidBody");
         }
 
         template<class Archive>
@@ -132,7 +134,8 @@ public:
             write<Archive, Component::Camera>(archive, id, "Camera");
             write<Archive, Component::Light>(archive, id, "Light");
             write<Archive, Component::Model>(archive, id, "Model");
-            //write<Archive,Component::RigidBody>(archive, id,"RigidBody");
+            write<Archive, Component::Animator>(archive, id, "Animator");
+            write<Archive, Component::RigidBody>(archive, id, "RigidBody");
         }
 
         template<class Archive>
@@ -148,12 +151,14 @@ public:
             read<Archive, Component::Camera>(archive, w, e, "Camera");
             read<Archive, Component::Light>(archive, w, e, "Light");
             read<Archive, Component::Model>(archive, w, e, "Model");
+            read<Archive, Component::Animator>(archive, w, e, "Animator");
+            read<Archive, Component::RigidBody>(archive, w, e, "RigidBody");
         }
 
     private:
 
         template<class Archive, class T>
-        void write(Archive &archive, Entity e, const std::string& name) const
+        void write(Archive &archive, Entity e, const std::string &name) const
         {
             if (components.at(name))
             {
@@ -162,9 +167,9 @@ public:
         }
 
         template<class Archive, class T>
-        void read(Archive &archive, World &w, Entity entity,const std::string& name) const
+        void read(Archive &archive, World &w, Entity entity, const std::string &name) const
         {
-            if(components.at(name))
+            if (components.at(name))
             {
                 T component;
                 archive(cereal::make_nvp(name, component));
@@ -173,7 +178,7 @@ public:
         }
 
         template<typename T>
-        void build(const std::string& name)
+        void build(const std::string &name)
         {
             components[name] = world->HasComponent<T>(id);
         }

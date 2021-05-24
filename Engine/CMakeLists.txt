@@ -46,7 +46,8 @@ add_library(${PROJECT_NAME} STATIC
         src/Physics/PhysicsEventManager.cpp
         src/Tools/Type.cpp
         src/Time/TimePlatformGLFW.cpp
-        src/Time/TimeManager.cpp src/Renderer/PostProcess/KernelPostProcess.cpp
+        src/Time/TimeManager.cpp
+        src/Renderer/PostProcess/KernelPostProcess.cpp
         )
 
 
