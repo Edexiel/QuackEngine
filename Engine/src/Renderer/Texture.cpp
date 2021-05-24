@@ -7,13 +7,14 @@
 
 using namespace Renderer;
 
-Texture::Texture() : Asset(Resources::ASSET_TYPE::A_TEXTURE){}
+Texture::Texture() : Asset(Resources::AssetType::A_TEXTURE){}
 
-Texture::Texture(unsigned int ID): Asset(Resources::ASSET_TYPE::A_TEXTURE), ID{ID} {}
+Texture::Texture(unsigned int id): Asset(Resources::AssetType::A_TEXTURE), _id{id} {}
+
 
 unsigned int Texture::GetID() const
 {
-  return ID;
+  return _id;
 }
 
 Texture Texture::LoadTexture(const std::filesystem::path& path)
@@ -39,5 +40,5 @@ Texture Texture::LoadTexture(const std::filesystem::path& path)
 
 void Texture::Bind(unsigned int index) const
 {
-  RendererPlatform::BindTexture(ID, index);
+  RendererPlatform::BindTexture(_id, index);
 }

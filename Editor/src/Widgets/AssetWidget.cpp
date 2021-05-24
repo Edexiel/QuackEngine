@@ -32,13 +32,13 @@ void AssetWidget::UpdateVisible()
 
     const Resources::Asset* asset = Engine::Instance().GetResourcesManager().GetAsset(_assetName);
 
-    if (asset->GetType() == Resources::ASSET_TYPE::A_MODEL)
+    if (asset->GetType() == Resources::AssetType::A_MODEL)
         DisplayModel(asset);
-    else if (asset->GetType() == Resources::ASSET_TYPE::A_SOUND)
+    else if (asset->GetType() == Resources::AssetType::A_SOUND)
         DisplaySound(asset);
-    else if (asset->GetType() == Resources::ASSET_TYPE::A_TEXTURE)
+    else if (asset->GetType() == Resources::AssetType::A_TEXTURE)
         DisplayTexture(asset);
-    else if (asset->GetType() == Resources::ASSET_TYPE::A_MATERIAL)
+    else if (asset->GetType() == Resources::AssetType::A_MATERIAL)
         DisplayMaterial(asset);
 
     ImGui::EndChild();

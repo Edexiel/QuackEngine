@@ -27,7 +27,7 @@ Mesh Shape::CreateQuad()
 
     RendererPlatform::VerticesReading();
 
-    return Engine::Instance().GetResourcesManager().AddShape(quadMesh);
+    return quadMesh;
 }
 
 Mesh Shape::CreateCube()

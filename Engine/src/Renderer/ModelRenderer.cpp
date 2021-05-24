@@ -18,10 +18,10 @@
 using namespace Resources;
 using namespace Renderer;
 
-ModelRenderer::ModelRenderer() : Asset(ASSET_TYPE::A_MODEL)
+ModelRenderer::ModelRenderer() : Asset(AssetType::A_MODEL)
 {}
 
-ModelRenderer::ModelRenderer(VertexType vertexType) : Asset(ASSET_TYPE::A_MODEL), _vertexType{vertexType}
+ModelRenderer::ModelRenderer(VertexType vertexType) : Asset(AssetType::A_MODEL), _vertexType{vertexType}
 {}
 
 void ModelRenderer::Destroy()

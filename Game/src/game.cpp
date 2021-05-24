@@ -12,6 +12,9 @@
 
 #include "game.hpp"
 
+#include "Renderer/ProcessBase.hpp"
+#include "Renderer/PostProcess/KernelPostProcess.hpp"
+
 #include "Scene/Component/Animator.hpp"
 
 using namespace Resources;
@@ -40,7 +43,6 @@ void Game::Init(Engine &engine) const
     engine.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
     engine.GetResourcesManager().Init();
     engine.GetResourcesManager().LoadFolder(R"(../../Game/Asset)");
-
 
     //Signature Renderer
     {
@@ -256,6 +258,7 @@ void Game::Init(Engine &engine) const
 
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
+
 }
 
 void Game::Update(float deltaTime)

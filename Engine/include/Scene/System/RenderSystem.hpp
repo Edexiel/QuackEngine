@@ -2,9 +2,9 @@
 #define _RENDER_SYSTEM_
 
 #include "Scene/Core/System.hpp"
+#include "Scene/Component/Transform.hpp"
 #include "Renderer/Material.hpp"
 #include "Renderer/Mesh.hpp"
-
 
 #include <vector>
 #include <unordered_map>
@@ -24,15 +24,12 @@ namespace Renderer
 
 class RenderSystem : public System
 {
-    Renderer::Shader _shader;
-    Renderer::Mesh _quadMesh;
-
     std::unordered_map<Renderer::MaterialInterface, std::vector<std::pair<Renderer::Mesh, Entity>>> _mapMaterial;
     unsigned int _lastLinkEntitiesNumbers{0};
 
 public:
 
-    RenderSystem();
+    RenderSystem() = default;
     ~RenderSystem() = default;
 
     /**
@@ -41,18 +38,14 @@ public:
      */
     void Draw(Component::Camera &camera);
     void Draw(const Maths::Matrix4 &projection, const Maths::Matrix4 &view);
-    void DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex);
 
     void UpdateModel(const Renderer::ModelRenderer &newModel);
 
     void SetMaterials();
 
 private:
-
     void DrawMaterials(const Maths::Matrix4 &projection, const Maths::Matrix4 &view);
-
     void AddMesh(const Renderer::MaterialInterface &materialInterface, const Renderer::Mesh &mesh, Entity entity);
-
 
 };
 

@@ -37,34 +37,35 @@ namespace Component
 
 class PhysicsSystem : public System
 {
-private:
-    World* _world;
 public:
 
     void Init();
-    void SetRigidBody(Entity id);
+    static void SetRigidBody(Entity id);
 
     void FixedUpdate(float fixedDeltaTime);
 
-    void SetType(Entity id, const BodyType& type);
-    void SetMass(Entity id, float mass);
-    void SetIsTrigger(Entity id, bool isTrigger);
+    static void SetType(Entity id, const BodyType& type);
+    static void SetMass(Entity id, float mass);
+    static void SetIsTrigger(Entity id, bool isTrigger);
     template<typename C, typename F>
     void SetPhysicEvent(Entity id, PhysicsEventType type, C *classObject, F && function);
 
-    void AddBoxCollider(Entity id, const Maths::Vector3f &halfExtend, const Maths::Vector3f &position = {0, 0, 0},
+    static void AddBoxCollider(Entity id, const Maths::Vector3f &halfExtend, const Maths::Vector3f &position = {0, 0, 0},
                         const Maths::Quaternion &rotation = {1, 0, 0, 0});
 
-    void AddSphereCollider(Entity id, float radius, const Maths::Vector3f &position = {0, 0, 0},
+    static void AddSphereCollider(Entity id, float radius, const Maths::Vector3f &position = {0, 0, 0},
                            const Maths::Quaternion &rotation = {1, 0, 0, 0});
 
-    void AddCapsuleCollider(Entity id, float radius,
+    static void AddCapsuleCollider(Entity id, float radius,
                             float height,
                             const Maths::Vector3f &position = {0, 0, 0},
                             const Maths::Quaternion &rotation = {1, 0, 0, 0});
 
-    void DeleteCollider(Entity id);
+    static void ResizeBoxCollider(Entity id, const Maths::Vector3f &halfExtend);
+    static void ResizeSphereCollider(Entity id, float radius);
+    static void ResizeCapsuleCollider(Entity id, float radius, float height);
 
+    static void SetIsGravityEnable(Entity id, bool isGravityEnable);
 
     //todo: create function to change world settings.
 };
@@ -76,7 +77,7 @@ void PhysicsSystem::SetPhysicEvent(Entity id, PhysicsEventType type, C *classObj
     if(!world.HasComponent<Component::RigidBody>(id))
         return;
 
-    Component::RigidBody &rb = world.GetComponent<Component::RigidBody>(id);
+    auto &rb = world.GetComponent<Component::RigidBody>(id);
 
     switch(type)
     {

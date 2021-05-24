@@ -5,7 +5,6 @@
 
 #include "Renderer/Animation.hpp"
 #include "Renderer/Shader.hpp"
-#include "Scene/Component/Model.hpp"
 
 #include <vector>
 #include <unordered_map>
@@ -21,7 +20,7 @@ namespace Component
 
         const std::vector<Maths::Matrix4>& GetBonesOffsets() const;
 
-        void CalculateBoneTransform(const Renderer::NodeData& node, Maths::Matrix4 parentMatrixWorld, Maths::Matrix4 bonePlace);
+        void CalculateBoneTransform(const Renderer::NodeData& node, Maths::Matrix4 parentMatrixWorld);
 
     public:
 

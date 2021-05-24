@@ -4,6 +4,11 @@
 #include "GLFW/glfw3.h"
 #include <algorithm>
 
+#include <Renderer/RendererInterface.hpp>
+#include <Resources/ResourcesManager.hpp>
+#include "Audio/SoundManager.hpp"
+#include "Time/TimePlatformGLFW.hpp"
+
 #include "Renderer/RendererPlatform.hpp"
 
 #include "Debug/Assertion.hpp"
@@ -15,7 +20,6 @@
 #include <fmt/core.h>
 
 namespace fs = std::filesystem;
-
 
 inline Engine *instance = nullptr;
 
@@ -114,6 +118,8 @@ Engine::Engine(const EngineSettings &settings)
     _platformInput = std::make_unique<Input::PlatformInputGLFW>(_window);
     //Assert_Fatal_Error(_platformInput, "Platform input not declared");
     _inputManager.Init(_platformInput.get());
+    _timeManager.Init(new Time::TimePlatformGLFW(_window));
+    _postProcessManager.Init();
 }
 
 GLFWwindow *Engine::GetWindow()
@@ -192,7 +198,7 @@ void Engine::SaveWorld(const std::string &worldName, fs::path path) const
 {
     if (_worldLut.find(worldName) == _worldLut.end())
     {
-        fmt::print(fg(fmt::color::yellow),"[Engine] Trying to save a world that does not exists: {}\n", path.string());
+        fmt::print(fg(fmt::color::yellow), "[Engine] Trying to save a world that does not exists: {}\n", path.string());
         return;
     }
     Log_Info(fmt::format("Saving world : {}", worldName).c_str());
@@ -208,17 +214,17 @@ void Engine::SaveWorld(const std::string &worldName, fs::path path) const
 
 }
 
-void Engine::LoadWorld(World& world, fs::path path)
+void Engine::LoadWorld(World &world, fs::path path)
 {
     if (!exists(path))
     {
-        fmt::print(fg(fmt::color::red),"[Engine]Path does not exists: {}\n", path.string());
+        fmt::print(fg(fmt::color::red), "[Engine]Path does not exists: {}\n", path.string());
         Log_Error("");
     }
 
     path.append(world.GetName()).replace_extension(".qck");
 
-    fmt::print(fg(fmt::color::forest_green),"[Engine] Loading world: {}\n",path.string());
+    fmt::print(fg(fmt::color::forest_green), "[Engine] Loading world: {}\n", path.string());
 
     std::ifstream is(path);
     cereal::JSONInputArchive iarchive(is);
@@ -238,6 +244,16 @@ void Engine::RemoveWorld(const std::string &name)
 PhysicsEventManager &Engine::GetPhysicsEventManager()
 {
     return _physicsEventManager;
+}
+
+Time::TimeManager &Engine::GetTimeManager()
+{
+    return _timeManager;
+}
+
+Renderer::PostProcessManager &Engine::GetPostProcessManager()
+{
+    return _postProcessManager;
 }
 
 

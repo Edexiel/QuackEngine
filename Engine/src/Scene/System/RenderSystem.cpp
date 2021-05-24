@@ -1,30 +1,16 @@
 #include "Scene/System/RenderSystem.hpp"
 
 #include "Engine.hpp"
-#include "Scene/Core/World.hpp"
-
 #include "Renderer/RendererPlatform.hpp"
-#include "Renderer/Shape.hpp"
-#include "Renderer/ModelRenderer.hpp"
-
 #include "Scene/Component/Animator.hpp"
-#include "Scene/Component/Camera.hpp"
-
-#include "Debug/Log.hpp"
+#include "Scene/Core/World.hpp"
 
 
 using namespace Renderer;
 using namespace Component;
 
-RenderSystem::RenderSystem()
-{
-    _quadMesh = Shape::CreateQuad();
-    _shader = Engine::Instance().GetResourcesManager().LoadShader(
-            "../../Engine/Shader/Framebuffer/BasicVertex.vs",
-            "../../Engine/Shader/Framebuffer/BasicFragment.fs");
-}
 
-void RenderSystem::Draw(Component::Camera& camera)
+void RenderSystem::Draw(Component::Camera &camera)
 {
     camera.GetFramebuffer().Bind();
 
@@ -36,7 +22,7 @@ void RenderSystem::Draw(Component::Camera& camera)
     RendererPlatform::BindFramebuffer(0);
 }
 
-void RenderSystem::Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view)
+void RenderSystem::Draw(const Maths::Matrix4 &projection, const Maths::Matrix4 &view)
 {
     RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 1.f});
     RendererPlatform::Clear();
@@ -44,21 +30,8 @@ void RenderSystem::Draw(const Maths::Matrix4& projection, const Maths::Matrix4& 
     DrawMaterials(projection, view);
 }
 
-void RenderSystem::DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex)
-{
-    RendererPlatform::BindFramebuffer(framebufferIndex);
-
-    RendererPlatform::ClearColor({0.2f, 0.2f, 0.2f, 1.f});
-    RendererPlatform::Clear();
-
-    _shader.Use();
-    _shader.SetMatrix4("view", Maths::Matrix4::Identity());
-    RendererPlatform::BindTexture(textureIndex, 0);
-
-    _quadMesh.Draw();
-}
-
-void RenderSystem::AddMesh(const Renderer::MaterialInterface& materialInterface, const Renderer::Mesh& mesh, Entity entity)
+void
+RenderSystem::AddMesh(const Renderer::MaterialInterface &materialInterface, const Renderer::Mesh &mesh, Entity entity)
 {
     auto it = _mapMaterial.find(materialInterface);
 
@@ -76,7 +49,7 @@ void RenderSystem::SetMaterials()
 
     _mapMaterial.erase(_mapMaterial.cbegin(), _mapMaterial.cend());
     MaterialInterface material;
-    World& world = Engine::Instance().GetCurrentWorld();
+    World &world = Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)
     {
         auto &t = world.GetComponent<Transform>(entity);
@@ -90,7 +63,7 @@ void RenderSystem::SetMaterials()
     }
 }
 
-void RenderSystem::DrawMaterials(const Maths::Matrix4& projection, const Maths::Matrix4& view)
+void RenderSystem::DrawMaterials(const Maths::Matrix4 &projection, const Maths::Matrix4 &view)
 {
     if (_lastLinkEntitiesNumbers != _entities.size() || _lastLinkEntitiesNumbers == 0)
     {
@@ -98,7 +71,7 @@ void RenderSystem::DrawMaterials(const Maths::Matrix4& projection, const Maths::
         SetMaterials();
     }
 
-    Engine & engine= Engine::Instance();
+    Engine &engine = Engine::Instance();
 
     for (auto it : _mapMaterial)
     {
@@ -108,14 +81,16 @@ void RenderSystem::DrawMaterials(const Maths::Matrix4& projection, const Maths::
 
         for (unsigned int i = 0; i < it.second.size(); i++)
         {
-            it.first->shader.SetMatrix4("model", engine.GetCurrentWorld().GetComponent<Transform>(it.second[i].second).GetMatrix());
+            it.first->shader.SetMatrix4("model", engine.GetCurrentWorld().GetComponent<Transform>(
+                    it.second[i].second).GetMatrix());
 
             if (it.second[i].first.GetType() == Renderer::VertexType::V_SKELETAL)
             {
                 if (it.first->hasSkeleton &&
-                        engine.GetCurrentWorld().HasComponent<Animator>(it.second[i].second))
+                    engine.GetCurrentWorld().HasComponent<Animator>(it.second[i].second))
                 {
-                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).Update(0.01f);
+                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).Update(
+                            engine.GetTimeManager().GetDeltaTime());
                     engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).SetShader(it.first->shader);
                 }
             }
@@ -126,7 +101,7 @@ void RenderSystem::DrawMaterials(const Maths::Matrix4& projection, const Maths::
 
 void RenderSystem::UpdateModel(const Renderer::ModelRenderer &newModel)
 {
-    World& world = Engine::Instance().GetCurrentWorld();
+    World &world = Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)
     {
         auto &m = world.GetComponent<Model>(entity).model;

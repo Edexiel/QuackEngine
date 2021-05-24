@@ -67,6 +67,9 @@ int main()
         engine.GetInputManager().Update();
         engine.TestWindowShouldClose();
 
+        /** Time Update **/
+        engine.GetTimeManager().Update();
+
         /** Editor draw **/
         editor.Draw();
 
@@ -77,6 +80,7 @@ int main()
         engine.GetCurrentWorld().GetSystemManager()->GetSystem<CameraSystem>()->Update();
 
         engine.SwapBuffers();
+
     }
 
     //engine.SaveWorld("Main","./");

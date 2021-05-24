@@ -1,7 +1,9 @@
 #include "Renderer/RendererInterface.hpp"
 
+#include "Engine.hpp"
 #include "Scene/Core/World.hpp"
 #include "Renderer/RendererPlatform.hpp"
+#include "Renderer/Mesh.hpp"
 
 using namespace Renderer;
 
@@ -21,14 +23,16 @@ Framebuffer RendererInterface::GetSceneUpdatedFramebuffer()
     Component::Camera& camera = cameraSystem->GetActiveCamera();
     renderSystem->Draw(camera);
 
+    Engine::Instance().GetPostProcessManager().ApplyPostProcess(camera.GetFramebuffer());
+
     RendererPlatform::BindFramebuffer(0);
 
     return camera.GetFramebuffer();
 }
 
-void RendererInterface::UpdateSceneFramebufferEditor(const Maths::Matrix4& projection, const Maths::Matrix4& view, unsigned int idFramebuffer)
+void RendererInterface::UpdateSceneFramebufferEditor(const Maths::Matrix4& projection, const Maths::Matrix4& view, Framebuffer& framebuffer)
 {
-    RendererPlatform::BindFramebuffer(idFramebuffer);
+    framebuffer.Bind();
 
     lightSystem->Update();
     renderSystem->Draw(projection, view);
@@ -36,12 +40,12 @@ void RendererInterface::UpdateSceneFramebufferEditor(const Maths::Matrix4& proje
     RendererPlatform::BindFramebuffer(0);
 }
 
-void RendererInterface::DrawFramebufferinFramebuffer(const Framebuffer& framebufferDrawIn, const Framebuffer& framebuffer2DrawOut)
+void RendererInterface::DrawFramebufferinFramebuffer(const Framebuffer& framebufferDrawIn, const Framebuffer& framebufferDrawOut)
 {
-    renderSystem->DrawTextureInFramebuffer(framebufferDrawIn.GetId(), framebuffer2DrawOut.GetTexture());
+    Engine::Instance().GetPostProcessManager().DrawTextureInFramebuffer(framebufferDrawIn.GetId(), framebufferDrawOut.GetTexture());
 }
 
 void RendererInterface::DrawTextureinFramebuffer(const Framebuffer& framebufferDrawIn, const Texture& textureDrawOut)
 {
-    renderSystem->DrawTextureInFramebuffer(framebufferDrawIn.GetId(), textureDrawOut.GetID());
+    Engine::Instance().GetPostProcessManager().DrawTextureInFramebuffer(framebufferDrawIn.GetId(), textureDrawOut.GetID());
 }

@@ -10,11 +10,11 @@ namespace Renderer
     class Texture : public Resources::Asset
     {
     private:
-    unsigned int ID{0};
+    unsigned int _id{0};
 
     public:
         Texture();
-        Texture(unsigned int ID);
+        Texture(unsigned int id);
         ~Texture()=default;
         unsigned int GetID() const;
         static Texture LoadTexture(const std::filesystem::path& path);

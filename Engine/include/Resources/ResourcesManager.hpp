@@ -26,13 +26,6 @@ class World;
 
 namespace Resources
 {
-    struct ReferenceShader
-    {
-        std::string vertexShader;
-        std::string fragmentShader;
-
-        Renderer::Shader shader;
-    };
 
     class ResourcesManager
     {
@@ -40,7 +33,7 @@ namespace Resources
 
         std::unordered_map<std::string, Renderer::ModelRenderer> _mapModel;
         std::unordered_map<std::string, Renderer::Texture> _mapTexture;
-        std::vector<ReferenceShader> _listShader;
+        std::unordered_map<std::string, Renderer::Shader> _mapShader;
         std::unordered_map<unsigned int, Renderer::Shader> _mapDynamicShader;
         std::unordered_map<std::string, Audio::Sound> _mapSound;
         std::unordered_map<std::string, Renderer::MaterialInterface> _mapMaterial;
@@ -54,7 +47,7 @@ namespace Resources
         std::unordered_map<std::string, Asset *> _globalAssetMap;
 
         template<typename T>
-        std::vector<std::string> GetList(const std::unordered_map<std::string,T>& map) const;
+        std::vector<std::string> GetList(const std::unordered_map<std::string, T> &map) const;
 
     public:
 
@@ -63,25 +56,24 @@ namespace Resources
 
         void Init();
 
-        Renderer::ModelRenderer LoadModel(const std::filesystem::path& path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
-        void ReLoadModel(const std::filesystem::path& path, Renderer::VertexType vertexType);
-        Renderer::Animation LoadAnimation(const std::filesystem::path& path);
-        Renderer::Texture LoadTexture(const std::filesystem::path& path);
-
-        Renderer::Shader LoadShader(const std::filesystem::path& vertexShader, const std::filesystem::path& fragmentShader);
-        Renderer::Shader LoadObjectShader(const std::filesystem::path& vertexShader, const std::filesystem::path& fragmentShader);
+        Renderer::ModelRenderer
+        LoadModel(const std::filesystem::path &path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
+        void ReLoadModel(const std::filesystem::path &path, Renderer::VertexType vertexType);
+        Renderer::Animation LoadAnimation(const std::filesystem::path &path);
+        Renderer::Texture LoadTexture(const std::filesystem::path &path);
+        Renderer::Shader LoadShader(std::filesystem::path path);
         Renderer::Shader LoadObjectShader(const Renderer::ShaderConstructData &constructData);
 
-        Renderer::MaterialInterface LoadMaterial(const std::filesystem::path& path);
+        Renderer::MaterialInterface LoadMaterial(const std::filesystem::path &path);
         Renderer::MaterialInterface GenerateMaterial(const char *name,
                                                      const Renderer::Material &material); // Should be used to load a material from scratch
 
 
-        Audio::Sound LoadSound(const std::filesystem::path& path, Audio::SoundType soundType);
+        Audio::Sound LoadSound(const std::filesystem::path &path, Audio::SoundType soundType);
 
         Renderer::Mesh &AddShape(Renderer::Mesh &mesh);
 
-        void LoadFolder(const std::filesystem::path& path);
+        void LoadFolder(const std::filesystem::path &path);
 
         std::vector<std::string> GetModelNameList() const;
         std::vector<std::string> GetMaterialNameList() const;
@@ -97,7 +89,7 @@ namespace Resources
     };
 
     template<typename T>
-    std::vector<std::string> ResourcesManager::GetList(const std::unordered_map<std::string,T>& map) const
+    std::vector<std::string> ResourcesManager::GetList(const std::unordered_map<std::string, T> &map) const
     {
         std::vector<std::string> list;
 

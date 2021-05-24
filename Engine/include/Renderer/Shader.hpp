@@ -1,6 +1,7 @@
 #ifndef _SHADER_
 #define _SHADER_
 
+#include "Resources/Asset.hpp"
 #include "Maths/Matrix4.hpp"
 #include <filesystem>
 
@@ -25,7 +26,7 @@ namespace Renderer
         {
             return hasLight + hasColorTexture * 10 + hasDiffuseTexture * 100 + hasSpecularTexture * 1000 +
                    hasNormalMap * 10000 + hasSkeleton * 100000;
-
+            //todo: tester
             /* De rien
             std::uint8_t key;
             key |= hasLight << 1;
@@ -38,15 +39,15 @@ namespace Renderer
         };
     };
 
-    class Shader
+    class Shader : public Resources::Asset
     {
-        unsigned int ID{0};
+      unsigned int _id {0};
 
     public:
 
-        Shader() = default;
-        explicit Shader(unsigned int id);
-        ~Shader() = default;
+        Shader();
+        explicit Shader(unsigned int ID);
+        ~Shader()=default;
 
         unsigned int GetID() const;
         void Use() const;
@@ -62,12 +63,15 @@ namespace Renderer
         void SetSpotLight(const Component::Light &light, unsigned int index) const;
 
         static Shader LoadShader(const std::filesystem::path &vertexShader, const std::filesystem::path &fragmentPath);
+        static Shader LoadShader(const char* path);
         static Shader LoadObjectShader(const ShaderConstructData &shaderData);
 
     private:
         static std::string CreateMaterial(const ShaderConstructData &shaderData);
         static std::string CreateColorFunctions(const ShaderConstructData &shaderData);
         static std::string LoadStringFromFile(const std::filesystem::path& path);
+        static std::string GetStringInFile(std::ifstream& file, const std::string& start, const std::string& end);
+
     };
 }
 

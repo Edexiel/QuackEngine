@@ -137,48 +137,29 @@ Texture ResourcesManager::LoadTexture(const std::filesystem::path &path)
     return texture;
 }
 
-Renderer::Shader
-ResourcesManager::LoadShader(const std::filesystem::path &vertexShader, const std::filesystem::path &fragmentShader)
+Renderer::Shader ResourcesManager::LoadShader(const std::filesystem::path path)
 {
-    bool vs, fs = false;
-    vs = exists(vertexShader);
-    fs = exists(fragmentShader);
+    // Check if the Texture already exist
+    auto it = _mapShader.find(path.string());
 
-    // Check if the file exist
-    if (!vs || !fs)
+    // Check if the shader already exist
+    if (it != _mapShader.end())
     {
-        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: ");
-        if (!vs)
-            fmt::print(fg(fmt::color::red), "Vertex Shader : {}\n", vertexShader.string());
-        if (!fs)
-            fmt::print(fg(fmt::color::red), "Fragment Shader : {}\n", fragmentShader.string());
+        return it->second;
+    }
 
-        //todo : no
+    // return null Shader if the file doesn't exist
+    if (!std::filesystem::exists(path.string()))
+    {
+        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", path.string());
         return Shader();
     }
 
-    // find if the Shader already exist
-    for (auto &i : _listShader)
-    {
-        if (i.fragmentShader == fragmentShader && i.vertexShader == vertexShader)
-        {
-            return i.shader;
-        }
-    }
+    // Create a new Shader
 
-    // Charge new Shader
-
-    Shader shader = Shader::LoadShader(vertexShader, fragmentShader);
-    _listShader.push_back(ReferenceShader{vertexShader, fragmentShader, shader});
-
-    return shader;
-}
-
-Renderer::Shader ResourcesManager::LoadObjectShader(const std::filesystem::path &vertexShader,
-                                                    const std::filesystem::path &fragmentShader)
-{
-    Shader shader = LoadShader(vertexShader, fragmentShader);
-    Engine::Instance().GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
+    Shader shader = Shader::LoadShader(path.string().c_str());
+    _mapShader.insert({path.string(), shader});
+    _globalAssetMap.insert({path.string(), &_mapShader.find(path.string())->second});
 
     return shader;
 }
@@ -292,8 +273,10 @@ void ResourcesManager::LoadFolder(const std::filesystem::path &path)
                 LoadModel(p.path(), VertexType::V_NORMALMAP);
             else if (extension == ".ogg" || extension == ".mp3" || extension == ".wav")
                 LoadSound(p.path(), Audio::SoundType::S_MASTER);
-            else if (extension == ".png" || extension == ".jpg" || extension == ".epg")
+            else if (extension == ".png" || extension == ".jpg" || extension == ".jpeg")
                 LoadTexture(p.path());
+            else if (extension == ".qsh")
+                Shader::LoadShader(p.path().string().c_str());
 
         }
     }

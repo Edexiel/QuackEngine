@@ -12,72 +12,74 @@
 using namespace Renderer;
 using namespace Component;
 
-Shader::Shader(unsigned int id) : ID {id} {}
+Shader::Shader() : Resources::Asset(Resources::AssetType::A_SHADER) {}
+
+Shader::Shader(unsigned int id) : Resources::Asset(Resources::AssetType::A_SHADER), _id {id} {}
 
 
 unsigned int Shader::GetID() const
 {
-  return ID;
+  return _id;
 }
 
 void Shader::Use() const
 {
-  RendererPlatform::UseShader(ID);
+  RendererPlatform::UseShader(_id);
 }
 
 void Shader::SetFloat(const char* name, float value) const
 {
-  RendererPlatform::SetFloat(ID, name, value);
+  RendererPlatform::SetFloat(_id, name, value);
 }
 
 void Shader::SetMatrix4(const char *name, const Maths::Matrix4& mat) const
 {
-  RendererPlatform::SetMatrix4(ID, name, mat);
+  RendererPlatform::SetMatrix4(_id, name, mat);
 }
 
 void Shader::SetVector3f(const char* name, const Maths::Vector3f& vec) const
 {
-    RendererPlatform::SetVector3f(ID, name, vec);
+    RendererPlatform::SetVector3f(_id, name, vec);
 }
 
 void Shader::SetVector4f(const char* name, const Maths::Vector4f& vec) const
 {
-    RendererPlatform::SetVector4f(ID, name, vec);
+    RendererPlatform::SetVector4f(_id, name, vec);
 }
 
 void Shader::SetUint(const char *name, unsigned int value) const
 {
-    RendererPlatform::SetUint(ID, name, value);
+    RendererPlatform::SetUint(_id, name, value);
 }
 
 void Shader::SetSampler(const char* name, int sampler) const
 {
-    RendererPlatform::SetSampler(ID, name, sampler);
+    RendererPlatform::SetSampler(_id, name, sampler);
 }
 
 void Shader::SetLight(const Component::Light& light, unsigned int index) const
 {
   switch (light.type) 
   {
-    case Light_Type::L_DIRECTIONAL : return RendererPlatform::SetDirectionalLight(ID, index, light);
-    case Light_Type::L_SPOT : return RendererPlatform::SetSpotLight(ID, index, light);
-    default : return RendererPlatform::SetPointLight(ID, index, light);
+    case Light_Type::L_DIRECTIONAL : return RendererPlatform::SetDirectionalLight(_id, index, light);
+    case Light_Type::L_SPOT : return RendererPlatform::SetSpotLight(_id, index, light);
+    default : return RendererPlatform::SetPointLight(_id, index, light);
   }
 }
 
 void Shader::SetPointLight(const Component::Light &light, unsigned int index) const
 {
-    RendererPlatform::SetPointLight(ID, index, light);
+    RendererPlatform::SetPointLight(_id, index, light);
 }
 
 void Shader::SetDirectionalLight(const Component::Light &light, unsigned int index) const
 {
-    RendererPlatform::SetDirectionalLight(ID, index, light);
+    RendererPlatform::SetDirectionalLight(_id, index, light);
 }
 
 void Shader::SetSpotLight(const Component::Light &light, unsigned int index) const
 {
-    RendererPlatform::SetSpotLight(ID, index, light);
+    RendererPlatform::SetSpotLight(_id, index, light);
 }
 
 Shader Shader::LoadShader(const std::filesystem::path &vertexPath, const std::filesystem::path &fragmentPath)
@@ -121,6 +123,35 @@ Shader Shader::LoadShader(const std::filesystem::path &vertexPath, const std::fi
 
 }
 
+Shader Shader::LoadShader(const char *path)
+{
+    std::string vertexShaderCode("#version 330 core\n#define VERTEX_SHADER\n");
+    std::string fragmentShaderCode("#version 330 core\n#define FRAGMENT_SHADER\n");
+
+    // Read the Shader code from the file
+    std::ifstream shaderStream(path, std::ios::in);
+    if (!shaderStream.is_open())
+    {
+        printf("Impossible to open %s.\n", path);
+        getchar();
+        return Shader{0};
+    }
+
+    std::stringstream sstr;
+    sstr << shaderStream.rdbuf();
+
+
+    vertexShaderCode += sstr.str();
+    fragmentShaderCode += sstr.str();
+
+    shaderStream.close();
+
+    //std::cout << vertexShaderCode << std::endl;
+    //std::cout << fragmentShaderCode << std::endl;
+
+    return RendererPlatform::CreateShader(vertexShaderCode.c_str(), fragmentShaderCode.c_str());
+}
+
 Shader Shader::LoadObjectShader(const ShaderConstructData& shaderData)
 {
     std::string vertexShaderCode;
@@ -128,7 +159,10 @@ Shader Shader::LoadObjectShader(const ShaderConstructData& shaderData)
     // Read the Vertex Shader code from the file
     if (shaderData.hasNormalMap)
     {
-        vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Light/VertexNormalMap.vs");
+        if (shaderData.hasSkeleton)
+            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Light/VertexNormalMap.vs");
+        else
+            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Skeletal/SkeletalVertex.vs");
     }
     else
     {
@@ -252,4 +286,20 @@ std::string Shader::LoadStringFromFile(const std::filesystem::path& path)
         return {0};
     }
     return fileData;
+}
+
+std::string Shader::GetStringInFile(std::ifstream& file, const std::string& start, const std::string& end)
+{
+    std::string result;
+    std::string line;
+    while (getline(file, line))
+        if (line.substr(0, start.size()) == start)
+            while (getline(file, line))
+            {
+                if (line.substr(0, end.size()) == end)
+                    return result;
+                result += line + "\n";
+            }
+
+    return result;
 }

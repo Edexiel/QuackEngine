@@ -27,55 +27,45 @@ namespace Thread
         public:
 
         /* ==== Variable ==== */
-        std::function<void(Args...)> function;
-        std::tuple<Args...> args;
+        std::function<void(Args...)> _function;
+        std::tuple<Args...> _args;
 
 
         /* ==== Function ==== */
 
         Task(){};
 
-        Task(std::function<void(Args...)> F, std::tuple<Args...> _args)
+        Task(std::function<void(Args...)> function, std::tuple<Args...> args)
         {
-            function = F;
-            args = _args;
+            _function = function;
+            _args = args;
         };
 
         virtual void operator()() override
         {
-            if (function)
+            if (_function)
             {
-                std::apply(function, args);
+                std::apply(_function, _args);
             }
         };
 
 
         virtual void Execute() override
         {
-            if (function)
+            if (_function)
             {
-                std::apply(function, args);
+                std::apply(_function, _args);
             }
         };
-    };
-
-    class LongTask : public TaskInterface
-    {
-    public:
-        std::vector<std::shared_ptr<TaskInterface>> taskList;
-
-        virtual void Execute() override;
-
-        void AddTask(std::shared_ptr<TaskInterface> tsk);
     };
 
     class TaskSystem
     {
     public:
 
-        std::queue<std::shared_ptr<TaskInterface>> taskList;
+        std::queue<std::unique_ptr<TaskInterface>> _taskList;
 
-        void AddTask(std::shared_ptr<TaskInterface> tsk);
+        void AddTask(TaskInterface* tsk);
 
     };
 }
