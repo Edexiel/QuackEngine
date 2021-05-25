@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 #include "Renderer/RendererPlatform.hpp"
 #include "Enemy/EnemyComponent.hpp"
+#include "Tools/Random.hpp"
 
 EnemyManagerSystem::EnemyManagerSystem()
 {
@@ -25,9 +26,37 @@ EnemyManagerSystem::EnemyManagerSystem()
     engine.GetInputManager().RegisterEvent("Left Hit", Input::Action::PRESS, this, &EnemyManagerSystem::LeftHit);
 }
 
+void EnemyManagerSystem::GenerateEnemies(unsigned int numberToGenerate, const Maths::Vector3f& origin, float innerRadius, float outerRadius)
+{
+    World& world = Engine::Instance().GetCurrentWorld();
+
+    srand((unsigned int)Engine::Instance().GetTimeManager().GetTime());
+
+    for (unsigned int i = 0; i < numberToGenerate; i++)
+    {
+        Entity id = world.CreateEntity("Enemy");
+
+        Component::Transform trs;
+        Maths::Vector3f direction {Random::Range(0.f, 1.0f), 0, Random::Range(0.0f, 1.0f)};
+        direction.Normalize();
+        trs.position = origin + direction * innerRadius;
+        world.AddComponent(id, trs);
+
+        EnemyComponent enemyWeaknessDisplay;
+        enemyWeaknessDisplay.AddNote(NoteType::M_DOWN);
+        enemyWeaknessDisplay.AddNote(NoteType::M_LEFT);
+        enemyWeaknessDisplay.AddNote(NoteType::M_UP);
+        enemyWeaknessDisplay.AddNote(NoteType::M_RIGHT);
+        world.AddComponent(id, enemyWeaknessDisplay);
+    }
+}
+
 void EnemyManagerSystem::HitEnemies(NoteType note)
 {
-    std::cout << "Called" << std::endl;
+    if (Engine::Instance().GetTimeManager().GetTime() - _time < _hitCooldown)
+        return;
+
+    _time = (float)Engine::Instance().GetTimeManager().GetTime();
     for (Entity entity: _entities)
     {
         auto &enemy = Engine::Instance().GetCurrentWorld().GetComponent<EnemyComponent>(entity);
@@ -67,8 +96,13 @@ void EnemyManagerSystem::Process(const Renderer::Framebuffer &buffer, const Rend
     shader.Use();
     shader.SetMatrix4("view", camera.GetView());
     shader.SetMatrix4("projection", camera.GetProjection());
+    buffer.BindTexture(0);
+
+    shader.SetSampler("frame", 0);
+    shader.SetSampler("noteTexture", 1);
 
     Renderer::RendererPlatform::SetTransparency(true);
+    Renderer::RendererPlatform::EnableDepthBuffer(false);
 
     Maths::Matrix4 invertView = camera.GetView().GetInvert();
     Maths::Vector3f cameraPosition {invertView.e[12], invertView.e[13], invertView.e[14]};
@@ -82,12 +116,14 @@ void EnemyManagerSystem::Process(const Renderer::Framebuffer &buffer, const Rend
 
         if (!enemy.GetNoteList().empty())
         {
-            _listTexture[enemy.GetNoteList()[0]].Bind();
+            _listTexture[enemy.GetNoteList()[0]].Bind(1);
             shader.SetMatrix4("model",  Maths::Matrix4::Translate(transform.position) *
             Maths::Matrix4::LookAtMatrix(
               transform.position, cameraPosition,{0,1,0}).GetInvert()
             * Maths::Matrix4::Scale(transform.scale * _arrowScale));
+            //todo GetComponent Transform Camera TA MERE
             screenMesh.Draw();
+
         }
     }
 
@@ -112,6 +148,7 @@ void EnemyManagerSystem::MoveEnemy(EnemyComponent& enemy, Component::Transform& 
     transform.position = transform.position + direction * Engine::Instance().GetTimeManager().GetDeltaTime() * enemy.speed;
     transform.rotation = Maths::Quaternion::LookAt(transform.position, target);
 }
+
 NoteDisplayProcess::NoteDisplayProcess() :
     Renderer::ProcessBase("EnemyManagerSystem",
                           Engine::Instance().GetResourcesManager().LoadShader

@@ -277,20 +277,14 @@ void Game::Init()
         world.SetSystemSignature<EnemyManagerSystem>(signatureRender);
     }
 
-    NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();
+    //NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();
+    std::unique_ptr<ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
 
-    engine.GetPostProcessManager().AddProcess(noteDisplayProcess);
+    engine.GetPostProcessManager().AddProcess(ptr);
 
-    Entity id = world.CreateEntity("Enemy Test");
-    world.AddComponent(id, t);
+    noteDisplaySystem->GenerateEnemies(10, {0,0,0}, 50.f, 100.f);
 
-    EnemyComponent enemyWeaknessDisplay;
-    enemyWeaknessDisplay.AddNote(NoteType::M_DOWN);
-    enemyWeaknessDisplay.AddNote(NoteType::M_LEFT);
-    enemyWeaknessDisplay.AddNote(NoteType::M_DOWN);
-    world.AddComponent(id, enemyWeaknessDisplay);
-
-
+    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
     Renderer::RendererPlatform::EnableDepthBuffer(true);
 
 }

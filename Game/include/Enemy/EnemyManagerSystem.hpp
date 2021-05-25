@@ -18,6 +18,8 @@ class EnemyManagerSystem : public System
 {
     Renderer::Texture _listTexture[4];
     float _arrowScale {1};
+    float _time {0.0f};
+    float _hitCooldown {0.2f};
 
     void MoveEnemy(EnemyComponent& enemy, Component::Transform& transform, const Maths::Vector3f& target);
     void HitEnemies(NoteType note);
@@ -32,6 +34,7 @@ public:
     float hitRaduis {0.01f};
 
     EnemyManagerSystem();
+    void GenerateEnemies(unsigned int numberToGenerate, const Maths::Vector3f& origin, float innerRadius, float outerRadius);
     void Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &screenMesh, Renderer::Shader& shader);
     float& GetArrowScale();
 

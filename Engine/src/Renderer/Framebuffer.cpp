@@ -40,9 +40,9 @@ void Framebuffer::Bind() const
     RendererPlatform::BindFramebuffer(_id);
 }
 
-void Framebuffer::BindTexture() const
+void Framebuffer::BindTexture(unsigned int index) const
 {
-    RendererPlatform::BindTexture(_texture);
+    RendererPlatform::BindTexture(_texture, index);
 }
 
 unsigned int Framebuffer::GetWidth()
