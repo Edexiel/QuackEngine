@@ -20,6 +20,9 @@
 
 #include "Scene/Component/Animator.hpp"
 
+#include "Enemy/EnemyManagerSystem.hpp"
+#include "Enemy/EnemyComponent.hpp"
+
 #include "Thread/ThreadPool.hpp"
 
 using namespace Component;
@@ -65,7 +68,7 @@ void Game::Init()
     {
         Signature signatureRender;
         signatureRender.set(world.GetComponentType<Component::Model>());
-        signatureRender.set(world.GetComponentType<Transform>());
+        signatureRender.set(world.GetComponentType<Component::Transform>());
         world.SetSystemSignature<RenderSystem>(signatureRender);
     }
 
@@ -73,7 +76,7 @@ void Game::Init()
     {
         Signature signatureCamera;
         signatureCamera.set(world.GetComponentType<Component::Camera>());
-        signatureCamera.set(world.GetComponentType<Transform>());
+        signatureCamera.set(world.GetComponentType<Component::Transform>());
         world.SetSystemSignature<CameraSystem>(signatureCamera);
     }
 
@@ -81,14 +84,14 @@ void Game::Init()
     {
         Signature signatureLight;
         signatureLight.set(world.GetComponentType<Component::Light>());
-        signatureLight.set(world.GetComponentType<Transform>());
+        signatureLight.set(world.GetComponentType<Component::Transform>());
         world.SetSystemSignature<LightSystem>(signatureLight);
     }
 
     //Signature Physics
     {
         Signature signaturePhysics;
-        signaturePhysics.set(world.GetComponentType<Transform>());
+        signaturePhysics.set(world.GetComponentType<Component::Transform>());
         signaturePhysics.set(world.GetComponentType<Component::RigidBody>());
         world.SetSystemSignature<PhysicsSystem>(signaturePhysics);
     }
@@ -264,34 +267,25 @@ void Game::Init()
     world.AddComponent(lightID3, light);
     world.AddComponent(lightID3, tl3);*/
 
-    Renderer::RendererPlatform::EnableDepthBuffer(true);
+    auto noteDisplaySystem = world.RegisterSystem<EnemyManagerSystem>();
+    world.RegisterComponent<EnemyComponent>();
 
-    Renderer::KernelPostProcess* kP = new Renderer::KernelPostProcess("Kernel 1");
-
-    kP->offset = 1.0f/300;
-    kP->array[0] = 0;
-    kP->array[1] = 1;
-    kP->array[2] = 0;
-    kP->array[3] = 1;
-    kP->array[4] = -4;
-    kP->array[5] = 1;
-    kP->array[6] = 0;
-    kP->array[7] = 1;
-    kP->array[8] = 0;
-
-    //Thread::Task<int>* tsk = new Thread::Task<int>(doStuff, {1});
-
-    Thread::TaskSystem tskSys;
-
-    for (unsigned int i = 0; i < 9; i++)
     {
-        tskSys.AddTask(new Thread::Task<int>(doStuff, {i}));
+        Signature signatureRender;
+        signatureRender.set(world.GetComponentType<EnemyComponent>());
+        signatureRender.set(world.GetComponentType<Component::Transform>());
+        world.SetSystemSignature<EnemyManagerSystem>(signatureRender);
     }
 
-    Thread::ThreadPool threadPool;
-    threadPool.Run(&tskSys);
+    //NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();
+    std::unique_ptr<ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
 
-    Engine::Instance().GetPostProcessManager().AddProcess(kP);
+    engine.GetPostProcessManager().AddProcess(ptr);
+
+    noteDisplaySystem->GenerateEnemies(10, {0,0,0}, 50.f, 100.f);
+
+    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
+    Renderer::RendererPlatform::EnableDepthBuffer(true);
 
 }
 

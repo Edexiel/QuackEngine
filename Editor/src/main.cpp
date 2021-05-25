@@ -89,7 +89,7 @@ int main()
         engine.GetCurrentWorld().GetSystemManager()->GetSystem<CameraSystem>()->Update();
 
         engine.SwapBuffers();
-
+        Renderer::RendererPlatform::Clear();
     }
 
     return 0;
