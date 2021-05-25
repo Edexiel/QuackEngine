@@ -2,6 +2,8 @@
 
 #include "Engine.hpp"
 #include "Renderer/RendererPlatform.hpp"
+#include "Scene/Component/Transform.hpp"
+#include "Scene/System/CameraSystem.hpp"
 #include "Enemy/EnemyComponent.hpp"
 #include "Tools/Random.hpp"
 

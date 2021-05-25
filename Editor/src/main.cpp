@@ -12,6 +12,8 @@
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
 #include "Resources/ResourcesManager.hpp"
+#include "Scene/System/RenderSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
 
 #include "Scene/Component/Animator.hpp"
 
@@ -50,8 +52,8 @@ int main()
     unsigned int frames{0};
     double timeAcc{0.0};
 
-    engine.GetRendererInterface().lightSystem->Update();
     engine.GetPhysicsManager();
+    engine.GetCurrentWorld().GetSystemManager()->GetSystem<LightSystem>()->Update();
 
     auto physicsSystem = engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>();
 

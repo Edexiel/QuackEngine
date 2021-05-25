@@ -6,7 +6,12 @@
 #include "misc/cpp/imgui_stdlib.h"
 #include "Maths/Common.hpp"
 
+#include "Scene/Component/Transform.hpp"
+#include "Scene/Component/Camera.hpp"
 #include "Scene/Component/Animator.hpp"
+
+#include "Scene/System/RenderSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
 
 #include <algorithm>
 
@@ -92,17 +97,17 @@ void PropertiesWidget::LightReader()
                 switch (n)
                 {
                     case 0:
-                        light.type = Component::Light_Type::L_POINT;
+                        light.type = Component::LightType::L_POINT;
                         break;
                     case 1:
-                        light.type = Component::Light_Type::L_DIRECTIONAL;
+                        light.type = Component::LightType::L_DIRECTIONAL;
                         break;
                     case 2:
-                        light.type = Component::Light_Type::L_SPOT;
+                        light.type = Component::LightType::L_SPOT;
                         break;
 
                 }
-                Engine::Instance().GetRendererInterface().lightSystem->Update(true);
+                Engine::Instance().GetCurrentWorld().GetSystemManager()->GetSystem<LightSystem>()->Update(true);
             }
             if (isSelected)
                 ImGui::SetItemDefaultFocus();
@@ -114,22 +119,22 @@ void PropertiesWidget::LightReader()
         ImGui::ColorEdit3("Diffuse", light.diffuse.e) ||
         ImGui::ColorEdit3("Specular", light.specular.e))
     {
-        Engine::Instance().GetRendererInterface().lightSystem->Update(true);
+        Engine::Instance().GetCurrentWorld().GetSystemManager()->GetSystem<LightSystem>()->Update(true);
     }
-    if (light.type != Component::Light_Type::L_DIRECTIONAL)
+    if (light.type != Component::LightType::L_DIRECTIONAL)
     {
         if (ImGui::InputFloat("Linear Attenuation", &light.linear, 0.0f, 0.0f, "%.9f") ||
             ImGui::InputFloat("Quadratic Attenuation", &light.quadratic, 0.0f, 0.0f, "%.9f"))
         {
-            Engine::Instance().GetRendererInterface().lightSystem->Update(true);
+            Engine::Instance().GetCurrentWorld().GetSystemManager()->GetSystem<LightSystem>()->Update(true);
         }
     }
-    if (light.type == Component::Light_Type::L_SPOT)
+    if (light.type == Component::LightType::L_SPOT)
     {
         if (ImGui::DragFloat("Spot Angle", &light.spotAngle) ||
             ImGui::DragFloat("Outer Spot Angle", &light.outerSpotAngle))
         {
-            Engine::Instance().GetRendererInterface().lightSystem->Update(true);
+            Engine::Instance().GetCurrentWorld().GetSystemManager()->GetSystem<LightSystem>()->Update(true);
         }
     }
 
@@ -155,7 +160,7 @@ void PropertiesWidget::ModelReader()
                 model.name = listModel[n];
                 model = Engine::Instance().GetResourcesManager().LoadModel(listModel[n].c_str(),
                                                                            Renderer::VertexType::V_NORMALMAP);
-                Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+                Engine::Instance().GetCurrentWorld().GetSystemManager()->GetSystem<RenderSystem>()->SetMaterials();
             }
 
             if (isSelected)
@@ -168,7 +173,7 @@ void PropertiesWidget::ModelReader()
     {
         ImGui::SliderInt((std::string("Material Mesh ") + std::to_string(i + 1)).c_str(),
                          (int *) model.GetMeshMaterialIndex(i), 0, (int) model.GetNumberMaterial() - 1);
-        Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+        Engine::Instance().GetCurrentWorld().GetSystemManager()->GetSystem<RenderSystem>()->SetMaterials();
     }
 
     std::vector<std::string> listMaterial = Engine::Instance().GetResourcesManager().GetMaterialNameList();
@@ -187,7 +192,7 @@ void PropertiesWidget::ModelReader()
                     Renderer::MaterialInterface materialInterface = Engine::Instance().GetResourcesManager().LoadMaterial(
                             listMaterial[n].c_str());
                     model.ChangeMaterial(materialInterface, i);
-                    Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+                    Engine::Instance().GetCurrentWorld().GetSystemManager()->GetSystem<RenderSystem>()->SetMaterials();
                 }
                 if (is_selected)
                     ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
@@ -222,7 +227,7 @@ void PropertiesWidget::AnimatorReader()
             if (ImGui::Selectable(listAnimation[n].c_str(), isSelected))
             {
                 animator.SetAnimation(*(Renderer::Animation*)(Engine::Instance().GetResourcesManager().GetAsset(listAnimation[n].c_str())));
-                Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+                Engine::Instance().GetCurrentWorld().GetSystemManager()->GetSystem<RenderSystem>()->SetMaterials();
             }
 
             if (isSelected)
@@ -265,7 +270,7 @@ void PropertiesWidget::RigidBodyReader()
 void PropertiesWidget::AddComponent()
 {
     World &world = Engine::Instance().GetCurrentWorld();
-    if (ImGui::Button("Add Component"))
+    if (ImGui::Button("Add ComponentBase"))
     {
         ImGui::OpenPopup("##ComponentContextMenu_Add");
     }
@@ -325,17 +330,17 @@ void PropertiesWidget::AddLight()
 
     if (ImGui::MenuItem("Directional"))
     {
-        light.type = Component::Light_Type::L_DIRECTIONAL;
+        light.type = Component::LightType::L_DIRECTIONAL;
         world.AddComponent(_entity, light);
     }
     else if (ImGui::MenuItem("Point"))
     {
-        light.type = Component::Light_Type::L_POINT;
+        light.type = Component::LightType::L_POINT;
         world.AddComponent(_entity, light);
     }
     else if (ImGui::MenuItem("Spot"))
     {
-        light.type = Component::Light_Type::L_SPOT;
+        light.type = Component::LightType::L_SPOT;
         world.AddComponent(_entity, light);
     }
 }
@@ -343,7 +348,7 @@ void PropertiesWidget::AddLight()
 void PropertiesWidget::DeleteComponent()
 {
     World &world = Engine::Instance().GetCurrentWorld();
-    if (ImGui::Button("Delete Component"))
+    if (ImGui::Button("Delete ComponentBase"))
     {
         ImGui::OpenPopup("##ComponentContextMenu_Delete");
     }

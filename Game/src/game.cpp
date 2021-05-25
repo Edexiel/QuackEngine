@@ -15,6 +15,10 @@
 #include "Renderer/Shape.hpp"
 #include "game.hpp"
 
+#include "Scene/System/RenderSystem.hpp"
+#include "Scene/System/CameraSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
+
 #include "Renderer/ProcessBase.hpp"
 #include "Renderer/PostProcess/KernelPostProcess.hpp"
 
@@ -60,7 +64,6 @@ void Game::Init()
 
     Engine &engine = Engine::Instance();
 
-    engine.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
     engine.GetResourcesManager().Init();
     engine.GetResourcesManager().LoadFolder(R"(..\..\Game\Asset\)");
 
@@ -230,7 +233,7 @@ void Game::Init()
 
     Component::Light light;
 
-    light.type = Component::Light_Type::L_POINT;
+    light.type = Component::LightType::L_POINT;
     light.ambient = {0.1f, 0.1f, 0.1f};
     light.diffuse = {1, 1, 1};
     light.specular = {1, 1, 1};
@@ -246,7 +249,7 @@ void Game::Init()
     world.AddComponent(lightID, light);
     world.AddComponent(lightID, tl1);
 
-    /*light.type = Component::Light_Type::L_POINT;
+    /*light.type = ComponentBase::LightType::L_POINT;
     light.diffuse = {1, 1, 1};
     light.specular = {1, 1, 1};
     Transform tl2 = {Maths::Vector3f::One() * -100, Maths::Vector3f::One(), Maths::Quaternion{}};
@@ -254,7 +257,7 @@ void Game::Init()
     world.AddComponent(lightID2, light);
     world.AddComponent(lightID2, tl2);
 
-    light.type = Component::Light_Type::L_DIRECTIONAL;
+    light.type = ComponentBase::LightType::L_DIRECTIONAL;
     light.diffuse = {0, 0, 1};
     light.specular = {0, 0, 1};
 
