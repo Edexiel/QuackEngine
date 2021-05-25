@@ -28,6 +28,14 @@ namespace Renderer
         void AddProcess(ProcessBase* process);
 
         /***
+         * @brief Add a Process to Apply to the screen on Rendering.
+         * Work with inheritance.
+         * It will be destroyed by the manager when needed.
+         * @param process
+         */
+        void AddProcess(std::unique_ptr<ProcessBase>& process);
+
+        /***
          * @brief Apply each Process saved in the manager on the framebuffer
          * @param framebuffer
          */

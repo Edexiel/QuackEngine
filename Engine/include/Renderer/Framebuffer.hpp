@@ -32,7 +32,7 @@ namespace Renderer
 
         void Bind() const;
 
-        void BindTexture() const;
+        void BindTexture(unsigned int index = 0) const;
 
         unsigned int GetWidth();
 
