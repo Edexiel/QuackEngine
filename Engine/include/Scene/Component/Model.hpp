@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "Scene/Component/ComponentBase.hpp"
+
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Material.hpp"
@@ -18,7 +20,7 @@
 
 namespace Component
 {
-    class Model : public Resources::Asset
+    class Model : public Resources::Asset, public ComponentBase
     {
 
         std::vector<Renderer::Mesh> _meshList;

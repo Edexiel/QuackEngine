@@ -9,6 +9,9 @@
 
 #include "Debug/Log.hpp"
 
+#include "Scene/System/RenderSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
+
 #include <filesystem>
 #include <iostream>
 
@@ -74,8 +77,8 @@ void ResourcesManager::ReLoadModel(const char *path, Renderer::VertexType vertex
     if (it != _mapModel.end())
     {
         Model::ReLoadModel(it->second, path, vertexType);
-        Engine::Instance().GetRendererInterface().renderSystem->UpdateModel(it->second);
-        Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+        Engine::Instance().GetCurrentWorld().GetSystemManager()->GetSystem<RenderSystem>()->UpdateModel(it->second);
+        Engine::Instance().GetCurrentWorld().GetSystemManager()->GetSystem<RenderSystem>()->SetMaterials();
         return;
     }
 
@@ -190,7 +193,7 @@ Renderer::Shader  ResourcesManager::LoadObjectShader(const Renderer::ShaderConst
   _mapDynamicShader.insert({constructData.GetKey(), shader});
 
   if(constructData.hasLight)
-      Engine::Instance().GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
+      Engine::Instance().GetCurrentWorld().GetSystemManager()->GetSystem<LightSystem>()->AddShaderToUpdate(shader);
 
   return shader;
 }

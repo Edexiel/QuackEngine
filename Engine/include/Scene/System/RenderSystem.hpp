@@ -3,7 +3,6 @@
 
 #include "Scene/Core/System.hpp"
 #include "Scene/Component/Model.hpp"
-#include "Scene/Component/Transform.hpp"
 
 #include <vector>
 #include <unordered_map>
@@ -12,8 +11,11 @@ namespace Maths
 {
     class Matrix4;
 }
+
 namespace Component
 {
+    class Transform;
+    class Model;
     class Camera;
 }
 
