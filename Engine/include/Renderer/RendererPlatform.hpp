@@ -15,12 +15,16 @@ namespace Component
 namespace Renderer
 {
     struct Vertex;
-    class Framebuffer;
-    class Shader;
-    class Mesh;
-    class Texture;
-    class RendererPlatform
 
+    class Framebuffer;
+
+    class Shader;
+
+    class Mesh;
+
+    class Texture;
+
+    class RendererPlatform
     {
     public:
 
@@ -63,7 +67,8 @@ namespace Renderer
 
         static Framebuffer CreateFramebuffer(unsigned int width, unsigned int height);
         static void BindFramebuffer(unsigned int ID);
-        static void ResizeFramebuffer(unsigned int fbo, unsigned int rbo, unsigned int texture, unsigned int width, unsigned int height);
+        static void ResizeFramebuffer(unsigned int fbo, unsigned int rbo, unsigned int texture, unsigned int width,
+                                      unsigned int height);
         static void DeleteFramebuffer(unsigned int fbo, unsigned int rbo, unsigned int texture);
 
         static Texture CreateTexture();
@@ -75,9 +80,9 @@ namespace Renderer
 
         // Light
 
-        static void SetSpotLight(unsigned int shaderID, unsigned int index, Component::Light &light);
-        static void SetDirectionalLight(unsigned int shaderID, unsigned int index, Component::Light &light);
-        static void SetPointLight(unsigned int shaderID, unsigned int index,  Component::Light &light);
+        static void SetSpotLight(unsigned int shaderID, unsigned int index, const Component::Light &light);
+        static void SetDirectionalLight(unsigned int shaderID, unsigned int index, const Component::Light &light);
+        static void SetPointLight(unsigned int shaderID, unsigned int index, const Component::Light &light);
     };
 }
 

@@ -8,6 +8,7 @@ float RigidBody::GetMass() const
 {
     return _mass;
 }
+
 BodyType RigidBody::GetBodyType() const
 {
     return _bodyType;
@@ -49,3 +50,5 @@ bool RigidBody::GetIsGravityEnabled() const
 {
     return _isGravityEnabled;
 }
+
+

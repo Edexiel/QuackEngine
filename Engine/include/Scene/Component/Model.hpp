@@ -1,74 +1,60 @@
-#ifndef _MODEL_
-#define _MODEL_
+#ifndef _COMPONENT_MODEL_
+#define _COMPONENT_MODEL_
 
-#include <vector>
+#include "Renderer/ModelRenderer.hpp"
+#include "Resources/ResourcesManager.hpp"
+#include <Engine.hpp>
 
-#include "Scene/Component/ComponentBase.hpp"
-
-#include "Renderer/Mesh.hpp"
-#include "Renderer/Vertex.hpp"
-#include "Renderer/Material.hpp"
-
-#include "Renderer/Skeleton.hpp"
-
-#include "Scene/Core/Types.hpp"
-
-#include "Resources/Asset.hpp"
-
-#include <memory>
-#include <unordered_map>
 
 namespace Component
 {
-    class Model : public Resources::Asset, public ComponentBase
+    struct Model :public ComponentBase
     {
+        Renderer::ModelRenderer model;
 
-        std::vector<Renderer::Mesh> _meshList;
-        std::vector<Renderer::MaterialInterface> _materialList;
-        Renderer::VertexType _vertexType {Renderer::VertexType::V_CLASSIC};
+        template<class Archive>
+        void save(Archive &archive) const
+        {
+            std::vector<std::string> materials;
+            for (const auto &mat : model.GetMaterialList())
+            {
+                materials.push_back(mat->name);
+            }
+            archive(cereal::make_nvp("path", model.name),
+                    cereal::make_nvp("type", model._vertexType),
+                    CEREAL_NVP(materials));
+        }
 
-        static std::vector<unsigned int> LoadIndices(const void* loadedScene, unsigned int meshId);
+        template<class Archive>
+        void load(Archive &archive)
+        {
+            std::vector<std::string> materials;
 
-        static Model LoadClassicModel(const void *loadedScene);
-        static Model LoadNormalMapModel(const void *loadedScene);
-        static Model LoadSkeletalMeshModel(const void *loadedScene);
+            archive(cereal::make_nvp("path", model.name),
+                    cereal::make_nvp("type", model._vertexType));
+            archive(CEREAL_NVP(materials));
 
-        static void SetVertexBoneData(Renderer::SkeletalVertex& vertex, int boneID, float weight);
-        static void ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex>& vertices,
-                                          unsigned int meshId,
-                                          const void* loadedScene);
-
-    public:
-
-        std::unordered_map<std::string, Renderer::Bone> _skeleton;
-
-        Model();
-        Model(Renderer::VertexType vertexType);
-
-        void Destroy();
-
-        static Model LoadModel(const char *path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);
-        static void ReLoadModel(Model& model, const char *path, Renderer::VertexType vertexType);
-        static void ReLoadModel(Model& oldModel, Model newModel);
-
-        unsigned int AddMaterial(const Renderer::MaterialInterface& newMaterial);
-        unsigned int ChangeMaterial(const Renderer::MaterialInterface& newMaterial, unsigned int index);
-        void RemoveMaterial(unsigned int index);
-
-        void SetMeshMaterial(unsigned int meshIndex, unsigned int materialIndex);
-
-        Renderer::MaterialInterface& GetMaterial(unsigned int index);
-
-        void Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view, const Maths::Matrix4& transform);
-
-        const Renderer::Mesh& GetMesh(unsigned int index) const;
-        unsigned int* GetMeshMaterialIndex(unsigned int index);
-        unsigned int GetNumberMesh() const;
-        unsigned int GetNumberMaterial() const;
-        Renderer::VertexType GetVertexType() const;
-
+            Resources::ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
+            model = resourcesManager.LoadModel(model.name, model._vertexType);
+            for (const auto &mat : materials)
+            {
+                model.AddMaterial(resourcesManager.LoadMaterial(mat));
+            }
+        }
     };
+
+
+
+//        template<class Archive>
+//        void load(Archive &archive)
+//        {
+//            archive(CEREAL_NVP(name), cereal::make_nvp("type", _vertexType));
+//            this =
+//        }
+
+
+
 }
 
 
-#endif // _MODEL_
+#endif // _COMPONENT_MODEL_

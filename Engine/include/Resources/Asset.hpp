@@ -15,6 +15,7 @@ namespace Resources
     public:
 
         std::string name;
+        //todo : private ?
 
         Asset(AssetType assetType);
         AssetType GetType() const;
