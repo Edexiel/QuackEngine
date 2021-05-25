@@ -3,7 +3,8 @@
 #include "Engine.hpp"
 #include "Renderer/RendererPlatform.hpp"
 #include "Scene/Component/Animator.hpp"
-
+#include "Scene/Component/Camera.hpp"
+#include "Scene/Component/Transform.hpp"
 
 using namespace Renderer;
 using namespace Component;

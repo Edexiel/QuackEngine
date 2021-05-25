@@ -1,39 +1,22 @@
 #ifndef _RENDERMANAGER_
 #define _RENDERMANAGER_
 
-#include "Scene/System/CameraSystem.hpp"
-#include "Scene/System/RenderSystem.hpp"
-#include "Scene/System/LightSystem.hpp"
-
-#include "Scene/Component/Model.hpp"
-
-//#include "Renderer/Mesh.hpp"
-//#include "Renderer/Shader.hpp"
-
-
 #include <memory>
+
+#include "Maths/Matrix4.hpp"
 
 class World;
 
-namespace Component
-{
-    class Light;
-    class Model;
-    class Camera;
-}
-
 namespace Renderer
 {
+    class Framebuffer;
+    class Texture;
+
     struct RendererInterface
     {
-        std::shared_ptr<RenderSystem>   renderSystem;
-        std::shared_ptr<CameraSystem>   cameraSystem;
-        std::shared_ptr<LightSystem>    lightSystem;
 
         RendererInterface() = default;
         ~RendererInterface() = default;
-
-        void Set(std::shared_ptr<RenderSystem> _renderSystem, std::shared_ptr<CameraSystem> _cameraSystem, std::shared_ptr<LightSystem> _lightSystem);
 
         Framebuffer GetSceneUpdatedFramebuffer();
         void UpdateSceneFramebufferEditor(const Maths::Matrix4& projection, const Maths::Matrix4& view, Framebuffer& framebuffer);

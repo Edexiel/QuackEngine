@@ -42,11 +42,11 @@ public:
     void Clear();
 
     // Entity methods
-    Entity CreateEntity(std::string name);
+    Entity CreateEntity(const std::string& name);
 
     void DestroyEntity(Entity id);
 
-    // Component methods
+    // ComponentBase methods
     template<typename T>
     void RegisterComponent();
 
@@ -90,10 +90,10 @@ inline void World::Clear()
     //todo:
 }
 
-inline Entity World::CreateEntity(std::string name)
+inline Entity World::CreateEntity(const std::string& name)
 {
     Entity id = _entityManager->Create();
-    AddComponent(id, Component::Name{std::move(name)});
+    AddComponent(id, Component::Name{name});
     return id;
 }
 
@@ -107,12 +107,18 @@ inline void World::DestroyEntity(Entity id)
 template<typename T>
 inline void World::RegisterComponent()
 {
-    _componentManager->RegisterComponent<T>();
+    //todo make the check with new Assert
+    if (std::is_base_of<Component::ComponentBase, T>())
+        _componentManager->RegisterComponent<T>();
+    else
+        std::cout << typeid(T).name() << " : The type you're trying to register isn't child of ComponentBase" << std::endl;
 }
 
 template<typename T>
-inline void World::AddComponent(Entity id, T component) //todo: maybe pass by const ref
+inline void World::AddComponent(Entity id, T component)
 {
+    Component::ComponentBase::LinkEntityToComponent(id, &component);
+
     _componentManager->AddComponent<T>(id, component);
 
     auto signature = _entityManager->GetSignature(id);
