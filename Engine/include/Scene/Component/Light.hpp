@@ -5,16 +5,19 @@
 #define MAX_DIRECTIONAL_LIGHT_NB 5
 #define MAX_SPOT_LIGHT_NB 5
 
+#include "Scene/Component/ComponentBase.hpp"
+
 #include "Maths/Vector3.hpp"
 #include "Maths/Matrix4.hpp"
 
 namespace Component
 {
-    enum class Light_Type{L_POINT, L_DIRECTIONAL, L_SPOT};
+    enum class LightType{L_POINT, L_DIRECTIONAL, L_SPOT};
 
-    struct Light
+    struct Light : public ComponentBase
     {
-      Light_Type type {Light_Type::L_POINT};
+
+      LightType type {LightType::L_POINT};
 
       Maths::Vector3f position {0.f, 0.f, 0.f};
       Maths::Vector3f direction {0.f, 0.f, 0.f};

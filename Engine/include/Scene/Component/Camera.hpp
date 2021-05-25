@@ -1,6 +1,8 @@
 #ifndef QUACKENGINE_CAMERA_HPP
 #define QUACKENGINE_CAMERA_HPP
 
+#include "Scene/Component/ComponentBase.hpp"
+
 #include "Maths/Matrix4.hpp"
 #include "Maths/Vector3.hpp"
 #include "Maths/Quaternion.hpp"
@@ -15,21 +17,21 @@ class CameraSystem;
 
 namespace Component
 {
-    class Camera
+    class Camera : public ComponentBase
     {
     public:
         bool isActive {true};
 
         friend ::CameraSystem;
-        float _fov;
+        float _fov {0};
         bool _isPerspective{true};
 
     private:
-        unsigned int _width;
-        unsigned int _height;
+        unsigned int _width     {0};
+        unsigned int _height    {0};
 
-        float _far;
-        float _near;
+        float _far {0};
+        float _near {0};
 
         float _scaleAxisX = 0;
         float _scaleAxisY = 0;

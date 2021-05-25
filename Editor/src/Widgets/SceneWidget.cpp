@@ -1,6 +1,7 @@
 #include "Widgets/SceneWidget.hpp"
 #include "Scene/Core/World.hpp"
 #include "Renderer/RendererInterface.hpp"
+#include "Scene/Component/Transform.hpp"
 #include "Engine.hpp"
 
 #include "GLFW/glfw3.h"
