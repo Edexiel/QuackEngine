@@ -9,6 +9,8 @@
 
 class ToolboxWidget :public Widget
 {
+private:
+    bool isPlaying=false;
 public:
     ToolboxWidget();
     void UpdateVisible() final;

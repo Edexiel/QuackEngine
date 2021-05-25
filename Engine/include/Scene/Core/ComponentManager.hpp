@@ -12,8 +12,11 @@
 #include "Types.hpp"
 #include "ComponentArray.hpp"
 #include "Debug/Assertion.hpp"
+#include <fmt/core.h>
+#include <fmt/color.h>
+#include <Tools/Type.hpp>
 
-class ComponentManager
+ class ComponentManager
 {
 private:
     std::unordered_map<std::string_view , ComponentType> _componentTypes;
@@ -63,8 +66,12 @@ inline void ComponentManager::RegisterComponent()
 
     std::string_view typeName = typeid(T).name();
 
-    Assert_Fatal_Error(_componentTypes.find(typeName) != _componentTypes.end(),
-                       "Registering component type more than once.");
+    if(_componentTypes.find(typeName)!= _componentTypes.end())
+    {
+        fmt::print(fg(fmt::color::yellow),"[ECS] Already registered, skipping: {}\n", demangle(typeid(T).name()));
+        return;
+    }
+    fmt::print(fg(fmt::color::forest_green),"[ECS] Registering: {}\n", demangle(typeid(T).name()));
 
     // Add this component type to the component type map
     _componentTypes.insert({typeName, _nextType});

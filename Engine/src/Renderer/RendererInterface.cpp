@@ -7,9 +7,9 @@
 
 using namespace Renderer;
 
-void RendererInterface::Set(std::shared_ptr<RenderSystem> _renderSystem,
-                                     std::shared_ptr<CameraSystem> _cameraSystem,
-                                     std::shared_ptr<LightSystem> _lightSystem)
+void RendererInterface::Set(RenderSystem* _renderSystem,
+                                     CameraSystem* _cameraSystem,
+                                     LightSystem* _lightSystem)
 {
     //todo: nettoyer
     renderSystem = _renderSystem;

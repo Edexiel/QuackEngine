@@ -7,6 +7,7 @@
 #include "Renderer/RendererInterface.hpp"
 
 #include "GLFW/glfw3.h"
+#include <memory>
 
 using namespace Renderer;
 
@@ -54,19 +55,19 @@ void ViewportWidget::LockCursor()
 //    }
 
     GLFWwindow *window = Engine::Instance().GetWindow();
-    auto cameraSystem = Engine::Instance().GetCurrentWorld().GetSystemManager()->GetSystem<CameraSystem>();
+    auto cs = Engine::Instance().GetCurrentWorld().GetSystem<CameraSystem>();
     if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS && !_isInGame)
     {
         io.ConfigFlags |= ImGuiConfigFlags_NoMouse;
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         _isInGame = true;
-        cameraSystem->_isFreeFlyCam = true;
+        cs->_isFreeFlyCam = true;
     }
     if (glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS && _isInGame)
     {
         io.ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         _isInGame = false;
-        cameraSystem->_isFreeFlyCam = false;
+        cs->_isFreeFlyCam = false;
     }
 }

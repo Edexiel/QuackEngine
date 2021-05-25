@@ -23,6 +23,9 @@ namespace Renderer
 
         std::vector<Renderer::Mesh> _meshList;
         std::vector<Renderer::MaterialInterface> _materialList;
+    public:
+        const std::vector<Renderer::MaterialInterface> &GetMaterialList() const;
+    private:
 
         static std::vector<unsigned int> LoadIndices(const void *loadedScene, unsigned int meshId);
 

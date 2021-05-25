@@ -1,8 +1,9 @@
-#include "Engine.hpp"
-#include "Scene/Core/World.hpp"
-
-#include "GLFW/glfw3.h"
 #include <algorithm>
+#include <vector>
+#include "Engine.hpp"
+
+#include "Scene/Core/World.hpp"
+#include "GLFW/glfw3.h"
 
 #include <Renderer/RendererInterface.hpp>
 #include <Resources/ResourcesManager.hpp>
@@ -194,24 +195,58 @@ World &Engine::CreateWorld(std::string name)
     return _worlds.emplace_back(name);
 }
 
-void Engine::SaveWorld(const std::string &worldName, fs::path path) const
+void Engine::SaveWorld(const std::string &worldName, fs::path path)
 {
     if (_worldLut.find(worldName) == _worldLut.end())
     {
         fmt::print(fg(fmt::color::yellow), "[Engine] Trying to save a world that does not exists: {}\n", path.string());
         return;
     }
-    Log_Info(fmt::format("Saving world : {}", worldName).c_str());
+//Scene
+    {
+        Log_Info(fmt::format("Saving world : {}", worldName).c_str());
+        std::filesystem::path worldPath = path;
+        worldPath.append(worldName).replace_extension(".qck");
+        std::ofstream os(worldPath);
 
-    path.append(worldName).replace_extension(".qck");
-    std::ofstream os(path);
+        cereal::JSONOutputArchive oarchive(os);
 
-    cereal::JSONOutputArchive oarchive(os);
+        oarchive(cereal::make_nvp("world", _worlds.at(_worldLut.at(worldName))));
+        Log_Info(fmt::format("World has been saved as: {}", worldPath.string()).c_str());
+    }
+//Materials
+    {
+        Log_Info(fmt::format("Saving materials").c_str());
+        path.append("Materials");
+        if (!exists(path))
+        {
+            std::filesystem::create_directory(path);
+        }
 
-    oarchive(cereal::make_nvp("world", _worlds.at(_worldLut.at(worldName))));
+        std::vector<std::string> materials = _resourcesManager.GetMaterialNameList();
+        for (const auto &name : materials)
+        {
+            std::filesystem::path tempPath = path;
+            tempPath.append(name).replace_extension(".qmt");
+            std::ofstream os(tempPath);
 
-    Log_Info(fmt::format("World has been saved as: {}", path.string()).c_str());
+            fmt::print("{}\n", tempPath.string());
+            cereal::JSONOutputArchive oarchive(os);
 
+            oarchive(cereal::make_nvp(name, *_resourcesManager.LoadMaterial(name)));
+        }
+        Log_Info(fmt::format("Materials have been saved", path.string()).c_str());
+    }
+
+
+}
+
+void Engine::FillTexture(Renderer::Texture &T)
+{
+    if (!T.name.empty())
+    {
+        T = _resourcesManager.LoadTexture(T.name);
+    }
 }
 
 void Engine::LoadWorld(World &world, fs::path path)
@@ -222,14 +257,51 @@ void Engine::LoadWorld(World &world, fs::path path)
         Log_Error("");
     }
 
-    path.append(world.GetName()).replace_extension(".qck");
+    //Materials
+    {
+        std::filesystem::path materialPath = path;
+        materialPath.append("Materials");
+        if (exists(materialPath))
+        {
+            for (const auto &p : std::filesystem::recursive_directory_iterator(materialPath))
+            {
+                if (!p.is_directory())
+                {
+                    std::string extension = p.path().extension();
+                    if (extension == ".qmt")
+                    {
+                        Renderer::Material material;
 
-    fmt::print(fg(fmt::color::forest_green), "[Engine] Loading world: {}\n", path.string());
+                        std::ifstream is(p.path());
+                        cereal::JSONInputArchive iarchive(is);
 
-    std::ifstream is(path);
-    cereal::JSONInputArchive iarchive(is);
+                        iarchive(material);
 
-    iarchive(world);
+                        FillTexture(material.colorTexture);
+                        FillTexture(material.diffuseTexture);
+                        FillTexture(material.specularTexture);
+                        FillTexture(material.normalMap);
+
+                        _resourcesManager.GenerateMaterial(p.path().filename().replace_extension("").c_str(), material);
+                    }
+                }
+
+            }
+        }
+    }
+    //World
+    {
+        std::filesystem::path worldPath = path;
+
+        worldPath.append(world.GetName()).replace_extension(".qck");
+
+        fmt::print(fg(fmt::color::forest_green), "[Engine] Loading world: {}\n", worldPath.string());
+
+        std::ifstream is(worldPath);
+        cereal::JSONInputArchive iarchive(is);
+
+        iarchive(world);
+    }
 }
 
 void Engine::RemoveWorld(const std::string &name)

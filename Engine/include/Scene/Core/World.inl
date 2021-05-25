@@ -1,7 +1,9 @@
+
+#include "World.hpp"
+
 template<typename T>
-inline void World::RegisterComponent()
+inline void World::RegisterComponent() const
 {
-    fmt::print(fg(fmt::color::forest_green),"[ECS] Register: {}\n", demangle(typeid(T).name()));
     _componentManager->RegisterComponent<T>();
 }
 
@@ -51,10 +53,8 @@ inline ComponentType World::GetComponentType()
 }
 
 template<typename T>
-inline std::shared_ptr<T> World::RegisterSystem()
+inline T* World::RegisterSystem() const
 {
-    fmt::print(fg(fmt::color::forest_green),"[ECS] Register system: {}\n",demangle(typeid(T).name()));
-
     return _systemManager->RegisterSystem<T>();
 }
 
@@ -75,7 +75,15 @@ inline const std::unique_ptr<EntityManager> &World::GetEntityManager() const
     return _entityManager;
 }
 
-inline const std::unique_ptr<SystemManager> &World::GetSystemManager() const
+//inline const std::unique_ptr<SystemManager> &World::GetSystemManager() const
+//{
+//    return _systemManager;
+//}
+
+template<class T>
+T* World::GetSystem()
 {
-    return _systemManager;
+    return _systemManager->GetSystem<T>();
 }
+
+

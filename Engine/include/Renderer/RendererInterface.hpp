@@ -19,14 +19,14 @@ namespace Renderer
 {
     struct RendererInterface
     {
-        std::shared_ptr<RenderSystem>   renderSystem;
-        std::shared_ptr<CameraSystem>   cameraSystem;
-        std::shared_ptr<LightSystem>    lightSystem;
+        RenderSystem*   renderSystem;
+        CameraSystem*   cameraSystem;
+        LightSystem*    lightSystem;
 
         RendererInterface() = default;
         ~RendererInterface() = default;
 
-        void Set(std::shared_ptr<RenderSystem> _renderSystem, std::shared_ptr<CameraSystem> _cameraSystem, std::shared_ptr<LightSystem> _lightSystem);
+        void Set(RenderSystem* _renderSystem, CameraSystem* _cameraSystem, LightSystem* _lightSystem);
 
         Framebuffer GetSceneUpdatedFramebuffer();
         void UpdateSceneFramebufferEditor(const Maths::Matrix4& projection, const Maths::Matrix4& view, Framebuffer& framebuffer);

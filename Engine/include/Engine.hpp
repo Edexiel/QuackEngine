@@ -24,6 +24,10 @@
 
 #include <filesystem>
 
+namespace cereal
+{
+    class JSONOutputArchive;
+};
 
 enum class WINDOW_MODE
 {
@@ -67,6 +71,8 @@ private:
     std::map<std::string, uint_fast16_t> _worldLut;
     std::vector<class World> _worlds;
 
+    void FillTexture(Renderer::Texture& T);
+
 public:
     static Engine &Instance();
     static void SetInstance(Engine &engine);
@@ -85,7 +91,7 @@ public:
 
     class World &CreateWorld(std::string name);
     void LoadWorld(class World &world, std::filesystem::path path);
-    void SaveWorld(const std::string &worldName, std::filesystem::path path) const;
+    void SaveWorld(const std::string &worldName, std::filesystem::path path);
     void RemoveWorld(const std::string &name);
 
     Input::InputManager &GetInputManager();
@@ -96,6 +102,7 @@ public:
     reactphysics3d::PhysicsCommon &GetPhysicsManager();
     Time::TimeManager &GetTimeManager();
     Renderer::PostProcessManager &GetPostProcessManager();
+
 
 };
 

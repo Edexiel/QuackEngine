@@ -77,16 +77,8 @@ Animation ResourcesManager::LoadAnimation(const std::filesystem::path &path)
     // Check if the Model already exist
 
     std::string type = GetFileType(path);
-    std::string name = path;
 
-    if (type != "anm")
-    {
-        // Change the type of the file
-        name.erase(name.cend() - 3, name.cend());
-        name += "anm";
-    }
-
-    auto it = _mapAnimation.find(name);
+    auto it = _mapAnimation.find(path);
 
     if (it != _mapAnimation.end())
     {
@@ -101,9 +93,9 @@ Animation ResourcesManager::LoadAnimation(const std::filesystem::path &path)
 
     // Create a new Model
     Animation animation = Animation::LoadAnimation(path);
-    animation.name = name;
-    _mapAnimation.insert({name, animation});
-    _globalAssetMap.insert({name, &_mapAnimation.find(name)->second});
+    animation.name = path;
+    _mapAnimation.insert({path, animation});
+    _globalAssetMap.insert({path, &_mapAnimation.find(path)->second});
 
     return animation;
 }
@@ -130,6 +122,7 @@ Texture ResourcesManager::LoadTexture(const std::filesystem::path &path)
     // Create a new Texture
 
     Texture texture = Texture::LoadTexture(path);
+    texture.name = path;
     _mapTexture.insert({path, texture});
     _textureToName.insert({texture.GetID(), path});
     _globalAssetMap.insert({path, &_mapTexture.find(path)->second});
@@ -217,10 +210,10 @@ Mesh &ResourcesManager::AddShape(Renderer::Mesh &mesh)
     return listLoadedShape[listLoadedShape.size() - 1];
 }
 
-Renderer::MaterialInterface ResourcesManager::LoadMaterial(const std::filesystem::path &path)
+Renderer::MaterialInterface ResourcesManager::LoadMaterial(const std::filesystem::path &name)
 {
     // Check if the Material already exist
-    auto it = _mapMaterial.find(path);
+    auto it = _mapMaterial.find(name);
 
     // Check if the texture already exist
     if (it != _mapMaterial.end())
@@ -229,9 +222,9 @@ Renderer::MaterialInterface ResourcesManager::LoadMaterial(const std::filesystem
     }
 
     // return null Material if the file doesn't exist
-    if (!exists(path))
+    if (!exists(name))
     {
-        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", path.string());
+        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", name.string());
         return nullptr;
     }
 

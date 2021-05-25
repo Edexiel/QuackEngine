@@ -42,7 +42,7 @@ int main()
     engine.GetRendererInterface().lightSystem->Update();
     engine.GetPhysicsManager();
 
-    auto physicsSystem = engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>();
+    auto physicsSystem = engine.GetCurrentWorld().GetSystem<PhysicsSystem>();
 
     while (!engine.WindowShouldClose())
     {
@@ -77,13 +77,13 @@ int main()
 
         /** UPDATE **/
         //engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
-        engine.GetCurrentWorld().GetSystemManager()->GetSystem<CameraSystem>()->Update();
+        engine.GetCurrentWorld().GetSystem<CameraSystem>()->Update();
 
         engine.SwapBuffers();
 
     }
 
-    engine.SaveWorld("Main","./");
+    //engine.SaveWorld("Main","./");
 
     return 0;
 }

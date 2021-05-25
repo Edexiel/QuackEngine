@@ -15,15 +15,31 @@ namespace Component
         template<class Archive>
         void save(Archive &archive) const
         {
-            archive(cereal::make_nvp("path",model.name), cereal::make_nvp("type", model._vertexType));
+            std::vector<std::string> materials;
+            for (const auto &mat : model.GetMaterialList())
+            {
+                materials.push_back(mat->name);
+            }
+            archive(cereal::make_nvp("path", model.name),
+                    cereal::make_nvp("type", model._vertexType),
+                    CEREAL_NVP(materials));
         }
 
         template<class Archive>
         void load(Archive &archive)
         {
-            archive(cereal::make_nvp("path",model.name), cereal::make_nvp("type", model._vertexType));
+            std::vector<std::string> materials;
+
+            archive(cereal::make_nvp("path", model.name),
+                    cereal::make_nvp("type", model._vertexType));
+            archive(CEREAL_NVP(materials));
+
             Resources::ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
-            model = resourcesManager.LoadModel(model.name,model._vertexType);
+            model = resourcesManager.LoadModel(model.name, model._vertexType);
+            for (const auto &mat : materials)
+            {
+                model.AddMaterial(resourcesManager.LoadMaterial(mat));
+            }
         }
     };
 

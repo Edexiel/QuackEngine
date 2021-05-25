@@ -13,7 +13,14 @@ option(QUACK_BUILD_TESTS "Build Tests" OFF)
 include(CheckIPOSupported)
 check_ipo_supported(RESULT supported OUTPUT error)
 
-
+option (FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." FALSE)
+if (${FORCE_COLORED_OUTPUT})
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        add_compile_options (-fdiagnostics-color=always)
+    elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        add_compile_options (-fcolor-diagnostics)
+    endif ()
+endif ()
 
 if (QUACK_BUILD_EDITOR)
     set(QUACK_EDITOR TRUE)

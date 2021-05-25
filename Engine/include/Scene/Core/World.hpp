@@ -64,7 +64,7 @@ public:
 
     // Component methods
     template<typename T>
-    void RegisterComponent();
+    void RegisterComponent() const;
 
     template<typename T>
     void AddComponent(Entity id, T component) const;
@@ -83,7 +83,7 @@ public:
 
     // System methods
     template<typename T>
-    std::shared_ptr<T> RegisterSystem();
+    T* RegisterSystem() const;
 
     template<typename T>
     void SetSystemSignature(Signature signature);
@@ -94,7 +94,10 @@ public:
 
     const std::unique_ptr<EntityManager> &GetEntityManager() const;
 
-    const std::unique_ptr<SystemManager> &GetSystemManager() const;
+    //const std::unique_ptr<SystemManager> &GetSystemManager() const;
+
+    template<class T>
+    T* GetSystem();
 
 
     ///***************SERIALIZATION**************/////////
@@ -102,6 +105,37 @@ public:
 
     struct EntityHandler
     {
+    private :
+
+        template<class Archive, class T>
+        void write(Archive &archive, Entity e, const std::string &name) const
+        {
+            if (components.at(name))
+            {
+                archive(cereal::make_nvp(name, world->GetComponent<T>(e)));
+            }
+        }
+
+        template<class Archive, class T>
+        void read(Archive &archive, World &w, Entity entity, const std::string &name) const
+        {
+            if (components.at(name))
+            {
+                T component;
+                archive(cereal::make_nvp(name, component));
+                //w.RegisterComponent<T>();
+                w.AddComponent(entity, component);
+            }
+        }
+
+        template<typename T>
+        void build(const std::string &name)
+        {
+            components[name] = world->HasComponent<T>(id);
+        }
+
+    public :
+
         EntityHandler() = default;
 
         explicit EntityHandler(Entity id, const World *world) : id(id), world(world)
@@ -155,33 +189,6 @@ public:
             read<Archive, Component::RigidBody>(archive, w, e, "RigidBody");
         }
 
-    private:
-
-        template<class Archive, class T>
-        void write(Archive &archive, Entity e, const std::string &name) const
-        {
-            if (components.at(name))
-            {
-                archive(cereal::make_nvp(name, world->GetComponent<T>(e)));
-            }
-        }
-
-        template<class Archive, class T>
-        void read(Archive &archive, World &w, Entity entity, const std::string &name) const
-        {
-            if (components.at(name))
-            {
-                T component;
-                archive(cereal::make_nvp(name, component));
-                w.AddComponent(entity, component);
-            }
-        }
-
-        template<typename T>
-        void build(const std::string &name)
-        {
-            components[name] = world->HasComponent<T>(id);
-        }
 
     };
 

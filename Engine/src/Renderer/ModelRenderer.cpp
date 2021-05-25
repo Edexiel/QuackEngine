@@ -433,3 +433,8 @@ Renderer::VertexType ModelRenderer::GetVertexType() const
 {
     return _vertexType;
 }
+
+const std::vector<Renderer::MaterialInterface> &ModelRenderer::GetMaterialList() const
+{
+    return _materialList;
+}
