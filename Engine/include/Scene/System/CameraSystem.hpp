@@ -18,7 +18,7 @@ private:
     void SetScaleAxisY(float scale) const;
     void SetScaleAxisZ(float scale) const;
 
-    Entity _activeCamera = -1;
+    Entity _activeCamera;
     Engine &_engine;
     void FreeFly() const;
     void MouseMovement() const;

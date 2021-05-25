@@ -1,6 +1,7 @@
 #ifndef QUACKENGINE_PHYSICSSYSTEM_HPP
 #define QUACKENGINE_PHYSICSSYSTEM_HPP
 
+#include "Scene/Core/World.hpp"
 #include "Scene/Core/System.hpp"
 #include "Scene/Core/Types.hpp"
 

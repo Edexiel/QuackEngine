@@ -29,14 +29,29 @@ namespace Renderer
         Texture specularTexture;
         Texture normalMap;
 
-        bool hasSkeleton {false};
-
-        std::string name;
+        bool hasSkeleton{false};
 
         Material();
         void GenerateShader();
         ShaderConstructData GetConstructData() const;
         void Apply();
+
+        template<class Archive>
+        void serialize(Archive &archive)
+        {
+            archive(CEREAL_NVP(checkLight),
+                    CEREAL_NVP(color),
+                    CEREAL_NVP(ambient),
+                    CEREAL_NVP(diffuse),
+                    CEREAL_NVP(specular),
+                    CEREAL_NVP(shininess),
+                    CEREAL_NVP(hasSkeleton),
+                    cereal::make_nvp("colorTexture", colorTexture.name),
+                    cereal::make_nvp("diffuseTexture", diffuseTexture.name),
+                    cereal::make_nvp("specularTexture", specularTexture.name),
+                    cereal::make_nvp("normalMap", normalMap.name)
+            );
+        }
     };
 
     using MaterialInterface = std::shared_ptr<Material>;
