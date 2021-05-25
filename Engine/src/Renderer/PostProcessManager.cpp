@@ -42,3 +42,8 @@ void PostProcessManager::AddProcess(ProcessBase *process)
 {
     _listProcess.emplace_back(process);
 }
+
+void PostProcessManager::AddProcess(std::unique_ptr<ProcessBase> &process)
+{
+    _listProcess.emplace_back(std::move(process));
+}
