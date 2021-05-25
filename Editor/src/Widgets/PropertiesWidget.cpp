@@ -1,15 +1,22 @@
 #include "Widgets/PropertiesWidget.hpp"
 
 #include "Engine.hpp"
+
 #include "Scene/Core/World.hpp"
 
+#include "Scene/Component/Transform.hpp"
+#include "Scene/Component/Camera.hpp"
+#include "Scene/Component/Animator.hpp"
 #include "Scene/Component/RigidBody.hpp"
+
+#include "Scene/System/RenderSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
+
+#include "Renderer/ModelRenderer.hpp"
+
 #include "misc/cpp/imgui_stdlib.h"
 #include "Maths/Common.hpp"
-
-#include "Scene/Component/Animator.hpp"
-#include "Renderer/ModelRenderer.hpp"
 
 #include <algorithm>
 
@@ -68,7 +75,7 @@ void PropertiesWidget::TransformReader()
 
     if (!ImGui::IsMouseDragging(0) && !isRotationChange)
         _eulerRot = transform.rotation.ToEuler() * RadToDeg<float>();
-    if(isRotationChange)
+    if (isRotationChange)
         transform.rotation = Maths::Quaternion::EulerToQuaternion(_eulerRot * DegToRad<float>());
 }
 
@@ -95,17 +102,17 @@ void PropertiesWidget::LightReader()
                 switch (n)
                 {
                     case 0:
-                        light.type = Component::Light_Type::L_POINT;
+                        light.type = Component::LightType::L_POINT;
                         break;
                     case 1:
-                        light.type = Component::Light_Type::L_DIRECTIONAL;
+                        light.type = Component::LightType::L_DIRECTIONAL;
                         break;
                     case 2:
-                        light.type = Component::Light_Type::L_SPOT;
+                        light.type = Component::LightType::L_SPOT;
                         break;
 
                 }
-                Engine::Instance().GetRendererInterface().lightSystem->Update(true);
+                Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
             }
             if (isSelected)
                 ImGui::SetItemDefaultFocus();
@@ -117,22 +124,22 @@ void PropertiesWidget::LightReader()
         ImGui::ColorEdit3("Diffuse", light.diffuse.e) ||
         ImGui::ColorEdit3("Specular", light.specular.e))
     {
-        Engine::Instance().GetRendererInterface().lightSystem->Update(true);
+        Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
     }
-    if (light.type != Component::Light_Type::L_DIRECTIONAL)
+    if (light.type != Component::LightType::L_DIRECTIONAL)
     {
         if (ImGui::InputFloat("Linear Attenuation", &light.linear, 0.0f, 0.0f, "%.9f") ||
             ImGui::InputFloat("Quadratic Attenuation", &light.quadratic, 0.0f, 0.0f, "%.9f"))
         {
-            Engine::Instance().GetRendererInterface().lightSystem->Update(true);
+            Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
         }
     }
-    if (light.type == Component::Light_Type::L_SPOT)
+    if (light.type == Component::LightType::L_SPOT)
     {
         if (ImGui::DragFloat("Spot Angle", &light.spotAngle) ||
             ImGui::DragFloat("Outer Spot Angle", &light.outerSpotAngle))
         {
-            Engine::Instance().GetRendererInterface().lightSystem->Update(true);
+            Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
         }
     }
 
@@ -158,7 +165,7 @@ void PropertiesWidget::ModelReader()
                 model.name = n;
                 model = Engine::Instance().GetResourcesManager().LoadModel(n.c_str(),
                                                                            Renderer::VertexType::V_NORMALMAP);
-                Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+                Engine::Instance().GetCurrentWorld().GetSystem<RenderSystem>()->SetMaterials();
             }
 
             if (isSelected)
@@ -171,7 +178,7 @@ void PropertiesWidget::ModelReader()
     {
         ImGui::SliderInt((std::string("Material Mesh ") + std::to_string(i + 1)).c_str(),
                          (int *) model.GetMeshMaterialIndex(i), 0, (int) model.GetNumberMaterial() - 1);
-        Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+        Engine::Instance().GetCurrentWorld().GetSystem<RenderSystem>()->SetMaterials();
     }
 
     std::vector<std::string> listMaterial = Engine::Instance().GetResourcesManager().GetMaterialNameList();
@@ -181,7 +188,7 @@ void PropertiesWidget::ModelReader()
         if (ImGui::BeginCombo((std::string("##comboMaterial") + std::to_string(i)).c_str(),
                               model.GetMaterial(i)->name.c_str()))
         {
-            for (auto & n : listMaterial)
+            for (auto &n : listMaterial)
             {
                 bool is_selected = (model.name ==
                                     n); // You can store your selection however you want, outside or inside your objects
@@ -190,7 +197,7 @@ void PropertiesWidget::ModelReader()
                     Renderer::MaterialInterface materialInterface = Engine::Instance().GetResourcesManager().LoadMaterial(
                             n.c_str());
                     model.ChangeMaterial(materialInterface, i);
-                    Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+                    Engine::Instance().GetCurrentWorld().GetSystem<RenderSystem>()->SetMaterials();
                 }
                 if (is_selected)
                     ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
@@ -219,7 +226,7 @@ void PropertiesWidget::AnimatorReader()
 
     if (ImGui::BeginCombo("##AnimatorCombo", animator.GetAnimation().name.c_str()))
     {
-        for (auto & n : listAnimation)
+        for (auto &n : listAnimation)
         {
             bool isSelected = (animator.GetAnimation().name ==
                                n); // You can store your selection however you want, outside or inside your objects
@@ -227,7 +234,7 @@ void PropertiesWidget::AnimatorReader()
             {
                 animator.SetAnimation(*(Renderer::Animation *) (Engine::Instance().GetResourcesManager().GetAsset(
                         n)));
-                Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+                Engine::Instance().GetCurrentWorld().GetSystem<RenderSystem>()->SetMaterials();
             }
 
             if (isSelected)
@@ -269,7 +276,8 @@ void PropertiesWidget::RigidBodyReader()
 
 void PropertiesWidget::AddComponent()
 {
-    World &world = Engine::Instance().GetCurrentWorld();
+    Engine &e = Engine::Instance();
+    World &world = e.GetCurrentWorld();
     if (ImGui::Button("Add Component"))
     {
         ImGui::OpenPopup("##ComponentContextMenu_Add");
@@ -292,13 +300,15 @@ void PropertiesWidget::AddComponent()
 
         if (ImGui::BeginMenu("Model"))
         {
-            std::vector<std::string> listModel = Engine::Instance().GetResourcesManager().GetModelNameList();
-            for (auto & n : listModel)
+            std::vector<std::string> listModel = e.GetResourcesManager().GetModelNameList();
+            for (auto &n : listModel)
             {
                 if (ImGui::MenuItem(n.c_str()))
                 {
-                    world.AddComponent(_entity, Engine::Instance().GetResourcesManager().LoadModel(n.c_str(),
-                                                                                                   Renderer::VertexType::V_NORMALMAP));
+                    Component::Model model;
+                    model.model = e.GetResourcesManager().LoadModel(n.c_str(),
+                                                                    Renderer::VertexType::V_NORMALMAP);
+                    world.AddComponent(_entity, model);
                 }
             }
             ImGui::EndMenu();
@@ -330,17 +340,17 @@ void PropertiesWidget::AddLight()
 
     if (ImGui::MenuItem("Directional"))
     {
-        light.type = Component::Light_Type::L_DIRECTIONAL;
+        light.type = Component::LightType::L_DIRECTIONAL;
         world.AddComponent(_entity, light);
     }
     else if (ImGui::MenuItem("Point"))
     {
-        light.type = Component::Light_Type::L_POINT;
+        light.type = Component::LightType::L_POINT;
         world.AddComponent(_entity, light);
     }
     else if (ImGui::MenuItem("Spot"))
     {
-        light.type = Component::Light_Type::L_SPOT;
+        light.type = Component::LightType::L_SPOT;
         world.AddComponent(_entity, light);
     }
 }
@@ -400,7 +410,7 @@ void PropertiesWidget::AddRigidBody()
             PhysicsSystem::AddSphereCollider(_entity, 1.f);
 
         }
-        if(ImGui::MenuItem("Capsule collider"))
+        if (ImGui::MenuItem("Capsule collider"))
         {
             world.AddComponent(_entity, RigidBody());
             PhysicsSystem::SetRigidBody(_entity);
@@ -411,11 +421,11 @@ void PropertiesWidget::AddRigidBody()
     }
 }
 
-void PropertiesWidget::RigidBodyChangeBodyType(Component::RigidBody& rigidBody)
+void PropertiesWidget::RigidBodyChangeBodyType(Component::RigidBody &rigidBody)
 {
     const char *enumBodyType[]{"Static", "Kinematic", "Dynamic"};
     int bodyType = (int) rigidBody.GetBodyType();
-    if(ImGui::Combo("BodyType",&bodyType, enumBodyType, IM_ARRAYSIZE(enumBodyType)))
+    if (ImGui::Combo("BodyType", &bodyType, enumBodyType, IM_ARRAYSIZE(enumBodyType)))
     {
         switch (bodyType)
         {
@@ -446,37 +456,37 @@ void PropertiesWidget::RigidBodyChangeBodyType(Component::RigidBody& rigidBody)
     }
 }
 
-void PropertiesWidget::RigidBodyResizeShape(Component::RigidBody& rigidBody)
+void PropertiesWidget::RigidBodyResizeShape(Component::RigidBody &rigidBody)
 {
-    if(rigidBody.GetCollisionShapeType() == CollisionShapeType::CONVEX_POLYHEDRON)
+    if (rigidBody.GetCollisionShapeType() == CollisionShapeType::CONVEX_POLYHEDRON)
     {
         Maths::Vector3<float> halfExtend = rigidBody.GetHalfExtends();
-        if(ImGui::DragFloat3("Half extend", halfExtend.e))
+        if (ImGui::DragFloat3("Half extend", halfExtend.e))
             PhysicsSystem::ResizeBoxCollider(_entity, halfExtend);
     }
-    if(rigidBody.GetCollisionShapeType() == CollisionShapeType::SPHERE)
+    if (rigidBody.GetCollisionShapeType() == CollisionShapeType::SPHERE)
     {
         float radius = rigidBody.GetRadius();
-        if(ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX))
+        if (ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX))
             PhysicsSystem::ResizeSphereCollider(_entity, radius);
     }
-    if(rigidBody.GetCollisionShapeType() == CollisionShapeType::CAPSULE)
+    if (rigidBody.GetCollisionShapeType() == CollisionShapeType::CAPSULE)
     {
         float radius = rigidBody.GetRadius();
         float height = rigidBody.GetHeight();
 
-        if(ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX)
-           || ImGui::DragFloat("height", &height, 0.1f, 0.001f, FLT_MAX))
+        if (ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX)
+            || ImGui::DragFloat("height", &height, 0.1f, 0.001f, FLT_MAX))
         {
             PhysicsSystem::ResizeCapsuleCollider(_entity, radius, height);
         }
     }
 }
 
-void PropertiesWidget::RigidBodySetIsTrigger(Component::RigidBody& rigidBody)
+void PropertiesWidget::RigidBodySetIsTrigger(Component::RigidBody &rigidBody)
 {
     bool isTrigger = rigidBody.GetIsTrigger();
-    if(ImGui::Checkbox("Trigger", &isTrigger))
+    if (ImGui::Checkbox("Trigger", &isTrigger))
         PhysicsSystem::SetIsTrigger(_entity, isTrigger);
 
 }
@@ -484,12 +494,12 @@ void PropertiesWidget::RigidBodySetIsTrigger(Component::RigidBody& rigidBody)
 void PropertiesWidget::RigidBodySetMass(RigidBody &rigidBody)
 {
     float mass = rigidBody.GetMass();
-    if(ImGui::DragFloat("mass", &mass))
+    if (ImGui::DragFloat("mass", &mass))
     {
         PhysicsSystem::SetMass(_entity, mass);
 
         //todo: change this code if the dev of reactphysics3d fix this bug.
-        if(rigidBody.GetBodyType() == BodyType::STATIC)
+        if (rigidBody.GetBodyType() == BodyType::STATIC)
         {
             PhysicsSystem::SetType(_entity, BodyType::DYNAMIC);// Sorcellerie Obligatoire due a reactphysics3d
             PhysicsSystem::SetType(_entity, BodyType::STATIC);// Sorcellerie Obligatoire due a reactphysics3d
@@ -505,6 +515,6 @@ void PropertiesWidget::RigidBodySetMass(RigidBody &rigidBody)
 void PropertiesWidget::RigidBodySetIsGravityEnabled(RigidBody &rigidBody)
 {
     bool isGravityEnabled = rigidBody.GetIsGravityEnabled();
-    if(ImGui::Checkbox("Gravity Enabled", &isGravityEnabled))
+    if (ImGui::Checkbox("Gravity Enabled", &isGravityEnabled))
         PhysicsSystem::SetIsGravityEnable(_entity, isGravityEnabled);
 }

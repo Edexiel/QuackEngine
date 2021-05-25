@@ -56,7 +56,7 @@ public:
     void Clear();
 
     // Entity methods
-    Entity CreateEntity(std::string name) const;
+    Entity CreateEntity(const std::string& name) const;
 
     Entity CreateEntity() const;
 

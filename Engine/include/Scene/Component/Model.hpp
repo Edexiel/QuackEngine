@@ -8,7 +8,7 @@
 
 namespace Component
 {
-    struct Model
+    struct Model :public ComponentBase
     {
         Renderer::ModelRenderer model;
 

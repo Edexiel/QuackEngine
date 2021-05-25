@@ -22,7 +22,7 @@ void RendererPlatform::CloseWindow()
 int RendererPlatform::LoadGl()
 {
     int version = gladLoadGL(glfwGetProcAddress);
-
+    //todo : use fmt
     printf("GL_VENDOR = %s\n", glGetString(GL_VENDOR));
     printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
     printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
@@ -57,6 +57,19 @@ void RendererPlatform::EnableDepthBuffer(bool isEnable)
     {
         glDisable(GL_DEPTH_TEST);
         glDepthFunc(GL_ALWAYS);
+    }
+}
+
+void RendererPlatform::SetTransparency(bool transparency)
+{
+    if (transparency)
+    {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+    else
+    {
+        glDisable(GL_BLEND);
     }
 }
 
@@ -460,4 +473,3 @@ void RendererPlatform::SetPointLight(unsigned int shaderID, unsigned int index, 
     glUniform1f(location, light.quadratic);
 
 }
-

@@ -6,6 +6,7 @@
 #include "Maths/Quaternion.hpp"
 
 #include "Renderer/Framebuffer.hpp"
+#include "Scene/Component/ComponentBase.hpp"
 
 namespace Input
 {
@@ -16,15 +17,15 @@ class CameraSystem;
 
 namespace Component
 {
-    class Camera
+    class Camera : public ComponentBase
     {
 
     private:
-        unsigned int _width;
-        unsigned int _height;
+        unsigned int _width{0};
+        unsigned int _height{0};
 
-        float _far;
-        float _near;
+        float _far{0};
+        float _near{0};
 
         float _scaleAxisX = 0;
         float _scaleAxisY = 0;
@@ -36,7 +37,7 @@ namespace Component
         float _speedTranslation = 0.1f;
         float _speedRotation = 0.1f;
 
-        Renderer::Framebuffer _framebuffer;
+        Renderer::Framebuffer _framebuffer{};
 
         Maths::Matrix4 _projection;
         Maths::Matrix4 _view;
@@ -46,7 +47,7 @@ namespace Component
         bool isActive{true};
 
         friend ::CameraSystem;
-        float _fov;
+        float _fov{50};
         bool _isPerspective{true};
 
         Camera() = default;

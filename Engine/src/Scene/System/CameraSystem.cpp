@@ -2,6 +2,7 @@
 #include "Scene/Core/World.hpp"
 
 #include "Engine.hpp"
+#include "Scene/Component/Transform.hpp"
 
 using namespace Maths;
 using namespace Component;
@@ -20,7 +21,7 @@ Component::Camera& CameraSystem::GetActiveCamera()
         {
             _activeCamera = entity;
             Transform trs = world.GetComponent<Transform>(entity);
-            trs.scale.z *= -1;
+            trs.scale.z *= -1; // revert Z axis of the camera
             cam.SetView(trs.GetMatrix().GetInvert());
             return cam;
         }

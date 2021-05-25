@@ -1,6 +1,7 @@
 #include "Engine.hpp"
 
 #include "Scene/System/PhysicsSystem.hpp"
+#include "Scene/Component/Transform.hpp"
 
 
 using namespace Component;

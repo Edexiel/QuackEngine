@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <Enemy/EnemyComponent.hpp>
 #include "Engine.hpp"
 
 #include "Scene/Core/World.hpp"
@@ -11,6 +12,10 @@
 #include "Renderer/RendererInterface.hpp"
 
 #include "game.hpp"
+
+#include "Scene/System/RenderSystem.hpp"
+#include "Scene/System/CameraSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
 
 #include "Renderer/ProcessBase.hpp"
 #include "Renderer/PostProcess/KernelPostProcess.hpp"
@@ -33,14 +38,18 @@ void Game::Init(Engine &engine) const
     world.RegisterComponent<Component::RigidBody>();
     world.RegisterComponent<Component::Animator>();
 
+    world.RegisterComponent<EnemyComponent>();
+
+
 
     auto renderSystem = world.RegisterSystem<RenderSystem>();
     auto cameraSystem = world.RegisterSystem<CameraSystem>();
     auto lightSystem = world.RegisterSystem<LightSystem>();
     auto physicsSystem = world.RegisterSystem<PhysicsSystem>();
 
+    auto noteDisplaySystem = world.RegisterSystem<EnemyManagerSystem>();
 
-    engine.GetRendererInterface().Set(renderSystem, cameraSystem, lightSystem);
+
     engine.GetResourcesManager().Init();
 
     //Signature Renderer
@@ -74,10 +83,30 @@ void Game::Init(Engine &engine) const
         signaturePhysics.set(world.GetComponentType<Component::RigidBody>());
         world.SetSystemSignature<PhysicsSystem>(signaturePhysics);
     }
+
+
+    //signature enemymanager
+    {
+        Signature signatureRender;
+        signatureRender.set(world.GetComponentType<EnemyComponent>());
+        signatureRender.set(world.GetComponentType<Component::Transform>());
+        world.SetSystemSignature<EnemyManagerSystem>(signatureRender);
+    }
+
     engine.LoadWorld(world, "./");
     engine.GetResourcesManager().LoadFolder(R"(../../Game/Asset)");
     physicsSystem->Init();
 
+
+//    //NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();
+//    std::unique_ptr<ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
+//
+//    engine.GetPostProcessManager().AddProcess(ptr);
+//
+//    noteDisplaySystem->GenerateEnemies(10, {0,0,0}, 50.f, 100.f);
+
+
+    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
 

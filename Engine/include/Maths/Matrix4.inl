@@ -1,3 +1,4 @@
+
 inline Matrix4 Matrix4::Identity()
 {
     Matrix4 mat;
@@ -180,6 +181,36 @@ inline Matrix4 Matrix4::ViewportMatrix(int x, int y,unsigned int width,unsigned 
     return view;
 }
 
+inline Matrix4 Matrix4::LookAtMatrix(const Vector3f& eye, const Vector3f& target, const Vector3f& angleZ)
+{
+    Matrix4 result;
+
+    Vector3f forward = (target - eye).Normalize();
+    Vector3f side = (Vector3f::CrossProduct(forward, angleZ)).Normalize();
+    Vector3f up = (Vector3f::CrossProduct(side, forward)).Normalize();
+
+    result.e[0] = side.x;
+    result.e[1] = up.x;
+    result.e[2] = -forward.x;
+
+
+    result.e[4] = side.y;
+    result.e[5] = up.y;
+    result.e[6] = -forward.y;
+
+    result.e[8] = side.z;
+    result.e[9] = up.z;
+    result.e[10] = -forward.z;
+
+    result.e[12] = -(Vector3f::DotProduct(side, eye));
+    result.e[13] = -(Vector3f::DotProduct(forward, up));
+    result.e[14] = -(Vector3f::DotProduct(side, forward));
+
+    result.e[15] = 1;
+
+    return result;
+}
+
 inline Matrix4 Matrix4::GetTranspose() const
 {
     return {
@@ -300,7 +331,6 @@ inline Matrix4 Matrix4::operator+(const Matrix4 &m2)
 
     return result;
 }
-
 
 
 /*std::ostream& operator<<(std::ostream &os, const Matrix4& m)

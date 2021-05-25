@@ -1,19 +1,33 @@
 
+#include "Quaternion.hpp"
+
 inline Quaternion::Quaternion(float _w, float _x, float _y, float _z) : x{_x}, y{_y}, z{_z}, w{_w}
 {}
 
 inline Quaternion::Quaternion(float _w, const Vector3f &_axis) : x{_axis.x}, y{_axis.y}, z{_axis.z}, w{_w}
 {}
 
-inline Quaternion::Quaternion(const Vector3f &Axe, float angle)
+inline Quaternion::Quaternion(const Vector3f &axis, float angle)
 {
     w = cosf(angle / 2);
 
-    x = sinf(angle / 2) * Axe.x;
-    y = sinf(angle / 2) * Axe.y;
-    z = sinf(angle / 2) * Axe.z;
+    x = sinf(angle / 2) * axis.x;
+    y = sinf(angle / 2) * axis.y;
+    z = sinf(angle / 2) * axis.z;
 }
 
+inline Quaternion Quaternion::AngleAxis(float angle, Vector3f axis)
+{
+    return {cosf(angle / 2),
+            sinf(angle / 2) * axis.x,
+            sinf(angle / 2) * axis.y,
+            sinf(angle / 2) * axis.z};
+}
+
+inline Quaternion Quaternion::Identity()
+{
+    return {1, 0, 0, 0};
+}
 
 inline float Quaternion::GetMagnitude() const
 {
@@ -175,6 +189,26 @@ inline Quaternion Quaternion::Lerp(const Quaternion &q1, const Quaternion &q2, f
 inline Quaternion Quaternion::Nlerp(const Quaternion &q1, const Quaternion &q2, float t)
 {
     return Lerp(q1, q2, t).GetNormalized();
+}
+
+inline Quaternion Quaternion::LookAt(const Vector3f& origin, const Vector3f& target)
+{
+    Vector3f forwardVector = (target - origin).Normalize();
+
+    float dot = Vector3f::DotProduct(Vector3f::Forward(), forwardVector);
+
+    if (abs(dot - (-1.0f)) < 0.000001f)
+    {
+        return Quaternion(Vector3f::Up(), 3.1415926535897932f);
+    }
+    if (abs(dot - (1.0f)) < 0.000001f)
+    {
+        return Quaternion::Identity();
+    }
+
+    float rotAngle = acosf(dot);
+    Vector3f rotAxis = Vector3f::CrossProduct(Vector3f::Forward(), forwardVector).Normalize();
+    return AngleAxis(rotAngle, rotAxis);
 }
 
 inline Maths::Vector3f Quaternion::XYZVector() const

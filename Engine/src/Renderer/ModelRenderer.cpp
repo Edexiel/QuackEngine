@@ -45,7 +45,7 @@ ModelRenderer ModelRenderer::LoadModel(const std::filesystem::path& path, Vertex
 
     if (!scene)
     {
-        fmt::print(fg(fmt::color::red), "[Model] Object can't be loaded: {}",path.string());
+        fmt::print(fg(fmt::color::red), "[Model] Object can't be loaded: {}\n",path.string());
 
         return {};
     }

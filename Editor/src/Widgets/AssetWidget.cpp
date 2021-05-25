@@ -1,8 +1,13 @@
 #include "Widgets/AssetWidget.hpp"
-
 #include "Scene/Core/World.hpp"
-#include "Renderer/ModelRenderer.hpp"
+#include "Scene/Component/Light.hpp"
 #include "Scene/Component/Model.hpp"
+#include "Scene/System/RenderSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
+
+#include "Renderer/Framebuffer.hpp"
+#include "Renderer/ModelRenderer.hpp"
+
 #include "Renderer/Vertex.hpp"
 
 #include "Engine.hpp"
@@ -53,12 +58,12 @@ void AssetWidget::DisplayMaterial(const Resources::Asset* asset)
     if (ImGui::Checkbox("Check Lights", &material->checkLight))
     {
         material->GenerateShader();
-        engine.GetRendererInterface().lightSystem->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
     }
     if (ImGui::Checkbox("Has Skeleton", &material->hasSkeleton))
     {
         material->GenerateShader();
-        engine.GetRendererInterface().lightSystem->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
     }
 
     if (material->checkLight)
@@ -76,7 +81,7 @@ void AssetWidget::DisplayMaterial(const Resources::Asset* asset)
     if (SelectTexture(material->colorTexture, listTexture, name.c_str(), "Color Texture"))
     {
         material->GenerateShader();
-        engine.GetRendererInterface().lightSystem->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
     }
 
     if (!material->checkLight)
@@ -86,21 +91,21 @@ void AssetWidget::DisplayMaterial(const Resources::Asset* asset)
     if (SelectTexture(material->diffuseTexture, listTexture, name.c_str(), "Diffuse Texture"))
     {
         material->GenerateShader();
-        engine.GetRendererInterface().lightSystem->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
     }
 
     name = engine.GetResourcesManager().GetName(material->specularTexture);
     if (SelectTexture(material->specularTexture, listTexture, name.c_str(), "Specular Texture"))
     {
         material->GenerateShader();
-        engine.GetRendererInterface().lightSystem->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
     }
 
     name = engine.GetResourcesManager().GetName(material->normalMap);
     if (SelectTexture(material->normalMap, listTexture, name.c_str(), "Normal Texture"))
     {
         material->GenerateShader();
-        engine.GetRendererInterface().lightSystem->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
     }
 }
 

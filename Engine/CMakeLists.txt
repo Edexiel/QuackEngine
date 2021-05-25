@@ -31,6 +31,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/PostProcessManager.cpp
 
         src/Scene/Core/World.cpp
+        src/Scene/Component/ComponentBase.cpp
         src/Scene/Component/Camera.cpp
         src/Scene/Component/RigidBody.cpp
 
@@ -45,11 +46,12 @@ add_library(${PROJECT_NAME} STATIC
 
         src/Physics/PhysicsEventManager.cpp
         src/Tools/Type.cpp
+
         src/Time/TimePlatformGLFW.cpp
         src/Time/TimeManager.cpp
+
         src/Renderer/PostProcess/KernelPostProcess.cpp
         )
-
 
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

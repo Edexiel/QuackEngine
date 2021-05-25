@@ -3,6 +3,7 @@
 
 #include "Scene/Core/System.hpp"
 #include "Scene/Component/Transform.hpp"
+
 #include "Renderer/Material.hpp"
 #include "Renderer/Mesh.hpp"
 
@@ -13,8 +14,11 @@ namespace Maths
 {
     class Matrix4;
 }
+
 namespace Component
 {
+    class Transform;
+    class Model;
     class Camera;
 }
 namespace Renderer

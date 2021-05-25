@@ -35,6 +35,8 @@ namespace Renderer
         static void Clear();
         static void EnableDepthBuffer(bool isEnable);
 
+        static void SetTransparency(bool transparency);
+
         static Mesh CreateMesh(const Vertex *vertices, unsigned int verticesSize, const unsigned int *indices,
                                unsigned int indicesSize, Renderer::VertexType vertexType);
         static Mesh CreateMesh(const float *vertices, unsigned int verticesSize, const unsigned int *indices,

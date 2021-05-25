@@ -1,6 +1,8 @@
 #ifndef _ANIMATOR_HPP
 #define _ANIMATOR_HPP
 
+#include "Scene/Component/ComponentBase.hpp"
+
 #include "Maths/Matrix4.hpp"
 
 #include "Renderer/Animation.hpp"
@@ -13,7 +15,7 @@
 
 namespace Component
 {
-    class Animator
+    class Animator : public ComponentBase
     {
         std::vector<Maths::Matrix4> _bonesOffset;
         Renderer::Animation _currentAnimation;

@@ -1,5 +1,5 @@
 #include "Engine.hpp"
-
+#include "Scene/Core/World.hpp"
 #include "Resources/ResourcesManager.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
@@ -9,7 +9,10 @@
 
 #include "Debug/Log.hpp"
 #include "Debug/Assertion.hpp"
+#include "Scene/System/RenderSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
 
+#include <filesystem>
 #include <fmt/core.h>
 #include <fmt/color.h>
 
@@ -63,9 +66,10 @@ void ResourcesManager::ReLoadModel(const std::filesystem::path &path, Renderer::
 
     if (it != _mapModel.end())
     {
+        Engine& e = Engine::Instance();
         Renderer::ModelRenderer::ReLoadModel(it->second, path, vertexType);
-        Engine::Instance().GetRendererInterface().renderSystem->UpdateModel(it->second);
-        Engine::Instance().GetRendererInterface().renderSystem->SetMaterials();
+        e.GetCurrentWorld().GetSystem<RenderSystem>()->UpdateModel(it->second);
+        e.GetCurrentWorld().GetSystem<RenderSystem>()->SetMaterials();
         return;
     }
 
@@ -115,7 +119,6 @@ Texture ResourcesManager::LoadTexture(const std::filesystem::path &path)
     if (!exists(path))
     {
         fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", path.string());
-        //todo : no
         return Texture();
     }
 
@@ -172,8 +175,8 @@ Renderer::Shader ResourcesManager::LoadObjectShader(const Renderer::ShaderConstr
     Shader shader = Shader::LoadObjectShader(constructData);
     _mapDynamicShader.insert({constructData.GetKey(), shader});
 
-    if (constructData.hasLight)
-        Engine::Instance().GetRendererInterface().lightSystem->AddShaderToUpdate(shader);
+  if(constructData.hasLight)
+      Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->AddShaderToUpdate(shader);
 
     return shader;
 }

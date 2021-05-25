@@ -61,8 +61,8 @@ void Shader::SetLight(const Component::Light& light, unsigned int index) const
 {
   switch (light.type) 
   {
-    case Light_Type::L_DIRECTIONAL : return RendererPlatform::SetDirectionalLight(_id, index, light);
-    case Light_Type::L_SPOT : return RendererPlatform::SetSpotLight(_id, index, light);
+    case LightType::L_DIRECTIONAL : return RendererPlatform::SetDirectionalLight(_id, index, light);
+    case LightType::L_SPOT : return RendererPlatform::SetSpotLight(_id, index, light);
     default : return RendererPlatform::SetPointLight(_id, index, light);
   }
 }

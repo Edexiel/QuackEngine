@@ -39,6 +39,8 @@ namespace Maths
                                       unsigned int width,
                                       unsigned int height);
 
+        static Matrix4 LookAtMatrix(const Vector3f& eye, const Vector3f& target, const Vector3f& angleZ);
+
         Matrix4 GetTranspose() const;
         float GetDeterminant() const;
         Matrix4 GetInvert() const;

@@ -5,6 +5,8 @@
 #include "Scene/Component/Animator.hpp"
 #include "Scene/Core/World.hpp"
 
+#include "Scene/Component/Camera.hpp"
+#include "Scene/Component/Transform.hpp"
 
 using namespace Renderer;
 using namespace Component;
@@ -12,26 +14,26 @@ using namespace Component;
 
 void RenderSystem::Draw(Component::Camera &camera)
 {
-    camera.GetFramebuffer().Bind();
-
-    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 1.f});
+    Renderer::RendererPlatform::SetTransparency(true);
+    Renderer::RendererPlatform::EnableDepthBuffer(true);
     RendererPlatform::Clear();
 
+    camera.GetFramebuffer().Bind();
+    RendererPlatform::Clear();
     DrawMaterials(camera.GetProjection(), camera.GetView());
-
     RendererPlatform::BindFramebuffer(0);
 }
 
 void RenderSystem::Draw(const Maths::Matrix4 &projection, const Maths::Matrix4 &view)
 {
-    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 1.f});
+    RendererPlatform::SetTransparency(true);
+    RendererPlatform::EnableDepthBuffer(true);
     RendererPlatform::Clear();
 
     DrawMaterials(projection, view);
 }
 
-void
-RenderSystem::AddMesh(const Renderer::MaterialInterface &materialInterface, const Renderer::Mesh &mesh, Entity entity)
+void RenderSystem::AddMesh(const Renderer::MaterialInterface &materialInterface, const Renderer::Mesh &mesh, Entity entity)
 {
     auto it = _mapMaterial.find(materialInterface);
 
@@ -46,7 +48,6 @@ RenderSystem::AddMesh(const Renderer::MaterialInterface &materialInterface, cons
 
 void RenderSystem::SetMaterials()
 {
-
     _mapMaterial.erase(_mapMaterial.cbegin(), _mapMaterial.cend());
     MaterialInterface material;
     World &world = Engine::Instance().GetCurrentWorld();

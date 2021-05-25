@@ -2,26 +2,18 @@
 
 #include "Engine.hpp"
 #include "Scene/Core/World.hpp"
+#include "Scene/Component/Camera.hpp"
+
 #include "Renderer/RendererPlatform.hpp"
-#include "Renderer/Mesh.hpp"
+#include "Scene/System/RenderSystem.hpp"
+#include "Scene/System/CameraSystem.hpp"
 
 using namespace Renderer;
 
-void RendererInterface::Set(RenderSystem* _renderSystem,
-                                     CameraSystem* _cameraSystem,
-                                     LightSystem* _lightSystem)
-{
-    //todo: nettoyer
-    renderSystem = _renderSystem;
-    cameraSystem = _cameraSystem;
-    lightSystem = _lightSystem;
-}
-
 Framebuffer RendererInterface::GetSceneUpdatedFramebuffer()
 {
-    lightSystem->Update();
-    Component::Camera& camera = cameraSystem->GetActiveCamera();
-    renderSystem->Draw(camera);
+    Component::Camera& camera = Engine::Instance().GetCurrentWorld().GetSystem<CameraSystem>()->GetActiveCamera();
+    Engine::Instance().GetCurrentWorld().GetSystem<RenderSystem>()->Draw(camera);
 
     Engine::Instance().GetPostProcessManager().ApplyPostProcess(camera.GetFramebuffer());
 
@@ -34,8 +26,7 @@ void RendererInterface::UpdateSceneFramebufferEditor(const Maths::Matrix4& proje
 {
     framebuffer.Bind();
 
-    lightSystem->Update();
-    renderSystem->Draw(projection, view);
+    Engine::Instance().GetCurrentWorld().GetSystem<RenderSystem>()->Draw(projection, view);
 
     RendererPlatform::BindFramebuffer(0);
 }

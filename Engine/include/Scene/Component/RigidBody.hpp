@@ -1,6 +1,8 @@
 #ifndef QUACKENGINE_RIGIDBODY_HPP
 #define QUACKENGINE_RIGIDBODY_HPP
 
+#include "Scene/Component/ComponentBase.hpp"
+
 #include <functional>
 #include "Scene/Core/Types.hpp"
 #include "Maths/Vector3.hpp"
@@ -26,7 +28,7 @@ class PhysicsSystem;
 
 namespace Component
 {
-    struct RigidBody
+    class RigidBody : public ComponentBase
     {
     private:
         union ShapeParams

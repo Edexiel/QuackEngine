@@ -30,13 +30,12 @@ private:
 public:
     template<typename T>
     void RegisterComponent();
-    void RegisterComponent();
 
     template<typename T>
     ComponentType GetComponentType();
 
     template<typename T>
-    void AddComponent(Entity id, T component);
+    void AddComponent(Entity id, const T& component);
 
     template<typename T>
     void RemoveComponent(Entity id);
@@ -56,7 +55,7 @@ inline std::shared_ptr<ComponentArray<T>> ComponentManager::GetComponentArray()
     std::string_view typeName = typeid(T).name();
 
     //std::printf("GetComponentArray : %s \n",typeName);
-    Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "Component not registered before use.");
+    Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "ComponentBase not registered before use.");
     return std::static_pointer_cast<ComponentArray<T>>(_componentArrays[typeName]);
 }
 
@@ -87,12 +86,12 @@ template<typename T>
 inline ComponentType ComponentManager::GetComponentType()
 {
     std::string_view typeName = typeid(T).name();
-    Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "Component not registered before use.");
+    Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "ComponentBase not registered before use.");
     return _componentTypes[typeName];
 }
 
 template<typename T>
-inline void ComponentManager::AddComponent(Entity id, T component)
+inline void ComponentManager::AddComponent(Entity id, const T& component)
 {
     GetComponentArray<T>()->AddData(id, component);
 }

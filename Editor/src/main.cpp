@@ -2,9 +2,13 @@
 
 #include "Editor.hpp"
 #include "Engine.hpp"
+
 #include "Renderer/Shape.hpp"
+#include "Renderer/RendererPlatform.hpp"
+
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
 
 #include "Tools/Random.hpp"
 #include "game.hpp"
@@ -39,8 +43,8 @@ int main()
     unsigned int frames{0};
     double timeAcc{0.0};
 
-    engine.GetRendererInterface().lightSystem->Update();
     engine.GetPhysicsManager();
+    engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
 
     auto physicsSystem = engine.GetCurrentWorld().GetSystem<PhysicsSystem>();
 
@@ -73,14 +77,12 @@ int main()
         /** Editor draw **/
         editor.Draw();
 
-
-
         /** UPDATE **/
-        //engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
+        //engine.GetCurrentWorld().GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
         engine.GetCurrentWorld().GetSystem<CameraSystem>()->Update();
 
         engine.SwapBuffers();
-
+        Renderer::RendererPlatform::Clear();
     }
 
     //engine.SaveWorld("Main","./");
