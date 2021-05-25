@@ -1,6 +1,7 @@
 #include "Widgets/ViewportWidget.hpp"
 #include "Renderer/Framebuffer.hpp"
 #include "Renderer/RendererInterface.hpp"
+#include "Scene/System/CameraSystem.hpp"
 #include "Engine.hpp"
 
 #include "GLFW/glfw3.h"
@@ -30,7 +31,7 @@ void ViewportWidget::UpdateVisible()
 
     RendererInterface &rendererInterface = Engine::Instance().GetRendererInterface();
 
-    rendererInterface.cameraSystem->GetActiveCamera().Resize(wsize.x, wsize.y);
+    Engine::Instance().GetCurrentWorld().GetSystemManager()->GetSystem<CameraSystem>()->GetActiveCamera().Resize(wsize.x, wsize.y);
     Framebuffer f = rendererInterface.GetSceneUpdatedFramebuffer();
 
     ImGui::Image((ImTextureID) (size_t) f.GetTexture(), wsize, ImVec2(0, 1), ImVec2(1, 0));

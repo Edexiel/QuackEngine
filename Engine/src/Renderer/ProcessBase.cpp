@@ -1,6 +1,7 @@
 #include "Renderer/ProcessBase.hpp"
 #include "Engine.hpp"
 #include "Renderer/RendererPlatform.hpp"
+#include "Renderer/Framebuffer.hpp"
 
 using namespace Renderer;
 

@@ -2,7 +2,7 @@
 
 using namespace Component;
 
-//Light::Light(Light_Type lightType) : type{lightType} {}
+//Light::Light(LightType lightType) : type{lightType} {}
 /*
 Maths::Vector3f Light::GetDirection() const
 {

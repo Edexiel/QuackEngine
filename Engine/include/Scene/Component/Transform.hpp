@@ -1,20 +1,24 @@
 #ifndef QUACKENGINE_TRANSFORM_HPP
 #define QUACKENGINE_TRANSFORM_HPP
 
+#include "Scene/Component/ComponentBase.hpp"
+
 #include <Maths/Quaternion.hpp>
 #include <Maths/Vector3.hpp>
 #include "Scene/Core/System.hpp"
 
 namespace Component
 {
-    struct Transform
+    struct Transform : public ComponentBase
     {
         Maths::Vector3f position{0, 0, 0};
         Maths::Vector3f scale{1, 1, 1};
         Maths::Quaternion rotation{1, 0, 0, 0};
 
-//        Maths::Vector3f forward{0, 0, 1};
-//        Maths::Vector3f right{1, 0, 0};
+    public:
+        Transform() = default;
+        Transform(const Maths::Vector3f& position, const Maths::Vector3f& scale, const Maths::Quaternion& rotation)
+        : position(position), scale(scale), rotation(rotation){};
 
         inline Maths::Matrix4 GetMatrix() const
         {
@@ -40,7 +44,7 @@ namespace Component
         }
     };
 }
-//struct Transform : public Component
+//struct Transform : public ComponentBase
 //{
 //private:
 //    Maths::Vector3f _position;
