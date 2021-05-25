@@ -8,13 +8,13 @@
 using namespace Component;
 using namespace Renderer;
 
-Animator::Animator(Renderer::Animation& animation) : _currentAnimation{animation}
+Animator::Animator(const Renderer::Animation& animation) : _currentAnimation{animation}
 {
     _currentAnimation = animation;
     _bonesOffset.resize(100, Maths::Matrix4::Identity());
 }
 
-void Animator::SetAnimation(Animation &animation)
+void Animator::SetAnimation(const Animation &animation)
 {
     _currentAnimation = animation;
     _bonesOffset.clear();

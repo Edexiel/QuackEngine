@@ -5,6 +5,7 @@
 #include "Common.hpp"
 
 #include "Matrix4.hpp"
+#include "cereal/cereal.hpp"
 
 
 namespace Maths
@@ -70,6 +71,12 @@ namespace Maths
         Quaternion operator/(float scalar) const;
         Vector3f operator*(const Vector3f &v) const;
         bool operator==(const Quaternion &q) const;
+
+        template<class Archive>
+        void serialize(Archive &archive)
+        {
+            archive(CEREAL_NVP(w),CEREAL_NVP(x),CEREAL_NVP(y),CEREAL_NVP(z));
+        }
     };
 
 #include "Maths/Quaternion.inl"

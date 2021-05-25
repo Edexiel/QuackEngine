@@ -7,6 +7,7 @@
 #include "Widgets/ViewportWidget.hpp"
 #include "Widgets/ViewerWidget.hpp"
 #include "Widgets/AssetWidget.hpp"
+#include "Widgets/ToolboxWidget.hpp"
 
 
 #include "backends/imgui_impl_glfw.h"
@@ -38,6 +39,7 @@ void Editor::InitWidgets()
     _widgets.emplace_back(std::make_unique<ViewportWidget>());
     _widgets.emplace_back(std::make_unique<ViewerWidget>());
     _widgets.emplace_back(std::make_unique<AssetWidget>());
+    _widgets.emplace_back(std::make_unique<ToolboxWidget>());
 }
 
 void Editor::InitImGui(GLFWwindow *window)
@@ -88,9 +90,9 @@ void Editor::Draw()
 
     //int display_w, display_h;
     //glfwGetFramebufferSize(_window, &display_w, &display_h);
-    // glViewport(0, 0, display_w, display_h);
-    // glClearColor(1.f,0.f,0.f,0.f);
-    // glClear(GL_COLOR_BUFFER_BIT);
+//     glViewport(0, 0, display_w, display_h);
+//     glClearColor(1.f,0.f,0.f,0.f);
+//     glClear(GL_COLOR_BUFFER_BIT);
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

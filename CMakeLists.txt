@@ -10,6 +10,18 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 #option(QUACK_BUILD_EDITOR "Build Editor" OFF)
 option(QUACK_BUILD_TESTS "Build Tests" OFF)
 
+include(CheckIPOSupported)
+check_ipo_supported(RESULT supported OUTPUT error)
+
+option (FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." FALSE)
+if (${FORCE_COLORED_OUTPUT})
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        add_compile_options (-fdiagnostics-color=always)
+    elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        add_compile_options (-fcolor-diagnostics)
+    endif ()
+endif ()
+
 if (QUACK_BUILD_EDITOR)
     set(QUACK_EDITOR TRUE)
 
@@ -71,7 +83,7 @@ target_sources(imgui INTERFACE
         "${IMGUI_FOLDER}/misc/cpp/imgui_stdlib.cpp"
         )
 target_include_directories(imgui INTERFACE ${IMGUI_FOLDER})
-target_link_libraries(imgui INTERFACE glfw glad)
+#target_link_libraries(imgui INTERFACE glfw glad)
 
 #IMGUIZMO
 #set(IMGUI_IMPL_OPENGL_LOADER_GLAD2 TRUE)
@@ -85,7 +97,7 @@ target_sources(ImGuizmo INTERFACE
         "${IMGUIZMO_FOLDER}/ImSequencer.cpp"
         )
 target_include_directories(ImGuizmo INTERFACE ${IMGUIZMO_FOLDER})
-target_link_libraries(ImGuizmo INTERFACE glfw glad)
+#target_link_libraries(ImGuizmo INTERFACE glfw glad)
 
 #STB
 add_library(stb INTERFACE)
@@ -109,16 +121,17 @@ set(ASSIMP_BUILD_ASSBIN_EXPORTER ON CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ASSXML_EXPORTER ON CACHE BOOL "" FORCE)
 add_subdirectory(${external_lib}/assimp)
 
-
-#flatbuffer
-#set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-#set(FLATBUFFERS_MAX_PARSING_DEPTH 16)
-#add_subdirectory(${external_lib}/flatbuffers ${CMAKE_CURRENT_BINARY_DIR}/flatbuffers-build EXCLUDE_FROM_ALL)
-
+#Cereal
+set(SKIP_PERFORMANCE_COMPARISON ON CACHE BOOL "Skip performance comparison(requires boost)" FORCE)
+set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
+add_subdirectory(${external_lib}/cereal)
 
 #reactphysics3d
 add_subdirectory(${external_lib}/reactphysics3d)
 target_compile_options(reactphysics3d PRIVATE -w --no-warnings)
+
+#fmt
+add_subdirectory(${external_lib}/fmt)
 
 #gtest
 if (QUACK_BUILD_TESTS)
@@ -127,7 +140,6 @@ if (QUACK_BUILD_TESTS)
 endif ()
 
 add_subdirectory(Editor)
-
 
 #Runner
 add_subdirectory(Runner)
@@ -138,6 +150,15 @@ add_subdirectory(Engine)
 #Game
 add_subdirectory(Game)
 
+
+#if( supported )
+#    message(STATUS "IPO / LTO enabled")
+#    set_property(TARGET Editor PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+#    set_property(TARGET Engine PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+#    set_property(TARGET Game PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+#else()
+#    message(STATUS "IPO / LTO not supported: <${error}>")
+#endif()
 
 #if(NOT MSVC)
 #    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)

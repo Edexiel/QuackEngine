@@ -6,103 +6,100 @@
 
 #include <fstream>
 #include <sstream>
+#include <fmt/core.h>
+#include <fmt/color.h>
 
 using namespace Renderer;
 using namespace Component;
 
 Shader::Shader() : Resources::Asset(Resources::AssetType::A_SHADER) {}
 
-Shader::Shader(unsigned int ID) : Resources::Asset(Resources::AssetType::A_SHADER), _ID {ID} {}
+Shader::Shader(unsigned int id) : Resources::Asset(Resources::AssetType::A_SHADER), _id {id} {}
 
-Shader::~Shader()
-{
-  //RendererPlatform::DeleteShader(_ID);
-}
 
 unsigned int Shader::GetID() const
 {
-  return _ID;
+  return _id;
 }
 
-void Shader::Use()
+void Shader::Use() const
 {
-  RendererPlatform::UseShader(_ID);
+  RendererPlatform::UseShader(_id);
 }
 
-void Shader::SetFloat(const char* name, float value)
+void Shader::SetFloat(const char* name, float value) const
 {
-  RendererPlatform::SetFloat(_ID, name, value);
+  RendererPlatform::SetFloat(_id, name, value);
 }
 
-void Shader::SetMatrix4(const char *name, const Maths::Matrix4& mat)
+void Shader::SetMatrix4(const char *name, const Maths::Matrix4& mat) const
 {
-  RendererPlatform::SetMatrix4(_ID, name, mat);
+  RendererPlatform::SetMatrix4(_id, name, mat);
 }
 
-void Shader::SetVector3f(const char* name, const Maths::Vector3f& vec)
+void Shader::SetVector3f(const char* name, const Maths::Vector3f& vec) const
 {
-    RendererPlatform::SetVector3f(_ID, name, vec);
+    RendererPlatform::SetVector3f(_id, name, vec);
 }
 
-void Shader::SetVector4f(const char* name, const Maths::Vector4f& vec)
+void Shader::SetVector4f(const char* name, const Maths::Vector4f& vec) const
 {
-    RendererPlatform::SetVector4f(_ID, name, vec);
+    RendererPlatform::SetVector4f(_id, name, vec);
 }
 
-void Shader::SetUint(const char *name, unsigned int value)
+void Shader::SetUint(const char *name, unsigned int value) const
 {
-    RendererPlatform::SetUint(_ID, name, value);
+    RendererPlatform::SetUint(_id, name, value);
 }
 
-void Shader::SetSampler(const char* name, int sampler)
+void Shader::SetSampler(const char* name, int sampler) const
 {
-    RendererPlatform::SetSampler(_ID, name, sampler);
+    RendererPlatform::SetSampler(_id, name, sampler);
 }
 
-void Shader::SetLight(Component::Light& light, unsigned int index)
+void Shader::SetLight(const Component::Light& light, unsigned int index) const
 {
   switch (light.type) 
   {
-    case LightType::L_DIRECTIONAL : return RendererPlatform::SetDirectionalLight(_ID, index, light);
-    case LightType::L_SPOT : return RendererPlatform::SetSpotLight(_ID, index, light);
-    default : return RendererPlatform::SetPointLight(_ID, index, light);
+    case LightType::L_DIRECTIONAL : return RendererPlatform::SetDirectionalLight(_id, index, light);
+    case LightType::L_SPOT : return RendererPlatform::SetSpotLight(_id, index, light);
+    default : return RendererPlatform::SetPointLight(_id, index, light);
   }
 }
 
-void Shader::SetPointLight(Component::Light &light, unsigned int index)
+void Shader::SetPointLight(const Component::Light &light, unsigned int index) const
 {
-    RendererPlatform::SetPointLight(_ID, index, light);
+    RendererPlatform::SetPointLight(_id, index, light);
 }
 
-void Shader::SetDirectionalLight(Component::Light &light, unsigned int index)
+void Shader::SetDirectionalLight(const Component::Light &light, unsigned int index) const
 {
-    RendererPlatform::SetDirectionalLight(_ID, index, light);
+    RendererPlatform::SetDirectionalLight(_id, index, light);
 }
 
-void Shader::SetSpotLight(Component::Light &light, unsigned int index)
+void Shader::SetSpotLight(const Component::Light &light, unsigned int index) const
 {
-    RendererPlatform::SetSpotLight(_ID, index, light);
+    RendererPlatform::SetSpotLight(_id, index, light);
 }
 
-Shader Shader::LoadShader(const char* vertexPath, const char* fragmentPath)
+Shader Shader::LoadShader(const std::filesystem::path &vertexPath, const std::filesystem::path &fragmentPath)
 {
     std::string VertexShaderCode;
     std::string FragmentShaderCode;
 
     // Read the Vertex Shader code from the file
-    std::ifstream VertexShaderStream(vertexPath, std::ios::in);
-    if (VertexShaderStream.is_open())
+    std::ifstream vertexShaderStream(vertexPath, std::ios::in);
+    if (vertexShaderStream.is_open())
     {
         std::stringstream sstr;
-        sstr << VertexShaderStream.rdbuf();
+        sstr << vertexShaderStream.rdbuf();
         VertexShaderCode = sstr.str();
-        VertexShaderStream.close();
+        vertexShaderStream.close();
     }
     else
     {
-        printf("Impossible to open %s.\n", vertexPath);
-        getchar();
-        return {0};
+        fmt::print(fg(fmt::color::red),"[Shader] Impossible to open {}\n",vertexPath.string());
+        return Shader{0};
     }
 
     // Read the Fragment Shader code from the file
@@ -116,9 +113,8 @@ Shader Shader::LoadShader(const char* vertexPath, const char* fragmentPath)
     }
     else
     {
-        printf("Impossible to open %s.\n", fragmentPath);
-        getchar();
-        return {0};
+        fmt::print(fg(fmt::color::red),"[Shader] Impossible to open {}\n",fragmentPath.string());
+        return Shader{0};
     }
 
     //std::cout << VertexShaderCode << std::endl;
@@ -138,7 +134,7 @@ Shader Shader::LoadShader(const char *path)
     {
         printf("Impossible to open %s.\n", path);
         getchar();
-        return {0};
+        return Shader{0};
     }
 
     std::stringstream sstr;
@@ -273,7 +269,7 @@ std::string Shader::CreateColorFunctions(const ShaderConstructData& shaderData)
     return frag;
 }
 
-std::string Shader::LoadStringFromFile(const char* path)
+std::string Shader::LoadStringFromFile(const std::filesystem::path& path)
 {
     std::string fileData;
     std::ifstream fileStream(path, std::ios::in);
@@ -286,7 +282,7 @@ std::string Shader::LoadStringFromFile(const char* path)
     }
     else
     {
-        Assert_Error(true, (std::string("Impossible to open %s.\n") + path).c_str());
+        Assert_Error(true, (std::string("Impossible to open %s.\n") + path.string()).c_str());
         return {0};
     }
     return fileData;

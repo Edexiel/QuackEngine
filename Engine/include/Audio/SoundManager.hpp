@@ -12,6 +12,8 @@
 #define VOLUME_MAX_VALUE 2.f
 
 #include <memory>
+#include <filesystem>
+
 
 struct ma_decoder;
 struct ma_device;
@@ -67,7 +69,7 @@ namespace Audio
         float SetVolume(SoundType soundType, float newVolume);
 
         /*Sound Function*/
-        Sound CreateSound(const char* path, SoundType soundType);
+        Sound CreateSound(const std::filesystem::path &path, SoundType soundType);
 
         void StartSound(soundIndex soundIndex);
         void StopSound(soundIndex soundIndex);
