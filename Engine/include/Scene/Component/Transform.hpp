@@ -20,6 +20,24 @@ namespace Component
         {
             return Maths::Matrix4::Translate(position) * rotation.ToMatrix() * Maths::Matrix4::Scale(scale);
         };
+
+        inline Maths::Vector3f Forward() const
+        {
+            Maths::Vector4f forward = rotation.ToMatrix() * Maths::Vector4f{0,0,1,0};
+            return {forward.x, forward.y, forward.z};
+        }
+
+        inline Maths::Vector3f Side() const
+        {
+            Maths::Vector4f side = rotation.ToMatrix() * Maths::Vector4f{1,0,0,0};
+            return {side.x, side.y, side.z};
+        }
+
+        inline Maths::Vector3f Up() const
+        {
+            Maths::Vector4f up = rotation.ToMatrix() * Maths::Vector4f{0,1,0,0};
+            return {up.x, up.y, up.z};
+        }
     };
 }
 //struct Transform : public Component
