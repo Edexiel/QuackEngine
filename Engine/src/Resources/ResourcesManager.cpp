@@ -36,7 +36,7 @@ ModelRenderer ResourcesManager::LoadModel(const std::filesystem::path &path, Ver
 {
     // Check if the Model already exist
 
-    auto it = _mapModel.find(path);
+    auto it = _mapModel.find(path.string());
 
     if (it != _mapModel.end())
     {
@@ -52,8 +52,8 @@ ModelRenderer ResourcesManager::LoadModel(const std::filesystem::path &path, Ver
 
     // Create a new Model
     ModelRenderer model = ModelRenderer::LoadModel(path, vertexType);
-    _mapModel.insert({path, model});
-    _globalAssetMap.insert({path, &_mapModel.find(path)->second});
+    _mapModel.insert({path.string(), model});
+    _globalAssetMap.insert({path.string(), &_mapModel.find(path.string())->second});
 
     return model;
 }
@@ -82,7 +82,7 @@ Animation ResourcesManager::LoadAnimation(const std::filesystem::path &path)
 
     std::string type = GetFileType(path);
 
-    auto it = _mapAnimation.find(path);
+    auto it = _mapAnimation.find(path.string());
 
     if (it != _mapAnimation.end())
     {
@@ -97,9 +97,9 @@ Animation ResourcesManager::LoadAnimation(const std::filesystem::path &path)
 
     // Create a new Model
     Animation animation = Animation::LoadAnimation(path);
-    animation.name = path;
-    _mapAnimation.insert({path, animation});
-    _globalAssetMap.insert({path, &_mapAnimation.find(path)->second});
+    animation.name = path.string();
+    _mapAnimation.insert({path.string(), animation});
+    _globalAssetMap.insert({path.string(), &_mapAnimation.find(path.string())->second});
 
     return animation;
 }
@@ -107,7 +107,7 @@ Animation ResourcesManager::LoadAnimation(const std::filesystem::path &path)
 Texture ResourcesManager::LoadTexture(const std::filesystem::path &path)
 {
     // Check if the Texture already exist
-    auto it = _mapTexture.find(path);
+    auto it = _mapTexture.find(path.string());
 
     // Check if the texture already exist
     if (it != _mapTexture.end())
@@ -125,10 +125,10 @@ Texture ResourcesManager::LoadTexture(const std::filesystem::path &path)
     // Create a new Texture
 
     Texture texture = Texture::LoadTexture(path);
-    texture.name = path;
-    _mapTexture.insert({path, texture});
-    _textureToName.insert({texture.GetID(), path});
-    _globalAssetMap.insert({path, &_mapTexture.find(path)->second});
+    texture.name = path.string();
+    _mapTexture.insert({path.string(), texture});
+    _textureToName.insert({texture.GetID(), path.string()});
+    _globalAssetMap.insert({path.string(), &_mapTexture.find(path.string())->second});
 
     return texture;
 }
@@ -185,7 +185,7 @@ Audio::Sound ResourcesManager::LoadSound(const std::filesystem::path &path, Audi
 {
     // Check if the Sound already exist
 
-    auto it = _mapSound.find(path);
+    auto it = _mapSound.find(path.string());
 
     // Check if the sound already exist
     if (it != _mapSound.end())
@@ -201,8 +201,8 @@ Audio::Sound ResourcesManager::LoadSound(const std::filesystem::path &path, Audi
     }
 
     Audio::Sound sound = Engine::Instance().GetSoundManager().CreateSound(path, soundType);
-    _mapSound.insert({path, sound});
-    _soundToName.insert({sound.GetID(), path});
+    _mapSound.insert({path.string(), sound});
+    _soundToName.insert({sound.GetID(), path.string()});
 
     return sound;
 }
@@ -216,7 +216,7 @@ Mesh &ResourcesManager::AddShape(Renderer::Mesh &mesh)
 Renderer::MaterialInterface ResourcesManager::LoadMaterial(const std::filesystem::path &name)
 {
     // Check if the Material already exist
-    auto it = _mapMaterial.find(name);
+    auto it = _mapMaterial.find(name.string());
 
     // Check if the texture already exist
     if (it != _mapMaterial.end())
@@ -238,7 +238,7 @@ Renderer::MaterialInterface ResourcesManager::LoadMaterial(const std::filesystem
     return material;
 }
 
-Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const char *name, const Material &material)
+Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const std::string& name, const Material &material)
 {
 
     MaterialInterface materialInterface = std::make_shared<Material>(material);
@@ -263,7 +263,7 @@ void ResourcesManager::LoadFolder(const std::filesystem::path &path)
     {
         if (!p.is_directory())
         {
-            std::string extension = p.path().extension();
+            std::string extension = p.path().extension().string();
 
             if (extension == ".fbx" || extension == ".glb" || extension == ".gltf")
                 LoadModel(p.path(), VertexType::V_NORMALMAP);
@@ -280,7 +280,7 @@ void ResourcesManager::LoadFolder(const std::filesystem::path &path)
 
 std::string ResourcesManager::GetFileType(const std::filesystem::path &path)
 {
-    return path.extension();
+    return path.extension().string();
 }
 
 std::vector<std::string> ResourcesManager::GetModelNameList() const

@@ -83,6 +83,7 @@ public:
     GLFWwindow *GetWindow();
     void SetWindowTitle(const std::string &title);
     void SetWindowSize(int width, int height);
+    Maths::Vector2i GetWindowSize();
     bool WindowShouldClose();
     void TestWindowShouldClose();
     class World &GetCurrentWorld();
