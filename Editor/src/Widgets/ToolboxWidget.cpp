@@ -3,15 +3,14 @@
 #include "Engine.hpp"
 #include "Scene/Core/World.hpp"
 
-ToolboxWidget::ToolboxWidget()
+ToolboxWidget::ToolboxWidget():_engine{Engine::Instance()}
 {
     _title = "Toolbox";
 }
 
-void Save()
+void ToolboxWidget::Save()
 {
-    Engine &engine = Engine::Instance();
-    engine.SaveWorld(engine.GetCurrentWorld().GetName(), "./");
+    _engine.SaveWorld(_engine.GetCurrentWorld().GetName());
 }
 //void Load()
 //{
@@ -39,8 +38,10 @@ void ToolboxWidget::UpdateVisible()
     {
         if (ImGui::Button("Stop"))
         {
-            //todo
+            //todo : clear world and restore
             isPlaying = !isPlaying;
+            _engine.SetGamePlaying(isPlaying);
+
         }
     }
     else
@@ -49,6 +50,7 @@ void ToolboxWidget::UpdateVisible()
         {
             Save();
             isPlaying = !isPlaying;
+            _engine.SetGamePlaying(isPlaying);
         }
     }
 

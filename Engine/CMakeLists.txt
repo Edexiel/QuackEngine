@@ -8,8 +8,8 @@ add_library(${PROJECT_NAME} STATIC
         src/Input/InputManager.cpp
         src/Input/PlatformInputGLFW.cpp
 
-        src/Thread/TaskSystem.cpp
-        src/Thread/ThreadPool.cpp
+#        src/Thread/TaskSystem.cpp
+#        src/Thread/ThreadPool.cpp
 
         src/Resources/ResourcesManager.cpp
         src/Renderer/Mesh.cpp
@@ -56,4 +56,5 @@ add_library(${PROJECT_NAME} STATIC
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp stb miniaudio reactphysics3d cereal fmt)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw cereal fmt reactphysics3d)
+target_link_libraries(${PROJECT_NAME} PRIVATE assimp stb miniaudio)

@@ -6,6 +6,7 @@ void World::RegisterComponent() const
     if (std::is_base_of<Component::ComponentBase, T>())
         _componentManager->RegisterComponent<T>();
     else
+//        Log_Info(fmt::format())
         fmt::print(fg(fmt::color::forest_green),"[ECS] The class you're trying to register isn't a child of ComponentBase: {}\n",demangle(typeid(T).name()));
 
 }

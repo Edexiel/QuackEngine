@@ -6,6 +6,8 @@
 #include <vector>
 #include <chrono>
 #include <iomanip>
+#include <fmt/core.h>
+#include <fmt/color.h>
 
 
 #ifdef WIN32
@@ -24,11 +26,11 @@
 #define Log_Info(message)
 #define Log_Debug(message)
 #else
-#define Log_Release(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LOG_LEVEL::L_RELEASE))
-#define Log_Error(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LOG_LEVEL::L_ERROR))
-#define Log_Warning(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LOG_LEVEL::L_WARNING))
-#define Log_Info(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LOG_LEVEL::L_INFO))
-#define Log_Debug(message) (Debug::Log(message, __FILENAME__, __func__, __LINE__, Debug::LOG_LEVEL::L_DEBUG))
+#define Log_Release(message) (Debug::Log(message, __FILE__, __LINE__, Debug::LOG_LEVEL::L_RELEASE))
+#define Log_Error(message) (Debug::Log(message, __FILE__, __LINE__, Debug::LOG_LEVEL::L_ERROR))
+#define Log_Warning(message) (Debug::Log(message, __FILE__, __LINE__, Debug::LOG_LEVEL::L_WARNING))
+#define Log_Info(message) (Debug::Log(message, __FILE__, __LINE__, Debug::LOG_LEVEL::L_INFO))
+#define Log_Debug(message) (Debug::Log(message, __FILE__, __LINE__, Debug::LOG_LEVEL::L_DEBUG))
 #endif
 
 
@@ -41,7 +43,7 @@ namespace Debug
 
     inline static LOG_LEVEL logLevel = LOG_LEVEL::L_DEBUG;
 
-    inline void Log(const char *message, const char *file, const char *function, unsigned int line,
+    inline void Log(const char *message, const char *file, unsigned int line,
                     LOG_LEVEL logLvl = LOG_LEVEL::L_DEBUG)
     {
 
@@ -57,28 +59,32 @@ namespace Debug
         oss << std::put_time(&localTime, "%H:%M:%S");
 
         const char *levelString;
-
+        fmt::color color = fmt::color::white;
         switch (logLvl)
         {
             case LOG_LEVEL::L_RELEASE:
                 levelString = "RELEASE";
+                color = fmt::color::white;
                 break;
             case LOG_LEVEL::L_ERROR:
                 levelString = "ERROR";
+                color = fmt::color::red;
                 break;
             case LOG_LEVEL::L_WARNING:
                 levelString = "WARNING";
+                color = fmt::color::yellow;
                 break;
             case LOG_LEVEL::L_INFO:
                 levelString = "INFO";
+                color = fmt::color::steel_blue;
                 break;
             default:
                 levelString = "DEBUG";
+                color = fmt::color::coral;
                 break;
 
         }
-        printf("%s %s : %s : %s() l[%s] : %s\n", oss.str().c_str(), levelString, file, function,
-               std::to_string(line).c_str(), message);
+        fmt::print(fg(color), "{} [{}] {}:{} {}\n", oss.str(), levelString, file, line, message);
     }
 }
 #endif // _LOG_H

@@ -5,20 +5,17 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-#find_package(OpenGL REQUIRED)
-
-#option(QUACK_BUILD_EDITOR "Build Editor" OFF)
 option(QUACK_BUILD_TESTS "Build Tests" OFF)
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT supported OUTPUT error)
 
-option (FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." FALSE)
+option(FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." FALSE)
 if (${FORCE_COLORED_OUTPUT})
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-        add_compile_options (-fdiagnostics-color=always)
+        add_compile_options(-fdiagnostics-color=always)
     elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        add_compile_options (-fcolor-diagnostics)
+        add_compile_options(-fcolor-diagnostics)
     endif ()
 endif ()
 
@@ -97,7 +94,6 @@ target_sources(ImGuizmo INTERFACE
         "${IMGUIZMO_FOLDER}/ImSequencer.cpp"
         )
 target_include_directories(ImGuizmo INTERFACE ${IMGUIZMO_FOLDER})
-#target_link_libraries(ImGuizmo INTERFACE glfw glad)
 
 #STB
 add_library(stb INTERFACE)
@@ -124,6 +120,7 @@ add_subdirectory(${external_lib}/assimp)
 #Cereal
 set(SKIP_PERFORMANCE_COMPARISON ON CACHE BOOL "Skip performance comparison(requires boost)" FORCE)
 set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(JUST_INSTALL_CEREAL ON CACHE BOOL "" FORCE)
 add_subdirectory(${external_lib}/cereal)
 
 #reactphysics3d
@@ -141,14 +138,37 @@ endif ()
 
 add_subdirectory(Editor)
 
-#Runner
-add_subdirectory(Runner)
+if (${QUACK_BUILD_TESTS} STREQUAL "Release")
+    #Runner
+    add_subdirectory(Runner)
+endif ()
 
 #Engine
 add_subdirectory(Engine)
 
 #Game
 add_subdirectory(Game)
+
+set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install)
+
+install(TARGETS Editor RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
+install(TARGETS Engine RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/Game/Asset" DESTINATION ${CMAKE_BUILD_TYPE})
+
+#install(TARGETS Runner
+#        CONFIGURATIONS Release
+#        RUNTIME DESTINATION Release/bin)
+
+
+##Installer
+#include(InstallRequiredSystemLibraries)
+##set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
+#set(CPACK_PACKAGE_VERSION_MAJOR "${Tutorial_VERSION_MAJOR}")
+#set(CPACK_PACKAGE_VERSION_MINOR "${Tutorial_VERSION_MINOR}")
+#SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Quack Engine project")
+#SET(CPACK_PACKAGE_VENDOR "Quack Team")
+#SET(CPACK_PACKAGE_EXECUTABLES "Hello" "Hello")
+#include(CPack)
 
 
 #if( supported )
@@ -167,11 +187,3 @@ add_subdirectory(Game)
 #    target_compile_options(Game PRIVATE -Wall -Wextra -pedantic)
 #endif()
 
-
-
-#Installer
-include(InstallRequiredSystemLibraries)
-#set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
-set(CPACK_PACKAGE_VERSION_MAJOR "${Tutorial_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${Tutorial_VERSION_MINOR}")
-include(CPack)

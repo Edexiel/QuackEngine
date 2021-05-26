@@ -17,7 +17,6 @@
 
 //Serialization
 #include <cereal/archives/json.hpp>
-#include <fstream>
 #include <fmt/core.h>
 
 namespace fs = std::filesystem;
@@ -139,6 +138,14 @@ void Engine::SetWindowSize(int width, int height)
 
 }
 
+Maths::Vector2i Engine::GetWindowSize()
+{
+    Maths::Vector2i size{};
+    glfwGetWindowSize(_window, &size.x, &size.y);
+    return size;
+}
+
+
 bool Engine::WindowShouldClose()
 {
     return glfwWindowShouldClose(_window);
@@ -195,8 +202,10 @@ World &Engine::CreateWorld(std::string name)
     return _worlds.emplace_back(name);
 }
 
-void Engine::SaveWorld(const std::string &worldName, fs::path path)
+void Engine::SaveWorld(const std::string &worldName)
 {
+    fs::path path{"./"};
+
     if (_worldLut.find(worldName) == _worldLut.end())
     {
         fmt::print(fg(fmt::color::yellow), "[Engine] Trying to save a world that does not exists: {}\n", path.string());
@@ -216,17 +225,18 @@ void Engine::SaveWorld(const std::string &worldName, fs::path path)
     }
 //Materials
     {
+        std::filesystem::path materialPath = path;
         Log_Info(fmt::format("Saving materials").c_str());
-        path.append("Materials");
-        if (!exists(path))
+        materialPath.append("Materials");
+        if (!exists(materialPath))
         {
-            std::filesystem::create_directory(path);
+            std::filesystem::create_directory(materialPath);
         }
 
         std::vector<std::string> materials = _resourcesManager.GetMaterialNameList();
         for (const auto &name : materials)
         {
-            std::filesystem::path tempPath = path;
+            std::filesystem::path tempPath = materialPath;
             tempPath.append(name).replace_extension(".qmt");
             std::ofstream os(tempPath);
 
@@ -249,8 +259,9 @@ void Engine::FillTexture(Renderer::Texture &T)
     }
 }
 
-void Engine::LoadWorld(World &world, fs::path path)
+void Engine::LoadWorld(World &world)
 {
+    const fs::path path{"./Asset"};
     if (!exists(path))
     {
         fmt::print(fg(fmt::color::red), "[Engine]Path does not exists: {}\n", path.string());
@@ -292,7 +303,7 @@ void Engine::LoadWorld(World &world, fs::path path)
     //World
     {
         std::filesystem::path worldPath = path;
-
+        worldPath.append("Scenes");
         worldPath.append(world.GetName()).replace_extension(".qck");
 
         fmt::print(fg(fmt::color::forest_green), "[Engine] Loading world: {}\n", worldPath.string());
@@ -326,6 +337,16 @@ Time::TimeManager &Engine::GetTimeManager()
 Renderer::PostProcessManager &Engine::GetPostProcessManager()
 {
     return _postProcessManager;
+}
+
+bool Engine::IsGamePlaying() const
+{
+    return _gamePlaying;
+}
+
+void Engine::SetGamePlaying(bool gamePlaying)
+{
+    _gamePlaying = gamePlaying;
 }
 
 
