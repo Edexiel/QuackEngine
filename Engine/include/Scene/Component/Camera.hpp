@@ -54,7 +54,6 @@ namespace Component
         Camera(unsigned int width, unsigned int height, float far, float near, float fov);
         Camera(unsigned int width, unsigned int height, float far, float near);
 
-
         void Resize(unsigned int width, unsigned int height);
 
         Renderer::Framebuffer GetFramebuffer() const;
@@ -69,6 +68,9 @@ namespace Component
         void SetView(const Maths::Matrix4 &view);
 
         /****** Serialization *******/
+
+        private:
+            void LoadFramebuffer();
 
         friend class cereal::access;
 
@@ -91,8 +93,7 @@ namespace Component
                 _projection = Maths::Matrix4::OrthoMatrix(_width, _height, _near, _far);
 
             _view = Maths::Matrix4::Identity();
-            _framebuffer = Renderer::Framebuffer::LoadFramebuffer(_width, _height);
-
+            LoadFramebuffer();
         }
 
     };

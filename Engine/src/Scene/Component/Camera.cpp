@@ -1,4 +1,5 @@
 #include "Scene/Component/Camera.hpp"
+#include "Engine.hpp"
 
 using namespace Component;
 using namespace Maths;
@@ -85,4 +86,10 @@ void Camera::Resize(unsigned int width, unsigned int height)
 void Camera::SetView(const Matrix4 &view)
 {
     _view = view;
+}
+
+void Camera::LoadFramebuffer()
+{
+    Maths::Vector2i size = Engine::Instance().GetWindowSize();
+    _framebuffer = Renderer::Framebuffer::LoadFramebuffer(size.x, size.y);
 }

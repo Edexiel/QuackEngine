@@ -37,7 +37,7 @@ void ViewportWidget::UpdateVisible()
 
     //todo : make ref
     Engine::Instance().GetCurrentWorld().GetSystem<CameraSystem>()->GetActiveCamera().Resize(wsize.x, wsize.y);
-    Framebuffer f = rendererInterface.GetSceneUpdatedFramebuffer();
+    Framebuffer f = RendererInterface::GetSceneUpdatedFramebuffer();
 
     ImGui::Image((ImTextureID) (size_t) f.GetTexture(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 

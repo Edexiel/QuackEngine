@@ -9,7 +9,7 @@
 
 namespace Component
 {
-    class Light;
+    struct Light;
 }
 
 namespace Renderer
