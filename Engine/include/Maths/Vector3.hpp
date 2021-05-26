@@ -2,7 +2,9 @@
 #define QUACKENGINE_VECTOR3_HPP
 
 #include "Maths/Vector2.hpp"
-#include <iostream>
+#include "cereal/cereal.hpp"
+#include <cmath>
+
 
 namespace Maths
 {
@@ -62,6 +64,12 @@ namespace Maths
         bool operator==(const Vector3<T>& v2) const;
 
         bool operator!=(const Vector3<T>& v2) const;
+
+        template<class Archive>
+        void serialize(Archive &archive)
+        {
+            archive(CEREAL_NVP(x),CEREAL_NVP(y), CEREAL_NVP(z));
+        }
     };
 
 #include "Maths/Vector3.inl"

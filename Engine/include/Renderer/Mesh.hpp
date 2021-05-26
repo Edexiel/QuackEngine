@@ -26,8 +26,8 @@ namespace Renderer
     Mesh(VertexType vertexType);
     Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int nbVertices, unsigned int nbIndices, VertexType vertexType)
             : _vao{vao},_vbo{vbo}, _ebo{ebo}, _nbVertices{nbVertices}, _nbIndices{nbIndices}, _vertexType{vertexType} {}
-    ~Mesh();
-    void Destroy();
+    ~Mesh()=default;
+    void Destroy() const;
 
     void Draw() const;
 

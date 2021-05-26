@@ -1,21 +1,24 @@
 [submodule "Vendor/glfw"]
 	path = Vendor/glfw
 	url = git@github.com:glfw/glfw.git
-[submodule "Vendor/flatbuffers"]
-	path = Vendor/flatbuffers
-	url = git@github.com:google/flatbuffers.git
 [submodule "Vendor/assimp"]
 	path = Vendor/assimp
 	url = git@github.com:assimp/assimp.git
 [submodule "Vendor/reactphysics3d"]
 	path = Vendor/reactphysics3d
 	url = git@github.com:DanielChappuis/reactphysics3d.git
-[submodule "imgui"]
-	path = Vendor/imgui
-	url = git@gitlab.com:quack-engine/imgui.git
 [submodule "Vendor/googletest"]
 	path = Vendor/googletest
 	url = https://github.com/google/googletest.git
 [submodule "Vendor/ImGuizmo"]
 	path = Vendor/ImGuizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo.git
+[submodule "Vendor/cereal"]
+    path = Vendor/cereal
+    url = https://github.com/USCiLab/cereal.git
+[submodule "Vendor/imgui"]
+	path = Vendor/imgui
+	url = git@gitlab.com:quack-engine/imgui.git
+[submodule "Vendor/fmt"]
+	path = Vendor/fmt
+	url = https://github.com/fmtlib/fmt.git

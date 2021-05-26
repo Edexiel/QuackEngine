@@ -1,7 +1,9 @@
+#include <algorithm>
+#include <vector>
 #include "Engine.hpp"
 
+#include "Scene/Core/World.hpp"
 #include "GLFW/glfw3.h"
-#include <algorithm>
 
 #include <Renderer/RendererInterface.hpp>
 #include <Resources/ResourcesManager.hpp>
@@ -11,6 +13,14 @@
 #include "Renderer/RendererPlatform.hpp"
 
 #include "Debug/Assertion.hpp"
+#include "Debug/Log.hpp"
+
+//Serialization
+#include <cereal/archives/json.hpp>
+#include <fstream>
+#include <fmt/core.h>
+
+namespace fs = std::filesystem;
 
 inline Engine *instance = nullptr;
 
@@ -129,6 +139,13 @@ void Engine::SetWindowSize(int width, int height)
 
 }
 
+Maths::Vector2i Engine::GetWindowSize()
+{
+    Maths::Vector2i size{};
+    glfwGetWindowSize(_window, &size.x, &size.y);
+    return size;
+}
+
 bool Engine::WindowShouldClose()
 {
     return glfwWindowShouldClose(_window);
@@ -164,30 +181,6 @@ World &Engine::GetCurrentWorld()
     return _worlds[_currentWorld];
 }
 
-World &Engine::CreateWorld(std::string_view name)
-{
-    _worldLut.insert({name, (uint_fast16_t) _worlds.size()});
-    return _worlds.emplace_back(name);
-}
-
-void Engine::LoadWorld(const std::string &name)
-{
-
-}
-
-void Engine::UnloadWorld(const std::string &name)
-{
-    _worlds[_worldLut[name]].Clear();
-}
-
-void Engine::RemoveWorld(const std::string &name)
-{
-    uint_fast16_t index = _worldLut[name];
-    std::string_view back_name = _worlds.back().GetName();
-    std::swap(_worlds[index], _worlds.back());
-    _worlds.pop_back();
-    _worldLut[back_name] = index;
-}
 
 void Engine::TestWindowShouldClose()
 {
@@ -200,6 +193,131 @@ void Engine::TestWindowShouldClose()
 void Engine::SwapBuffers()
 {
     glfwSwapBuffers(_window);
+}
+
+
+World &Engine::CreateWorld(std::string name)
+{
+    _worldLut.insert({name, (uint_fast16_t) _worlds.size()});
+    return _worlds.emplace_back(name);
+}
+
+void Engine::SaveWorld(const std::string &worldName, fs::path path)
+{
+    if (_worldLut.find(worldName) == _worldLut.end())
+    {
+        fmt::print(fg(fmt::color::yellow), "[Engine] Trying to save a world that does not exists: {}\n", path.string());
+        return;
+    }
+//Scene
+    {
+        Log_Info(fmt::format("Saving world : {}", worldName).c_str());
+        std::filesystem::path worldPath = path;
+        worldPath.append(worldName).replace_extension(".qck");
+        std::ofstream os(worldPath);
+
+        cereal::JSONOutputArchive oarchive(os);
+
+        oarchive(cereal::make_nvp("world", _worlds.at(_worldLut.at(worldName))));
+        Log_Info(fmt::format("World has been saved as: {}", worldPath.string()).c_str());
+    }
+//Materials
+    {
+        Log_Info(fmt::format("Saving materials").c_str());
+        path.append("Materials");
+        if (!exists(path))
+        {
+            std::filesystem::create_directory(path);
+        }
+
+        std::vector<std::string> materials = _resourcesManager.GetMaterialNameList();
+        for (const auto &name : materials)
+        {
+            std::filesystem::path tempPath = path;
+            tempPath.append(name).replace_extension(".qmt");
+            std::ofstream os(tempPath);
+
+            fmt::print("{}\n", tempPath.string());
+            cereal::JSONOutputArchive oarchive(os);
+
+            oarchive(cereal::make_nvp(name, *_resourcesManager.LoadMaterial(name)));
+        }
+        Log_Info(fmt::format("Materials have been saved", path.string()).c_str());
+    }
+
+
+}
+
+void Engine::FillTexture(Renderer::Texture &T)
+{
+    if (!T.name.empty())
+    {
+        T = _resourcesManager.LoadTexture(T.name);
+    }
+}
+
+void Engine::LoadWorld(World &world, fs::path path)
+{
+    if (!exists(path))
+    {
+        fmt::print(fg(fmt::color::red), "[Engine]Path does not exists: {}\n", path.string());
+        Log_Error("");
+    }
+
+    //Materials
+    {
+        std::filesystem::path materialPath = path;
+        materialPath.append("Materials");
+        if (exists(materialPath))
+        {
+            for (const auto &p : std::filesystem::recursive_directory_iterator(materialPath))
+            {
+                if (!p.is_directory())
+                {
+                    std::string extension = p.path().extension().string();
+                    if (extension == ".qmt")
+                    {
+                        Renderer::Material material;
+
+                        std::ifstream is(p.path());
+                        cereal::JSONInputArchive iarchive(is);
+
+                        iarchive(material);
+
+                        FillTexture(material.colorTexture);
+                        FillTexture(material.diffuseTexture);
+                        FillTexture(material.specularTexture);
+                        FillTexture(material.normalMap);
+
+                        _resourcesManager.GenerateMaterial(p.path().filename().replace_extension("").string().c_str(), material);
+                    }
+                }
+
+            }
+        }
+    }
+    //World
+    {
+        std::filesystem::path worldPath = path;
+
+        worldPath.append(world.GetName()).replace_extension(".qck");
+
+        fmt::print(fg(fmt::color::forest_green), "[Engine] Loading world: {}\n", worldPath.string());
+
+        std::ifstream is(worldPath);
+        cereal::JSONInputArchive iarchive(is);
+
+        iarchive(world);
+    }
+}
+
+void Engine::RemoveWorld(const std::string &name)
+{
+    uint_fast16_t index = _worldLut[name];
+    std::string back_name = _worlds.back().GetName();
+    std::swap(_worlds[index], _worlds.back());
+    _worlds.pop_back();
+    _worldLut[back_name] = index;
 }
 
 PhysicsEventManager &Engine::GetPhysicsEventManager()
@@ -217,4 +335,10 @@ Renderer::PostProcessManager &Engine::GetPostProcessManager()
     return _postProcessManager;
 }
 
+
+//void Engine
+// ::UnloadWorld(const std::string &name)
+//{
+//    _worlds[_worldLut[name]].Clear();
+//}
 

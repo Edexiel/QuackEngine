@@ -17,28 +17,28 @@ unsigned int Texture::GetID() const
   return _id;
 }
 
-Texture Texture::LoadTexture(const char* filepath)
+Texture Texture::LoadTexture(const std::filesystem::path& path)
 {
   Texture texture(RendererPlatform::CreateTexture());
   RendererPlatform::TextureParameter();
 
   int width, height, nrChannels;
   stbi_set_flip_vertically_on_load(true);
-  unsigned char *data = stbi_load(filepath, &width, &height, &nrChannels, 0);
+  unsigned char *data = stbi_load(path.string().c_str(), &width, &height, &nrChannels, 0);
   if (data)
   {
     RendererPlatform::SetTextureImage2D(data, nrChannels, width, height);
   }
   else
   {
-    std::cout << "can't open image : " << filepath << std::endl;
+    std::cout << "[Texture] Can't open image : " << path.string() << std::endl;
   }
   stbi_image_free(data);
 
   return texture;
 }
 
-void Texture::Bind(unsigned int index)
+void Texture::Bind(unsigned int index) const
 {
   RendererPlatform::BindTexture(_id, index);
 }

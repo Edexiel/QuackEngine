@@ -2,24 +2,15 @@
 
 #include "Editor.hpp"
 #include "Engine.hpp"
-#include "Renderer/Material.hpp"
-#include "Scene/Core/World.hpp"
-#include "Scene/Component/Transform.hpp"
-#include "Renderer/RendererInterface.hpp"
-#include "Renderer/RendererPlatform.hpp"
+
 #include "Renderer/Shape.hpp"
-#include "Scene/Component/RigidBody.hpp"
+#include "Renderer/RendererPlatform.hpp"
+
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
-#include "Resources/ResourcesManager.hpp"
-#include "Scene/System/RenderSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
 
-#include "Scene/Component/Animator.hpp"
-
 #include "Tools/Random.hpp"
-#include "CameraEditor.hpp"
-#include "Scene/System/PhysicsSystem.hpp"
 #include "game.hpp"
 
 using namespace Component;
@@ -31,7 +22,7 @@ int main()
     EngineSettings settings{
             true,
             "QuackEditor",
-            {1280, 720},
+            {1920, 1080},
             WINDOW_MODE::WINDOWED,
             0,
             INPUT_MODE::GLFW
@@ -43,7 +34,7 @@ int main()
     Editor editor{engine.GetWindow()};
 
     Game game;
-    game.Init();
+    game.Init(engine);
 
     // Time && fps
     double tempTime{0.0};
@@ -53,9 +44,9 @@ int main()
     double timeAcc{0.0};
 
     engine.GetPhysicsManager();
-    engine.GetCurrentWorld().GetSystemManager()->GetSystem<LightSystem>()->Update();
+    engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
 
-    auto physicsSystem = engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>();
+    auto physicsSystem = engine.GetCurrentWorld().GetSystem<PhysicsSystem>();
 
     while (!engine.WindowShouldClose())
     {
@@ -87,12 +78,14 @@ int main()
         editor.Draw();
 
         /** UPDATE **/
-        engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
-        engine.GetCurrentWorld().GetSystemManager()->GetSystem<CameraSystem>()->Update();
+        //engine.GetCurrentWorld().GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
+        engine.GetCurrentWorld().GetSystem<CameraSystem>()->Update();
 
         engine.SwapBuffers();
         Renderer::RendererPlatform::Clear();
     }
+
+    //engine.SaveWorld("Main","./");
 
     return 0;
 }

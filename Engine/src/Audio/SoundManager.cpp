@@ -15,6 +15,7 @@
 
 #include <algorithm>
 #include <string>
+#include <fmt/format.h>
 
 using namespace Audio;
 
@@ -123,14 +124,14 @@ void SoundManager::Init()
     Assert_Fatal_Error((ma_device_start(_device) != MA_SUCCESS), "Failed to open playback device.\n");
 }
 
-Sound SoundManager::CreateSound(const char *path, SoundType soundType)
+Sound SoundManager::CreateSound(const std::filesystem::path &path, SoundType soundType)
 {
     ma_decoder_config decoderConfig;
 
     decoderConfig = ma_decoder_config_init(SAMPLE_FORMAT, CHANNEL_COUNT, SAMPLE_RATE);
     ma_decoder* decoder = new ma_decoder;
-    Assert_Error((ma_decoder_init_file(path, &decoderConfig, decoder) != MA_SUCCESS),
-                 (std::string("SOUND : Failed to open : ") + path).c_str());
+    Assert_Error((ma_decoder_init_file(path.string().c_str(), &decoderConfig, decoder) != MA_SUCCESS),
+                 fmt::format("[Sound] Failed to open: {}",path.string()).c_str());
 
     _index += 1;
 

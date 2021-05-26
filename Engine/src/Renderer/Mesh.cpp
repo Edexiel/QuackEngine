@@ -11,13 +11,7 @@ Mesh::Mesh(VertexType vertexType) : _vertexType {vertexType}
 {
 }
 
-
-Mesh::~Mesh()
-{
-  //RendererPlatform::DeleteMesh(_vao,_vbo, _ebo);
-}
-
-void Mesh::Destroy()
+void Mesh::Destroy() const
 {
     RendererPlatform::DeleteMesh(_vao,_vbo, _ebo);
 }
