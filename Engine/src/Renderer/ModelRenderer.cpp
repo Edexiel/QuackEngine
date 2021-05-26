@@ -36,7 +36,7 @@ void ModelRenderer::Destroy()
 ModelRenderer ModelRenderer::LoadModel(const std::filesystem::path& path, VertexType vertexType)
 {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(path,
+    const aiScene *scene = importer.ReadFile(path.string(),
                                              aiProcess_Triangulate |
                                              aiProcess_SortByPType |
                                              aiProcess_JoinIdenticalVertices |
@@ -65,7 +65,7 @@ ModelRenderer ModelRenderer::LoadModel(const std::filesystem::path& path, Vertex
             break;
     }
 
-    loadedModel.name = path;
+    loadedModel.name = path.string();
     return loadedModel;
 }
 

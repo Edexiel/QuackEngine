@@ -14,7 +14,7 @@ Animation Animation::LoadAnimation(const std::filesystem::path &path)
 {
     Assimp::Importer importer;
 
-    const aiScene *scene = importer.ReadFile(path,
+    const aiScene *scene = importer.ReadFile(path.string(),
                                              aiProcess_Triangulate |
                                              aiProcess_JoinIdenticalVertices);
 

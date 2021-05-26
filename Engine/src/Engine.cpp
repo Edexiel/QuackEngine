@@ -139,6 +139,13 @@ void Engine::SetWindowSize(int width, int height)
 
 }
 
+Maths::Vector2i Engine::GetWindowSize()
+{
+    Maths::Vector2i size{};
+    glfwGetWindowSize(_window, &size.x, &size.y);
+    return size;
+}
+
 bool Engine::WindowShouldClose()
 {
     return glfwWindowShouldClose(_window);
@@ -267,7 +274,7 @@ void Engine::LoadWorld(World &world, fs::path path)
             {
                 if (!p.is_directory())
                 {
-                    std::string extension = p.path().extension();
+                    std::string extension = p.path().extension().string();
                     if (extension == ".qmt")
                     {
                         Renderer::Material material;
@@ -282,7 +289,7 @@ void Engine::LoadWorld(World &world, fs::path path)
                         FillTexture(material.specularTexture);
                         FillTexture(material.normalMap);
 
-                        _resourcesManager.GenerateMaterial(p.path().filename().replace_extension("").c_str(), material);
+                        _resourcesManager.GenerateMaterial(p.path().filename().replace_extension("").string().c_str(), material);
                     }
                 }
 

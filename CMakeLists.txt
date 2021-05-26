@@ -124,6 +124,7 @@ add_subdirectory(${external_lib}/assimp)
 #Cereal
 set(SKIP_PERFORMANCE_COMPARISON ON CACHE BOOL "Skip performance comparison(requires boost)" FORCE)
 set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(JUST_INSTALL_CEREAL ON CACHE BOOL "" FORCE)
 add_subdirectory(${external_lib}/cereal)
 
 #reactphysics3d

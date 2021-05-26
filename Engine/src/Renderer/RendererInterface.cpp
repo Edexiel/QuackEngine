@@ -3,10 +3,13 @@
 #include "Engine.hpp"
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/Camera.hpp"
+#include "Renderer/Framebuffer.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Scene/System/RenderSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
+
+#include "Maths/Matrix4.hpp"
 
 using namespace Renderer;
 
@@ -22,7 +25,7 @@ Framebuffer RendererInterface::GetSceneUpdatedFramebuffer()
     return camera.GetFramebuffer();
 }
 
-void RendererInterface::UpdateSceneFramebufferEditor(const Maths::Matrix4& projection, const Maths::Matrix4& view, Framebuffer& framebuffer)
+void RendererInterface::UpdateSceneFramebufferEditor(const Maths::Matrix4& projection, const Maths::Matrix4& view, const Framebuffer& framebuffer)
 {
     framebuffer.Bind();
 

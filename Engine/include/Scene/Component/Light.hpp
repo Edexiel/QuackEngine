@@ -17,7 +17,7 @@ namespace Component
     struct Light : public ComponentBase
     {
 
-      LightType type {LightType::L_POINT};
+        LightType type {LightType::L_POINT};
 
         Maths::Vector3f position{0.f, 0.f, 0.f};
         Maths::Vector3f direction{0.f, 0.f, 0.f};
