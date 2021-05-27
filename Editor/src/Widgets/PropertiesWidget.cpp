@@ -154,15 +154,15 @@ void PropertiesWidget::ModelReader()
 
     std::vector<std::string> listModel = Engine::Instance().GetResourcesManager().GetModelNameList();
 
-    if (ImGui::BeginCombo("##ModelCombo", model.name.c_str()))
+    if (ImGui::BeginCombo("##ModelCombo", model.GetName().c_str()))
     {
         for (auto &n : listModel)
         {
-            bool isSelected = (model.name ==
-                               n); // You can store your selection however you want, outside or inside your objects
+            bool isSelected = (model.Path() == n);
             if (ImGui::Selectable(n.c_str(), isSelected))
             {
-                model.name = n;
+                //todo check if need to put back
+                //model.name = n;
                 model = Engine::Instance().GetResourcesManager().LoadModel(n.c_str(),
                                                                            Renderer::VertexType::V_NORMALMAP);
                 Engine::Instance().GetCurrentWorld().GetSystem<RenderSystem>()->SetMaterials();
@@ -186,12 +186,11 @@ void PropertiesWidget::ModelReader()
     for (unsigned int i = 0; i < model.GetNumberMaterial(); i++)
     {
         if (ImGui::BeginCombo((std::string("##comboMaterial") + std::to_string(i)).c_str(),
-                              model.GetMaterial(i)->name.c_str()))
+                              model.GetMaterial(i)->GetName().c_str()))
         {
             for (auto &n : listMaterial)
             {
-                bool is_selected = (model.name ==
-                                    n); // You can store your selection however you want, outside or inside your objects
+                bool is_selected = (model.Path() == n);
                 if (ImGui::Selectable(n.c_str(), is_selected))
                 {
                     Renderer::MaterialInterface materialInterface = Engine::Instance().GetResourcesManager().LoadMaterial(
@@ -224,16 +223,14 @@ void PropertiesWidget::AnimatorReader()
 
     std::vector<std::string> listAnimation = Engine::Instance().GetResourcesManager().GetAnimationNameList();
 
-    if (ImGui::BeginCombo("##AnimatorCombo", animator.GetAnimation().name.c_str()))
+    if (ImGui::BeginCombo("##AnimatorCombo", animator.GetAnimation().GetName().c_str()))
     {
         for (auto &n : listAnimation)
         {
-            bool isSelected = (animator.GetAnimation().name ==
-                               n); // You can store your selection however you want, outside or inside your objects
+            bool isSelected = (animator.GetAnimation().GetPath() == n);
             if (ImGui::Selectable(n.c_str(), isSelected))
             {
-                animator.SetAnimation(*(Renderer::Animation *) (Engine::Instance().GetResourcesManager().GetAsset(
-                        n)));
+                animator.SetAnimation((Engine::Instance().GetResourcesManager().LoadAnimation(n)));
                 Engine::Instance().GetCurrentWorld().GetSystem<RenderSystem>()->SetMaterials();
             }
 

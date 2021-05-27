@@ -95,13 +95,18 @@ Animation ResourcesManager::LoadAnimation(const std::filesystem::path &path)
         return Animation();
     }
 
-    // Create a new Model
+    // Create a new Animation
     Animation animation = Animation::LoadAnimation(path);
-    animation.name = path.string();
-    _mapAnimation.insert({path.string(), animation});
-    _globalAssetMap.insert({path.string(), &_mapAnimation.find(path.string())->second});
+
+    if (animation.GetDuration() > 0.0f) // Check if the file has an animation
+    {
+        animation.Path() = path.string();
+        _mapAnimation.insert({path.string(), animation});
+        _globalAssetMap.insert({path.string(), &_mapAnimation.find(path.string())->second});
+    }
 
     return animation;
+
 }
 
 Texture ResourcesManager::LoadTexture(const std::filesystem::path &path)
@@ -125,7 +130,7 @@ Texture ResourcesManager::LoadTexture(const std::filesystem::path &path)
     // Create a new Texture
 
     Texture texture = Texture::LoadTexture(path);
-    texture.name = path.string();
+    texture.Path() = path.string();
     _mapTexture.insert({path.string(), texture});
     _textureToName.insert({texture.GetID(), path.string()});
     _globalAssetMap.insert({path.string(), &_mapTexture.find(path.string())->second});
@@ -193,7 +198,6 @@ Audio::Sound ResourcesManager::LoadSound(const std::filesystem::path &path, Audi
         return it->second;
     }
 
-    // todo :: return null sound if the file doesn't exist
     if (!exists(path))
     {
         fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", path.string());
@@ -243,7 +247,7 @@ Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const std::string
 
     MaterialInterface materialInterface = std::make_shared<Material>(material);
 
-    materialInterface->name = name;
+    materialInterface->Path() = name;
 
     _mapMaterial.insert({name, materialInterface});
 
@@ -265,14 +269,19 @@ void ResourcesManager::LoadFolder(const std::filesystem::path &path)
         {
             std::string extension = p.path().extension().string();
 
-            if (extension == ".fbx" || extension == ".glb" || extension == ".gltf")
+            if (extension == ".glb")
                 LoadModel(p.path(), VertexType::V_NORMALMAP);
+            if (extension == ".fbx")
+            {
+                LoadModel(p.path(), VertexType::V_NORMALMAP);
+                LoadAnimation(p.path());
+            }
             else if (extension == ".ogg" || extension == ".mp3" || extension == ".wav")
                 LoadSound(p.path(), Audio::SoundType::S_MASTER);
             else if (extension == ".png" || extension == ".jpg" || extension == ".jpeg")
                 LoadTexture(p.path());
             else if (extension == ".qsh")
-                Shader::LoadShader(p.path().string().c_str());
+                LoadShader(p.path().string().c_str());
 
         }
     }
@@ -322,5 +331,8 @@ std::string ResourcesManager::GetName(const Audio::Sound &sound) const
 
 const Asset *ResourcesManager::GetAsset(const std::string &name)
 {
-    return _globalAssetMap.find(name)->second;
+    auto it = _globalAssetMap.find(name);
+    if (it == _globalAssetMap.cend())
+        return nullptr;
+    return it->second;
 }
