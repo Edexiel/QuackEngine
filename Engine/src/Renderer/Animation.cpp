@@ -4,6 +4,9 @@
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
 
+#include <fmt/core.h>
+#include <fmt/color.h>
+
 using namespace Renderer;
 
 Animation::Animation() : Resources::Asset(Resources::AssetType::A_ANIMATION)
@@ -19,6 +22,23 @@ Animation Animation::LoadAnimation(const std::filesystem::path &path)
                                              aiProcess_JoinIdenticalVertices);
 
     Animation animation;
+
+    if (!scene)
+    {
+        fmt::print(fg(fmt::color::red), "[ANIMATION LOADING] File doesn't exists: {}\n", path.string());
+        return animation;
+    }
+    if (!scene->HasMeshes())
+    {
+        fmt::print(fg(fmt::color::red), "[ANIMATION LOADING] Animation doesn't have mesh : {}\n", path.string());
+        return animation;
+    }
+    if (!scene->HasAnimations())
+    {
+        fmt::print(fg(fmt::color::red), "[ANIMATION LOADING] Animation doesn't have animation : {}\n", path.string());
+        return animation;
+    }
+
     animation.ReadBaseSkeleton((void *) scene->mMeshes[0]);
     auto assimpAnimation = scene->mAnimations[0];
     animation._duration = (float) assimpAnimation->mDuration;
@@ -32,7 +52,7 @@ Animation Animation::LoadAnimation(const std::filesystem::path &path)
 
 void Animation::ReadBaseSkeleton(const void *baseMesh)
 {
-    aiMesh *mesh = (aiMesh *) baseMesh;
+    aiMesh *mesh = (aiMesh*) baseMesh;
 
     int boneCounter = 0;
 
@@ -41,7 +61,6 @@ void Animation::ReadBaseSkeleton(const void *baseMesh)
         std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
         if (!_skeleton.GetBone(boneName))
         {
-            //newBone.id = m_BoneCounter;
             auto boneMatrix = mesh->mBones[boneIndex]->mOffsetMatrix;
             Maths::Matrix4 transform = {
                     boneMatrix.a1, boneMatrix.b1, boneMatrix.c1, boneMatrix.d1,
@@ -81,8 +100,6 @@ void Animation::ReadHierarchy(NodeData &node, const void *src)
 void Animation::ReadBones(const void *loadedAnimation)
 {
     const aiAnimation *animation = (aiAnimation *) loadedAnimation;
-
-    std::cout << "Animation Name : " << animation->mName.data << std::endl;
 
     for (unsigned int i = 0; i < animation->mNumChannels; i++)
     {
