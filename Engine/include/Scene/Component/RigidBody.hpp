@@ -8,11 +8,13 @@
 namespace reactphysics3d
 {
     class RigidBody;
+    class CollisionBody;
 }
 enum class BodyType {STATIC, KINEMATIC, DYNAMIC};
-enum class CollisionShapeType {SPHERE, CAPSULE, CONVEX_POLYHEDRON, CONCAVE_SHAPE};
+enum class CollisionShapeType {SPHERE, CAPSULE, CONVEX_POLYHEDRON, CONCAVE_SHAPE, NONE = -1};
 
 class PhysicsEventManager;
+class PhysicsCollisionCallback;
 class PhysicsSystem;
 
 namespace Component
@@ -29,7 +31,7 @@ namespace Component
         std::function<void(Entity, Entity)> _overlapExit;
 
         BodyType _bodyType {BodyType::STATIC};
-        CollisionShapeType _collisionShapeType;
+        CollisionShapeType _collisionShapeType{CollisionShapeType::NONE};
         bool _isTrigger {false};
         bool _isGravityEnabled {true};
         float _mass{1};
@@ -44,6 +46,7 @@ namespace Component
         ShapeParams _shapeParams;
 
         friend ::PhysicsEventManager;
+        friend ::PhysicsCollisionCallback;
         friend ::PhysicsSystem;
 
     public:

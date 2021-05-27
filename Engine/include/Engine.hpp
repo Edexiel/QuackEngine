@@ -15,6 +15,7 @@
 #include <reactphysics3d/engine/PhysicsCommon.h>
 #include "Time/TimeManager.hpp"
 
+#include "Physics/PhysicsCollisionCallback.hpp"
 
 #include "Input/InputManager.hpp"
 #include "Input/PlatformInput.hpp"
@@ -56,6 +57,7 @@ private:
     Resources::ResourcesManager _resourcesManager;
     Audio::SoundManager _soundManager;
     PhysicsEventManager _physicsEventManager;
+    PhysicsCollisionCallback _physicsCollisionCallback;
     reactphysics3d::PhysicsCommon _physicsManager;
     Input::InputManager _inputManager;
     Time::TimeManager _timeManager;
@@ -90,6 +92,7 @@ public:
     Resources::ResourcesManager &GetResourcesManager();
     Audio::SoundManager &GetSoundManager();
     PhysicsEventManager &GetPhysicsEventManager();
+    PhysicsCollisionCallback &GetPhysicsCollisionCallback();
     reactphysics3d::PhysicsCommon &GetPhysicsManager();
     Time::TimeManager &GetTimeManager();
     Renderer::PostProcessManager &GetPostProcessManager();

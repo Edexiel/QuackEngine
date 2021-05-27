@@ -10,14 +10,7 @@ void PhysicsSystem::Init()
     auto world = &Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)
     {
-        auto &t = world->GetComponent<Transform>(entity);
-        auto &r = world->GetComponent<Component::RigidBody>(entity);
-
-        if (!r.rb)
-        {
-            r.rb = world->GetPhysicsWorld()->createRigidBody({{t.position.x, t.position.y, t.position.z},
-                                                               {t.rotation.x, t.rotation.y, t.rotation.z, t.rotation.w}});
-        }
+        SetRigidBody(entity);
     }
 }
 
@@ -31,14 +24,10 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
     for (Entity entity: _entities)
     {
         auto &t = world->GetComponent<Transform>(entity);
-        auto &r = world->GetComponent<Component::RigidBody>(entity);
-        rp3d::Transform newTransform({t.position.x, t.position.y, t.position.z}, {t.rotation.w, t.rotation.x, t.rotation.y, t.rotation.z});
-        const rp3d::Transform &transform = r.rb->getTransform();
-        if(newTransform != transform)
-            r.rb->setTransform(newTransform);
+        PhysicsSystem::SetTransform(entity, t.position, t.rotation);
     }
 
-    world->GetPhysicsWorld()->update(fixedDeltaTime);
+//    world->GetPhysicsWorld()->update(fixedDeltaTime);
 
     for (Entity entity: _entities)
     {
@@ -54,9 +43,6 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
 void PhysicsSystem::AddBoxCollider(Entity id, const Maths::Vector3f &halfExtend, const Maths::Vector3f &position,
                                    const Maths::Quaternion &rotation)
 {
-    if(Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id).rb->getNbColliders() > 0)
-        return;
-
     auto &rigidBody = Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id);
     rigidBody._collisionShapeType = CollisionShapeType::CONVEX_POLYHEDRON;
     rigidBody._shapeParams.halfExtends = halfExtend;
@@ -67,16 +53,18 @@ void PhysicsSystem::AddBoxCollider(Entity id, const Maths::Vector3f &halfExtend,
 
     rp3d::Transform transform{{position.x, position.y, position.z},
                               {rotation.x, rotation.y, rotation.z, rotation.w}};
-    Engine::Instance().GetCurrentWorld().GetComponent<Component::RigidBody>(id).rb->addCollider(boxShape, transform);
+
+    if(Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id).rb->getNbColliders() > 0)
+        rigidBody.rb->removeCollider(rigidBody.rb->getCollider(0));
+
+    rigidBody.rb->addCollider(boxShape, transform);
+    PhysicsSystem::SetBounciness(id, rigidBody._bounciness);
 }
 
 void
 PhysicsSystem::AddSphereCollider(Entity id, float radius, const Maths::Vector3f &position,
                                  const Maths::Quaternion &rotation)
 {
-    if(Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id).rb->getNbColliders() > 0)
-        return;
-
     auto &rigidBody = Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id);
     rigidBody._collisionShapeType = CollisionShapeType::SPHERE;
     rigidBody._shapeParams.radius = radius;
@@ -85,17 +73,16 @@ PhysicsSystem::AddSphereCollider(Entity id, float radius, const Maths::Vector3f 
     rp3d::Transform transform{{position.x, position.y, position.z},
                               {rotation.x, rotation.y, rotation.z, rotation.w}};
 
+    if(Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id).rb->getNbColliders() > 0)
+        rigidBody.rb->removeCollider(rigidBody.rb->getCollider(0));
 
-    Engine::Instance().GetCurrentWorld().GetComponent<Component::RigidBody>(id).rb->addCollider(sphereShape, transform);
-
-    rigidBody.rb->getCollider(0)->getCollisionShape()->getType();
+    rigidBody.rb->addCollider(sphereShape, transform);
+    PhysicsSystem::SetBounciness(id, rigidBody._bounciness);
 }
 
 void PhysicsSystem::AddCapsuleCollider(Entity id, float radius, float height, const Maths::Vector3f &position,
                                        const Maths::Quaternion &rotation)
 {
-    if(Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id).rb->getNbColliders() > 0)
-        return;
 
     auto &rigidBody = Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id);
     rigidBody._collisionShapeType = CollisionShapeType::CAPSULE;
@@ -107,9 +94,11 @@ void PhysicsSystem::AddCapsuleCollider(Entity id, float radius, float height, co
     rp3d::Transform transform{{position.x, position.y, position.z},
                               {rotation.x, rotation.y, rotation.z, rotation.w}};
 
-    Engine::Instance().GetCurrentWorld().GetComponent<Component::RigidBody>(id).rb->addCollider(capsuleShape, transform);
+    if(Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id).rb->getNbColliders() > 0)
+        rigidBody.rb->removeCollider(rigidBody.rb->getCollider(0));
 
-    rigidBody.rb->getCollider(0)->getCollisionShape();
+    rigidBody.rb->addCollider(capsuleShape, transform);
+    PhysicsSystem::SetBounciness(id, rigidBody._bounciness);
 }
 
 void PhysicsSystem::SetType(Entity id, const BodyType &type)
@@ -130,7 +119,6 @@ void PhysicsSystem::SetRigidBody(Entity id)
 {
     auto world = &Engine::Instance().GetCurrentWorld();
     auto &rigidBody = world->GetComponent<Component::RigidBody>(id);
-    auto & name = world->GetComponent<Component::Name>(id);
 
     if (rigidBody.rb)
         return;
@@ -138,10 +126,32 @@ void PhysicsSystem::SetRigidBody(Entity id)
     auto &t = world->GetComponent<Transform>(id);
     rigidBody.rb = world->GetPhysicsWorld()->createRigidBody({{t.position.x, t.position.y, t.position.z},
                                                        {t.rotation.x, t.rotation.y, t.rotation.z, t.rotation.w}});
+    switch(rigidBody._collisionShapeType)
+    {
+        case CollisionShapeType::CONVEX_POLYHEDRON :
+        {
+            PhysicsSystem::AddBoxCollider(id, {1.f,1.f,1.f});
+            break;
+        }
+        case CollisionShapeType::SPHERE:
+        {
+            PhysicsSystem::AddSphereCollider(id, 1.f);
+            break;
+        }
+        case CollisionShapeType::CAPSULE:
+        {
+            PhysicsSystem::AddCapsuleCollider(id, 1.f, 1.f);
+            break;
+        }
+        case CollisionShapeType::NONE:
+            break;
+
+        default:
+            break;
+    }
     PhysicsSystem::SetType(id, rigidBody._bodyType);
-    PhysicsSystem::SetBounciness(id, rigidBody._bounciness);
-//    PhysicsSystem::SetMass();
-//    PhysicsSystem::SetIsGravityEnable();
+    PhysicsSystem::SetMass(id, rigidBody._mass);
+    PhysicsSystem::SetIsGravityEnable(id, rigidBody._isGravityEnabled);
 
     rigidBody.rb->setUserData(reinterpret_cast<void*>(static_cast<size_t>(id)));
 }
@@ -151,6 +161,18 @@ void PhysicsSystem::SetMass(Entity id, float mass)
     auto &rigidBody = Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id);
     rigidBody._mass = mass;
     rigidBody.rb->setMass(mass);
+
+    //todo: change this code if the dev of reactphysics3d fix this bug.
+    if(rigidBody._bodyType == BodyType::STATIC)
+    {
+        rigidBody.rb->setType(rp3d::BodyType::DYNAMIC);// Sorcellerie Obligatoire due a reactphysics3d
+        rigidBody.rb->setType(rp3d::BodyType::STATIC);// Sorcellerie Obligatoire due a reactphysics3d
+    }
+    else if (rigidBody._bodyType == BodyType::KINEMATIC)
+    {
+        rigidBody.rb->setType(rp3d::BodyType::DYNAMIC);// Sorcellerie Obligatoire due a reactphysics3d
+        rigidBody.rb->setType(rp3d::BodyType::KINEMATIC);// Sorcellerie Obligatoire due a reactphysics3d
+    }
 }
 
 void PhysicsSystem::ResizeBoxCollider(Entity id, const Maths::Vector3f &halfExtend)
@@ -209,9 +231,25 @@ void PhysicsSystem::SetVelocity(Entity id, const Maths::Vector3f &velocity)
 
 void PhysicsSystem::SetBounciness(Entity id, float bounciness)
 {
-    bounciness <= 0? bounciness = 0 : (bounciness >= 1 ? bounciness = 1 : bounciness);
+    bounciness < 0? bounciness = 0 : (bounciness > 1 ? bounciness = 1 : bounciness);
+
     auto &rigidBody = Engine::Instance().GetCurrentWorld().GetComponent<RigidBody>(id);
     rigidBody._bounciness = bounciness;
     if(rigidBody.rb->getNbColliders() > 0)
         rigidBody.rb->getCollider(0)->getMaterial().setBounciness(bounciness);
+}
+
+void PhysicsSystem::SetTransform(Entity id, const Maths::Vector3f &position, const Maths::Quaternion &rotation)
+{
+    rp3d::Vector3 pos {position.x, position.y, position.z};
+    rp3d::Quaternion rot(rotation.x, rotation.y, rotation.z, rotation.w);
+    rp3d::Transform t {pos, rot};
+
+    auto &world = Engine::Instance().GetCurrentWorld();
+    auto &rigidBody = world.GetComponent<RigidBody>(id);
+    auto &transform = world.GetComponent<Transform>(id);
+
+    rigidBody.rb->setTransform(t);
+    transform.position = position;
+    transform.rotation = rotation;
 }

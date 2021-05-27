@@ -26,7 +26,7 @@ float RigidBody::GetRadius() const
     if(_collisionShapeType == CollisionShapeType::SPHERE || _collisionShapeType == CollisionShapeType::CAPSULE)
         return _shapeParams.radius;
 
-    return 1;return 1;//todo: Assertion instead of returning 1
+    return 1;//todo: Assertion instead of returning 1
 }
 
 float RigidBody::GetHeight() const

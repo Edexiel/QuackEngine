@@ -48,6 +48,7 @@ public:
     static void SetIsTrigger(Entity id, bool isTrigger);
     static void SetVelocity(Entity id, const Maths::Vector3f &velocity);
     static void SetBounciness(Entity id, float bounciness);
+    static void SetTransform(Entity id, const Maths::Vector3f &position, const Maths::Quaternion &rotation);
     template<typename C, typename F>
     static void SetPhysicEvent(Entity id, PhysicsEventType type, C *classObject, F && function);
 

@@ -367,7 +367,7 @@ void PropertiesWidget::DeleteComponent()
         if (world.HasComponent<RigidBody>(_entity) && ImGui::MenuItem("Rigidbody"))
         {
             auto physicsWorld = world.GetPhysicsWorld();
-            physicsWorld->destroyRigidBody(world.GetComponent<RigidBody>(_entity).rb);
+//            physicsWorld->destroyRigidBody(world.GetComponent<RigidBody>(_entity).rb);
             world.RemoveComponent<RigidBody>(_entity);
         }
         ImGui::EndPopup();
@@ -481,18 +481,6 @@ void PropertiesWidget::RigidBodySetMass(RigidBody &rigidBody)
     if(ImGui::DragFloat("mass", &mass))
     {
         PhysicsSystem::SetMass(_entity, mass);
-
-        //todo: change this code if the dev of reactphysics3d fix this bug.
-        if(rigidBody.GetBodyType() == BodyType::STATIC)
-        {
-            PhysicsSystem::SetType(_entity, BodyType::DYNAMIC);// Sorcellerie Obligatoire due a reactphysics3d
-            PhysicsSystem::SetType(_entity, BodyType::STATIC);// Sorcellerie Obligatoire due a reactphysics3d
-        }
-        else if (rigidBody.GetBodyType() == BodyType::KINEMATIC)
-        {
-            PhysicsSystem::SetType(_entity, BodyType::DYNAMIC);// Sorcellerie Obligatoire due a reactphysics3d
-            PhysicsSystem::SetType(_entity, BodyType::KINEMATIC);// Sorcellerie Obligatoire due a reactphysics3d
-        }
     }
 }
 

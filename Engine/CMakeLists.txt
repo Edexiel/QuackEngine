@@ -45,6 +45,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Audio/SoundManager.cpp
 
         src/Physics/PhysicsEventManager.cpp
+        src/Physics/PhysicsCollisionCallback.cpp
         src/Time/TimePlatformGLFW.cpp
         src/Time/TimeManager.cpp src/Renderer/PostProcess/KernelPostProcess.cpp)
         

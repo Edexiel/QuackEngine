@@ -25,6 +25,8 @@
 
 #include "Thread/ThreadPool.hpp"
 
+#include "reactphysics3d/reactphysics3d.h"
+
 using namespace Component;
 using namespace Resources;
 using namespace Renderer;
@@ -58,7 +60,7 @@ void Game::Init()
     auto cameraSystem = world.RegisterSystem<CameraSystem>();
     auto lightSystem = world.RegisterSystem<LightSystem>();
     auto physicsSystem = world.RegisterSystem<PhysicsSystem>();
-    world.RegisterSystem<CharacterControllerSystem>();
+    auto characterControllerSystem = world.RegisterSystem<CharacterControllerSystem>();
 
     Engine &engine = Engine::Instance();
 
@@ -106,6 +108,8 @@ void Game::Init()
     }
 
     physicsSystem->Init();
+    characterControllerSystem->Init();
+
 
     {
         Entity CameraEntity = world.CreateEntity("Camera");
@@ -190,14 +194,14 @@ void Game::Init()
     PhysicsSystem::SetRigidBody(idTrigger);
     PhysicsSystem::SetType(idTrigger, BodyType::STATIC);
     PhysicsSystem::AddBoxCollider(idTrigger,{1,1,1});
-    PhysicsSystem::SetIsTrigger(idTrigger, true);
+//    PhysicsSystem::SetIsTrigger(idTrigger, true);
 
 //Test contactCollision
     Component::RigidBody rbContact;
     Component::Model mdContact = engine.GetResourcesManager().LoadModel(R"(../../Game/Asset/Model/Cube.fbx)", Renderer::VertexType::V_NORMALMAP);
-    Transform tContact = {Maths::Vector3f{0, -5.f, 20}, {1,1,1}, Maths::Quaternion{}};
+    Transform tContact = {Maths::Vector3f{2.5f, -2.5f, 20}, {1,1,1}, Maths::Quaternion{}};
     CharacterController characterController;
-    characterController.speed = 0.20f;
+    characterController.speed = 5.f;
     Entity idContact = world.CreateEntity("ContactBox");
 
     world.AddComponent(idContact, tContact);
