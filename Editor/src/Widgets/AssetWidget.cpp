@@ -165,7 +165,7 @@ void AssetWidget::DisplayTexture(const Resources::Asset* asset)
 
 void AssetWidget::DisplayModel(const Resources::Asset* asset)
 {
-    Renderer::ModelRenderer& model = ((Component::Model*)asset)->model;
+    Renderer::ModelRenderer& model = (*(Renderer::ModelRenderer*)asset);
 
     std::vector<std::string> listModelType;
     listModelType.emplace_back("CLASSIC");
