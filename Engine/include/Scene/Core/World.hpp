@@ -10,6 +10,7 @@
 #include "Scene/Core/SystemManager.hpp"
 #include "Scene/Core/ComponentManager.hpp"
 #include "Physics/PhysicsEventManager.hpp"
+#include "Debug/Log.hpp"
 
 //Serialization, yeah sorry
 #include <cereal/types/string.hpp>
@@ -25,8 +26,6 @@
 #include "Scene/Component/Name.hpp"
 #include "Scene/Component/Animator.hpp"
 
-#include <fmt/core.h>
-#include <fmt/color.h>
 #include "Tools/Type.hpp"
 
 #include "Engine.hpp"

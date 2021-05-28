@@ -15,7 +15,6 @@ using namespace Renderer;
 ViewportWidget::ViewportWidget()
 {
     _title = "Viewport";
-
 }
 
 void ViewportWidget::UpdateVisible()

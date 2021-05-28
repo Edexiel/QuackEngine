@@ -1,16 +1,18 @@
-//
-// Created by gnisi on 24/05/2021.
-//
-
 #ifndef QUACKENGINE_TOOLBOXWIDGET_HPP
 #define QUACKENGINE_TOOLBOXWIDGET_HPP
 
 #include "Widgets/Widget.hpp"
 
-class ToolboxWidget :public Widget
+
+class ToolboxWidget : public Widget
 {
 private:
-    bool isPlaying=false;
+
+    class Engine &_engine;
+
+    bool isPlaying = false;
+    void Save();
+    void Reload();
 public:
     ToolboxWidget();
     void UpdateVisible() final;

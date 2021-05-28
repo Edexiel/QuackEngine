@@ -12,9 +12,8 @@
 #include "Types.hpp"
 #include "System.hpp"
 #include "Debug/Assertion.hpp"
-#include <fmt/core.h>
-#include <fmt/color.h>
 #include <Tools/Type.hpp>
+#include "Debug/Log.hpp"
 
 class SystemManager
 {
@@ -45,11 +44,11 @@ T* SystemManager::RegisterSystem()
     auto search = _systems.find(typeName);
     if (search != _systems.end())
     {
-        fmt::print(fg(fmt::color::yellow), "[ECS] Already registered, skipping: {}\n", demangle(typeid(T).name()));
+        Log_Warning("Already registered, skipping: {}", demangle(typeid(T).name()));
         return static_cast<T*>(search->second.get());
     }
 
-    fmt::print(fg(fmt::color::forest_green), "[ECS] Registering: {}\n", demangle(typeid(T).name()));
+    Log_Info("Registering: {}", demangle(typeid(T).name()));
 
     auto result =  _systems.insert({typeName, std::make_unique<T>()});
 

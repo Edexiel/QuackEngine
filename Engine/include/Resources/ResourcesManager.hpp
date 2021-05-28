@@ -61,7 +61,7 @@ namespace Resources
         void ReLoadModel(const std::filesystem::path &path, Renderer::VertexType vertexType);
         Renderer::Animation LoadAnimation(const std::filesystem::path &path);
         Renderer::Texture LoadTexture(const std::filesystem::path &path);
-        Renderer::Shader LoadShader(std::filesystem::path path);
+        Renderer::Shader LoadShader(const std::filesystem::path& path);
         Renderer::Shader LoadObjectShader(const Renderer::ShaderConstructData &constructData);
 
         Renderer::MaterialInterface LoadMaterial(const std::filesystem::path &path);
