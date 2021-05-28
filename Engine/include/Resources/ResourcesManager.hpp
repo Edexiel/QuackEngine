@@ -65,7 +65,7 @@ namespace Resources
         Renderer::Shader LoadObjectShader(const Renderer::ShaderConstructData &constructData);
 
         Renderer::MaterialInterface LoadMaterial(const std::filesystem::path &path);
-        Renderer::MaterialInterface GenerateMaterial(const char *name,
+        Renderer::MaterialInterface GenerateMaterial(const std::string& name,
                                                      const Renderer::Material &material); // Should be used to load a material from scratch
 
 

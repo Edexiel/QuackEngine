@@ -1,25 +1,31 @@
+#include "game.hpp"
+
 #include <cstdio>
 #include <Enemy/EnemyComponent.hpp>
+#include <Scene/System/CharacterControllerSystem.hpp>
 #include "Engine.hpp"
 
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/Transform.hpp"
+#include "Scene/Component/Animator.hpp"
 #include "Scene/Component/RigidBody.hpp"
-#include "Scene/System/PhysicsSystem.hpp"
-#include "Scene/System/CameraSystem.hpp"
+#include "Scene/Component/CharacterController.hpp"
+
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/RendererInterface.hpp"
-
-#include "game.hpp"
-
-#include "Scene/System/RenderSystem.hpp"
-#include "Scene/System/CameraSystem.hpp"
-#include "Scene/System/LightSystem.hpp"
-
 #include "Renderer/ProcessBase.hpp"
 #include "Renderer/PostProcess/KernelPostProcess.hpp"
 
+
+#include "Scene/System/PhysicsSystem.hpp"
+#include "Scene/System/CameraSystem.hpp"
+#include "Scene/System/RenderSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
+#include "Scene/System/CharacterControllerSystem.hpp"
+
+
+#include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/Component/Animator.hpp"
 
 using namespace Resources;
@@ -36,6 +42,7 @@ void Game::Init(Engine &engine) const
     world.RegisterComponent<Component::Camera>();
     world.RegisterComponent<Component::Light>();
     world.RegisterComponent<Component::RigidBody>();
+    world.RegisterComponent<Component::CharacterController>();
     world.RegisterComponent<Component::Animator>();
 
     world.RegisterComponent<EnemyComponent>();
@@ -46,6 +53,8 @@ void Game::Init(Engine &engine) const
     auto cameraSystem = world.RegisterSystem<CameraSystem>();
     auto lightSystem = world.RegisterSystem<LightSystem>();
     auto physicsSystem = world.RegisterSystem<PhysicsSystem>();
+    auto characterControllerSystem = world.RegisterSystem<CharacterControllerSystem>();
+    auto animatorSystem = world.RegisterSystem<AnimatorSystem>();
 
     auto noteDisplaySystem = world.RegisterSystem<EnemyManagerSystem>();
 
@@ -75,7 +84,14 @@ void Game::Init(Engine &engine) const
         signatureLight.set(world.GetComponentType<Component::Transform>());
         world.SetSystemSignature<LightSystem>(signatureLight);
     }
-
+    //Signature CharacterController
+    {
+        Signature signatureCharacterController;
+        signatureCharacterController.set(world.GetComponentType<Component::Transform>());
+        signatureCharacterController.set(world.GetComponentType<Component::RigidBody>());
+        signatureCharacterController.set(world.GetComponentType<Component::CharacterController>());
+        world.SetSystemSignature<CharacterControllerSystem>(signatureCharacterController);
+    }
     //Signature Physics
     {
         Signature signaturePhysics;
@@ -84,18 +100,25 @@ void Game::Init(Engine &engine) const
         world.SetSystemSignature<PhysicsSystem>(signaturePhysics);
     }
 
+    //signature Animation
+    {
+        Signature signatureAnimation;
+        signatureAnimation.set(world.GetComponentType<Component::Animator>());
+        world.SetSystemSignature<AnimatorSystem>(signatureAnimation);
+    }
 
     //signature enemymanager
     {
-        Signature signatureRender;
-        signatureRender.set(world.GetComponentType<EnemyComponent>());
-        signatureRender.set(world.GetComponentType<Component::Transform>());
-        world.SetSystemSignature<EnemyManagerSystem>(signatureRender);
+        Signature signatureEnemy;
+        signatureEnemy.set(world.GetComponentType<EnemyComponent>());
+        signatureEnemy.set(world.GetComponentType<Component::Transform>());
+        world.SetSystemSignature<EnemyManagerSystem>(signatureEnemy);
     }
 
     engine.LoadWorld(world);
     engine.GetResourcesManager().LoadFolder(R"(./Asset)");
     physicsSystem->Init();
+    characterControllerSystem->Init();
 
 
 //    //NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();

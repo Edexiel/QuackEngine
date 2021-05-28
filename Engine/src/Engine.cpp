@@ -144,7 +144,6 @@ Maths::Vector2i Engine::GetWindowSize()
     return size;
 }
 
-
 bool Engine::WindowShouldClose()
 {
     return glfwWindowShouldClose(_window);
@@ -251,9 +250,9 @@ void Engine::SaveWorld(const std::string &worldName)
 
 void Engine::FillTexture(Renderer::Texture &T)
 {
-    if (!T.name.empty())
+    if (!T.Path().empty())
     {
-        T = _resourcesManager.LoadTexture(T.name);
+        T = _resourcesManager.LoadTexture(T.Path());
     }
 }
 
@@ -275,7 +274,7 @@ void Engine::LoadWorld(World &world)
             {
                 if (!p.is_directory())
                 {
-                    std::string extension = p.path().extension();
+                    std::string extension = p.path().extension().string();
                     if (extension == ".qmt")
                     {
                         Renderer::Material material;
@@ -290,7 +289,7 @@ void Engine::LoadWorld(World &world)
                         FillTexture(material.specularTexture);
                         FillTexture(material.normalMap);
 
-                        _resourcesManager.GenerateMaterial(p.path().filename().replace_extension("").c_str(), material);
+                        _resourcesManager.GenerateMaterial(p.path().filename().replace_extension("").string().c_str(), material);
                     }
                 }
 
@@ -302,7 +301,6 @@ void Engine::LoadWorld(World &world)
         std::filesystem::path worldPath = path;
         worldPath.append("Scenes");
         worldPath.append(world.GetName()).replace_extension(".qck");
-
 
         Log_Info("Loading world: {}", worldPath.string());
 
@@ -361,6 +359,10 @@ void Engine::UpdateTime()
         _timeAcc = 0.;
     }
 
+}
+PhysicsCollisionCallback &Engine::GetPhysicsCollisionCallback()
+{
+    return _physicsCollisionCallback;
 }
 
 float Engine::GetFps() const

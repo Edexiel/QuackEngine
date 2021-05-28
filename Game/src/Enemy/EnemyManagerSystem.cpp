@@ -14,10 +14,10 @@
 EnemyManagerSystem::EnemyManagerSystem()
 {
     Engine &engine = Engine::Instance();
-    _listTexture[0] = engine.GetResourcesManager().LoadTexture("../../Game/Asset/Texture/Arrow/Up.png");
-    _listTexture[1] = engine.GetResourcesManager().LoadTexture("../../Game/Asset/Texture/Arrow/Down.png");
-    _listTexture[2] = engine.GetResourcesManager().LoadTexture("../../Game/Asset/Texture/Arrow/Right.png");
-    _listTexture[3] = engine.GetResourcesManager().LoadTexture("../../Game/Asset/Texture/Arrow/Left.png");
+    _listTexture[0] = engine.GetResourcesManager().LoadTexture("./Asset/Texture/Arrow/Up.png");
+    _listTexture[1] = engine.GetResourcesManager().LoadTexture("./Asset/Texture/Arrow/Down.png");
+    _listTexture[2] = engine.GetResourcesManager().LoadTexture("./Asset/Texture/Arrow/Right.png");
+    _listTexture[3] = engine.GetResourcesManager().LoadTexture("./Asset/Texture/Arrow/Left.png");
 
     engine.GetInputManager().BindEvent("Up Hit", Input::Key::KEY_UP);
     engine.GetInputManager().RegisterEvent("Up Hit", Input::Action::PRESS, this, &EnemyManagerSystem::UpHit);
@@ -116,7 +116,7 @@ void EnemyManagerSystem::Process(const Renderer::Framebuffer &buffer, const Rend
     Renderer::RendererPlatform::EnableDepthBuffer(false);
 
     Maths::Matrix4 invertView = camera.GetView().GetInvert();
-    Maths::Vector3f cameraPosition{invertView.e[12], invertView.e[13], invertView.e[14]};
+    Component::Transform cameraTransform = world.GetComponent<Component::Transform>(camera.GetEntity());
 
     for (Entity entity: _entities)
     {
@@ -128,11 +128,12 @@ void EnemyManagerSystem::Process(const Renderer::Framebuffer &buffer, const Rend
         if (!enemy.GetNoteList().empty())
         {
             _listTexture[enemy.GetNoteList()[0]].Bind(1);
-            shader.SetMatrix4("model", Maths::Matrix4::Translate(transform.position) *
-                                       Maths::Matrix4::LookAtMatrix(
-                                               transform.position, cameraPosition, {0, 1, 0}).GetInvert()
-                                       * Maths::Matrix4::Scale(transform.scale * _arrowScale));
-            //todo GetComponent Transform Camera TA MERE
+            shader.SetMatrix4("model",
+            Maths::Matrix4::Translate(transform.position)
+            *
+            Maths::Matrix4::LookAtMatrix(transform.position,  transform.position + cameraTransform.Forward(), {0,1,0}).GetInvert()
+            * Maths::Matrix4::Scale(transform.scale * _arrowScale));
+
             screenMesh.Draw();
 
         }

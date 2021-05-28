@@ -18,9 +18,9 @@ namespace Component
             std::vector<std::string> materials;
             for (const auto &mat : model.GetMaterialList())
             {
-                materials.push_back(mat->name);
+                materials.push_back(mat->Path());
             }
-            archive(cereal::make_nvp("path", model.name),
+            archive(cereal::make_nvp("path", model.GetPath()),
                     cereal::make_nvp("type", model._vertexType),
                     CEREAL_NVP(materials));
         }
@@ -30,12 +30,12 @@ namespace Component
         {
             std::vector<std::string> materials;
 
-            archive(cereal::make_nvp("path", model.name),
+            archive(cereal::make_nvp("path", model.Path()),
                     cereal::make_nvp("type", model._vertexType));
             archive(CEREAL_NVP(materials));
 
             Resources::ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
-            model = resourcesManager.LoadModel(model.name, model._vertexType);
+            model = resourcesManager.LoadModel(model.Path(), model._vertexType);
             for (const auto &mat : materials)
             {
                 model.AddMaterial(resourcesManager.LoadMaterial(mat));

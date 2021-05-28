@@ -4,6 +4,8 @@
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
 
+#include "Debug/Log.hpp"
+
 using namespace Renderer;
 
 Animation::Animation() : Resources::Asset(Resources::AssetType::A_ANIMATION)
@@ -14,11 +16,28 @@ Animation Animation::LoadAnimation(const std::filesystem::path &path)
 {
     Assimp::Importer importer;
 
-    const aiScene *scene = importer.ReadFile(path,
+    const aiScene *scene = importer.ReadFile(path.string(),
                                              aiProcess_Triangulate |
                                              aiProcess_JoinIdenticalVertices);
 
     Animation animation;
+
+    if (!scene)
+    {
+        Log_Warning("File doesn't exists: {}", path.string());
+        return animation;
+    }
+    if (!scene->HasMeshes())
+    {
+        Log_Warning("Doesn't have mesh : {}", path.string());
+        return animation;
+    }
+    if (!scene->HasAnimations())
+    {
+        Log_Warning("Doesn't have animation : {}", path.string());
+        return animation;
+    }
+
     animation.ReadBaseSkeleton((void *) scene->mMeshes[0]);
     auto assimpAnimation = scene->mAnimations[0];
     animation._duration = (float) assimpAnimation->mDuration;
@@ -41,7 +60,6 @@ void Animation::ReadBaseSkeleton(const void *baseMesh)
         std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
         if (!_skeleton.GetBone(boneName))
         {
-            //newBone.id = m_BoneCounter;
             auto boneMatrix = mesh->mBones[boneIndex]->mOffsetMatrix;
             Maths::Matrix4 transform = {
                     boneMatrix.a1, boneMatrix.b1, boneMatrix.c1, boneMatrix.d1,
@@ -81,7 +99,7 @@ void Animation::ReadHierarchy(NodeData &node, const void *src)
 void Animation::ReadBones(const void *loadedAnimation)
 {
     const aiAnimation *animation = (aiAnimation *) loadedAnimation;
-    
+
     for (unsigned int i = 0; i < animation->mNumChannels; i++)
     {
         const Bone *bone = _skeleton.GetBone(animation->mChannels[i]->mNodeName.data);

@@ -1,13 +1,8 @@
 #include "Widgets/PropertiesWidget.hpp"
-
 #include "Engine.hpp"
 
-#include "Scene/Core/World.hpp"
-
-#include "Scene/Component/Transform.hpp"
-#include "Scene/Component/Camera.hpp"
-#include "Scene/Component/Animator.hpp"
 #include "Scene/Component/RigidBody.hpp"
+#include "Scene/Component/CharacterController.hpp"
 
 #include "Scene/System/RenderSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
@@ -16,7 +11,6 @@
 #include "Renderer/ModelRenderer.hpp"
 
 #include "misc/cpp/imgui_stdlib.h"
-#include "Maths/Common.hpp"
 
 #include <algorithm>
 
@@ -49,6 +43,8 @@ void PropertiesWidget::UpdateVisible()
         ModelReader();
     if (world.HasComponent<Animator>(_entity))
         AnimatorReader();
+    if(world.HasComponent<CharacterController>(_entity))
+        CharacterControllerReader();
 
     AddComponent();
     DeleteComponent();
@@ -154,15 +150,15 @@ void PropertiesWidget::ModelReader()
 
     std::vector<std::string> listModel = Engine::Instance().GetResourcesManager().GetModelNameList();
 
-    if (ImGui::BeginCombo("##ModelCombo", model.name.c_str()))
+    if (ImGui::BeginCombo("##ModelCombo", model.GetName().c_str()))
     {
         for (auto &n : listModel)
         {
-            bool isSelected = (model.name ==
-                               n); // You can store your selection however you want, outside or inside your objects
+            bool isSelected = (model.Path() == n);
             if (ImGui::Selectable(n.c_str(), isSelected))
             {
-                model.name = n;
+                //todo check if need to put back
+                //model.name = n;
                 model = Engine::Instance().GetResourcesManager().LoadModel(n.c_str(),
                                                                            Renderer::VertexType::V_NORMALMAP);
                 Engine::Instance().GetCurrentWorld().GetSystem<RenderSystem>()->SetMaterials();
@@ -186,12 +182,11 @@ void PropertiesWidget::ModelReader()
     for (unsigned int i = 0; i < model.GetNumberMaterial(); i++)
     {
         if (ImGui::BeginCombo((std::string("##comboMaterial") + std::to_string(i)).c_str(),
-                              model.GetMaterial(i)->name.c_str()))
+                              model.GetMaterial(i)->GetName().c_str()))
         {
             for (auto &n : listMaterial)
             {
-                bool is_selected = (model.name ==
-                                    n); // You can store your selection however you want, outside or inside your objects
+                bool is_selected = (model.Path() == n);
                 if (ImGui::Selectable(n.c_str(), is_selected))
                 {
                     Renderer::MaterialInterface materialInterface = Engine::Instance().GetResourcesManager().LoadMaterial(
@@ -224,16 +219,14 @@ void PropertiesWidget::AnimatorReader()
 
     std::vector<std::string> listAnimation = Engine::Instance().GetResourcesManager().GetAnimationNameList();
 
-    if (ImGui::BeginCombo("##AnimatorCombo", animator.GetAnimation().name.c_str()))
+    if (ImGui::BeginCombo("##AnimatorCombo", animator.GetAnimation().GetName().c_str()))
     {
         for (auto &n : listAnimation)
         {
-            bool isSelected = (animator.GetAnimation().name ==
-                               n); // You can store your selection however you want, outside or inside your objects
+            bool isSelected = (animator.GetAnimation().GetPath() == n);
             if (ImGui::Selectable(n.c_str(), isSelected))
             {
-                animator.SetAnimation(*(Renderer::Animation *) (Engine::Instance().GetResourcesManager().GetAsset(
-                        n)));
+                animator.SetAnimation((Engine::Instance().GetResourcesManager().LoadAnimation(n)));
                 Engine::Instance().GetCurrentWorld().GetSystem<RenderSystem>()->SetMaterials();
             }
 
@@ -271,7 +264,7 @@ void PropertiesWidget::RigidBodyReader()
     RigidBodySetIsTrigger(rigidBody);
     RigidBodySetIsGravityEnabled(rigidBody);
     RigidBodySetMass(rigidBody);
-
+    RigidBodySetBounciness(rigidBody);
 }
 
 void PropertiesWidget::AddComponent()
@@ -314,8 +307,13 @@ void PropertiesWidget::AddComponent()
             ImGui::EndMenu();
         }
 
-        AddRigidBody();
+        if (ImGui::MenuItem("Character controller"))
+        {
+            Component::CharacterController characterController;
+            world.AddComponent(_entity, characterController);
+        }
 
+        AddRigidBody();
 
         ImGui::EndPopup();
     }
@@ -383,8 +381,12 @@ void PropertiesWidget::DeleteComponent()
         if (world.HasComponent<RigidBody>(_entity) && ImGui::MenuItem("Rigidbody"))
         {
             auto physicsWorld = world.GetPhysicsWorld();
-            physicsWorld->destroyRigidBody(world.GetComponent<RigidBody>(_entity).rb);
+//            physicsWorld->destroyRigidBody(world.GetComponent<RigidBody>(_entity).rb);
             world.RemoveComponent<RigidBody>(_entity);
+        }
+        if (world.HasComponent<CharacterController>(_entity) && ImGui::MenuItem("Character controller"))
+        {
+            world.RemoveComponent<CharacterController>(_entity);
         }
         ImGui::EndPopup();
     }
@@ -410,7 +412,7 @@ void PropertiesWidget::AddRigidBody()
             PhysicsSystem::AddSphereCollider(_entity, 1.f);
 
         }
-        if (ImGui::MenuItem("Capsule collider"))
+        if(ImGui::MenuItem("Capsule collider"))
         {
             world.AddComponent(_entity, RigidBody());
             PhysicsSystem::SetRigidBody(_entity);
@@ -421,11 +423,11 @@ void PropertiesWidget::AddRigidBody()
     }
 }
 
-void PropertiesWidget::RigidBodyChangeBodyType(Component::RigidBody &rigidBody)
+void PropertiesWidget::RigidBodyChangeBodyType(Component::RigidBody& rigidBody)
 {
     const char *enumBodyType[]{"Static", "Kinematic", "Dynamic"};
     int bodyType = (int) rigidBody.GetBodyType();
-    if (ImGui::Combo("BodyType", &bodyType, enumBodyType, IM_ARRAYSIZE(enumBodyType)))
+    if(ImGui::Combo("BodyType",&bodyType, enumBodyType, IM_ARRAYSIZE(enumBodyType)))
     {
         switch (bodyType)
         {
@@ -456,37 +458,37 @@ void PropertiesWidget::RigidBodyChangeBodyType(Component::RigidBody &rigidBody)
     }
 }
 
-void PropertiesWidget::RigidBodyResizeShape(Component::RigidBody &rigidBody)
+void PropertiesWidget::RigidBodyResizeShape(Component::RigidBody& rigidBody)
 {
-    if (rigidBody.GetCollisionShapeType() == CollisionShapeType::CONVEX_POLYHEDRON)
+    if(rigidBody.GetCollisionShapeType() == CollisionShapeType::CONVEX_POLYHEDRON)
     {
         Maths::Vector3<float> halfExtend = rigidBody.GetHalfExtends();
-        if (ImGui::DragFloat3("Half extend", halfExtend.e))
+        if(ImGui::DragFloat3("Half extend", halfExtend.e))
             PhysicsSystem::ResizeBoxCollider(_entity, halfExtend);
     }
-    if (rigidBody.GetCollisionShapeType() == CollisionShapeType::SPHERE)
+    if(rigidBody.GetCollisionShapeType() == CollisionShapeType::SPHERE)
     {
         float radius = rigidBody.GetRadius();
-        if (ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX))
+        if(ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX))
             PhysicsSystem::ResizeSphereCollider(_entity, radius);
     }
-    if (rigidBody.GetCollisionShapeType() == CollisionShapeType::CAPSULE)
+    if(rigidBody.GetCollisionShapeType() == CollisionShapeType::CAPSULE)
     {
         float radius = rigidBody.GetRadius();
         float height = rigidBody.GetHeight();
 
-        if (ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX)
-            || ImGui::DragFloat("height", &height, 0.1f, 0.001f, FLT_MAX))
+        if(ImGui::DragFloat("Radius", &radius, 0.1f, 0.001f, FLT_MAX)
+           || ImGui::DragFloat("height", &height, 0.1f, 0.001f, FLT_MAX))
         {
             PhysicsSystem::ResizeCapsuleCollider(_entity, radius, height);
         }
     }
 }
 
-void PropertiesWidget::RigidBodySetIsTrigger(Component::RigidBody &rigidBody)
+void PropertiesWidget::RigidBodySetIsTrigger(Component::RigidBody& rigidBody)
 {
     bool isTrigger = rigidBody.GetIsTrigger();
-    if (ImGui::Checkbox("Trigger", &isTrigger))
+    if(ImGui::Checkbox("Trigger", &isTrigger))
         PhysicsSystem::SetIsTrigger(_entity, isTrigger);
 
 }
@@ -494,27 +496,30 @@ void PropertiesWidget::RigidBodySetIsTrigger(Component::RigidBody &rigidBody)
 void PropertiesWidget::RigidBodySetMass(RigidBody &rigidBody)
 {
     float mass = rigidBody.GetMass();
-    if (ImGui::DragFloat("mass", &mass))
+    if(ImGui::DragFloat("mass", &mass))
     {
         PhysicsSystem::SetMass(_entity, mass);
-
-        //todo: change this code if the dev of reactphysics3d fix this bug.
-        if (rigidBody.GetBodyType() == BodyType::STATIC)
-        {
-            PhysicsSystem::SetType(_entity, BodyType::DYNAMIC);// Sorcellerie Obligatoire due a reactphysics3d
-            PhysicsSystem::SetType(_entity, BodyType::STATIC);// Sorcellerie Obligatoire due a reactphysics3d
-        }
-        else if (rigidBody.GetBodyType() == BodyType::KINEMATIC)
-        {
-            PhysicsSystem::SetType(_entity, BodyType::DYNAMIC);// Sorcellerie Obligatoire due a reactphysics3d
-            PhysicsSystem::SetType(_entity, BodyType::KINEMATIC);// Sorcellerie Obligatoire due a reactphysics3d
-        }
     }
 }
 
 void PropertiesWidget::RigidBodySetIsGravityEnabled(RigidBody &rigidBody)
 {
     bool isGravityEnabled = rigidBody.GetIsGravityEnabled();
-    if (ImGui::Checkbox("Gravity Enabled", &isGravityEnabled))
+    if(ImGui::Checkbox("Gravity Enabled", &isGravityEnabled))
         PhysicsSystem::SetIsGravityEnable(_entity, isGravityEnabled);
+}
+
+void PropertiesWidget::RigidBodySetBounciness(RigidBody &rigidBody)
+{
+    float bounciness = rigidBody.GetBounciness();
+    if(ImGui::DragFloat("Bounciness", &bounciness, 0.1f, 0.0f, 1.0f))
+        PhysicsSystem::SetBounciness(_entity, bounciness);
+}
+
+void PropertiesWidget::CharacterControllerReader()
+{
+    if (ImGui::CollapsingHeader("CharacterController"))
+        return;
+    auto &characterController = Engine::Instance().GetCurrentWorld().GetComponent<CharacterController>(_entity);
+    ImGui::DragFloat("Speed", &characterController.speed);
 }

@@ -15,6 +15,7 @@
 #include <reactphysics3d/engine/PhysicsCommon.h>
 #include "Time/TimeManager.hpp"
 
+#include "Physics/PhysicsCollisionCallback.hpp"
 
 #include "Input/InputManager.hpp"
 #include "Input/PlatformInput.hpp"
@@ -62,6 +63,7 @@ private:
     Resources::ResourcesManager _resourcesManager;
     Audio::SoundManager _soundManager;
     PhysicsEventManager _physicsEventManager;
+    PhysicsCollisionCallback _physicsCollisionCallback;
     reactphysics3d::PhysicsCommon _physicsManager;
     Input::InputManager _inputManager;
     Time::TimeManager _timeManager;
@@ -74,15 +76,8 @@ private:
     double _timeAcc{0.};
     unsigned int _frames{0};
     float _fps{0.};
-public:
-    float GetFps() const;
-private:
-
     void FillTexture(Renderer::Texture &T);
     bool _gamePlaying{false};
-public:
-    bool IsGamePlaying() const;
-    void SetGamePlaying(bool gamePlaying);
 
 public:
     static Engine &Instance();
@@ -103,6 +98,10 @@ public:
     class World &GetCurrentWorld();
     void SwapBuffers();
 
+    float GetFps() const;
+    bool IsGamePlaying() const;
+    void SetGamePlaying(bool gamePlaying);
+
 
     class World &CreateWorld(std::string name);
     void LoadWorld(class World &world);
@@ -115,6 +114,7 @@ public:
     Resources::ResourcesManager &GetResourcesManager();
     Audio::SoundManager &GetSoundManager();
     PhysicsEventManager &GetPhysicsEventManager();
+    PhysicsCollisionCallback &GetPhysicsCollisionCallback();
     reactphysics3d::PhysicsCommon &GetPhysicsManager();
     Time::TimeManager &GetTimeManager();
     Renderer::PostProcessManager &GetPostProcessManager();

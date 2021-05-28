@@ -35,7 +35,7 @@ void ModelRenderer::Destroy()
 ModelRenderer ModelRenderer::LoadModel(const std::filesystem::path& path, VertexType vertexType)
 {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(path,
+    const aiScene *scene = importer.ReadFile(path.string(),
                                              aiProcess_Triangulate |
                                              aiProcess_SortByPType |
                                              aiProcess_JoinIdenticalVertices |
@@ -64,7 +64,7 @@ ModelRenderer ModelRenderer::LoadModel(const std::filesystem::path& path, Vertex
             break;
     }
 
-    loadedModel.name = path;
+    loadedModel.Path() = path.string();
     return loadedModel;
 }
 
@@ -285,28 +285,13 @@ void ModelRenderer::ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalV
 
     int boneCounter = 0;
 
-    std::unordered_map<std::string, int> _skeleton;
-
     for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
     {
-        int boneID = -1;
-        std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
-        if (_skeleton.find(boneName) == _skeleton.end())
-        {
-            _skeleton.insert({boneName, boneCounter});
-            boneID = boneCounter;
-            boneCounter++;
-        }
-        else
-        {
-            boneID = _skeleton[boneName];
-        }
-        assert(boneID != -1);
         auto weights = mesh->mBones[boneIndex]->mWeights;
 
         for (unsigned int i = 0; i < mesh->mBones[boneIndex]->mNumWeights; i++)
         {
-            SetVertexBoneData(vertices[weights[i].mVertexId], boneID, weights[i].mWeight);
+            SetVertexBoneData(vertices[weights[i].mVertexId], boneIndex, weights[i].mWeight);
         }
     }
 }

@@ -144,7 +144,7 @@ Sound SoundManager::CreateSound(const std::filesystem::path &path, SoundType sou
 
     decoderConfig = ma_decoder_config_init(SAMPLE_FORMAT, CHANNEL_COUNT, SAMPLE_RATE);
     ma_decoder *decoder = new ma_decoder;
-    Assert_Error((ma_decoder_init_file(path.c_str(), &decoderConfig, decoder) != MA_SUCCESS),
+    Assert_Error((ma_decoder_init_file(path.string().c_str(), &decoderConfig, decoder) != MA_SUCCESS),
                  "[Sound] Failed to open: {}", path.string());
 
     _index += 1;

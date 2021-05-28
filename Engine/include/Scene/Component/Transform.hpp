@@ -27,19 +27,19 @@ namespace Component
 
         inline Maths::Vector3f Forward() const
         {
-            Maths::Vector4f forward = rotation.ToMatrix() * Maths::Vector4f{0,0,1,0};
+            Maths::Vector4f forward = rotation.ToMatrix().GetInvert() * Maths::Vector4f{0,0,1,0};
             return {forward.x, forward.y, forward.z};
         }
 
         inline Maths::Vector3f Side() const
         {
-            Maths::Vector4f side = rotation.ToMatrix() * Maths::Vector4f{1,0,0,0};
+            Maths::Vector4f side = rotation.ToMatrix().GetInvert() * Maths::Vector4f{1,0,0,0};
             return {side.x, side.y, side.z};
         }
 
         inline Maths::Vector3f Up() const
         {
-            Maths::Vector4f up = rotation.ToMatrix() * Maths::Vector4f{0,1,0,0};
+            Maths::Vector4f up = rotation.ToMatrix().GetInvert() * Maths::Vector4f{0,1,0,0};
             return {up.x, up.y, up.z};
         }
 

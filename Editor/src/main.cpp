@@ -8,6 +8,9 @@
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
+#include "Scene/System/AnimatorSystem.hpp"
+
+#include "Scene/System/CharacterControllerSystem.hpp"
 
 #include "game.hpp"
 
@@ -54,12 +57,12 @@ int main()
 
         if (engine.IsGamePlaying())
         {
-
-
-
             /** UPDATE **/
             engine.GetCurrentWorld().GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
             engine.GetCurrentWorld().GetSystem<CameraSystem>()->Update();
+            engine.GetCurrentWorld().GetSystem<CharacterControllerSystem>()->Update();
+            engine.GetCurrentWorld().GetSystem<Renderer::AnimatorSystem>()->Update();
+
         }
         engine.SwapBuffers();
         Renderer::RendererPlatform::Clear();
