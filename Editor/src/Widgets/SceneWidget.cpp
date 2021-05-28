@@ -109,6 +109,9 @@ void SceneWidget::SelectOperation()
 
 void SceneWidget::ManipulateEntity(const Maths::Matrix4& view, const Maths::Matrix4& projection)
 {
+    if(!Engine::Instance().GetCurrentWorld().HasComponent<Component::Transform>(_entity))
+        return;
+
     auto &transform = Engine::Instance().GetCurrentWorld().GetComponent<Component::Transform>(_entity);
 
     ImGuizmo::RecomposeMatrixFromComponents(transform.position.e, (transform.rotation.ToEuler() * RadToDeg<float>()).e,  transform.scale.e, _mat.e);

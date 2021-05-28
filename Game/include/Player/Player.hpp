@@ -15,6 +15,11 @@ public:
     void Down();
     void Right();
     void Left();
+private:
+    void MoveForward(float verticalAxis);
+    void MoveBackward(float verticalAxis);
+    void MoveLeft(float horizontalAxis);
+    void MoveRight(float horizontalAxis);
 };
 
 class PlayerComponent : public Component::ComponentBase
