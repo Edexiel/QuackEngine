@@ -18,7 +18,7 @@ namespace Resources
 class AssetWidget : public Widget
 {
 private:
-    Component::Camera _camera;
+
     static void DisplayMaterial(const Resources::Asset* asset);
     static void DisplayTexture(const Resources::Asset* asset);
     static void DisplayModel(const Resources::Asset* asset);
