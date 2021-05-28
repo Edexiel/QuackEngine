@@ -13,18 +13,12 @@ namespace reactphysics3d
 {
     class RigidBody;
 }
-enum class BodyType
-{
-    STATIC, KINEMATIC, DYNAMIC
-};
-enum class CollisionShapeType
-{
-    SPHERE, CAPSULE, CONVEX_POLYHEDRON, CONCAVE_SHAPE
-};
+enum class BodyType {STATIC, KINEMATIC, DYNAMIC};
+enum class CollisionShapeType {SPHERE, CAPSULE, CONVEX_POLYHEDRON, CONCAVE_SHAPE, NONE = -1};
 
 class PhysicsEventManager;
-
 class PhysicsSystem;
+class PhysicsCollisionCallback;
 
 namespace Component
 {
@@ -49,16 +43,18 @@ namespace Component
         std::function<void(Entity, Entity)> _overlapStay;
         std::function<void(Entity, Entity)> _overlapExit;
 
-        BodyType _bodyType{BodyType::STATIC};
-        CollisionShapeType _collisionShapeType;
-        bool _isTrigger{false};
-        bool _isGravityEnabled{true};
+        BodyType _bodyType {BodyType::STATIC};
+        CollisionShapeType _collisionShapeType{CollisionShapeType::NONE};
+        bool _isTrigger {false};
+        bool _isGravityEnabled {true};
         float _mass{1};
+        float _bounciness{0};
 
 
         ShapeParams _shapeParams;
 
         friend ::PhysicsEventManager;
+        friend ::PhysicsCollisionCallback;
         friend ::PhysicsSystem;
         friend cereal::access;
 
@@ -71,6 +67,7 @@ namespace Component
         CollisionShapeType GetCollisionShapeType() const;
         float GetRadius() const;
         float GetHeight() const;
+        float GetBounciness() const;
         Maths::Vector3<float> GetHalfExtends() const;
 
         template<class Archive>
