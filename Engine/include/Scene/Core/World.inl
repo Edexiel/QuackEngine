@@ -38,6 +38,21 @@ inline void World::RemoveComponent(Entity id)
     _systemManager->EntitySignatureChanged(id, signature);
 }
 
+template<>
+inline void World::RemoveComponent<Component::RigidBody>(Entity id)
+{
+    fmt::print(fg(fmt::color::forest_green),"[ECS] Remove component: {} from {}\n",demangle(typeid(Component::RigidBody).name()),id);
+
+    _physicsWorld->destroyRigidBody(GetComponent<Component::RigidBody>(id).rb);
+    _componentManager->RemoveComponent<Component::RigidBody>(id);
+
+    auto signature = _entityManager->GetSignature(id);
+    signature.set(_componentManager->GetComponentType<Component::RigidBody>(), false);
+
+    _entityManager->SetSignature(id, signature);
+    _systemManager->EntitySignatureChanged(id, signature);
+}
+
 template<typename T>
 inline T &World::GetComponent(Entity id) const
 {

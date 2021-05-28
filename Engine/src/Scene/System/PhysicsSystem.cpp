@@ -131,17 +131,17 @@ void PhysicsSystem::SetRigidBody(Entity id)
     {
         case CollisionShapeType::CONVEX_POLYHEDRON :
         {
-            PhysicsSystem::AddBoxCollider(id, {1.f,1.f,1.f});
+            PhysicsSystem::AddBoxCollider(id, rigidBody._shapeParams.halfExtends);
             break;
         }
         case CollisionShapeType::SPHERE:
         {
-            PhysicsSystem::AddSphereCollider(id, 1.f);
+            PhysicsSystem::AddSphereCollider(id, rigidBody._shapeParams.radius);
             break;
         }
         case CollisionShapeType::CAPSULE:
         {
-            PhysicsSystem::AddCapsuleCollider(id, 1.f, 1.f);
+            PhysicsSystem::AddCapsuleCollider(id, rigidBody._shapeParams.radius, rigidBody._shapeParams.height);
             break;
         }
         case CollisionShapeType::NONE:

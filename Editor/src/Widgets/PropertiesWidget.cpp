@@ -380,8 +380,6 @@ void PropertiesWidget::DeleteComponent()
         }
         if (world.HasComponent<RigidBody>(_entity) && ImGui::MenuItem("Rigidbody"))
         {
-            auto physicsWorld = world.GetPhysicsWorld();
-//            physicsWorld->destroyRigidBody(world.GetComponent<RigidBody>(_entity).rb);
             world.RemoveComponent<RigidBody>(_entity);
         }
         if (world.HasComponent<CharacterController>(_entity) && ImGui::MenuItem("Character controller"))
