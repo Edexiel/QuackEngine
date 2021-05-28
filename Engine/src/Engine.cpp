@@ -336,6 +336,11 @@ Renderer::PostProcessManager &Engine::GetPostProcessManager()
     return _postProcessManager;
 }
 
+PhysicsCollisionCallback &Engine::GetPhysicsCollisionCallback()
+{
+    return _physicsCollisionCallback;
+}
+
 
 //void Engine
 // ::UnloadWorld(const std::string &name)

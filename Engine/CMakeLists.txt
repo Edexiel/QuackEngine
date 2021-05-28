@@ -40,11 +40,13 @@ add_library(${PROJECT_NAME} STATIC
         src/Scene/System/RenderSystem.cpp
         src/Scene/System/CameraSystem.cpp
         src/Scene/System/LightSystem.cpp
+        src/Scene/System/CharacterControllerSystem.cpp
 
         src/Audio/Sound.cpp
         src/Audio/SoundManager.cpp
 
         src/Physics/PhysicsEventManager.cpp
+        src/Physics/PhysicsCollisionCallback.cpp
         src/Tools/Type.cpp
 
         src/Time/TimePlatformGLFW.cpp

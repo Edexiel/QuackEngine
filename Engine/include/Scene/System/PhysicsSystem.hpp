@@ -47,8 +47,11 @@ public:
     static void SetType(Entity id, const BodyType& type);
     static void SetMass(Entity id, float mass);
     static void SetIsTrigger(Entity id, bool isTrigger);
+    static void SetVelocity(Entity id, const Maths::Vector3f &velocity);
+    static void SetBounciness(Entity id, float bounciness);
+    static void SetTransform(Entity id, const Maths::Vector3f &position, const Maths::Quaternion &rotation);
     template<typename C, typename F>
-    void SetPhysicEvent(Entity id, PhysicsEventType type, C *classObject, F && function);
+    static void SetPhysicEvent(Entity id, PhysicsEventType type, C *classObject, F && function);
 
     static void AddBoxCollider(Entity id, const Maths::Vector3f &halfExtend, const Maths::Vector3f &position = {0, 0, 0},
                         const Maths::Quaternion &rotation = {1, 0, 0, 0});
