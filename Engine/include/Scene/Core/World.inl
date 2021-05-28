@@ -6,7 +6,7 @@ void World::RegisterComponent() const
     if (std::is_base_of<Component::ComponentBase, T>())
         _componentManager->RegisterComponent<T>();
     else
-        fmt::print(fg(fmt::color::forest_green),"[ECS] The class you're trying to register isn't a child of ComponentBase: {}\n",demangle(typeid(T).name()));
+        fmt::print(fg(fmt::color::forest_green),"[ECS] The class you're trying to register isn't a child of Component: {}\n",demangle(typeid(T).name()));
 
 }
 
@@ -14,6 +14,7 @@ template<typename T>
 inline void World::AddComponent(Entity id, T component) const
 {
     Component::ComponentBase::LinkEntityToComponent(id, &component);
+
     fmt::print(fg(fmt::color::forest_green),"[ECS] Add Component: {}\n",demangle(typeid(T).name()));
     _componentManager->AddComponent<T>(id, component);
 
