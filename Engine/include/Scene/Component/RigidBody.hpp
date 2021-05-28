@@ -74,6 +74,7 @@ namespace Component
         void serialize(Archive &archive)
         {
             archive(cereal::make_nvp("mass", _mass),
+                    cereal::make_nvp("bounciness", _bounciness),
                     cereal::make_nvp("gravity", _isGravityEnabled),
                     cereal::make_nvp("trigger", _isTrigger),
                     cereal::make_nvp("bodyType", _bodyType),
