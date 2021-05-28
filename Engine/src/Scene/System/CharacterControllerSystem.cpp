@@ -23,64 +23,6 @@ void CharacterControllerSystem::Update()
     }
 }
 
-void CharacterControllerSystem::Init()
-{
-    auto &inputManager = Engine::Instance().GetInputManager();
-
-    inputManager.BindEventAxis("Move up", Input::Key::KEY_W, 1.f);
-    inputManager.RegisterEventAxis("Move up", this, &CharacterControllerSystem::MoveForward);
-
-    inputManager.BindEventAxis("Move down", Input::Key::KEY_S, -1.f);
-    inputManager.RegisterEventAxis("Move down", this, &CharacterControllerSystem::MoveBackward);
-
-    inputManager.BindEventAxis("Move left", Input::Key::KEY_A, -1.f);
-    inputManager.RegisterEventAxis("Move left", this, &CharacterControllerSystem::MoveLeft);
-
-    inputManager.BindEventAxis("Move right", Input::Key::KEY_D, 1.f);
-    inputManager.RegisterEventAxis("Move right", this, &CharacterControllerSystem::MoveRight);
-}
-
-void CharacterControllerSystem::MoveForward(float verticalAxis)
-{
-    auto &world = Engine::Instance().GetCurrentWorld();
-
-    for(Entity entity : _entities)
-    {
-        auto &characterController = world.GetComponent<CharacterController>(entity);
-        characterController.forward = verticalAxis;
-    }
-}
-
-void CharacterControllerSystem::MoveRight(float horizontalAxis)
-{
-    auto &world = Engine::Instance().GetCurrentWorld();
-    for(Entity entity : _entities)
-    {
-        auto &characterController = world.GetComponent<CharacterController>(entity);
-        characterController.right = horizontalAxis;
-    }
-}
-
-void CharacterControllerSystem::MoveBackward(float verticalAxis)
-{
-    auto &world = Engine::Instance().GetCurrentWorld();
-    for(Entity entity : _entities)
-    {
-        auto &characterController = world.GetComponent<CharacterController>(entity);
-        characterController.backward = verticalAxis;
-    }
-}
-
-void CharacterControllerSystem::MoveLeft(float horizontalAxis)
-{
-    auto &world = Engine::Instance().GetCurrentWorld();
-    for(Entity entity : _entities)
-    {
-        auto &characterController = world.GetComponent<CharacterController>(entity);
-        characterController.left = horizontalAxis;
-    }
-}
-
 void CharacterControllerSystem::CharacterMovement(Entity entity)
 {
     auto &world = Engine::Instance().GetCurrentWorld();
@@ -88,7 +30,7 @@ void CharacterControllerSystem::CharacterMovement(Entity entity)
     auto &transform = world.GetComponent<Transform>(entity);
     auto &characterController = world.GetComponent<CharacterController>(entity);
 
-    float deltatime = (float)Engine::Instance().GetTimeManager().GetDeltaTime();
+//    float deltatime = (float)Engine::Instance().GetTimeManager().GetDeltaTime();
 
     float verticalAxis = characterController.forward + characterController.backward;
     float horizontalAxis = characterController.right + characterController.left;
@@ -98,10 +40,18 @@ void CharacterControllerSystem::CharacterMovement(Entity entity)
 
     rp3d::Transform t = rigidBody.rb->getTransform();
     rp3d::Vector3 v = t.getPosition();
-    rp3d::Quaternion q = t.getOrientation();
 
     Maths::Vector3f pos{v.x, v.y, v.z};
-    Maths::Quaternion rot{q.w, q.x, q.y, q.z};
+    Maths::Quaternion rot;
+    if(horizontalAxis != 0 || verticalAxis != 0)
+    {
+        rot = Maths::Quaternion::LookAt(Maths::Vector3f::Zero(), characterController.direction);
+    }
+    else
+    {
+        rp3d::Quaternion q = t.getOrientation();
+        rot = Maths::Quaternion{q.w, q.x, q.y, q.z};
+    }
 
     PhysicsSystem::SetTransform(entity, pos + characterController.direction * characterController.speed * 0.06f, rot);
 }
