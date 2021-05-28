@@ -203,7 +203,7 @@ World &Engine::CreateWorld(std::string name)
 
 void Engine::SaveWorld(const std::string &worldName)
 {
-    fs::path path{"./"};
+    fs::path path{"./Asset"};
 
     if (_worldLut.find(worldName) == _worldLut.end())
     {

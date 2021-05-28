@@ -165,6 +165,26 @@ endif ()
 #        CONFIGURATIONS Release
 #        RUNTIME DESTINATION Release/bin)
 
+#if( supported )
+#    message(STATUS "IPO / LTO enabled")
+#    set_property(TARGET Editor PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+#    set_property(TARGET Engine PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+#    set_property(TARGET Game PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+#else()
+#    message(STATUS "IPO / LTO not supported: <${error}>")
+#endif()
+
+
+
+
+
+
+#if(NOT MSVC)
+##    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Editor PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Engine PRIVATE -Wall -Wextra -pedantic)
+#    target_compile_options(Game PRIVATE -Wall -Wextra -pedantic)
+#endif()
 
 ##Installer
 #include(InstallRequiredSystemLibraries)
@@ -175,21 +195,3 @@ endif ()
 #SET(CPACK_PACKAGE_VENDOR "Quack Team")
 #SET(CPACK_PACKAGE_EXECUTABLES "Hello" "Hello")
 #include(CPack)
-
-
-if( supported )
-    message(STATUS "IPO / LTO enabled")
-    set_property(TARGET Editor PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-    set_property(TARGET Engine PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-    set_property(TARGET Game PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-else()
-    message(STATUS "IPO / LTO not supported: <${error}>")
-endif()
-
-#if(NOT MSVC)
-##    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
-#    target_compile_options(Editor PRIVATE -Wall -Wextra -pedantic)
-#    target_compile_options(Engine PRIVATE -Wall -Wextra -pedantic)
-#    target_compile_options(Game PRIVATE -Wall -Wextra -pedantic)
-#endif()
-
