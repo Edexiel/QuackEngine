@@ -20,9 +20,14 @@ rp3d::PhysicsWorld *World::GetPhysicsWorld() const
 
 void World::Clear()
 {
-    //todo:
+    std::vector<Entity> entities = _entityManager->GetEntities();
+    for (const Entity &entity : entities)
+    {
+        _entityManager->Destroy(entity);
+    }
 }
-Entity World::CreateEntity(const std::string& name) const
+
+Entity World::CreateEntity(const std::string &name) const
 {
     Entity id = _entityManager->Create();
     AddComponent(id, Component::Name{name});

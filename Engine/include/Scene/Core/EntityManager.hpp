@@ -14,15 +14,12 @@ class EntityManager
 {
 private:
     Entity _idCount {0};
-
     std::vector<Entity> _entities{};
-public:
-    std::vector<Entity> &GetEntities();
 
-private:
     std::vector<Signature> _signatures{};
 
     std::unordered_map<Entity, size_t> _entityLut{};
+
 
 public:
     EntityManager();
@@ -30,6 +27,9 @@ public:
     Entity Create();
 
     Signature GetSignature(Entity id);
+
+    std::vector<Entity> &GetEntities();
+
 
     void SetSignature(Entity id, Signature signature);
 

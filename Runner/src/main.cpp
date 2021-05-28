@@ -20,7 +20,7 @@ int main()
     Engine::SetInstance(engine);
 
     Game game;
-    game.Init();
+    game.Init(engine);
     //loadScene();
 
     while (!engine.WindowShouldClose())

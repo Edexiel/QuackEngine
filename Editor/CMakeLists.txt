@@ -19,6 +19,6 @@ add_executable(${PROJECT_NAME}
         src/Widgets/ToolboxWidget.cpp include/Widgets/ToolboxWidget.hpp)
 
 
-target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories (${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw imgui ImGuizmo Engine Game)
+target_link_libraries(${PROJECT_NAME} PRIVATE glad glfw imgui ImGuizmo Engine Game)

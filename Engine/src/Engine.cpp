@@ -17,8 +17,6 @@
 
 //Serialization
 #include <cereal/archives/json.hpp>
-#include <fstream>
-#include <fmt/core.h>
 
 namespace fs = std::filesystem;
 
@@ -203,16 +201,18 @@ World &Engine::CreateWorld(std::string name)
     return _worlds.emplace_back(name);
 }
 
-void Engine::SaveWorld(const std::string &worldName, fs::path path)
+void Engine::SaveWorld(const std::string &worldName)
 {
+    fs::path path{"./Asset"};
+
     if (_worldLut.find(worldName) == _worldLut.end())
     {
-        fmt::print(fg(fmt::color::yellow), "[Engine] Trying to save a world that does not exists: {}\n", path.string());
+        Log_Error("Trying to save a world that does not exists: {}", path.string());
         return;
     }
 //Scene
     {
-        Log_Info(fmt::format("Saving world : {}", worldName).c_str());
+        Log_Info("Saving world : {}", worldName);
         std::filesystem::path worldPath = path;
         worldPath.append(worldName).replace_extension(".qck");
         std::ofstream os(worldPath);
@@ -220,30 +220,30 @@ void Engine::SaveWorld(const std::string &worldName, fs::path path)
         cereal::JSONOutputArchive oarchive(os);
 
         oarchive(cereal::make_nvp("world", _worlds.at(_worldLut.at(worldName))));
-        Log_Info(fmt::format("World has been saved as: {}", worldPath.string()).c_str());
+        Log_Info("World has been saved as: {}", worldPath.string());
     }
 //Materials
     {
-        Log_Info(fmt::format("Saving materials").c_str());
-        path.append("Materials");
-        if (!exists(path))
+        std::filesystem::path materialPath = path;
+        Log_Info("Saving materials", "");
+        materialPath.append("Materials");
+        if (!exists(materialPath))
         {
-            std::filesystem::create_directory(path);
+            std::filesystem::create_directory(materialPath);
         }
 
         std::vector<std::string> materials = _resourcesManager.GetMaterialNameList();
         for (const auto &name : materials)
         {
-            std::filesystem::path tempPath = path;
+            std::filesystem::path tempPath = materialPath;
             tempPath.append(name).replace_extension(".qmt");
             std::ofstream os(tempPath);
 
-            fmt::print("{}\n", tempPath.string());
             cereal::JSONOutputArchive oarchive(os);
 
             oarchive(cereal::make_nvp(name, *_resourcesManager.LoadMaterial(name)));
         }
-        Log_Info(fmt::format("Materials have been saved", path.string()).c_str());
+        Log_Info("Materials have been saved", path.string());
     }
 
 
@@ -257,12 +257,12 @@ void Engine::FillTexture(Renderer::Texture &T)
     }
 }
 
-void Engine::LoadWorld(World &world, fs::path path)
+void Engine::LoadWorld(World &world)
 {
+    const fs::path path{"./Asset"};
     if (!exists(path))
     {
-        fmt::print(fg(fmt::color::red), "[Engine]Path does not exists: {}\n", path.string());
-        Log_Error("");
+        Log_Error("Path does not exists: {}", path.string());
     }
 
     //Materials
@@ -300,10 +300,10 @@ void Engine::LoadWorld(World &world, fs::path path)
     //World
     {
         std::filesystem::path worldPath = path;
-
+        worldPath.append("Scenes");
         worldPath.append(world.GetName()).replace_extension(".qck");
 
-        fmt::print(fg(fmt::color::forest_green), "[Engine] Loading world: {}\n", worldPath.string());
+        Log_Info("Loading world: {}", worldPath.string());
 
         std::ifstream is(worldPath);
         cereal::JSONInputArchive iarchive(is);
@@ -336,15 +336,49 @@ Renderer::PostProcessManager &Engine::GetPostProcessManager()
     return _postProcessManager;
 }
 
+bool Engine::IsGamePlaying() const
+{
+    return _gamePlaying;
+}
+
+void Engine::SetGamePlaying(bool gamePlaying)
+{
+    _gamePlaying = gamePlaying;
+}
+
+void Engine::UpdateTime()
+{
+    _timeManager.Update();
+
+    _timeAcc += _timeManager.GetDeltaTime();
+    _frames++;
+
+    if (_timeAcc >= 1.0f)
+    {
+        _fps = roundf(1. / (_timeAcc / _frames));
+        _frames = 0;
+        _timeAcc = 0.;
+    }
+
+}
 PhysicsCollisionCallback &Engine::GetPhysicsCollisionCallback()
 {
     return _physicsCollisionCallback;
 }
 
+float Engine::GetFps() const
+{
+    return _fps;
+}
 
-//void Engine
-// ::UnloadWorld(const std::string &name)
-//{
-//    _worlds[_worldLut[name]].Clear();
-//}
+double Engine::GetDeltaTime()
+{
+    return _timeManager.GetDeltaTime();
+}
+
+void Engine::ClearWorld(const std::string &worldName)
+{
+    _worlds[_worldLut[worldName]].Clear();
+
+}
 

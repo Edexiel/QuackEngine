@@ -8,6 +8,7 @@
 
 #include <string>
 #include <imgui.h>
+#include <imgui_internal.h>
 #include "Scene/Core/Types.hpp"
 
 #define PROPERTIES_SHOW_ENTITY true
@@ -21,7 +22,8 @@ protected:
     bool _visible{true};
     float _position[2]{0.f, 0.f};
     float _size[2]{0.f, 0.f};
-    ImGuiWindowFlags _flags = 0;
+
+    ImGuiWindowFlags _windowFlags = 0;
 
     Widget() = default;
 
@@ -69,7 +71,7 @@ inline void Widget::Draw()
     if (!_visible)
         return;
 
-    if (ImGui::Begin(_title.c_str(), &_visible, _flags))
+    if (ImGui::Begin(_title.c_str(), &_visible, _windowFlags))
     {
         UpdateVisible();
     }
