@@ -24,7 +24,6 @@ void ViewerWidget::UpdateVisible()
             _propertiesSwitch = PROPERTIES_SHOW_ENTITY;
             _selected = n;
             _entity = entity;
-            std::cout << _entity << std::endl;
         }
         n++;
     }
@@ -48,6 +47,8 @@ void ViewerWidget::DestroyEntity()
 {
     if (ImGui::Button("Destroy entity") && _selected > -1)
     {
+        std::cout << _entity << std::endl;
+
         Engine::Instance().GetCurrentWorld().DestroyEntity(_entity);
         _selected = -1;
     }

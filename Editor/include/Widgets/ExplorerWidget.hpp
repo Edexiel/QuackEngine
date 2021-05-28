@@ -16,6 +16,9 @@ private:
     bool _newMaterial {false};
     char _newMaterialTextBuffer[32] {""};
 
+    void AddMaterial(unsigned int& offset);
+    void RemoveMaterial(const std::vector<std::string>& listMaterialName);
+
 public:
     ExplorerWidget();
 
