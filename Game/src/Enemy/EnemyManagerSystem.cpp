@@ -15,10 +15,10 @@ EnemyManagerSystem::EnemyManagerSystem()
 {
 
     Engine &engine = Engine::Instance();
-    _listTexture[0] = engine.GetResourcesManager().LoadTexture("../../Game/Asset/Texture/Arrow/Up.png");
-    _listTexture[1] = engine.GetResourcesManager().LoadTexture("../../Game/Asset/Texture/Arrow/Down.png");
-    _listTexture[2] = engine.GetResourcesManager().LoadTexture("../../Game/Asset/Texture/Arrow/Right.png");
-    _listTexture[3] = engine.GetResourcesManager().LoadTexture("../../Game/Asset/Texture/Arrow/Left.png");
+    _listTexture[0] = engine.GetResourcesManager().LoadTexture("./Asset/Texture/Arrow/Up.png");
+    _listTexture[1] = engine.GetResourcesManager().LoadTexture("./Asset/Texture/Arrow/Down.png");
+    _listTexture[2] = engine.GetResourcesManager().LoadTexture("./Asset/Texture/Arrow/Right.png");
+    _listTexture[3] = engine.GetResourcesManager().LoadTexture("./Asset/Texture/Arrow/Left.png");
 
     Input::InputManager& inputManager = engine.GetInputManager();
 

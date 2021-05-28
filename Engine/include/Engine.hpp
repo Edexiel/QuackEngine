@@ -73,7 +73,11 @@ private:
     std::map<std::string, uint_fast16_t> _worldLut;
     std::vector<class World> _worlds;
 
-    void FillTexture(Renderer::Texture& T);
+    double _timeAcc{0.};
+    unsigned int _frames{0};
+    float _fps{0.};
+    void FillTexture(Renderer::Texture &T);
+    bool _gamePlaying{false};
 
 public:
     static Engine &Instance();
@@ -86,15 +90,23 @@ public:
     void SetWindowTitle(const std::string &title);
     void SetWindowSize(int width, int height);
     Maths::Vector2i GetWindowSize();
+    void UpdateTime();
+    double GetDeltaTime();
+
     bool WindowShouldClose();
     void TestWindowShouldClose();
     class World &GetCurrentWorld();
     void SwapBuffers();
 
+    float GetFps() const;
+    bool IsGamePlaying() const;
+    void SetGamePlaying(bool gamePlaying);
+
 
     class World &CreateWorld(std::string name);
-    void LoadWorld(class World &world, std::filesystem::path path);
-    void SaveWorld(const std::string &worldName, std::filesystem::path path);
+    void LoadWorld(class World &world);
+    void SaveWorld(const std::string &worldName);
+    void ClearWorld(const std::string& worldName);
     void RemoveWorld(const std::string &name);
 
     Input::InputManager &GetInputManager();

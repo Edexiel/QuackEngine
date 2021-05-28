@@ -13,6 +13,8 @@ private:
 
     void InitWidgets();
     void InitImGui(GLFWwindow * window);
+    void SetStyle();
+    void SetIo();
 public:
 
     explicit Editor(GLFWwindow * window);

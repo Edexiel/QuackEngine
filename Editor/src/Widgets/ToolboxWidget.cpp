@@ -3,23 +3,24 @@
 #include "Engine.hpp"
 #include "Scene/Core/World.hpp"
 
-ToolboxWidget::ToolboxWidget()
+ToolboxWidget::ToolboxWidget() : _engine{Engine::Instance()}
 {
     _title = "Toolbox";
 }
 
-void Save()
+void ToolboxWidget::Save()
 {
-    Engine &engine = Engine::Instance();
-    engine.SaveWorld(engine.GetCurrentWorld().GetName(), "./");
+    _engine.SaveWorld(_engine.GetCurrentWorld().GetName());
 }
-//void Load()
-//{
-//    Engine &engine = Engine::Instance();
-//    engine.SaveWorld(engine.GetCurrentWorld().GetName(), "./");
-//    World world;
-//    engine.LoadWorld()
-//}
+
+void ToolboxWidget::Reload()
+{
+
+    World &world = _engine.GetCurrentWorld();
+    world.Clear();
+
+    _engine.LoadWorld(world);
+}
 
 
 void ToolboxWidget::UpdateVisible()
@@ -39,9 +40,14 @@ void ToolboxWidget::UpdateVisible()
     {
         if (ImGui::Button("Stop"))
         {
-            //todo
             isPlaying = !isPlaying;
+            Reload();
+
+            _engine.SetGamePlaying(isPlaying);
+
         }
+        ImGui::SameLine();
+        ImGui::Text("FPS: %i", (unsigned int) _engine.GetFps());
     }
     else
     {
@@ -49,6 +55,7 @@ void ToolboxWidget::UpdateVisible()
         {
             Save();
             isPlaying = !isPlaying;
+            _engine.SetGamePlaying(isPlaying);
         }
     }
 

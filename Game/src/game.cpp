@@ -129,8 +129,8 @@ void Game::Init(Engine &engine) const
         world.SetSystemSignature<PlayerSystem>(signaturePlayer);
     }
 
-    engine.LoadWorld(world, "./");
-    engine.GetResourcesManager().LoadFolder(R"(../../Game/Asset)");
+    engine.LoadWorld(world);
+    engine.GetResourcesManager().LoadFolder(R"(./Asset)");
     physicsSystem->Init();
 
 

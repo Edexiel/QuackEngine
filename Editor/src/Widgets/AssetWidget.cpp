@@ -5,7 +5,6 @@
 #include "Scene/System/RenderSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
 
-#include "Renderer/Framebuffer.hpp"
 #include "Renderer/ModelRenderer.hpp"
 
 #include "Renderer/Vertex.hpp"
