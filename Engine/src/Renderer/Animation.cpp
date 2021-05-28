@@ -81,9 +81,7 @@ void Animation::ReadHierarchy(NodeData &node, const void *src)
 void Animation::ReadBones(const void *loadedAnimation)
 {
     const aiAnimation *animation = (aiAnimation *) loadedAnimation;
-
-    std::cout << "Animation Name : " << animation->mName.data << std::endl;
-
+    
     for (unsigned int i = 0; i < animation->mNumChannels; i++)
     {
         const Bone *bone = _skeleton.GetBone(animation->mChannels[i]->mNodeName.data);

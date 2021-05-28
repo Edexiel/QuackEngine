@@ -13,7 +13,6 @@
 #include "Scene/System/LightSystem.hpp"
 
 #include <filesystem>
-#include <fmt/core.h>
 #include <fmt/color.h>
 
 
@@ -66,14 +65,14 @@ void ResourcesManager::ReLoadModel(const std::filesystem::path &path, Renderer::
 
     if (it != _mapModel.end())
     {
-        Engine& e = Engine::Instance();
+        Engine &e = Engine::Instance();
         Renderer::ModelRenderer::ReLoadModel(it->second, path, vertexType);
         e.GetCurrentWorld().GetSystem<RenderSystem>()->UpdateModel(it->second);
         e.GetCurrentWorld().GetSystem<RenderSystem>()->SetMaterials();
         return;
     }
 
-    Assert_Error(true, fmt::format("Trying to reload a model that doesn't exists: {}\n", path.string()).c_str());
+    Assert_Error(true, "Trying to reload a model that doesn't exists: {}", path.string());
 }
 
 Animation ResourcesManager::LoadAnimation(const std::filesystem::path &path)
@@ -91,7 +90,7 @@ Animation ResourcesManager::LoadAnimation(const std::filesystem::path &path)
 
     if (!exists(path))
     {
-        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", path.string());
+        Log_Error("File doesn't exists: {}", path.string());
         return Animation();
     }
 
@@ -118,7 +117,7 @@ Texture ResourcesManager::LoadTexture(const std::filesystem::path &path)
     // return null Texture if the file doesn't exist
     if (!exists(path))
     {
-        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", path.string());
+        Log_Error("File doesn't exists: {}", path.string());
         return Texture();
     }
 
@@ -133,7 +132,7 @@ Texture ResourcesManager::LoadTexture(const std::filesystem::path &path)
     return texture;
 }
 
-Renderer::Shader ResourcesManager::LoadShader(const std::filesystem::path path)
+Renderer::Shader ResourcesManager::LoadShader(const std::filesystem::path &path)
 {
     // Check if the Texture already exist
     auto it = _mapShader.find(path.string());
@@ -147,7 +146,7 @@ Renderer::Shader ResourcesManager::LoadShader(const std::filesystem::path path)
     // return null Shader if the file doesn't exist
     if (!std::filesystem::exists(path.string()))
     {
-        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", path.string());
+        Log_Error("File doesn't exists: {}", path.string());
         return Shader();
     }
 
@@ -175,8 +174,8 @@ Renderer::Shader ResourcesManager::LoadObjectShader(const Renderer::ShaderConstr
     Shader shader = Shader::LoadObjectShader(constructData);
     _mapDynamicShader.insert({constructData.GetKey(), shader});
 
-  if(constructData.hasLight)
-      Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->AddShaderToUpdate(shader);
+    if (constructData.hasLight)
+        Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->AddShaderToUpdate(shader);
 
     return shader;
 }
@@ -196,7 +195,7 @@ Audio::Sound ResourcesManager::LoadSound(const std::filesystem::path &path, Audi
     // todo :: return null sound if the file doesn't exist
     if (!exists(path))
     {
-        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", path.string());
+        Log_Error("File doesn't exists: {}", path.string());
         return Audio::Sound();
     }
 
@@ -227,7 +226,7 @@ Renderer::MaterialInterface ResourcesManager::LoadMaterial(const std::filesystem
     // return null Material if the file doesn't exist
     if (!exists(name))
     {
-        fmt::print(fg(fmt::color::red), "[Resource Manager] File doesn't exists: {}\n", name.string());
+        Log_Error("File doesn't exists: {}", name.string());
         return nullptr;
     }
 
@@ -250,7 +249,7 @@ Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const char *name,
     materialInterface->shader = LoadObjectShader(materialInterface->GetConstructData());
     _globalAssetMap.insert({name, _mapMaterial.find(name)->second.get()});
 
-    fmt::print(fg(fmt::color::green), "[Resource Manager] Loading material: {}\n", name);
+    Log_Info("Loading material: {}", name);
 
 
     return materialInterface;

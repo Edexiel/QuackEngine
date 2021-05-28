@@ -17,7 +17,6 @@
 
 //Serialization
 #include <cereal/archives/json.hpp>
-#include <fmt/core.h>
 
 namespace fs = std::filesystem;
 
@@ -208,12 +207,12 @@ void Engine::SaveWorld(const std::string &worldName)
 
     if (_worldLut.find(worldName) == _worldLut.end())
     {
-        fmt::print(fg(fmt::color::yellow), "[Engine] Trying to save a world that does not exists: {}\n", path.string());
+        Log_Error("Trying to save a world that does not exists: {}", path.string());
         return;
     }
 //Scene
     {
-        Log_Info(fmt::format("Saving world : {}", worldName).c_str());
+        Log_Info("Saving world : {}", worldName);
         std::filesystem::path worldPath = path;
         worldPath.append(worldName).replace_extension(".qck");
         std::ofstream os(worldPath);
@@ -221,12 +220,12 @@ void Engine::SaveWorld(const std::string &worldName)
         cereal::JSONOutputArchive oarchive(os);
 
         oarchive(cereal::make_nvp("world", _worlds.at(_worldLut.at(worldName))));
-        Log_Info(fmt::format("World has been saved as: {}", worldPath.string()).c_str());
+        Log_Info("World has been saved as: {}", worldPath.string());
     }
 //Materials
     {
         std::filesystem::path materialPath = path;
-        Log_Info(fmt::format("Saving materials").c_str());
+        Log_Info("Saving materials", "");
         materialPath.append("Materials");
         if (!exists(materialPath))
         {
@@ -240,12 +239,11 @@ void Engine::SaveWorld(const std::string &worldName)
             tempPath.append(name).replace_extension(".qmt");
             std::ofstream os(tempPath);
 
-            fmt::print("{}\n", tempPath.string());
             cereal::JSONOutputArchive oarchive(os);
 
             oarchive(cereal::make_nvp(name, *_resourcesManager.LoadMaterial(name)));
         }
-        Log_Info(fmt::format("Materials have been saved", path.string()).c_str());
+        Log_Info("Materials have been saved", path.string());
     }
 
 
@@ -264,8 +262,7 @@ void Engine::LoadWorld(World &world)
     const fs::path path{"./Asset"};
     if (!exists(path))
     {
-        fmt::print(fg(fmt::color::red), "[Engine]Path does not exists: {}\n", path.string());
-        Log_Error("");
+        Log_Error("ath does not exists: {}", path.string());
     }
 
     //Materials
@@ -306,7 +303,8 @@ void Engine::LoadWorld(World &world)
         worldPath.append("Scenes");
         worldPath.append(world.GetName()).replace_extension(".qck");
 
-        fmt::print(fg(fmt::color::forest_green), "[Engine] Loading world: {}\n", worldPath.string());
+
+        Log_Info("Loading world: {}", worldPath.string());
 
         std::ifstream is(worldPath);
         cereal::JSONInputArchive iarchive(is);
@@ -347,6 +345,32 @@ bool Engine::IsGamePlaying() const
 void Engine::SetGamePlaying(bool gamePlaying)
 {
     _gamePlaying = gamePlaying;
+}
+
+void Engine::UpdateTime()
+{
+    _timeManager.Update();
+
+    _timeAcc += _timeManager.GetDeltaTime();
+    _frames++;
+
+    if (_timeAcc >= 1.0f)
+    {
+        _fps = roundf(1. / (_timeAcc / _frames));
+        _frames = 0;
+        _timeAcc = 0.;
+    }
+
+}
+
+float Engine::GetFps() const
+{
+    return _fps;
+}
+
+double Engine::GetDeltaTime()
+{
+    return _timeManager.GetDeltaTime();
 }
 
 

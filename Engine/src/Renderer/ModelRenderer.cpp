@@ -12,8 +12,7 @@
 #include "Renderer/Skeleton.hpp"
 
 #include <iostream>
-#include <fmt/core.h>
-#include <fmt/color.h>
+#include "Debug/Log.hpp"
 
 using namespace Resources;
 using namespace Renderer;
@@ -45,7 +44,7 @@ ModelRenderer ModelRenderer::LoadModel(const std::filesystem::path& path, Vertex
 
     if (!scene)
     {
-        fmt::print(fg(fmt::color::red), "[Model] Object can't be loaded: {}\n",path.string());
+        Log_Error("[Model] Object can't be loaded: {}\n",path.string());
 
         return {};
     }
@@ -221,8 +220,6 @@ ModelRenderer ModelRenderer::LoadSkeletalMeshModel(const void *loadedScene)
     ModelRenderer model(VertexType::V_SKELETAL);
     model._meshList.resize(scene->mNumMeshes);
 
-    unsigned int count;
-
     for (unsigned int i = 0; i < scene->mNumMeshes; i++)
     {
         std::vector<SkeletalVertex> vertices;
@@ -231,7 +228,6 @@ ModelRenderer ModelRenderer::LoadSkeletalMeshModel(const void *loadedScene)
         vertices.resize(scene->mMeshes[i]->mNumVertices);
 
         // Load Vertices
-        count = 0;
         for (unsigned int e = 0; e < scene->mMeshes[i]->mNumVertices; e++)
         {
             Maths::Vector3f position{(scene->mMeshes[i]->mVertices[e]).x,

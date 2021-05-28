@@ -138,7 +138,7 @@ endif ()
 
 add_subdirectory(Editor)
 
-if (${QUACK_BUILD_TESTS} STREQUAL "Release")
+if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
     #Runner
     add_subdirectory(Runner)
 endif ()
@@ -179,7 +179,7 @@ install(DIRECTORY "${PROJECT_SOURCE_DIR}/Game/Asset" DESTINATION ${CMAKE_BUILD_T
 #else()
 #    message(STATUS "IPO / LTO not supported: <${error}>")
 #endif()
-
+#
 #if(NOT MSVC)
 #    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
 #    target_compile_options(Editor PRIVATE -Wall -Wextra -pedantic)

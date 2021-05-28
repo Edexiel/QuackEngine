@@ -71,6 +71,13 @@ private:
     std::map<std::string, uint_fast16_t> _worldLut;
     std::vector<class World> _worlds;
 
+    double _timeAcc{0.};
+    unsigned int _frames{0};
+    float _fps{0.};
+public:
+    float GetFps() const;
+private:
+
     void FillTexture(Renderer::Texture &T);
     bool _gamePlaying{false};
 public:
@@ -88,6 +95,8 @@ public:
     void SetWindowTitle(const std::string &title);
     void SetWindowSize(int width, int height);
     Maths::Vector2i GetWindowSize();
+    void UpdateTime();
+    double GetDeltaTime();
 
     bool WindowShouldClose();
     void TestWindowShouldClose();

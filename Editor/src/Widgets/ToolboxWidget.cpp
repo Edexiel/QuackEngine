@@ -43,6 +43,8 @@ void ToolboxWidget::UpdateVisible()
             _engine.SetGamePlaying(isPlaying);
 
         }
+
+        ImGui::Text("FPS: %f", _engine.GetFps());
     }
     else
     {

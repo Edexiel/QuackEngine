@@ -26,8 +26,6 @@
 #include "Scene/Component/Name.hpp"
 #include "Scene/Component/Animator.hpp"
 
-#include <fmt/core.h>
-#include <fmt/color.h>
 #include "Tools/Type.hpp"
 
 #include "Engine.hpp"

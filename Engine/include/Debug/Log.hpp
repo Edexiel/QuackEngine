@@ -1,41 +1,30 @@
 #ifndef _LOG_H
 #define _LOG_H
 
-#include <iostream>
-#include <sstream>
-#include <vector>
 #include <chrono>
-#include <iomanip>
+#include <string>
 #include <fmt/core.h>
 #include <fmt/color.h>
 
 
-#ifdef WIN32
-# include <io.h>
-#define __FILENAME__ (strrchr(__FILE__,'\\')+1)
-#endif
-#ifdef LINUX
-#define __FILENAME__ (strrchr(__FILE__,'/')+1)
-#endif
-
 #ifdef NDEBUG
-
-#define Log_Release(message)
-#define Log_Error(message)
-#define Log_Warning(message)
-#define Log_Info(message)
-#define Log_Debug(message)
+#define Log_Release(...)
+#define Log_Error(...)
+#define Log_Warning(...)
+#define Log_Info(...)
+#define Log_Debug(...)
 #else
-#define Log_Release(message) (Debug::Log(message, __FILE__, __LINE__, Debug::LOG_LEVEL::L_RELEASE))
-#define Log_Error(message) (Debug::Log(message, __FILE__, __LINE__, Debug::LOG_LEVEL::L_ERROR))
-#define Log_Warning(message) (Debug::Log(message, __FILE__, __LINE__, Debug::LOG_LEVEL::L_WARNING))
-#define Log_Info(message) (Debug::Log(message, __FILE__, __LINE__, Debug::LOG_LEVEL::L_INFO))
-#define Log_Debug(message) (Debug::Log(message, __FILE__, __LINE__, Debug::LOG_LEVEL::L_DEBUG))
+#define Log_Release(...) Debug::Log(fmt::format(__VA_ARGS__), __FILE__, __LINE__, Debug::LOG_LEVEL::L_RELEASE)
+#define Log_Error(...) Debug::Log(fmt::format(__VA_ARGS__), __FILE__, __LINE__, Debug::LOG_LEVEL::L_ERROR)
+#define Log_Warning(...) Debug::Log(fmt::format(__VA_ARGS__), __FILE__, __LINE__, Debug::LOG_LEVEL::L_WARNING)
+#define Log_Info(...) Debug::Log(fmt::format(__VA_ARGS__), __FILE__, __LINE__, Debug::LOG_LEVEL::L_INFO)
+#define Log_Debug(...) Debug::Log(fmt::format(__VA_ARGS__), __FILE__, __LINE__, Debug::LOG_LEVEL::L_DEBUG)
 #endif
 
 
 namespace Debug
 {
+
     enum class LOG_LEVEL
     {
         L_RELEASE, L_ERROR, L_WARNING, L_INFO, L_DEBUG
@@ -43,8 +32,8 @@ namespace Debug
 
     inline static LOG_LEVEL logLevel = LOG_LEVEL::L_DEBUG;
 
-    inline void Log(const char *message, const char *file, unsigned int line,
-                    LOG_LEVEL logLvl = LOG_LEVEL::L_DEBUG)
+    inline void
+    Log(const std::string &message, const char *file, unsigned int line, LOG_LEVEL logLvl = LOG_LEVEL::L_DEBUG)
     {
 
         if (logLvl > logLevel)
@@ -54,12 +43,11 @@ namespace Debug
 
         /* Get the Current Time */
         time_t time = std::time(nullptr);
-        tm localTime = *std::localtime(&time);
-        std::ostringstream oss;
-        oss << std::put_time(&localTime, "%H:%M:%S");
+        tm *localTime = std::localtime(&time);
+        const std::string stime = fmt::format("{}:{}:{}", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
 
         const char *levelString;
-        fmt::color color = fmt::color::white;
+        fmt::color color;
         switch (logLvl)
         {
             case LOG_LEVEL::L_RELEASE:
@@ -76,7 +64,7 @@ namespace Debug
                 break;
             case LOG_LEVEL::L_INFO:
                 levelString = "INFO";
-                color = fmt::color::steel_blue;
+                color = fmt::color::forest_green;
                 break;
             default:
                 levelString = "DEBUG";
@@ -84,7 +72,12 @@ namespace Debug
                 break;
 
         }
-        fmt::print(fg(color), "{} [{}] {}:{} {}\n", oss.str(), levelString, file, line, message);
+#if LINUX
+        fmt::print(fg(color), "[{}][{}] {}:{} {}\n", stime, levelString, file, line, message);
+#else
+        fmt::print("[{}][{}] {}:{} {}\n", stime, levelString, file, line, message);
+#endif
+
     }
 }
 #endif // _LOG_H

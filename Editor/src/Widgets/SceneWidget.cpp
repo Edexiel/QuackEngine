@@ -91,17 +91,17 @@ void SceneWidget::SelectOperation()
     if(glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
     {
         _operation = ImGuizmo::OPERATION::TRANSLATE;
-        std::cout << "translate\n";
+//        std::cout << "translate\n";
     }
     if(glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
     {
         _operation = ImGuizmo::OPERATION::ROTATE;
-        std::cout << "rotate\n";
+//        std::cout << "rotate\n";
     }
     if(glfwGetKey(window,GLFW_KEY_R) == GLFW_PRESS)
     {
         _operation = ImGuizmo::OPERATION::SCALE;
-        std::cout << "scale\n";
+//        std::cout << "scale\n";
     }
 }
 

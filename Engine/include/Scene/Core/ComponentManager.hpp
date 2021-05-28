@@ -1,6 +1,3 @@
- //
-// Created by gnisi on 19/03/2021.
-//
 
 #ifndef QUACKENGINE_COMPONENTMANAGER_HPP
 #define QUACKENGINE_COMPONENTMANAGER_HPP
@@ -12,9 +9,9 @@
 #include "Types.hpp"
 #include "ComponentArray.hpp"
 #include "Debug/Assertion.hpp"
-#include <fmt/core.h>
-#include <fmt/color.h>
 #include <Tools/Type.hpp>
+
+#include "Debug/Log.hpp"
 
  class ComponentManager
 {
@@ -54,7 +51,6 @@ inline std::shared_ptr<ComponentArray<T>> ComponentManager::GetComponentArray()
 {
     std::string_view typeName = typeid(T).name();
 
-    //std::printf("GetComponentArray : %s \n",typeName);
     Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "ComponentBase not registered before use.");
     return std::static_pointer_cast<ComponentArray<T>>(_componentArrays[typeName]);
 }
@@ -67,10 +63,10 @@ inline void ComponentManager::RegisterComponent()
 
     if(_componentTypes.find(typeName)!= _componentTypes.end())
     {
-        fmt::print(fg(fmt::color::yellow),"[ECS] Already registered, skipping: {}\n", demangle(typeid(T).name()));
+        Log_Warning("Already registered, skipping: {}", demangle(typeid(T).name()));
         return;
     }
-    fmt::print(fg(fmt::color::forest_green),"[ECS] Registering: {}\n", demangle(typeid(T).name()));
+    Log_Info("Registering: {}", demangle(typeid(T).name()));
 
     // Add this component type to the component type map
     _componentTypes.insert({typeName, _nextType});
