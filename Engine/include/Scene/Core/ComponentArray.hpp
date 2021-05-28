@@ -90,9 +90,9 @@ bool ComponentArray<T>::HasData(Entity id) const
 template<typename T>
 void ComponentArray<T>::EntityDestroyed(Entity id)
 {
-    //if (_indexToEntity.find(id) != _indexToEntity.end()) {
+    if (_indexToEntity.find(id) != _indexToEntity.end()) {
         DeleteData(id);
-    //}
+    }
 }
 
 #endif //QUACKENGINE_COMPONENTARRAY_HPP

@@ -262,7 +262,7 @@ void Engine::LoadWorld(World &world)
     const fs::path path{"./Asset"};
     if (!exists(path))
     {
-        Log_Error("ath does not exists: {}", path.string());
+        Log_Error("Path does not exists: {}", path.string());
     }
 
     //Materials
@@ -373,10 +373,9 @@ double Engine::GetDeltaTime()
     return _timeManager.GetDeltaTime();
 }
 
+void Engine::ClearWorld(const std::string &worldName)
+{
+    _worlds[_worldLut[worldName]].Clear();
 
-//void Engine
-// ::UnloadWorld(const std::string &name)
-//{
-//    _worlds[_worldLut[name]].Clear();
-//}
+}
 

@@ -40,6 +40,11 @@ int main()
     while (!engine.WindowShouldClose())
     {
 
+        /** Time Update **/
+        engine.UpdateTime();
+
+        const auto deltaTime = (float) engine.GetDeltaTime();
+
         /** POLL INPUT **/
         engine.GetInputManager().Update();
         engine.TestWindowShouldClose();
@@ -49,10 +54,7 @@ int main()
 
         if (engine.IsGamePlaying())
         {
-            /** Time Update **/
-            engine.UpdateTime();
 
-            const auto deltaTime = (float) engine.GetDeltaTime();
 
 
             /** UPDATE **/

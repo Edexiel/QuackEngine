@@ -12,6 +12,7 @@ private:
 
     bool isPlaying = false;
     void Save();
+    void Reload();
 public:
     ToolboxWidget();
     void UpdateVisible() final;
