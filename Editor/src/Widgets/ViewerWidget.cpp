@@ -8,6 +8,8 @@ using namespace Component;
 ViewerWidget::ViewerWidget()
 {
     _title = "Viewer";
+
+
 }
 
 void ViewerWidget::UpdateVisible()

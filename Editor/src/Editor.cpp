@@ -61,7 +61,7 @@ void Editor::Draw()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
+    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode|ImGuiDockNodeFlags_AutoHideTabBar);
 
     for (const auto &widget : _widgets)
     {
