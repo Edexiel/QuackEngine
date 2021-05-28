@@ -11,12 +11,10 @@
 
 #include "Engine.hpp"
 
-AssetWidget::AssetWidget() :
-        _camera{Component::Camera(1280, 720, 1000, -1, 20 * 3.1415 / 180)}
+AssetWidget::AssetWidget()
 {
     _title = "Properties";
 
-    _camera.SetView(Maths::Matrix4::Identity());
 }
 
 void AssetWidget::UpdateVisible()
@@ -28,7 +26,6 @@ void AssetWidget::UpdateVisible()
     Engine &engine = Engine::Instance();
 
     ImGui::BeginChild("ViewportRender");
-    //ImVec2 wsize = ImGui::GetWindowSize();
 
     ImGui::Text("%s", _assetName.c_str());
 
@@ -36,14 +33,17 @@ void AssetWidget::UpdateVisible()
 
     const Resources::Asset* asset = Engine::Instance().GetResourcesManager().GetAsset(_assetName);
 
-    if (asset->GetType() == Resources::AssetType::A_MODEL)
-        DisplayModel(asset);
-    else if (asset->GetType() == Resources::AssetType::A_SOUND)
-        DisplaySound(asset);
-    else if (asset->GetType() == Resources::AssetType::A_TEXTURE)
-        DisplayTexture(asset);
-    else if (asset->GetType() == Resources::AssetType::A_MATERIAL)
-        DisplayMaterial(asset);
+    if (asset)
+    {
+        if (asset->GetType() == Resources::AssetType::A_MODEL)
+            DisplayModel(asset);
+        else if (asset->GetType() == Resources::AssetType::A_SOUND)
+            DisplaySound(asset);
+        else if (asset->GetType() == Resources::AssetType::A_TEXTURE)
+            DisplayTexture(asset);
+        else if (asset->GetType() == Resources::AssetType::A_MATERIAL)
+            DisplayMaterial(asset);
+    }
 
     ImGui::EndChild();
 

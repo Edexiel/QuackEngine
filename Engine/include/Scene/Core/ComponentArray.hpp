@@ -43,13 +43,13 @@ template<typename T>
 void ComponentArray<T>::AddData(Entity id, const T& data)
 {
     Assert_Fatal_Error(_entityToIndex.find(id) != _entityToIndex.end(),
-                       "ComponentBase added to same entity more than once.");
+                       "Component added to same entity more than once.");
 
     size_t end = _components.size();
 
     _entityToIndex[id] = end;
     _indexToEntity[end] = id;
-    _components.emplace_back(std::move(data));
+    _components.emplace_back(data);
 }
 
 template<typename T>

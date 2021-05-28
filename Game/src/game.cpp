@@ -28,6 +28,8 @@
 #include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/Component/Animator.hpp"
 
+#include "Player/Player.hpp"
+
 using namespace Resources;
 using namespace Renderer;
 
@@ -46,6 +48,8 @@ void Game::Init(Engine &engine) const
     world.RegisterComponent<Component::Animator>();
 
     world.RegisterComponent<EnemyComponent>();
+    world.RegisterComponent<PlayerComponent>();
+
 
 
 
@@ -55,6 +59,7 @@ void Game::Init(Engine &engine) const
     auto physicsSystem = world.RegisterSystem<PhysicsSystem>();
     auto characterControllerSystem = world.RegisterSystem<CharacterControllerSystem>();
     auto animatorSystem = world.RegisterSystem<AnimatorSystem>();
+    auto playerSystem = world.RegisterSystem<PlayerSystem>();
 
     auto noteDisplaySystem = world.RegisterSystem<EnemyManagerSystem>();
 
@@ -115,19 +120,29 @@ void Game::Init(Engine &engine) const
         world.SetSystemSignature<EnemyManagerSystem>(signatureEnemy);
     }
 
+    {
+        Signature signaturePlayer;
+        signaturePlayer.set(world.GetComponentType<PlayerComponent>());
+        signaturePlayer.set(world.GetComponentType<Component::Transform>());
+        world.SetSystemSignature<PlayerSystem>(signaturePlayer);
+    }
+
     engine.LoadWorld(world);
     engine.GetResourcesManager().LoadFolder(R"(./Asset)");
     physicsSystem->Init();
     characterControllerSystem->Init();
 
 
-//    //NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();
-//    std::unique_ptr<ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
-//
-//    engine.GetPostProcessManager().AddProcess(ptr);
-//
-//    noteDisplaySystem->GenerateEnemies(10, {0,0,0}, 50.f, 100.f);
+    //NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();
+    std::unique_ptr<ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
+    engine.GetPostProcessManager().AddProcess(ptr);
 
+    noteDisplaySystem->GenerateEnemies(10, {0,0,0}, 50.f, 100.f);
+
+
+    Entity id = world.CreateEntity("Player");
+    PlayerComponent pl;
+    world.AddComponent(id, pl);
 
     RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
 

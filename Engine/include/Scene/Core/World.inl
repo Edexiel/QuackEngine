@@ -6,7 +6,7 @@ void World::RegisterComponent() const
     if (std::is_base_of<Component::ComponentBase, T>())
         _componentManager->RegisterComponent<T>();
     else
-        Log_Error("The class you're trying to register isn't a child of ComponentBase: {}",demangle(typeid(T).name()));
+        Log_Error("The class you're trying to register isn't a child of Component: {}",demangle(typeid(T).name()));
 
 }
 
@@ -33,6 +33,21 @@ inline void World::RemoveComponent(Entity id)
 
     auto signature = _entityManager->GetSignature(id);
     signature.set(_componentManager->GetComponentType<T>(), false);
+
+    _entityManager->SetSignature(id, signature);
+    _systemManager->EntitySignatureChanged(id, signature);
+}
+
+template<>
+inline void World::RemoveComponent<Component::RigidBody>(Entity id)
+{
+    fmt::print(fg(fmt::color::forest_green),"[ECS] Remove component: {} from {}\n",demangle(typeid(Component::RigidBody).name()),id);
+
+    _physicsWorld->destroyRigidBody(GetComponent<Component::RigidBody>(id).rb);
+    _componentManager->RemoveComponent<Component::RigidBody>(id);
+
+    auto signature = _entityManager->GetSignature(id);
+    signature.set(_componentManager->GetComponentType<Component::RigidBody>(), false);
 
     _entityManager->SetSignature(id, signature);
     _systemManager->EntitySignatureChanged(id, signature);

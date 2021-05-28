@@ -12,6 +12,8 @@
 #include "Scene/System/RenderSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
 
+#include "Thread/ThreadPool.hpp"
+
 #include <filesystem>
 #include <fmt/color.h>
 
@@ -51,9 +53,12 @@ ModelRenderer ResourcesManager::LoadModel(const std::filesystem::path &path, Ver
 
     // Create a new Model
     ModelRenderer model = ModelRenderer::LoadModel(path, vertexType);
-    _mapModel.insert({path.string(), model});
-    _globalAssetMap.insert({path.string(), &_mapModel.find(path.string())->second});
 
+    if (model.GetNumberMesh() > 0)
+    {
+        _mapModel.insert({path.string(), model});
+        _globalAssetMap.insert({path.string(), &_mapModel.find(path.string())->second});
+    }
     return model;
 }
 
@@ -259,9 +264,18 @@ Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const std::string
     return materialInterface;
 }
 
+void ResourcesManager::DestroyMaterial(const std::string &name)
+{
+    _mapMaterial.erase(name);
+    _globalAssetMap.erase(name);
+}
+
 void ResourcesManager::LoadFolder(const std::filesystem::path &path)
 {
     std::vector<std::filesystem::path> results;
+
+    Thread::TaskSystem tsk;
+
     for (auto &p : std::filesystem::recursive_directory_iterator(path))
     {
         if (!p.is_directory())
@@ -281,9 +295,11 @@ void ResourcesManager::LoadFolder(const std::filesystem::path &path)
                 LoadTexture(p.path());
             else if (extension == ".qsh")
                 LoadShader(p.path().string().c_str());
-
         }
     }
+
+    Thread::ThreadPool th;
+    th.Run(&tsk);
 }
 
 std::string ResourcesManager::GetFileType(const std::filesystem::path &path)

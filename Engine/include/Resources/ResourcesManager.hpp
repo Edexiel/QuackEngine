@@ -67,6 +67,7 @@ namespace Resources
         Renderer::MaterialInterface LoadMaterial(const std::filesystem::path &path);
         Renderer::MaterialInterface GenerateMaterial(const std::string& name,
                                                      const Renderer::Material &material); // Should be used to load a material from scratch
+        void DestroyMaterial(const std::string& name);
 
 
         Audio::Sound LoadSound(const std::filesystem::path &path, Audio::SoundType soundType);

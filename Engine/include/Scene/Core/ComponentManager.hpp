@@ -51,7 +51,7 @@ inline std::shared_ptr<ComponentArray<T>> ComponentManager::GetComponentArray()
 {
     std::string_view typeName = typeid(T).name();
 
-    Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "ComponentBase not registered before use.");
+    Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "Component not registered before use.");
     return std::static_pointer_cast<ComponentArray<T>>(_componentArrays[typeName]);
 }
 
@@ -82,7 +82,7 @@ template<typename T>
 inline ComponentType ComponentManager::GetComponentType()
 {
     std::string_view typeName = typeid(T).name();
-    Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "ComponentBase not registered before use.");
+    Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "Component not registered before use.");
     return _componentTypes[typeName];
 }
 

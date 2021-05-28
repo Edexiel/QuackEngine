@@ -48,6 +48,10 @@ ModelRenderer ModelRenderer::LoadModel(const std::filesystem::path& path, Vertex
 
         return {};
     }
+    if (scene->HasAnimations())
+    {
+        return {};
+    }
 
     ModelRenderer loadedModel;
 
