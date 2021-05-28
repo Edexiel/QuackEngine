@@ -25,6 +25,8 @@
 #include "Scene/System/CharacterControllerSystem.hpp"
 
 
+#include "Scene/System/AnimatorSystem.hpp"
+#include "Scene/Component/Animator.hpp"
 
 using namespace Resources;
 using namespace Renderer;
@@ -52,6 +54,8 @@ void Game::Init(Engine &engine) const
     auto lightSystem = world.RegisterSystem<LightSystem>();
     auto physicsSystem = world.RegisterSystem<PhysicsSystem>();
     auto characterControllerSystem = world.RegisterSystem<CharacterControllerSystem>();
+    auto animatorSystem = world.RegisterSystem<AnimatorSystem>();
+
     auto noteDisplaySystem = world.RegisterSystem<EnemyManagerSystem>();
 
 
@@ -96,13 +100,19 @@ void Game::Init(Engine &engine) const
         world.SetSystemSignature<PhysicsSystem>(signaturePhysics);
     }
 
+    //signature Animation
+    {
+        Signature signatureAnimation;
+        signatureAnimation.set(world.GetComponentType<Component::Animator>());
+        world.SetSystemSignature<AnimatorSystem>(signatureAnimation);
+    }
 
     //signature enemymanager
     {
-        Signature signatureRender;
-        signatureRender.set(world.GetComponentType<EnemyComponent>());
-        signatureRender.set(world.GetComponentType<Component::Transform>());
-        world.SetSystemSignature<EnemyManagerSystem>(signatureRender);
+        Signature signatureEnemy;
+        signatureEnemy.set(world.GetComponentType<EnemyComponent>());
+        signatureEnemy.set(world.GetComponentType<Component::Transform>());
+        world.SetSystemSignature<EnemyManagerSystem>(signatureEnemy);
     }
 
     engine.LoadWorld(world, "./");

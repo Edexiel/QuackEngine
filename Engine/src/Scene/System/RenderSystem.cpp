@@ -90,8 +90,6 @@ void RenderSystem::DrawMaterials(const Maths::Matrix4 &projection, const Maths::
                 if (it.first->hasSkeleton &&
                     engine.GetCurrentWorld().HasComponent<Animator>(it.second[i].second))
                 {
-                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).Update(
-                            engine.GetTimeManager().GetDeltaTime());
                     engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).SetShader(it.first->shader);
                 }
             }
@@ -107,7 +105,7 @@ void RenderSystem::UpdateModel(const Renderer::ModelRenderer &newModel)
     {
         auto &m = world.GetComponent<Model>(entity).model;
 
-        if (m.name == newModel.name)
+        if (m.GetPath() == newModel.GetPath())
         {
             Renderer::ModelRenderer::ReLoadModel(m, newModel);
         }

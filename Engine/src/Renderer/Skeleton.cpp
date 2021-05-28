@@ -107,7 +107,7 @@ Maths::Matrix4 Bone::InterpolateRotation(float animationTime)
     float scaleFactor = GetTimeScaleFactor(_rotations[p0Index].second,
                                            _rotations[p1Index].second, animationTime);
 
-    Quaternion finalRotation = Quaternion::Lerp(_rotations[p0Index].first,
+    Quaternion finalRotation = Quaternion::Slerp(_rotations[p0Index].first,
                                               _rotations[p1Index].first, scaleFactor);
 
     return  finalRotation.ToMatrix();

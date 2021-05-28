@@ -46,10 +46,10 @@ namespace Renderer
                     CEREAL_NVP(specular),
                     CEREAL_NVP(shininess),
                     CEREAL_NVP(hasSkeleton),
-                    cereal::make_nvp("colorTexture", colorTexture.name),
-                    cereal::make_nvp("diffuseTexture", diffuseTexture.name),
-                    cereal::make_nvp("specularTexture", specularTexture.name),
-                    cereal::make_nvp("normalMap", normalMap.name)
+                    cereal::make_nvp("colorTexture", colorTexture.Path()),
+                    cereal::make_nvp("diffuseTexture", diffuseTexture.Path()),
+                    cereal::make_nvp("specularTexture", specularTexture.Path()),
+                    cereal::make_nvp("normalMap", normalMap.Path())
             );
         }
     };

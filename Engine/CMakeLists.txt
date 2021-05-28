@@ -53,7 +53,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Time/TimeManager.cpp
 
         src/Renderer/PostProcess/KernelPostProcess.cpp
-        )
+        src/Scene/System/AnimatorSystem.cpp include/Scene/System/AnimatorSystem.hpp)
 
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

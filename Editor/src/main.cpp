@@ -23,7 +23,7 @@ int main()
     EngineSettings settings{
             true,
             "QuackEditor",
-            {1920, 1080},
+            {1280, 720},
             WINDOW_MODE::WINDOWED,
             0,
             INPUT_MODE::GLFW

@@ -35,14 +35,14 @@ namespace Component
         void Update(float deltaTime);
         void SetShader(Renderer::Shader& shader);
 
-        void PlayAnimation(Renderer::Animation& animation);
+        void PlayAnimation(const Renderer::Animation& animation);
 
         const Renderer::Animation& GetAnimation() const;
 
         template<class Archive>
         void save(Archive &archive) const
         {
-            archive(cereal::make_nvp("path",_currentAnimation.name));
+            archive(cereal::make_nvp("path",_currentAnimation.GetPath()));
         }
 
         template<class Archive>

@@ -250,9 +250,9 @@ void Engine::SaveWorld(const std::string &worldName, fs::path path)
 
 void Engine::FillTexture(Renderer::Texture &T)
 {
-    if (!T.name.empty())
+    if (!T.Path().empty())
     {
-        T = _resourcesManager.LoadTexture(T.name);
+        T = _resourcesManager.LoadTexture(T.Path());
     }
 }
 
