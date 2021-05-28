@@ -31,6 +31,7 @@ void InputManager::OnKeyEvent(Action action, Key key)
             }
         }
     }
+    //For axis event
     for (const std::pair<const std::string, std::vector<std::pair<Key, float>>> &eventKeyAxis : _eventKeysAxis)
     {
         for (std::pair<Key, float> _key : eventKeyAxis.second)

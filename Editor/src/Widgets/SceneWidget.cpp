@@ -60,8 +60,8 @@ void SceneWidget::CameraUpdate()
     _camera._width = (unsigned int)wsize.x;
     _camera._height = (unsigned int)wsize.y;
 
-    if(ImGui::IsWindowFocused())
-        _camera.FreeFly();
+
+    _camera.FreeFly();
 
     RendererInterface &rendererInterface = Engine::Instance().GetRendererInterface();
     Maths::Matrix4 projection = Maths::Matrix4::Perspective((int)_camera._width, (int)_camera._height, _camera._near, _camera._far, _camera._fov);
