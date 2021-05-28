@@ -202,16 +202,16 @@ inline Matrix4 Matrix4::LookAtMatrix(const Vector3f& eye, const Vector3f& target
     result.e[9] = up.z;
     result.e[10] = -forward.z;
 
-    /*result.e[12] = -(Vector3f::DotProduct(side, eye));
-    result.e[13] = -(Vector3f::DotProduct(up, eye));
-    result.e[14] = -(Vector3f::DotProduct(forward, eye));*/
+    result.e[12] = -(Vector3f::DotProduct(side, eye));
+    result.e[13] = -(Vector3f::DotProduct(forward, up));
+    result.e[14] = -(Vector3f::DotProduct(side, forward));
 
     result.e[15] = 1;
 
     return result;
 }
 
-inline Matrix4 Matrix4::LookAtMatrixCamera(const Vector3f& eye, const Vector3f& target, const Vector3f& angleZ)
+inline Matrix4 Matrix4::LookAtMatrixRotation(const Vector3f& eye, const Vector3f& target, const Vector3f& angleZ)
 {
     Matrix4 result;
 
@@ -231,10 +231,6 @@ inline Matrix4 Matrix4::LookAtMatrixCamera(const Vector3f& eye, const Vector3f& 
     result.e[8] = side.z;
     result.e[9] = up.z;
     result.e[10] = -forward.z;
-
-    result.e[12] = -(Vector3f::DotProduct(side, eye));
-    result.e[13] = -(Vector3f::DotProduct(forward, up));
-    result.e[14] = -(Vector3f::DotProduct(side, forward));
 
     result.e[15] = 1;
 

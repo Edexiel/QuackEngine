@@ -121,6 +121,7 @@ Engine::Engine(const EngineSettings &settings)
     _inputManager.Init(_platformInput.get());
     _timeManager.Init(new Time::TimePlatformGLFW(_window));
     _postProcessManager.Init();
+    _soundManager.Init();
 }
 
 GLFWwindow *Engine::GetWindow()
