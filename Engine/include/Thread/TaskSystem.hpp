@@ -33,8 +33,6 @@ namespace Thread
 
         /* ==== Function ==== */
 
-        Task(){};
-
         Task(std::function<void(Args...)> function, std::tuple<Args...> args)
         {
             _function = function;

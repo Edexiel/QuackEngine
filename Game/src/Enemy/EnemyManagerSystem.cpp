@@ -13,23 +13,26 @@
 
 EnemyManagerSystem::EnemyManagerSystem()
 {
+
     Engine &engine = Engine::Instance();
     _listTexture[0] = engine.GetResourcesManager().LoadTexture("../../Game/Asset/Texture/Arrow/Up.png");
     _listTexture[1] = engine.GetResourcesManager().LoadTexture("../../Game/Asset/Texture/Arrow/Down.png");
     _listTexture[2] = engine.GetResourcesManager().LoadTexture("../../Game/Asset/Texture/Arrow/Right.png");
     _listTexture[3] = engine.GetResourcesManager().LoadTexture("../../Game/Asset/Texture/Arrow/Left.png");
 
-    engine.GetInputManager().BindEvent("Up Hit", Input::Key::KEY_UP);
-    engine.GetInputManager().RegisterEvent("Up Hit", Input::Action::PRESS, this, &EnemyManagerSystem::UpHit);
+    Input::InputManager& inputManager = engine.GetInputManager();
 
-    engine.GetInputManager().BindEvent("Down Hit", Input::Key::KEY_DOWN);
-    engine.GetInputManager().RegisterEvent("Down Hit", Input::Action::PRESS, this, &EnemyManagerSystem::DownHit);
+    inputManager.BindEvent("Up Hit", Input::Key::KEY_UP);
+    inputManager.RegisterEvent("Up Hit", Input::Action::PRESS, this, &EnemyManagerSystem::UpHit);
 
-    engine.GetInputManager().BindEvent("Right Hit", Input::Key::KEY_RIGHT);
-    engine.GetInputManager().RegisterEvent("Right Hit", Input::Action::PRESS, this, &EnemyManagerSystem::RightHit);
+    inputManager.BindEvent("Down Hit", Input::Key::KEY_DOWN);
+    inputManager.RegisterEvent("Down Hit", Input::Action::PRESS, this, &EnemyManagerSystem::DownHit);
 
-    engine.GetInputManager().BindEvent("Left Hit", Input::Key::KEY_LEFT);
-    engine.GetInputManager().RegisterEvent("Left Hit", Input::Action::PRESS, this, &EnemyManagerSystem::LeftHit);
+    inputManager.BindEvent("Right Hit", Input::Key::KEY_RIGHT);
+    inputManager.RegisterEvent("Right Hit", Input::Action::PRESS, this, &EnemyManagerSystem::RightHit);
+
+    inputManager.BindEvent("Left Hit", Input::Key::KEY_LEFT);
+    inputManager.RegisterEvent("Left Hit", Input::Action::PRESS, this, &EnemyManagerSystem::LeftHit);
 }
 
 void
@@ -47,31 +50,39 @@ EnemyManagerSystem::GenerateEnemies(unsigned int numberToGenerate, const Maths::
         Component::Transform trs;
         Maths::Vector3f direction{Random::Range(0.f, 1.0f), 0, Random::Range(0.0f, 1.0f)};
         direction.Normalize();
-        trs.position = origin + direction * innerRadius;
+        trs.position = origin * innerRadius;
         world.AddComponent(id, trs);
 
         EnemyComponent enemyWeaknessDisplay;
         enemyWeaknessDisplay.AddNote(NoteType::M_DOWN);
         enemyWeaknessDisplay.AddNote(NoteType::M_LEFT);
-        enemyWeaknessDisplay.AddNote(NoteType::M_UP);
         enemyWeaknessDisplay.AddNote(NoteType::M_RIGHT);
+        enemyWeaknessDisplay.AddNote(NoteType::M_UP);
         world.AddComponent(id, enemyWeaknessDisplay);
     }
 }
 
 void EnemyManagerSystem::HitEnemies(NoteType note)
 {
-    if (Engine::Instance().GetTimeManager().GetTime() - _time < _hitCooldown)
+    Engine& engine = Engine::Instance();
+
+    if (engine.GetTimeManager().GetTime() - _time < _hitCooldown)
         return;
 
     _time = (float) Engine::Instance().GetTimeManager().GetTime();
+
+    std::vector<Entity> entityToDestroy;
     for (Entity entity: _entities)
     {
         auto &enemy = Engine::Instance().GetCurrentWorld().GetComponent<EnemyComponent>(entity);
         enemy.RemoveNote(note);
 
         if (enemy.GetNoteList().empty())
-            Engine::Instance().GetCurrentWorld().DestroyEntity(entity);
+            entityToDestroy.push_back(entity);
+    }
+    for (unsigned int i = 0; i < entityToDestroy.size(); i++)
+    {
+        engine.GetCurrentWorld().DestroyEntity(entityToDestroy[i]);
     }
 }
 
