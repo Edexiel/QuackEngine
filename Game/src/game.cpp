@@ -119,18 +119,19 @@ void Game::Init(Engine &engine) const
         signatureEnemy.set(world.GetComponentType<Component::Transform>());
         world.SetSystemSignature<EnemyManagerSystem>(signatureEnemy);
     }
-
+    //signature player
     {
         Signature signaturePlayer;
         signaturePlayer.set(world.GetComponentType<PlayerComponent>());
         signaturePlayer.set(world.GetComponentType<Component::Transform>());
+        signaturePlayer.set(world.GetComponentType<Component::RigidBody>());
+        signaturePlayer.set(world.GetComponentType<Component::CharacterController>());
         world.SetSystemSignature<PlayerSystem>(signaturePlayer);
     }
 
     engine.LoadWorld(world, "./");
     engine.GetResourcesManager().LoadFolder(R"(../../Game/Asset)");
     physicsSystem->Init();
-    characterControllerSystem->Init();
 
 
     //NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();
@@ -140,8 +141,10 @@ void Game::Init(Engine &engine) const
     noteDisplaySystem->GenerateEnemies(10, {0,0,0}, 50.f, 100.f);
 
 
-    Entity id = world.CreateEntity("Player");
+    Entity id = world.CreateEntity("Tartiflette");
     PlayerComponent pl;
+    Component::Transform t {Maths::Vector3f::Zero(),Maths::Vector3f::One(),Maths::Quaternion::Identity()};
+    world.AddComponent(id, t);
     world.AddComponent(id, pl);
 
     RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});

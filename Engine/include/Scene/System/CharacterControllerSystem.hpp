@@ -7,15 +7,9 @@
 class CharacterControllerSystem: public System
 {
 private:
-    void MoveForward(float verticalAxis);
-    void MoveBackward(float verticalAxis);
-    void MoveLeft(float horizontalAxis);
-    void MoveRight(float horizontalAxis);
-
     void  CharacterMovement(Entity entity);
 
 public:
-    void Init();
     void Update();
     static void CollideWithWall(Entity player,const Maths::Vector3f &normal, float depth);
 };
