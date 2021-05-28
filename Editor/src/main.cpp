@@ -10,6 +10,7 @@
 #include "Scene/System/CameraSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
 #include "Scene/System/CharacterControllerSystem.hpp"
+#include "Scene/System/AnimatorSystem.hpp"
 
 #include "Tools/Random.hpp"
 #include "game.hpp"
@@ -81,6 +82,8 @@ int main()
         /** UPDATE **/
         engine.GetCurrentWorld().GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
         engine.GetCurrentWorld().GetSystem<CameraSystem>()->Update();
+        engine.GetCurrentWorld().GetSystem<Renderer::AnimatorSystem>()->Update();
+
         engine.GetCurrentWorld().GetSystem<CharacterControllerSystem>()->Update();
 
         engine.SwapBuffers();

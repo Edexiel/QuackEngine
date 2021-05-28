@@ -45,7 +45,7 @@ ModelRenderer ResourcesManager::LoadModel(const std::filesystem::path &path, Ver
         return (it->second);
     }
 
-    // return null Texture if the file doesn't exist
+    // return null Model if the file doesn't exist
     if (!exists(path))
     {
         std::cout << "File : " << path << " doesn't exist" << std::endl;
@@ -281,21 +281,24 @@ void ResourcesManager::LoadFolder(const std::filesystem::path &path)
     {
         if (!p.is_directory())
         {
+            std::string path = p.path().string();
+            std::replace(path.begin(), path.end(), '\\', '/');
+
             std::string extension = p.path().extension().string();
 
             if (extension == ".glb")
-                LoadModel(p.path(), VertexType::V_NORMALMAP);
+                LoadModel(path, VertexType::V_NORMALMAP);
             if (extension == ".fbx")
             {
-                LoadModel(p.path(), VertexType::V_NORMALMAP);
-                LoadAnimation(p.path());
+                LoadModel(path, VertexType::V_NORMALMAP);
+                LoadAnimation(path);
             }
             else if (extension == ".ogg" || extension == ".mp3" || extension == ".wav")
-                LoadSound(p.path(), Audio::SoundType::S_MASTER);
+                LoadSound(path, Audio::SoundType::S_MASTER);
             else if (extension == ".png" || extension == ".jpg" || extension == ".jpeg")
-                LoadTexture(p.path());
+                LoadTexture(path);
             else if (extension == ".qsh")
-                LoadShader(p.path().string().c_str());
+                LoadShader(path.c_str());
         }
     }
 
