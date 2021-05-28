@@ -23,64 +23,6 @@ void CharacterControllerSystem::Update()
     }
 }
 
-void CharacterControllerSystem::Init()
-{
-    auto &inputManager = Engine::Instance().GetInputManager();
-
-    inputManager.BindEventAxis("Move up", Input::Key::KEY_W, 1.f);
-    inputManager.RegisterEventAxis("Move up", this, &CharacterControllerSystem::MoveForward);
-
-    inputManager.BindEventAxis("Move down", Input::Key::KEY_S, -1.f);
-    inputManager.RegisterEventAxis("Move down", this, &CharacterControllerSystem::MoveBackward);
-
-    inputManager.BindEventAxis("Move left", Input::Key::KEY_A, -1.f);
-    inputManager.RegisterEventAxis("Move left", this, &CharacterControllerSystem::MoveLeft);
-
-    inputManager.BindEventAxis("Move right", Input::Key::KEY_D, 1.f);
-    inputManager.RegisterEventAxis("Move right", this, &CharacterControllerSystem::MoveRight);
-}
-
-void CharacterControllerSystem::MoveForward(float verticalAxis)
-{
-    auto &world = Engine::Instance().GetCurrentWorld();
-
-    for(Entity entity : _entities)
-    {
-        auto &characterController = world.GetComponent<CharacterController>(entity);
-        characterController.forward = verticalAxis;
-    }
-}
-
-void CharacterControllerSystem::MoveRight(float horizontalAxis)
-{
-    auto &world = Engine::Instance().GetCurrentWorld();
-    for(Entity entity : _entities)
-    {
-        auto &characterController = world.GetComponent<CharacterController>(entity);
-        characterController.right = horizontalAxis;
-    }
-}
-
-void CharacterControllerSystem::MoveBackward(float verticalAxis)
-{
-    auto &world = Engine::Instance().GetCurrentWorld();
-    for(Entity entity : _entities)
-    {
-        auto &characterController = world.GetComponent<CharacterController>(entity);
-        characterController.backward = verticalAxis;
-    }
-}
-
-void CharacterControllerSystem::MoveLeft(float horizontalAxis)
-{
-    auto &world = Engine::Instance().GetCurrentWorld();
-    for(Entity entity : _entities)
-    {
-        auto &characterController = world.GetComponent<CharacterController>(entity);
-        characterController.left = horizontalAxis;
-    }
-}
-
 void CharacterControllerSystem::CharacterMovement(Entity entity)
 {
     auto &world = Engine::Instance().GetCurrentWorld();
