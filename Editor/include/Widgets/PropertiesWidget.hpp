@@ -24,6 +24,7 @@ private:
     static void AnimatorReader();
     static void CameraReader();
     static void RigidBodyReader();
+    static  void CharacterControllerReader();
     static void AddComponent();
     static void DeleteComponent();
 

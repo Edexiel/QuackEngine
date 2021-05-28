@@ -1,5 +1,7 @@
 #include "Physics/PhysicsEventManager.hpp"
 
+#include "Scene/Core/World.hpp"
+
 #include "Engine.hpp"
 #include "Scene/Component/RigidBody.hpp"
 

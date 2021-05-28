@@ -21,16 +21,17 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/IcoSphere.cpp
         src/Renderer/RendererInterface.cpp
         src/Renderer/Shape.cpp
-        src/Renderer/Skeleton.cpp 
-        src/Renderer/Animation.cpp 
+        src/Renderer/Skeleton.cpp
+        src/Renderer/Animation.cpp
+        src/Renderer/ModelRenderer.cpp
+
         src/Scene/Component/Animator.cpp
-        
+
         src/Renderer/ProcessBase.cpp
         src/Renderer/PostProcessManager.cpp
 
         src/Scene/Core/World.cpp
-        src/Scene/Component/Model.cpp
-        src/Scene/Component/Light.cpp
+        src/Scene/Component/ComponentBase.cpp
         src/Scene/Component/Camera.cpp
         src/Scene/Component/RigidBody.cpp
 
@@ -46,10 +47,15 @@ add_library(${PROJECT_NAME} STATIC
 
         src/Physics/PhysicsEventManager.cpp
         src/Physics/PhysicsCollisionCallback.cpp
+        src/Tools/Type.cpp
+
         src/Time/TimePlatformGLFW.cpp
-        src/Time/TimeManager.cpp src/Renderer/PostProcess/KernelPostProcess.cpp)
-        
+        src/Time/TimeManager.cpp
+
+        src/Renderer/PostProcess/KernelPostProcess.cpp
+        )
+
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp stb miniaudio reactphysics3d)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw assimp stb miniaudio reactphysics3d cereal fmt)

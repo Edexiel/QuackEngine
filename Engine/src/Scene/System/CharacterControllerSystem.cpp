@@ -96,7 +96,6 @@ void CharacterControllerSystem::CharacterMovement(Entity entity)
 
 //    std::cout << "deltatime = " << deltatime << std::endl;
 
-    rp3d::Vector3 dir = {characterController.direction.x, characterController.direction.y, characterController.direction.z};
     rp3d::Transform t = rigidBody.rb->getTransform();
     rp3d::Vector3 v = t.getPosition();
     rp3d::Quaternion q = t.getOrientation();

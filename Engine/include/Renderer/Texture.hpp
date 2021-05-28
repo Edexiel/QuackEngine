@@ -2,6 +2,7 @@
 #define QUACKENGINE_TEXTURE_HPP
 
 #include <string>
+#include <filesystem>
 #include "Resources/Asset.hpp"
 
 namespace Renderer
@@ -14,9 +15,10 @@ namespace Renderer
     public:
         Texture();
         Texture(unsigned int id);
+        ~Texture()=default;
         unsigned int GetID() const;
-        static Texture LoadTexture(const char* filepath);
-        void Bind(unsigned int index = 0);
+        static Texture LoadTexture(const std::filesystem::path& path);
+        void Bind(unsigned int index = 0) const;
     };
 }
 

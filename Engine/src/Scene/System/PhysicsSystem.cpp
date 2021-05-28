@@ -1,6 +1,7 @@
 #include "Engine.hpp"
 
 #include "Scene/System/PhysicsSystem.hpp"
+#include "Scene/Component/Transform.hpp"
 
 
 using namespace Component;
@@ -35,8 +36,8 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
         auto &r = world->GetComponent<Component::RigidBody>(entity);
         const rp3d::Transform &transform = r.rb->getTransform();
         t.position = {transform.getPosition().x, transform.getPosition().y, transform.getPosition().z};
-        t.rotation = {transform.getOrientation().x, transform.getOrientation().y, transform.getOrientation().z,
-                      transform.getOrientation().w};
+        t.rotation = {transform.getOrientation().w, transform.getOrientation().x, transform.getOrientation().y,
+                      transform.getOrientation().z};
     }
 }
 

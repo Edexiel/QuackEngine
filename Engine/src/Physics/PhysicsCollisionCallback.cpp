@@ -1,7 +1,6 @@
 #include "Physics/PhysicsCollisionCallback.hpp"
 #include "Engine.hpp"
 #include "Scene/Core/World.hpp"
-#include "Scene/Component/RigidBody.hpp"
 #include "Scene/System/CharacterControllerSystem.hpp"
 #include "Scene/Component//CharacterController.hpp"
 

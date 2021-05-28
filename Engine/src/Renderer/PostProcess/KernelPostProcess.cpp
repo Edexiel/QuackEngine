@@ -2,6 +2,7 @@
 
 #include "Engine.hpp"
 #include "Renderer/RendererPlatform.hpp"
+#include "Renderer/Framebuffer.hpp"
 
 Renderer::KernelPostProcess::KernelPostProcess(const std::string& name) :
 ProcessBase(name, Engine::Instance().GetResourcesManager().LoadShader("../../Engine/Shader/PostProcess/KernelPostProcess.qsh"))

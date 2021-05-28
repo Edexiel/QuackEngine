@@ -2,10 +2,11 @@
 #define QUACKENGINE_CHARACTERCONTROLLER_HPP
 
 #include "Maths/Vector3.hpp"
+#include "Scene/Component/ComponentBase.hpp"
 
 namespace Component
 {
-    struct CharacterController
+    struct CharacterController : public ComponentBase
     {
         float speed {1};
         float left{0};

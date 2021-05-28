@@ -1,18 +1,21 @@
 #ifndef _ANIMATOR_HPP
 #define _ANIMATOR_HPP
 
+#include "Scene/Component/ComponentBase.hpp"
+
 #include "Maths/Matrix4.hpp"
 
 #include "Renderer/Animation.hpp"
 #include "Renderer/Shader.hpp"
-#include "Scene/Component/Model.hpp"
+#include "Resources/ResourcesManager.hpp"
+#include "Engine.hpp"
 
 #include <vector>
 #include <unordered_map>
 
 namespace Component
 {
-    class Animator
+    class Animator : public ComponentBase
     {
         std::vector<Maths::Matrix4> _bonesOffset;
         Renderer::Animation _currentAnimation;
@@ -26,8 +29,8 @@ namespace Component
     public:
 
         Animator() = default;
-        explicit Animator(Renderer::Animation& animation);
-        void SetAnimation(Renderer::Animation& animation);
+        explicit Animator(const Renderer::Animation& animation);
+        void SetAnimation(const Renderer::Animation& animation);
 
         void Update(float deltaTime);
         void SetShader(Renderer::Shader& shader);
@@ -35,6 +38,22 @@ namespace Component
         void PlayAnimation(Renderer::Animation& animation);
 
         const Renderer::Animation& GetAnimation() const;
+
+        template<class Archive>
+        void save(Archive &archive) const
+        {
+            archive(cereal::make_nvp("path",_currentAnimation.name));
+        }
+
+        template<class Archive>
+        void load(Archive &archive)
+        {
+
+            std::string name;
+            archive(cereal::make_nvp("path",name));
+            Resources::ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
+            SetAnimation(resourcesManager.LoadAnimation(name));
+        }
 
     };
 }
