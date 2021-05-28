@@ -138,10 +138,9 @@ endif ()
 
 add_subdirectory(Editor)
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    #Runner
-    add_subdirectory(Runner)
-endif ()
+#Runner
+add_subdirectory(Runner)
+
 
 #Engine
 add_subdirectory(Engine)
@@ -151,10 +150,16 @@ add_subdirectory(Game)
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install)
 
+install(CODE "file(REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE})")
+
 install(TARGETS Editor RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
 install(TARGETS Engine RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
-#install(DIRECTORY "${PROJECT_SOURCE_DIR}/Game/Asset" DESTINATION ${CMAKE_BUILD_TYPE})
-install(CODE "file(CREATE_LINK ${PROJECT_SOURCE_DIR}/Game/Asset ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Asset SYMBOLIC)")
+
+if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    install(DIRECTORY "${PROJECT_SOURCE_DIR}/Game/Asset" DESTINATION ${CMAKE_BUILD_TYPE})
+else ()
+    install(CODE "file(CREATE_LINK ${PROJECT_SOURCE_DIR}/Game/Asset ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Asset SYMBOLIC)")
+endif ()
 
 #install(TARGETS Runner
 #        CONFIGURATIONS Release
@@ -172,17 +177,17 @@ install(CODE "file(CREATE_LINK ${PROJECT_SOURCE_DIR}/Game/Asset ${CMAKE_INSTALL_
 #include(CPack)
 
 
-#if( supported )
-#    message(STATUS "IPO / LTO enabled")
-#    set_property(TARGET Editor PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-#    set_property(TARGET Engine PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-#    set_property(TARGET Game PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-#else()
-#    message(STATUS "IPO / LTO not supported: <${error}>")
-#endif()
-#
+if( supported )
+    message(STATUS "IPO / LTO enabled")
+    set_property(TARGET Editor PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+    set_property(TARGET Engine PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+    set_property(TARGET Game PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+else()
+    message(STATUS "IPO / LTO not supported: <${error}>")
+endif()
+
 #if(NOT MSVC)
-#    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
+##    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
 #    target_compile_options(Editor PRIVATE -Wall -Wextra -pedantic)
 #    target_compile_options(Engine PRIVATE -Wall -Wextra -pedantic)
 #    target_compile_options(Game PRIVATE -Wall -Wextra -pedantic)

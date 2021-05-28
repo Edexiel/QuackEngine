@@ -12,8 +12,6 @@
 #include "Scene/System/RenderSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
 
-#include "Thread/ThreadPool.hpp"
-
 #include <filesystem>
 #include <fmt/color.h>
 
@@ -47,7 +45,7 @@ ModelRenderer ResourcesManager::LoadModel(const std::filesystem::path &path, Ver
     // return null Texture if the file doesn't exist
     if (!exists(path))
     {
-        Log_Warning("File {} doesn't exist",path.string());
+        Log_Warning("File {} doesn't exist", path.string());
         return ModelRenderer();
     }
 
@@ -246,7 +244,7 @@ Renderer::MaterialInterface ResourcesManager::LoadMaterial(const std::filesystem
     return material;
 }
 
-Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const std::string& name, const Material &material)
+Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const std::string &name, const Material &material)
 {
 
     MaterialInterface materialInterface = std::make_shared<Material>(material);
@@ -274,15 +272,13 @@ void ResourcesManager::LoadFolder(const std::filesystem::path &path)
 {
     std::vector<std::filesystem::path> results;
 
-    Thread::TaskSystem tsk;
-
     for (auto &p : std::filesystem::recursive_directory_iterator(path))
     {
         if (!p.is_directory())
         {
             std::string extension = p.path().extension().string();
 
-            if (extension == ".glb")
+            if (extension == ".glb" || extension == ".gltf")
                 LoadModel(p.path(), VertexType::V_NORMALMAP);
             if (extension == ".fbx")
             {
@@ -298,8 +294,6 @@ void ResourcesManager::LoadFolder(const std::filesystem::path &path)
         }
     }
 
-    Thread::ThreadPool th;
-    th.Run(&tsk);
 }
 
 std::string ResourcesManager::GetFileType(const std::filesystem::path &path)

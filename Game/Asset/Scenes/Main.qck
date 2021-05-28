@@ -43,21 +43,21 @@
                         "z": -22.20970344543457
                     },
                     "scale": {
-                        "x": 0.9999997615814209,
-                        "y": 0.9999996423721314,
-                        "z": 0.999999463558197
+                        "x": 0.9999582767486572,
+                        "y": 0.9999995827674866,
+                        "z": 0.9999994039535523
                     },
                     "rotation": {
                         "w": 0.9967842102050781,
-                        "x": 0.07932548969984055,
-                        "y": 0.01130660530179739,
-                        "z": -0.0008997955592349172
+                        "x": 0.07932547479867935,
+                        "y": 0.01130660343915224,
+                        "z": -0.0008997853728942573
                     }
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 951,
-                    "_height": 479,
+                    "_width": 916,
+                    "_height": 366,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
                     "_fov": 0.7853749394416809
@@ -87,7 +87,7 @@
                     },
                     {
                         "key": "RigidBody",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "Transform",
@@ -99,7 +99,7 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": 0.0,
+                        "x": -3.3599977493286135,
                         "y": -1.0,
                         "z": 135.0
                     },
@@ -109,9 +109,9 @@
                         "z": 0.20000000298023225
                     },
                     "rotation": {
-                        "w": -4.371138828673793e-8,
+                        "w": 1.0,
                         "x": 0.0,
-                        "y": 1.0,
+                        "y": 0.0,
                         "z": 0.0
                     }
                 },
@@ -124,6 +124,19 @@
                 },
                 "Animator": {
                     "path": "./Asset/Model/Standard Run.fbx"
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": true,
+                    "trigger": false,
+                    "bodyType": 0,
+                    "shapeType": 1,
+                    "shapeParams": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    }
                 }
             },
             {
@@ -179,15 +192,16 @@
                     }
                 },
                 "Model": {
-                    "path": "",
-                    "type": 0,
+                    "path": "./Asset/Model/Cube.fbx",
+                    "type": 1,
                     "materials": [
                         "Default material"
                     ]
                 },
                 "RigidBody": {
                     "mass": 1.0,
-                    "gravity": true,
+                    "bounciness": 0.0,
+                    "gravity": false,
                     "trigger": true,
                     "bodyType": 0,
                     "shapeType": 2,
@@ -251,17 +265,18 @@
                     }
                 },
                 "Model": {
-                    "path": "",
-                    "type": 0,
+                    "path": "./Asset/Model/Cube.fbx",
+                    "type": 1,
                     "materials": [
                         "Default material"
                     ]
                 },
                 "RigidBody": {
                     "mass": 1.0,
-                    "gravity": true,
+                    "bounciness": 0.0,
+                    "gravity": false,
                     "trigger": false,
-                    "bodyType": 0,
+                    "bodyType": 1,
                     "shapeType": 2,
                     "shapeParams": {
                         "x": 1.0,
@@ -323,17 +338,18 @@
                     }
                 },
                 "Model": {
-                    "path": "",
-                    "type": 0,
+                    "path": "./Asset/Model/Cube.fbx",
+                    "type": 1,
                     "materials": [
-                        "mat2"
+                        "Default material"
                     ]
                 },
                 "RigidBody": {
                     "mass": 1.0,
+                    "bounciness": 0.0,
                     "gravity": true,
                     "trigger": false,
-                    "bodyType": 0,
+                    "bodyType": 2,
                     "shapeType": 2,
                     "shapeParams": {
                         "x": 20.0,

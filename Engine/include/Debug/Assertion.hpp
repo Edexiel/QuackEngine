@@ -7,10 +7,10 @@
 #include <fmt/color.h>
 
 #ifdef NDEBUG
-#define Assert_Release(check, message)(check)
-#define Assert_Fatal_Error(check, message)(check)
-#define Assert_Error(check, message)(check)
-#define Assert_Warning(check, message)(check)
+#define Assert_Release(check, ...)(check)
+#define Assert_Fatal_Error(check, ...)(check)
+#define Assert_Error(check, ...)(check)
+#define Assert_Warning(check, ...)(check)
 #else
 #define Assert_Release(check, ...) (Debug::Assert(check, fmt::format(__VA_ARGS__), __FILE__, __LINE__, Debug::AssertLevel::A_RELEASE))
 #define Assert_Fatal_Error(check, ...) (Debug::Assert(check, fmt::format(__VA_ARGS__), __FILE__, __LINE__, Debug::AssertLevel::A_FATAL_ERROR))
