@@ -9,8 +9,10 @@ namespace Time
     {
         TimePlatform* _timePlatform {nullptr};
 
-        double _time;
-        double _deltaTime;
+        double _time{0.};
+        double _deltaTime{0.};
+    public:
+        void SetDeltaTime(double deltaTime);
 
     public:
         ~TimeManager();

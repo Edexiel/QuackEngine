@@ -1,6 +1,8 @@
 #include "Scene/Core/World.hpp"
 #include "Engine.hpp"
 
+#include "Scene/System/RenderSystem.hpp"
+
 World::World(std::string &name) : _name(name)
 {}
 
@@ -20,9 +22,16 @@ rp3d::PhysicsWorld *World::GetPhysicsWorld() const
 
 void World::Clear()
 {
-    //todo:
+    std::vector<Entity> entities = _entityManager->GetEntities();
+    for (const Entity &entity : entities)
+    {
+        DestroyEntity(entity);
+    }
+
+    GetSystem<RenderSystem>()->Clear();
 }
-Entity World::CreateEntity(const std::string& name) const
+
+Entity World::CreateEntity(const std::string &name) const
 {
     Entity id = _entityManager->Create();
     AddComponent(id, Component::Name{name});

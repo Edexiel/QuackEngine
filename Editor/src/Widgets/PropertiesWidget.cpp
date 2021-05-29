@@ -37,7 +37,7 @@ void PropertiesWidget::UpdateVisible()
         LightReader();
     if (world.HasComponent<Camera>(_entity))
         CameraReader();
-    if (world.HasComponent<RigidBody>(_entity))
+    if (world.HasComponent<RigidBody>(_entity) && world.HasComponent<Transform>(_entity))
         RigidBodyReader();
     if (world.HasComponent<Model>(_entity))
         ModelReader();
@@ -312,8 +312,8 @@ void PropertiesWidget::AddComponent()
             Component::CharacterController characterController;
             world.AddComponent(_entity, characterController);
         }
-
-        AddRigidBody();
+        if(world.HasComponent<Transform>(_entity))
+            AddRigidBody();
 
         ImGui::EndPopup();
     }
@@ -380,8 +380,6 @@ void PropertiesWidget::DeleteComponent()
         }
         if (world.HasComponent<RigidBody>(_entity) && ImGui::MenuItem("Rigidbody"))
         {
-            auto physicsWorld = world.GetPhysicsWorld();
-//            physicsWorld->destroyRigidBody(world.GetComponent<RigidBody>(_entity).rb);
             world.RemoveComponent<RigidBody>(_entity);
         }
         if (world.HasComponent<CharacterController>(_entity) && ImGui::MenuItem("Character controller"))

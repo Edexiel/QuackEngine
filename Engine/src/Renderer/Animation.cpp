@@ -4,8 +4,7 @@
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
 
-#include <fmt/core.h>
-#include <fmt/color.h>
+#include "Debug/Log.hpp"
 
 using namespace Renderer;
 
@@ -25,17 +24,17 @@ Animation Animation::LoadAnimation(const std::filesystem::path &path)
 
     if (!scene)
     {
-        fmt::print(fg(fmt::color::red), "[ANIMATION LOADING] File doesn't exists: {}\n", path.string());
+        Log_Warning("File doesn't exists: {}", path.string());
         return animation;
     }
     if (!scene->HasMeshes())
     {
-        fmt::print(fg(fmt::color::red), "[ANIMATION LOADING] Animation doesn't have mesh : {}\n", path.string());
+        Log_Warning("Doesn't have mesh : {}", path.string());
         return animation;
     }
     if (!scene->HasAnimations())
     {
-        fmt::print(fg(fmt::color::red), "[ANIMATION LOADING] Animation doesn't have animation : {}\n", path.string());
+        Log_Warning("Doesn't have animation : {}", path.string());
         return animation;
     }
 
@@ -52,7 +51,7 @@ Animation Animation::LoadAnimation(const std::filesystem::path &path)
 
 void Animation::ReadBaseSkeleton(const void *baseMesh)
 {
-    aiMesh *mesh = (aiMesh*) baseMesh;
+    aiMesh *mesh = (aiMesh *) baseMesh;
 
     int boneCounter = 0;
 

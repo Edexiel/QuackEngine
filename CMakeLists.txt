@@ -5,20 +5,17 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-#find_package(OpenGL REQUIRED)
-
-#option(QUACK_BUILD_EDITOR "Build Editor" OFF)
 option(QUACK_BUILD_TESTS "Build Tests" OFF)
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT supported OUTPUT error)
 
-option (FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." FALSE)
+option(FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." FALSE)
 if (${FORCE_COLORED_OUTPUT})
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-        add_compile_options (-fdiagnostics-color=always)
+        add_compile_options(-fdiagnostics-color=always)
     elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        add_compile_options (-fcolor-diagnostics)
+        add_compile_options(-fcolor-diagnostics)
     endif ()
 endif ()
 
@@ -97,7 +94,6 @@ target_sources(ImGuizmo INTERFACE
         "${IMGUIZMO_FOLDER}/ImSequencer.cpp"
         )
 target_include_directories(ImGuizmo INTERFACE ${IMGUIZMO_FOLDER})
-#target_link_libraries(ImGuizmo INTERFACE glfw glad)
 
 #STB
 add_library(stb INTERFACE)
@@ -145,12 +141,29 @@ add_subdirectory(Editor)
 #Runner
 add_subdirectory(Runner)
 
+
 #Engine
 add_subdirectory(Engine)
 
 #Game
 add_subdirectory(Game)
 
+set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install)
+
+install(CODE "file(REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE})")
+
+install(TARGETS Editor RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
+install(TARGETS Engine RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
+
+if ((${CMAKE_BUILD_TYPE} STREQUAL "Release") OR WIN32 )
+    install(DIRECTORY "${PROJECT_SOURCE_DIR}/Game/Asset" DESTINATION ${CMAKE_BUILD_TYPE})
+else ()
+    install(CODE "file(CREATE_LINK ${PROJECT_SOURCE_DIR}/Game/Asset ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Asset SYMBOLIC)")
+endif ()
+
+#install(TARGETS Runner
+#        CONFIGURATIONS Release
+#        RUNTIME DESTINATION Release/bin)
 
 #if( supported )
 #    message(STATUS "IPO / LTO enabled")
@@ -161,18 +174,24 @@ add_subdirectory(Game)
 #    message(STATUS "IPO / LTO not supported: <${error}>")
 #endif()
 
+
+
+
+
+
 #if(NOT MSVC)
-#    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
+##    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
 #    target_compile_options(Editor PRIVATE -Wall -Wextra -pedantic)
 #    target_compile_options(Engine PRIVATE -Wall -Wextra -pedantic)
 #    target_compile_options(Game PRIVATE -Wall -Wextra -pedantic)
 #endif()
 
-
-
-#Installer
-include(InstallRequiredSystemLibraries)
-#set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
-set(CPACK_PACKAGE_VERSION_MAJOR "${Tutorial_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${Tutorial_VERSION_MINOR}")
-include(CPack)
+##Installer
+#include(InstallRequiredSystemLibraries)
+##set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
+#set(CPACK_PACKAGE_VERSION_MAJOR "${Tutorial_VERSION_MAJOR}")
+#set(CPACK_PACKAGE_VERSION_MINOR "${Tutorial_VERSION_MINOR}")
+#SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Quack Engine project")
+#SET(CPACK_PACKAGE_VENDOR "Quack Team")
+#SET(CPACK_PACKAGE_EXECUTABLES "Hello" "Hello")
+#include(CPack)

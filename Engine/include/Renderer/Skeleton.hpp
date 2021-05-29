@@ -64,6 +64,14 @@ namespace Renderer
 
         void AddBone(const Bone& bone);
     };
+
+    struct SkeletonOffset
+    {
+        std::unordered_map<std::string, Maths::Matrix4> mapOffset;
+
+        Maths::Matrix4 GetBoneOffset(const std::string& name) const;
+        void AddBone(const std::string & name, const Maths::Matrix4& offset);
+    };
 }
 
 #endif //_SKELETALMESH_HPP

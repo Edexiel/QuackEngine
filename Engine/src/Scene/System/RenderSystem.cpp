@@ -51,6 +51,7 @@ void RenderSystem::SetMaterials()
     _mapMaterial.erase(_mapMaterial.cbegin(), _mapMaterial.cend());
     MaterialInterface material;
     World &world = Engine::Instance().GetCurrentWorld();
+
     for (Entity entity: _entities)
     {
         auto &t = world.GetComponent<Transform>(entity);
@@ -96,6 +97,19 @@ void RenderSystem::DrawMaterials(const Maths::Matrix4 &projection, const Maths::
             it.second[i].first.Draw();
         }
     }
+}
+
+void RenderSystem::Clear()
+{
+    for (auto it : _mapMaterial)
+    {
+        it.second.clear();
+    }
+
+    _mapMaterial.clear();
+    _mapMaterial.rehash(0);
+    std::cout << "HERE " << _mapMaterial.size() << std::endl;
+    _lastLinkEntitiesNumbers = 0;
 }
 
 void RenderSystem::UpdateModel(const Renderer::ModelRenderer &newModel)

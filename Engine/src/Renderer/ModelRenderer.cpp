@@ -12,8 +12,7 @@
 #include "Renderer/Skeleton.hpp"
 
 #include <iostream>
-#include <fmt/core.h>
-#include <fmt/color.h>
+#include "Debug/Log.hpp"
 
 using namespace Resources;
 using namespace Renderer;
@@ -45,7 +44,7 @@ ModelRenderer ModelRenderer::LoadModel(const std::filesystem::path& path, Vertex
 
     if (!scene)
     {
-        fmt::print(fg(fmt::color::red), "[Model] Object can't be loaded: {}\n",path.string());
+        Log_Error("[Model] Object can't be loaded: {}\n",path.string());
 
         return {};
     }
@@ -225,8 +224,6 @@ ModelRenderer ModelRenderer::LoadSkeletalMeshModel(const void *loadedScene)
     ModelRenderer model(VertexType::V_SKELETAL);
     model._meshList.resize(scene->mNumMeshes);
 
-    unsigned int count;
-
     for (unsigned int i = 0; i < scene->mNumMeshes; i++)
     {
         std::vector<SkeletalVertex> vertices;
@@ -235,7 +232,6 @@ ModelRenderer ModelRenderer::LoadSkeletalMeshModel(const void *loadedScene)
         vertices.resize(scene->mMeshes[i]->mNumVertices);
 
         // Load Vertices
-        count = 0;
         for (unsigned int e = 0; e < scene->mMeshes[i]->mNumVertices; e++)
         {
             Maths::Vector3f position{(scene->mMeshes[i]->mVertices[e]).x,
@@ -265,10 +261,33 @@ ModelRenderer ModelRenderer::LoadSkeletalMeshModel(const void *loadedScene)
                                                                     sizeof(float),
                                                                     indices.data(), indices.size(),
                                                                     Renderer::VertexType::V_SKELETAL);
+
+        //model.LoadSkeleton(scene->mMeshes[i]);
+        //std::cout << "SIZE SKELETON : " << model._skeletonOffset.mapOffset.size() << std::endl;
+
         RendererPlatform::VerticesReadingSkeletalMesh();
     }
 
     return model;
+}
+
+void ModelRenderer::LoadSkeleton(const void *meshAssimp)
+{
+    /*aiMesh *mesh = (aiMesh *)meshAssimp;
+
+    for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
+    {
+        std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
+
+        auto boneMatrix = mesh->mBones[boneIndex]->mOffsetMatrix;
+        Maths::Matrix4 transform = {
+            boneMatrix.a1, boneMatrix.b1, boneMatrix.c1, boneMatrix.d1,
+            boneMatrix.a2, boneMatrix.b2, boneMatrix.c2, boneMatrix.d2,
+            boneMatrix.a3, boneMatrix.b3, boneMatrix.c3, boneMatrix.d3,
+            boneMatrix.a4, boneMatrix.b4, boneMatrix.c4, boneMatrix.d4};
+
+        _skeletonOffset.AddBone(boneName, transform);
+    }*/
 }
 
 void ModelRenderer::SetVertexBoneData(SkeletalVertex &vertex, int boneID, float weight)

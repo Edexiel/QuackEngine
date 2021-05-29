@@ -2,6 +2,7 @@
 
 #include "Engine.hpp"
 #include "Scene/Core/World.hpp"
+#include "Scene/Component/CharacterController.hpp"
 
 PlayerComponent::PlayerComponent()
 {
@@ -40,6 +41,17 @@ PlayerSystem::PlayerSystem()
     inputManager.BindEvent("Left", Input::Key::KEY_LEFT);
     inputManager.RegisterEvent("Left", Input::Action::PRESS, this, &PlayerSystem::Left);
 
+    inputManager.BindEventAxis("Move up", Input::Key::KEY_W, 1.f);
+    inputManager.RegisterEventAxis("Move up", this, &PlayerSystem::MoveForward);
+
+    inputManager.BindEventAxis("Move down", Input::Key::KEY_S, -1.f);
+    inputManager.RegisterEventAxis("Move down", this, &PlayerSystem::MoveBackward);
+
+    inputManager.BindEventAxis("Move left", Input::Key::KEY_A, -1.f);
+    inputManager.RegisterEventAxis("Move left", this, &PlayerSystem::MoveLeft);
+
+    inputManager.BindEventAxis("Move right", Input::Key::KEY_D, 1.f);
+    inputManager.RegisterEventAxis("Move right", this, &PlayerSystem::MoveRight);
 }
 
 void PlayerSystem::Up()
@@ -71,5 +83,46 @@ void PlayerSystem::Left()
     for (Entity entity : _entities)
     {
         Engine::Instance().GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
+    }
+}
+
+void PlayerSystem::MoveForward(float verticalAxis)
+{
+    auto &world = Engine::Instance().GetCurrentWorld();
+
+    for(Entity entity : _entities)
+    {
+        auto &characterController = world.GetComponent<Component::CharacterController>(entity);
+        characterController.forward = verticalAxis;
+    }
+}
+
+void PlayerSystem::MoveRight(float horizontalAxis)
+{
+    auto &world = Engine::Instance().GetCurrentWorld();
+    for(Entity entity : _entities)
+    {
+        auto &characterController = world.GetComponent<Component::CharacterController>(entity);
+        characterController.right = horizontalAxis;
+    }
+}
+
+void PlayerSystem::MoveBackward(float verticalAxis)
+{
+    auto &world = Engine::Instance().GetCurrentWorld();
+    for(Entity entity : _entities)
+    {
+        auto &characterController = world.GetComponent<Component::CharacterController>(entity);
+        characterController.backward = verticalAxis;
+    }
+}
+
+void PlayerSystem::MoveLeft(float horizontalAxis)
+{
+    auto &world = Engine::Instance().GetCurrentWorld();
+    for(Entity entity : _entities)
+    {
+        auto &characterController = world.GetComponent<Component::CharacterController>(entity);
+        characterController.left = horizontalAxis;
     }
 }
