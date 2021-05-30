@@ -160,13 +160,16 @@ Shader Shader::LoadObjectShader(const ShaderConstructData &shaderData)
 {
     std::string vertexShaderCode;
 
+    vertexShaderCode += LoadStringFromFile("../../Engine/Shader/Object/Object.vs");
+    std::cout << vertexShaderCode << std::endl;
+
     // Read the Vertex Shader code from the file
     if (shaderData.hasNormalMap)
     {
         if (shaderData.hasSkeleton)
-            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Light/VertexNormalMap.vs");
-        else
             vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Skeletal/SkeletalVertex.vs");
+        else
+            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Light/VertexNormalMap.vs");
     }
     else
     {
@@ -175,7 +178,6 @@ Shader Shader::LoadObjectShader(const ShaderConstructData &shaderData)
         else
             vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Base/Vertex.vs");
     }
-
 
     std::string fragmentShaderCode = "#version 330 core\n";
     if (shaderData.hasLight)
