@@ -72,7 +72,7 @@ namespace Debug
                 break;
 
         }
-#if LINUX
+#if 1
         fmt::print(fg(color), "[{}][{}] {}:{} {}\n", stime, levelString, file, line, message);
 #else
         fmt::print("[{}][{}] {}:{} {}\n", stime, levelString, file, line, message);

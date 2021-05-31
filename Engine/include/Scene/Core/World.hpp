@@ -20,6 +20,7 @@
 #include <cereal/types/vector.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/access.hpp>
+#include <Scene/Component/CameraGameplay.hpp>
 
 #include "Scene/Component/Camera.hpp"
 #include "Scene/Component/Light.hpp"
@@ -157,6 +158,7 @@ public:
             build<Component::Model>("Model");
             build<Component::Animator>("Animator");
             build<Component::RigidBody>("RigidBody");
+            build<Component::CameraGameplay>("CameraGameplay");
         }
 
         template<class Archive>
@@ -172,6 +174,7 @@ public:
             write<Archive, Component::Model>(archive, id, "Model");
             write<Archive, Component::Animator>(archive, id, "Animator");
             write<Archive, Component::RigidBody>(archive, id, "RigidBody");
+            write<Archive, Component::CameraGameplay>(archive, id, "CameraGameplay");
         }
 
         template<class Archive>
@@ -189,6 +192,7 @@ public:
             read<Archive, Component::Model>(archive, w, e, "Model");
             read<Archive, Component::Animator>(archive, w, e, "Animator");
             read<Archive, Component::RigidBody>(archive, w, e, "RigidBody");
+//            read<Archive, Component::CameraGameplay>(archive, w, e, "CameraGameplay");
         }
 
 

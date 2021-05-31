@@ -41,6 +41,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Scene/System/CameraSystem.cpp
         src/Scene/System/LightSystem.cpp
         src/Scene/System/CharacterControllerSystem.cpp
+        src/Scene/System/CameraGameplaySystem.cpp
 
         src/Audio/Sound.cpp
         src/Audio/SoundManager.cpp
