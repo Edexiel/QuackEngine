@@ -1,0 +1,364 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A4819D8B-E519-3A10-A1DC-AFD617BABD29}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>Runner</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\d.petit\Documents\Moteur\engine\build\Runner\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Runner.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Runner</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\d.petit\Documents\Moteur\engine\build\Runner\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Runner.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Runner</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\d.petit\Documents\Moteur\engine\build\Runner\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Runner.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Runner</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\d.petit\Documents\Moteur\engine\build\Runner\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Runner.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Runner</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\d.petit\Documents\Moteur\engine\Runner\include;C:\Users\d.petit\Documents\Moteur\engine\Engine\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glad\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glfw\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\cereal\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\fmt\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\reactphysics3d\include;C:\Users\d.petit\Documents\Moteur\engine\Game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;FMT_LOCALE;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;FMT_LOCALE;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\d.petit\Documents\Moteur\engine\Runner\include;C:\Users\d.petit\Documents\Moteur\engine\Engine\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glad\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glfw\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\cereal\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\fmt\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\reactphysics3d\include;C:\Users\d.petit\Documents\Moteur\engine\Game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\d.petit\Documents\Moteur\engine\Runner\include;C:\Users\d.petit\Documents\Moteur\engine\Engine\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glad\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glfw\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\cereal\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\fmt\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\reactphysics3d\include;C:\Users\d.petit\Documents\Moteur\engine\Game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\Engine\Debug\Engine.lib;..\Game\Debug\Game.lib;..\Engine\Debug\Engine.lib;..\Debug\glad.lib;..\Vendor\glfw\src\Debug\glfw3.lib;..\Vendor\fmt\Debug\fmtd.lib;..\Vendor\reactphysics3d\Debug\reactphysics3d.lib;..\Vendor\assimp\lib\Debug\assimp-vc142-mt.lib;..\Vendor\assimp\contrib\zlib\Debug\zlibstaticd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/d.petit/Documents/Moteur/engine/build/Runner/Debug/Runner.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/d.petit/Documents/Moteur/engine/build/Runner/Debug/Runner.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\d.petit\Documents\Moteur\engine\Runner\include;C:\Users\d.petit\Documents\Moteur\engine\Engine\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glad\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glfw\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\cereal\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\fmt\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\reactphysics3d\include;C:\Users\d.petit\Documents\Moteur\engine\Game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FMT_LOCALE;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FMT_LOCALE;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\d.petit\Documents\Moteur\engine\Runner\include;C:\Users\d.petit\Documents\Moteur\engine\Engine\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glad\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glfw\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\cereal\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\fmt\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\reactphysics3d\include;C:\Users\d.petit\Documents\Moteur\engine\Game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\d.petit\Documents\Moteur\engine\Runner\include;C:\Users\d.petit\Documents\Moteur\engine\Engine\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glad\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glfw\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\cereal\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\fmt\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\reactphysics3d\include;C:\Users\d.petit\Documents\Moteur\engine\Game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\Engine\Release\Engine.lib;..\Game\Release\Game.lib;..\Engine\Release\Engine.lib;..\Release\glad.lib;..\Vendor\glfw\src\Release\glfw3.lib;..\Vendor\fmt\Release\fmt.lib;..\Vendor\reactphysics3d\Release\reactphysics3d.lib;..\Vendor\assimp\lib\Release\assimp-vc142-mt.lib;..\Vendor\assimp\contrib\zlib\Release\zlibstatic.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/d.petit/Documents/Moteur/engine/build/Runner/Release/Runner.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/d.petit/Documents/Moteur/engine/build/Runner/Release/Runner.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\d.petit\Documents\Moteur\engine\Runner\include;C:\Users\d.petit\Documents\Moteur\engine\Engine\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glad\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glfw\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\cereal\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\fmt\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\reactphysics3d\include;C:\Users\d.petit\Documents\Moteur\engine\Game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FMT_LOCALE;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FMT_LOCALE;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\d.petit\Documents\Moteur\engine\Runner\include;C:\Users\d.petit\Documents\Moteur\engine\Engine\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glad\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glfw\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\cereal\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\fmt\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\reactphysics3d\include;C:\Users\d.petit\Documents\Moteur\engine\Game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\d.petit\Documents\Moteur\engine\Runner\include;C:\Users\d.petit\Documents\Moteur\engine\Engine\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glad\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glfw\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\cereal\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\fmt\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\reactphysics3d\include;C:\Users\d.petit\Documents\Moteur\engine\Game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\Engine\MinSizeRel\Engine.lib;..\Game\MinSizeRel\Game.lib;..\Engine\MinSizeRel\Engine.lib;..\MinSizeRel\glad.lib;..\Vendor\glfw\src\MinSizeRel\glfw3.lib;..\Vendor\fmt\MinSizeRel\fmt.lib;..\Vendor\reactphysics3d\MinSizeRel\reactphysics3d.lib;..\Vendor\assimp\lib\MinSizeRel\assimp-vc142-mt.lib;..\Vendor\assimp\contrib\zlib\MinSizeRel\zlibstatic.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/d.petit/Documents/Moteur/engine/build/Runner/MinSizeRel/Runner.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/d.petit/Documents/Moteur/engine/build/Runner/MinSizeRel/Runner.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\d.petit\Documents\Moteur\engine\Runner\include;C:\Users\d.petit\Documents\Moteur\engine\Engine\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glad\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glfw\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\cereal\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\fmt\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\reactphysics3d\include;C:\Users\d.petit\Documents\Moteur\engine\Game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FMT_LOCALE;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FMT_LOCALE;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\d.petit\Documents\Moteur\engine\Runner\include;C:\Users\d.petit\Documents\Moteur\engine\Engine\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glad\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glfw\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\cereal\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\fmt\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\reactphysics3d\include;C:\Users\d.petit\Documents\Moteur\engine\Game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\d.petit\Documents\Moteur\engine\Runner\include;C:\Users\d.petit\Documents\Moteur\engine\Engine\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glad\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\glfw\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\cereal\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\fmt\include;C:\Users\d.petit\Documents\Moteur\engine\Vendor\reactphysics3d\include;C:\Users\d.petit\Documents\Moteur\engine\Game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\Engine\RelWithDebInfo\Engine.lib;..\Game\RelWithDebInfo\Game.lib;..\Engine\RelWithDebInfo\Engine.lib;..\RelWithDebInfo\glad.lib;..\Vendor\glfw\src\RelWithDebInfo\glfw3.lib;..\Vendor\fmt\RelWithDebInfo\fmt.lib;..\Vendor\reactphysics3d\RelWithDebInfo\reactphysics3d.lib;..\Vendor\assimp\lib\RelWithDebInfo\assimp-vc142-mt.lib;..\Vendor\assimp\contrib\zlib\RelWithDebInfo\zlibstatic.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/d.petit/Documents/Moteur/engine/build/Runner/RelWithDebInfo/Runner.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/d.petit/Documents/Moteur/engine/build/Runner/RelWithDebInfo/Runner.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\d.petit\Documents\Moteur\engine\Runner\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/d.petit/Documents/Moteur/engine/Runner/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/d.petit/Documents/Moteur/engine -BC:/Users/d.petit/Documents/Moteur/engine/build --check-stamp-file C:/Users/d.petit/Documents/Moteur/engine/build/Runner/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\d.petit\Documents\Moteur\engine\build\Runner\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/d.petit/Documents/Moteur/engine/Runner/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/d.petit/Documents/Moteur/engine -BC:/Users/d.petit/Documents/Moteur/engine/build --check-stamp-file C:/Users/d.petit/Documents/Moteur/engine/build/Runner/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\d.petit\Documents\Moteur\engine\build\Runner\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/d.petit/Documents/Moteur/engine/Runner/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/d.petit/Documents/Moteur/engine -BC:/Users/d.petit/Documents/Moteur/engine/build --check-stamp-file C:/Users/d.petit/Documents/Moteur/engine/build/Runner/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\d.petit\Documents\Moteur\engine\build\Runner\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/d.petit/Documents/Moteur/engine/Runner/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/d.petit/Documents/Moteur/engine -BC:/Users/d.petit/Documents/Moteur/engine/build --check-stamp-file C:/Users/d.petit/Documents/Moteur/engine/build/Runner/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\d.petit\Documents\Moteur\engine\build\Runner\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\d.petit\Documents\Moteur\engine\Runner\src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\d.petit\Documents\Moteur\engine\build\ZERO_CHECK.vcxproj">
+      <Project>{C3C4F454-6C10-3EB9-9BBA-798C4BD1F256}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\d.petit\Documents\Moteur\engine\build\Engine\Engine.vcxproj">
+      <Project>{0D56FA10-8588-36A2-89F3-A8E2F4F31B5B}</Project>
+      <Name>Engine</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\d.petit\Documents\Moteur\engine\build\Game\Game.vcxproj">
+      <Project>{EAFFA6AB-6F59-312E-AF1D-46EAA86E978B}</Project>
+      <Name>Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\d.petit\Documents\Moteur\engine\build\Vendor\assimp\code\assimp.vcxproj">
+      <Project>{CBE72444-E43A-3A63-AAA9-7597C98242E9}</Project>
+      <Name>assimp</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\d.petit\Documents\Moteur\engine\build\Vendor\fmt\fmt.vcxproj">
+      <Project>{A02F2861-5716-33E5-BD3D-598851FC29A3}</Project>
+      <Name>fmt</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\d.petit\Documents\Moteur\engine\build\glad.vcxproj">
+      <Project>{866099C0-BED7-3724-859E-7E0DD3B560BB}</Project>
+      <Name>glad</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\d.petit\Documents\Moteur\engine\build\Vendor\glfw\src\glfw.vcxproj">
+      <Project>{0A0F8738-338A-3D07-B03F-59687C2A89C7}</Project>
+      <Name>glfw</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\d.petit\Documents\Moteur\engine\build\Vendor\reactphysics3d\reactphysics3d.vcxproj">
+      <Project>{65E45AAB-36AB-3EE8-B65E-DA985C146AA1}</Project>
+      <Name>reactphysics3d</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\d.petit\Documents\Moteur\engine\build\Vendor\assimp\contrib\zlib\zlibstatic.vcxproj">
+      <Project>{2EF2BC3A-417B-3430-A5AE-83D60942C146}</Project>
+      <Name>zlibstatic</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
