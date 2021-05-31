@@ -5,7 +5,7 @@
 #include "Renderer/Framebuffer.hpp"
 
 Renderer::KernelPostProcess::KernelPostProcess(const std::string& name) :
-ProcessBase(name, Engine::Instance().GetResourcesManager().LoadShader("../../Engine/Shader/PostProcess/KernelPostProcess.qsh"))
+ProcessBase(name, Engine::Instance().GetResourcesManager().LoadShader("./Shader/PostProcess/KernelPostProcess.qsh"))
 {}
 
 void Renderer::KernelPostProcess::Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &screenMesh)

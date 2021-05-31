@@ -1,6 +1,8 @@
 #include "Scene/Core/World.hpp"
 #include "Engine.hpp"
 
+#include "Scene/System/RenderSystem.hpp"
+
 World::World(std::string &name) : _name(name)
 {}
 
@@ -23,8 +25,10 @@ void World::Clear()
     std::vector<Entity> entities = _entityManager->GetEntities();
     for (const Entity &entity : entities)
     {
-        _entityManager->Destroy(entity);
+        DestroyEntity(entity);
     }
+
+    GetSystem<RenderSystem>()->Clear();
 }
 
 Entity World::CreateEntity(const std::string &name) const

@@ -50,6 +50,7 @@ void PropertiesWidget::UpdateVisible()
     if(world.HasComponent<CameraGameplay>(_entity))
         CameraGameplayReader();
     AddComponent();
+    ImGui::SameLine();
     DeleteComponent();
 }
 
@@ -189,28 +190,25 @@ void PropertiesWidget::ModelReader()
         {
             for (auto &n : listMaterial)
             {
-                bool is_selected = (model.Path() == n);
-                if (ImGui::Selectable(n.c_str(), is_selected))
+                bool isSelected = (model.Path() == n);
+                if (ImGui::Selectable(n.c_str(), isSelected))
                 {
                     Renderer::MaterialInterface materialInterface = Engine::Instance().GetResourcesManager().LoadMaterial(
                             n.c_str());
                     model.ChangeMaterial(materialInterface, i);
                     Engine::Instance().GetCurrentWorld().GetSystem<RenderSystem>()->SetMaterials();
                 }
-                if (is_selected)
+                if (isSelected)
                     ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
             }
             ImGui::EndCombo();
         }
     }
     if (ImGui::Button("Add Material"))
-    {
         model.AddMaterial(Engine::Instance().GetResourcesManager().LoadMaterial(DEFAULT_MATERIAL_STRING));
-    }
+    ImGui::SameLine();
     if (ImGui::Button("Remove Material"))
-    {
         model.RemoveMaterial(model.GetNumberMaterial() - 1);
-    }
 }
 
 void PropertiesWidget::AnimatorReader()
@@ -286,7 +284,6 @@ void PropertiesWidget::AddComponent()
         {
             world.AddComponent(_entity, Component::Camera(1280, 720, 1000, -1, 20 * 3.1415 / 180));
         }
-
         //Light
         if (ImGui::BeginMenu("Light"))
         {
@@ -326,7 +323,10 @@ void PropertiesWidget::AddComponent()
             world.AddComponent(_entity, cameraGameplay);
         }
         if(world.HasComponent<Transform>(_entity))
-            AddRigidBody();
+            AddRigidBody(); // Propose to add a RigidBody only if the entity already have a Transform
+
+        if (ImGui::MenuItem("Animator"))
+            world.AddComponent(_entity, Animator());
 
         ImGui::EndPopup();
     }
@@ -394,9 +394,7 @@ void PropertiesWidget::DeleteComponent()
         if (world.HasComponent<RigidBody>(_entity) && ImGui::MenuItem("Rigidbody"))
         {
             world.RemoveComponent<RigidBody>(_entity);
-        }
-        if (world.HasComponent<CharacterController>(_entity) && ImGui::MenuItem("Character controller"))
-        {
+        if (world.HasComponent<CharacterController>(_entity) && ImGui::MenuItem("Character Controller"))
             world.RemoveComponent<CharacterController>(_entity);
         }
         if (world.HasComponent<PlayerComponent>(_entity) && ImGui::MenuItem("Player component"))

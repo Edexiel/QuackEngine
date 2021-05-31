@@ -10,6 +10,9 @@
 #include "Scene/Core/SystemManager.hpp"
 #include "Scene/Core/ComponentManager.hpp"
 #include "Physics/PhysicsEventManager.hpp"
+
+#include "Scene/System/PhysicsSystem.hpp"
+
 #include "Debug/Log.hpp"
 
 //Serialization, yeah sorry
@@ -216,6 +219,8 @@ public:
         archive(_name);
         std::vector<EntityHandler> entities;
         archive(CEREAL_NVP(entities));
+
+        GetSystem<PhysicsSystem>()->Init();
     }
 };
 

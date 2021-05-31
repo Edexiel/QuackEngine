@@ -11,6 +11,7 @@
 #include "Scene/System/AnimatorSystem.hpp"
 
 #include "Scene/System/CharacterControllerSystem.hpp"
+#include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/System/CameraGameplaySystem.hpp"
 
 #include "game.hpp"

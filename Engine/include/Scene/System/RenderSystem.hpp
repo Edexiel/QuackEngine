@@ -47,6 +47,8 @@ public:
 
     void SetMaterials();
 
+    void Clear();
+
 private:
     void DrawMaterials(const Maths::Matrix4 &projection, const Maths::Matrix4 &view);
     void AddMesh(const Renderer::MaterialInterface &materialInterface, const Renderer::Mesh &mesh, Entity entity);

@@ -67,11 +67,7 @@ namespace Renderer
         static Shader LoadObjectShader(const ShaderConstructData &shaderData);
 
     private:
-        static std::string CreateMaterial(const ShaderConstructData &shaderData);
-        static std::string CreateColorFunctions(const ShaderConstructData &shaderData);
         static std::string LoadStringFromFile(const std::filesystem::path& path);
-        static std::string GetStringInFile(std::ifstream& file, const std::string& start, const std::string& end);
-
     };
 }
 
