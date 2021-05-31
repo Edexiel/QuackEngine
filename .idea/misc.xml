@@ -12,5 +12,9 @@
     <libraryRoots>
       <file path="$PROJECT_DIR$/Vendor" />
     </libraryRoots>
+    <excludeRoots>
+      <file path="$PROJECT_DIR$/Debug" />
+      <file path="$PROJECT_DIR$/Release" />
+    </excludeRoots>
   </component>
 </project>

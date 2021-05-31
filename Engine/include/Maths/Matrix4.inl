@@ -93,7 +93,7 @@ inline Matrix4 Matrix4::Rotation(const Vector3f &rotation)
     return RotateY(rotation.y) * RotateX(rotation.x) * RotateZ(rotation.z);
 }
 
-inline Matrix4 Matrix4::AxisRotation(const float angle, const Vector3f &axis)
+inline Matrix4 Matrix4::AxisRotation(float angle, const Vector3f &axis)
 {
     Matrix4 first;
 
@@ -130,7 +130,7 @@ inline Matrix4 Matrix4::AxisRotation(const float angle, const Vector3f &axis)
 }
 
 inline Matrix4
-Matrix4::Perspective(const int &width, const int &height, float near, float far, float fov)
+Matrix4::Perspective(unsigned int width, unsigned int height, float near, float far, float fov)
 {
     Matrix4 projection;
     float const a = 1.f / tanf(fov / 2.f);
@@ -148,7 +148,7 @@ Matrix4::Perspective(const int &width, const int &height, float near, float far,
     return projection;
 }
 
-inline Matrix4 Matrix4::OrthoMatrix(const int &width, const int &height, float near, float far)
+inline Matrix4 Matrix4::OrthoMatrix(unsigned int width, unsigned int height, float near, float far)
 {
     Matrix4 ortho;
 
@@ -164,7 +164,7 @@ inline Matrix4 Matrix4::OrthoMatrix(const int &width, const int &height, float n
     return ortho;
 }
 
-inline Matrix4 Matrix4::ViewportMatrix(const int &x, const int &y, const int &width, const int &height)
+inline Matrix4 Matrix4::ViewportMatrix(int x, int y,unsigned int width,unsigned int height)
 {
     Matrix4 view;
 
@@ -179,6 +179,62 @@ inline Matrix4 Matrix4::ViewportMatrix(const int &x, const int &y, const int &wi
     view.e[15] = 1;
 
     return view;
+}
+
+inline Matrix4 Matrix4::LookAtMatrix(const Vector3f& eye, const Vector3f& target, const Vector3f& angleZ)
+{
+    Matrix4 result;
+
+    Vector3f forward = (target - eye).Normalize();
+    Vector3f side = (Vector3f::CrossProduct(forward, angleZ)).Normalize();
+    Vector3f up = (Vector3f::CrossProduct(side, forward)).Normalize();
+
+    result.e[0] = side.x;
+    result.e[1] = up.x;
+    result.e[2] = -forward.x;
+
+
+    result.e[4] = side.y;
+    result.e[5] = up.y;
+    result.e[6] = -forward.y;
+
+    result.e[8] = side.z;
+    result.e[9] = up.z;
+    result.e[10] = -forward.z;
+
+    result.e[12] = -(Vector3f::DotProduct(side, eye));
+    result.e[13] = -(Vector3f::DotProduct(forward, up));
+    result.e[14] = -(Vector3f::DotProduct(side, forward));
+
+    result.e[15] = 1;
+
+    return result;
+}
+
+inline Matrix4 Matrix4::LookAtMatrixRotation(const Vector3f& eye, const Vector3f& target, const Vector3f& angleZ)
+{
+    Matrix4 result;
+
+    Vector3f forward = (target - eye).Normalize();
+    Vector3f side = (Vector3f::CrossProduct(forward, angleZ)).Normalize();
+    Vector3f up = (Vector3f::CrossProduct(side, forward)).Normalize();
+
+    result.e[0] = side.x;
+    result.e[1] = up.x;
+    result.e[2] = -forward.x;
+
+
+    result.e[4] = side.y;
+    result.e[5] = up.y;
+    result.e[6] = -forward.y;
+
+    result.e[8] = side.z;
+    result.e[9] = up.z;
+    result.e[10] = -forward.z;
+
+    result.e[15] = 1;
+
+    return result;
 }
 
 inline Matrix4 Matrix4::GetTranspose() const
@@ -301,7 +357,6 @@ inline Matrix4 Matrix4::operator+(const Matrix4 &m2)
 
     return result;
 }
-
 
 
 /*std::ostream& operator<<(std::ostream &os, const Matrix4& m)

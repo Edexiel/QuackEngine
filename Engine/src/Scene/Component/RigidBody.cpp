@@ -26,7 +26,7 @@ float RigidBody::GetRadius() const
     if(_collisionShapeType == CollisionShapeType::SPHERE || _collisionShapeType == CollisionShapeType::CAPSULE)
         return _shapeParams.radius;
 
-    return 1;return 1;//todo: Assertion instead of returning 1
+    return 1;//todo: Assertion instead of returning 1
 }
 
 float RigidBody::GetHeight() const
@@ -48,4 +48,9 @@ Maths::Vector3<float> RigidBody::GetHalfExtends() const
 bool RigidBody::GetIsGravityEnabled() const
 {
     return _isGravityEnabled;
+}
+
+float RigidBody::GetBounciness() const
+{
+    return _bounciness;
 }

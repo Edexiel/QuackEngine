@@ -1,8 +1,6 @@
 #ifndef QUACKENGINE_FRAMEBUFFER_HPP
 #define QUACKENGINE_FRAMEBUFFER_HPP
 
-#include <string>
-
 namespace Renderer
 {
 
@@ -16,6 +14,7 @@ namespace Renderer
         unsigned int _height;
 
     public:
+        Framebuffer() = default;
         Framebuffer(unsigned int id, unsigned int rbo, unsigned int texture,
                     unsigned int width, unsigned int height);
 
@@ -32,7 +31,7 @@ namespace Renderer
 
         void Bind() const;
 
-        void BindTexture() const;
+        void BindTexture(unsigned int index = 0) const;
 
         unsigned int GetWidth();
 

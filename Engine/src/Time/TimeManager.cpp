@@ -28,3 +28,8 @@ double TimeManager::GetDeltaTime() const
 {
     return _deltaTime;
 }
+
+void TimeManager::SetDeltaTime(double deltaTime)
+{
+    _deltaTime = deltaTime;
+}

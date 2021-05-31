@@ -1,14 +1,20 @@
-#include <Widgets/AssetWidget.hpp>
+#include "Widgets/AssetWidget.hpp"
 #include "Scene/Core/World.hpp"
-#include "Renderer/Framebuffer.hpp"
+#include "Scene/Component/Light.hpp"
+#include "Scene/Component/Model.hpp"
+#include "Scene/System/RenderSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
+
+#include "Renderer/ModelRenderer.hpp"
+
+#include "Renderer/Vertex.hpp"
+
 #include "Engine.hpp"
 
-AssetWidget::AssetWidget() :
-        _camera{Component::Camera(1280, 720, 1000, -1, 20 * 3.1415 / 180)}
+AssetWidget::AssetWidget()
 {
     _title = "Properties";
 
-    _camera.SetView(Maths::Matrix4::Identity());
 }
 
 void AssetWidget::UpdateVisible()
@@ -20,7 +26,6 @@ void AssetWidget::UpdateVisible()
     Engine &engine = Engine::Instance();
 
     ImGui::BeginChild("ViewportRender");
-    //ImVec2 wsize = ImGui::GetWindowSize();
 
     ImGui::Text("%s", _assetName.c_str());
 
@@ -28,14 +33,17 @@ void AssetWidget::UpdateVisible()
 
     const Resources::Asset* asset = Engine::Instance().GetResourcesManager().GetAsset(_assetName);
 
-    if (asset->GetType() == Resources::AssetType::A_MODEL)
-        DisplayModel(asset);
-    else if (asset->GetType() == Resources::AssetType::A_SOUND)
-        DisplaySound(asset);
-    else if (asset->GetType() == Resources::AssetType::A_TEXTURE)
-        DisplayTexture(asset);
-    else if (asset->GetType() == Resources::AssetType::A_MATERIAL)
-        DisplayMaterial(asset);
+    if (asset)
+    {
+        if (asset->GetType() == Resources::AssetType::A_MODEL)
+            DisplayModel(asset);
+        else if (asset->GetType() == Resources::AssetType::A_SOUND)
+            DisplaySound(asset);
+        else if (asset->GetType() == Resources::AssetType::A_TEXTURE)
+            DisplayTexture(asset);
+        else if (asset->GetType() == Resources::AssetType::A_MATERIAL)
+            DisplayMaterial(asset);
+    }
 
     ImGui::EndChild();
 
@@ -44,17 +52,17 @@ void AssetWidget::UpdateVisible()
 void AssetWidget::DisplayMaterial(const Resources::Asset* asset)
 {
     Engine& engine = Engine::Instance();
-    Renderer::Material* material = (Renderer::Material*)asset;
+    auto* material = (Renderer::Material*)asset;
 
     if (ImGui::Checkbox("Check Lights", &material->checkLight))
     {
         material->GenerateShader();
-        engine.GetRendererInterface().lightSystem->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
     }
     if (ImGui::Checkbox("Has Skeleton", &material->hasSkeleton))
     {
         material->GenerateShader();
-        engine.GetRendererInterface().lightSystem->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
     }
 
     if (material->checkLight)
@@ -72,7 +80,7 @@ void AssetWidget::DisplayMaterial(const Resources::Asset* asset)
     if (SelectTexture(material->colorTexture, listTexture, name.c_str(), "Color Texture"))
     {
         material->GenerateShader();
-        engine.GetRendererInterface().lightSystem->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
     }
 
     if (!material->checkLight)
@@ -82,21 +90,21 @@ void AssetWidget::DisplayMaterial(const Resources::Asset* asset)
     if (SelectTexture(material->diffuseTexture, listTexture, name.c_str(), "Diffuse Texture"))
     {
         material->GenerateShader();
-        engine.GetRendererInterface().lightSystem->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
     }
 
     name = engine.GetResourcesManager().GetName(material->specularTexture);
     if (SelectTexture(material->specularTexture, listTexture, name.c_str(), "Specular Texture"))
     {
         material->GenerateShader();
-        engine.GetRendererInterface().lightSystem->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
     }
 
     name = engine.GetResourcesManager().GetName(material->normalMap);
     if (SelectTexture(material->normalMap, listTexture, name.c_str(), "Normal Texture"))
     {
         material->GenerateShader();
-        engine.GetRendererInterface().lightSystem->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
     }
 }
 
@@ -107,12 +115,12 @@ AssetWidget::SelectInList(const std::vector<std::string> &list, const char *curr
 
     if (ImGui::BeginCombo(comboName, currentlySelected))
     {
-        for (int n = 0; n < list.size(); n++)
+        for (const auto & n : list)
         {
-            bool isSelected = (currentlySelected == list[n]);
-            if (ImGui::Selectable(list[n].c_str(), isSelected))
+            bool isSelected = (currentlySelected == n);
+            if (ImGui::Selectable(n.c_str(), isSelected))
             {
-                selected = list[n];
+                selected = n;
                 break;
             }
 
@@ -144,7 +152,7 @@ AssetWidget::SelectTexture(Renderer::Texture &texture, const std::vector<std::st
 
 void AssetWidget::DisplayTexture(const Resources::Asset* asset)
 {
-    Renderer::Texture* texture = (Renderer::Texture*)asset;
+    auto* texture = (Renderer::Texture*)asset;
     //Renderer::Texture texture = Engine::Instance().GetResourcesManager().LoadTexture(_assetName.c_str());
     ImVec2 wsize = ImGui::GetWindowSize();
     if (wsize.x < wsize.y)
@@ -156,16 +164,16 @@ void AssetWidget::DisplayTexture(const Resources::Asset* asset)
 
 void AssetWidget::DisplayModel(const Resources::Asset* asset)
 {
-    Component::Model* model = (Component::Model*)asset;
+    Renderer::ModelRenderer& model = (*(Renderer::ModelRenderer*)asset);
 
     std::vector<std::string> listModelType;
     listModelType.emplace_back("CLASSIC");
     listModelType.emplace_back("NORMAL_MAP");
     listModelType.emplace_back("SKELETAL");
 
-    std::string selected = SelectInList(listModelType, listModelType[(int)model->GetVertexType()].c_str(), "Model Vertex Type");
+    std::string selected = SelectInList(listModelType, listModelType[(int)model.GetVertexType()].c_str(), "Model Vertex Type");
 
-    if (selected != listModelType[(int)model->GetVertexType()])
+    if (selected != listModelType[(int)model.GetVertexType()])
     {
         if (selected == "CLASSIC")
             Engine::Instance().GetResourcesManager().ReLoadModel(_assetName.c_str(), Renderer::VertexType::V_CLASSIC);

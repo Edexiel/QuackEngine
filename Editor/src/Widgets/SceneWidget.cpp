@@ -1,6 +1,8 @@
 #include "Widgets/SceneWidget.hpp"
 #include "Scene/Core/World.hpp"
 #include "Renderer/RendererInterface.hpp"
+#include "Scene/Component/Transform.hpp"
+#include "Renderer/Framebuffer.hpp"
 #include "Engine.hpp"
 
 #include "GLFW/glfw3.h"
@@ -58,14 +60,15 @@ void SceneWidget::CameraUpdate()
     _camera._width = (unsigned int)wsize.x;
     _camera._height = (unsigned int)wsize.y;
 
-    if(ImGui::IsWindowFocused())
-        _camera.FreeFly();
+
+    _camera.FreeFly();
 
     RendererInterface &rendererInterface = Engine::Instance().GetRendererInterface();
     Maths::Matrix4 projection = Maths::Matrix4::Perspective((int)_camera._width, (int)_camera._height, _camera._near, _camera._far, _camera._fov);
     Maths::Matrix4 view = (Maths::Matrix4::Translate(_camera._position) * _camera._rotation.ToMatrix() * Maths::Matrix4::Scale({1, 1, -1})).GetInvert();
 
-    rendererInterface.UpdateSceneFramebufferEditor(projection, view, _camera._framebuffer);
+    //todo Add Back
+    RendererInterface::UpdateSceneFramebufferEditor(projection, view, _camera._framebuffer);
     ImGui::Image((ImTextureID) (size_t) _camera._framebuffer.GetTexture(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 
     ImGuizmoUpdate(view, projection);
@@ -90,22 +93,25 @@ void SceneWidget::SelectOperation()
     if(glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
     {
         _operation = ImGuizmo::OPERATION::TRANSLATE;
-        std::cout << "translate\n";
+//        std::cout << "translate\n";
     }
     if(glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
     {
         _operation = ImGuizmo::OPERATION::ROTATE;
-        std::cout << "rotate\n";
+//        std::cout << "rotate\n";
     }
     if(glfwGetKey(window,GLFW_KEY_R) == GLFW_PRESS)
     {
         _operation = ImGuizmo::OPERATION::SCALE;
-        std::cout << "scale\n";
+//        std::cout << "scale\n";
     }
 }
 
 void SceneWidget::ManipulateEntity(const Maths::Matrix4& view, const Maths::Matrix4& projection)
 {
+    if(!Engine::Instance().GetCurrentWorld().HasComponent<Component::Transform>(_entity))
+        return;
+
     auto &transform = Engine::Instance().GetCurrentWorld().GetComponent<Component::Transform>(_entity);
 
     ImGuizmo::RecomposeMatrixFromComponents(transform.position.e, (transform.rotation.ToEuler() * RadToDeg<float>()).e,  transform.scale.e, _mat.e);

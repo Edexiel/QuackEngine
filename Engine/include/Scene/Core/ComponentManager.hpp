@@ -1,6 +1,3 @@
- //
-// Created by gnisi on 19/03/2021.
-//
 
 #ifndef QUACKENGINE_COMPONENTMANAGER_HPP
 #define QUACKENGINE_COMPONENTMANAGER_HPP
@@ -12,8 +9,11 @@
 #include "Types.hpp"
 #include "ComponentArray.hpp"
 #include "Debug/Assertion.hpp"
+#include <Tools/Type.hpp>
 
-class ComponentManager
+#include "Debug/Log.hpp"
+
+ class ComponentManager
 {
 private:
     std::unordered_map<std::string_view , ComponentType> _componentTypes;
@@ -32,7 +32,7 @@ public:
     ComponentType GetComponentType();
 
     template<typename T>
-    void AddComponent(Entity id, T component);
+    void AddComponent(Entity id, const T& component);
 
     template<typename T>
     void RemoveComponent(Entity id);
@@ -51,7 +51,6 @@ inline std::shared_ptr<ComponentArray<T>> ComponentManager::GetComponentArray()
 {
     std::string_view typeName = typeid(T).name();
 
-    //std::printf("GetComponentArray : %s \n",typeName);
     Assert_Fatal_Error(_componentTypes.find(typeName) == _componentTypes.end(), "Component not registered before use.");
     return std::static_pointer_cast<ComponentArray<T>>(_componentArrays[typeName]);
 }
@@ -61,10 +60,13 @@ inline void ComponentManager::RegisterComponent()
 {
 
     std::string_view typeName = typeid(T).name();
-    std::printf("Register : %s \n",typeName.data(),"\n");
 
-    Assert_Fatal_Error(_componentTypes.find(typeName) != _componentTypes.end(),
-                       "Registering component type more than once.");
+    if(_componentTypes.find(typeName)!= _componentTypes.end())
+    {
+        Log_Warning("Already registered, skipping: {}", demangle(typeid(T).name()));
+        return;
+    }
+    Log_Info("Registering: {}", demangle(typeid(T).name()));
 
     // Add this component type to the component type map
     _componentTypes.insert({typeName, _nextType});
@@ -85,7 +87,7 @@ inline ComponentType ComponentManager::GetComponentType()
 }
 
 template<typename T>
-inline void ComponentManager::AddComponent(Entity id, T component)
+inline void ComponentManager::AddComponent(Entity id, const T& component)
 {
     GetComponentArray<T>()->AddData(id, component);
 }
