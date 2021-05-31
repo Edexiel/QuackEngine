@@ -16,6 +16,12 @@ void ExplorerWidget::UpdateVisible()
 
     unsigned int offset = 0;
 
+    if (ImGui::Button("Refresh"))
+    {
+        engine.GetResourcesManager().Clear();
+        engine.GetResourcesManager().LoadFolder("./Asset");
+    }
+
     if (!ImGui::CollapsingHeader("Material"))
     {
         offset += DisplayList(listName, offset);
@@ -37,6 +43,7 @@ void ExplorerWidget::UpdateVisible()
     listName = engine.GetResourcesManager().GetAnimationNameList();
     if (!ImGui::CollapsingHeader("Animation"))
         offset += DisplayList(listName, offset);
+
 }
 
 unsigned int ExplorerWidget::DisplayList(std::vector<std::string> &listName, unsigned int offset)
