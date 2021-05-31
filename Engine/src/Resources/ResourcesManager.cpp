@@ -350,3 +350,19 @@ const Asset *ResourcesManager::GetAsset(const std::string &name)
         return nullptr;
     return it->second;
 }
+
+void ResourcesManager::Clear()
+{
+    _mapModel.clear();
+    _mapTexture.clear();
+    _mapShader.clear();
+    _mapDynamicShader.clear();
+    _mapSound.clear();
+    _mapMaterial.clear();
+    _mapAnimation.clear();
+
+    _textureToName.clear();
+    _soundToName.clear();
+    _globalAssetMap.clear();
+
+}

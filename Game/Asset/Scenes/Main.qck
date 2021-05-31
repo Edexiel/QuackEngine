@@ -40,7 +40,7 @@
                     "position": {
                         "x": 2.062415599822998,
                         "y": 53.16899108886719,
-                        "z": -22.20970344543457
+                        "z": -176.2100067138672
                     },
                     "scale": {
                         "x": 0.9999582767486572,
@@ -56,8 +56,8 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 916,
-                    "_height": 366,
+                    "_width": 824,
+                    "_height": 520,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
                     "_fov": 0.7853749394416809
@@ -432,6 +432,59 @@
                     "quadratic": 0.000007000000096013537,
                     "spotAngle": 8.5,
                     "outerSpotAngle": 10.5
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "Tartiflette"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
                 }
             }
         ]

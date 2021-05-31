@@ -37,8 +37,9 @@ void ParticleEmitter::Process(const Renderer::Framebuffer &buffer, const Rendere
         {
             ResetParticle(_listParticle[i]);
         }
-    }
 
+        DrawParticle(_listParticle[i], screenMesh);
+    }
 }
 
 void ParticleEmitter::ResetParticle(Particle &particle)
@@ -47,4 +48,9 @@ void ParticleEmitter::ResetParticle(Particle &particle)
     auto trs = Engine::Instance().GetCurrentWorld().GetComponent<Component::Transform>(_entity);
 
     particle.position = trs.position;
+}
+
+void ParticleEmitter::DrawParticle(const Particle &particle, const Renderer::Mesh &screenMesh)
+{
+    //_shader.SetVector3f()
 }
