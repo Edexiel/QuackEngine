@@ -1,0 +1,40 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"Vendor/reactphysics3d/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "reactphysics3d::@3c34d624f7b2d8adfeda"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@3c34d624f7b2d8adfeda",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "Vendor/reactphysics3d",
+		"source" : "Vendor/reactphysics3d"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}
