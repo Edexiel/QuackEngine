@@ -261,10 +261,33 @@ ModelRenderer ModelRenderer::LoadSkeletalMeshModel(const void *loadedScene)
                                                                     sizeof(float),
                                                                     indices.data(), indices.size(),
                                                                     Renderer::VertexType::V_SKELETAL);
+
+        //model.LoadSkeleton(scene->mMeshes[i]);
+        //std::cout << "SIZE SKELETON : " << model._skeletonOffset.mapOffset.size() << std::endl;
+
         RendererPlatform::VerticesReadingSkeletalMesh();
     }
 
     return model;
+}
+
+void ModelRenderer::LoadSkeleton(const void *meshAssimp)
+{
+    /*aiMesh *mesh = (aiMesh *)meshAssimp;
+
+    for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
+    {
+        std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
+
+        auto boneMatrix = mesh->mBones[boneIndex]->mOffsetMatrix;
+        Maths::Matrix4 transform = {
+            boneMatrix.a1, boneMatrix.b1, boneMatrix.c1, boneMatrix.d1,
+            boneMatrix.a2, boneMatrix.b2, boneMatrix.c2, boneMatrix.d2,
+            boneMatrix.a3, boneMatrix.b3, boneMatrix.c3, boneMatrix.d3,
+            boneMatrix.a4, boneMatrix.b4, boneMatrix.c4, boneMatrix.d4};
+
+        _skeletonOffset.AddBone(boneName, transform);
+    }*/
 }
 
 void ModelRenderer::SetVertexBoneData(SkeletalVertex &vertex, int boneID, float weight)
