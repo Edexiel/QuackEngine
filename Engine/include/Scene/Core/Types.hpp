@@ -7,7 +7,7 @@
 #include <cereal/types/string.hpp>
 
 
-const std::uint32_t COMPONENTS_NUMBER = 10;
+const std::uint32_t COMPONENTS_NUMBER = 11;
 const size_t START_SIZE = 10000;
 typedef unsigned int Entity;
 using ComponentType = std::uint_fast8_t;

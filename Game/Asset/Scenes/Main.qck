@@ -116,14 +116,14 @@
                     }
                 },
                 "Model": {
-                    "path": "./Asset/Model/Bard.fbx",
+                    "path": "../../Game/Asset\\Model\\Bard.fbx",
                     "type": 2,
                     "materials": [
                         "AnimationMaterial"
                     ]
                 },
                 "Animator": {
-                    "path": "./Asset/Model/Standard Run.fbx"
+                    "path": "../../Game/Asset\\Model\\Standard Run.fbx"
                 },
                 "RigidBody": {
                     "mass": 1.0,
@@ -192,7 +192,7 @@
                     }
                 },
                 "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
+                    "path": "../../Game/Asset\\Model\\Cube.fbx",
                     "type": 1,
                     "materials": [
                         "Default material"
@@ -265,7 +265,7 @@
                     }
                 },
                 "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
+                    "path": "../../Game/Asset\\Model\\Cube.fbx",
                     "type": 1,
                     "materials": [
                         "Default material"
@@ -338,7 +338,7 @@
                     }
                 },
                 "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
+                    "path": "../../Game/Asset\\Model\\Cube.fbx",
                     "type": 1,
                     "materials": [
                         "Default material"

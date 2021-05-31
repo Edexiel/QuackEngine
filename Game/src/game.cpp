@@ -10,6 +10,8 @@
 #include "Scene/Component/Animator.hpp"
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/Component/CharacterController.hpp"
+#include "Scene/Component/CameraGameplay.hpp"
+
 
 
 #include "Renderer/RendererPlatform.hpp"
@@ -23,6 +25,7 @@
 #include "Scene/System/RenderSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
 #include "Scene/System/CharacterControllerSystem.hpp"
+#include "Scene/System/CameraGameplaySystem.hpp"
 
 
 #include "Scene/System/AnimatorSystem.hpp"
@@ -46,7 +49,7 @@ void Game::Init(Engine &engine) const
     world.RegisterComponent<Component::RigidBody>();
     world.RegisterComponent<Component::CharacterController>();
     world.RegisterComponent<Component::Animator>();
-    //world.RegisterComponent<C>()
+    world.RegisterComponent<Component::CameraGameplay>();
 
     world.RegisterComponent<EnemyComponent>();
     world.RegisterComponent<PlayerComponent>();
@@ -59,6 +62,7 @@ void Game::Init(Engine &engine) const
     auto lightSystem = world.RegisterSystem<LightSystem>();
     auto physicsSystem = world.RegisterSystem<PhysicsSystem>();
     auto characterControllerSystem = world.RegisterSystem<CharacterControllerSystem>();
+    auto cameraGameplaySystem = world.RegisterSystem<CameraGameplaySystem>();
     auto animatorSystem = world.RegisterSystem<AnimatorSystem>();
     auto playerSystem = world.RegisterSystem<PlayerSystem>();
 
@@ -97,6 +101,14 @@ void Game::Init(Engine &engine) const
         signatureCharacterController.set(world.GetComponentType<Component::RigidBody>());
         signatureCharacterController.set(world.GetComponentType<Component::CharacterController>());
         world.SetSystemSignature<CharacterControllerSystem>(signatureCharacterController);
+    }
+    //Signature CameraGameplay
+    {
+        Signature signatureCameraGameplay;
+        signatureCameraGameplay.set(world.GetComponentType<Component::Transform>());
+        signatureCameraGameplay.set(world.GetComponentType<Component::Camera>());
+        signatureCameraGameplay.set(world.GetComponentType<Component::CameraGameplay>());
+        world.SetSystemSignature<CameraGameplaySystem>(signatureCameraGameplay);
     }
     //Signature Physics
     {
@@ -140,13 +152,6 @@ void Game::Init(Engine &engine) const
     engine.GetPostProcessManager().AddProcess(ptr);
 
     noteDisplaySystem->GenerateEnemies(10, {0,0,0}, 50.f, 100.f);
-
-
-    Entity id = world.CreateEntity("Tartiflette");
-    PlayerComponent pl;
-    Component::Transform t {Maths::Vector3f::Zero(),Maths::Vector3f::One(),Maths::Quaternion::Identity()};
-    world.AddComponent(id, t);
-    world.AddComponent(id, pl);
 
     RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
 
