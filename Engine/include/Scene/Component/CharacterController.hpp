@@ -14,6 +14,12 @@ namespace Component
         float forward{0};
         float backward{0};
         Maths::Vector3f direction{0, 0, 0};
+
+        template<class Archive>
+        void serialize(Archive &archive)
+        {
+            archive(speed);
+        }
     };
 }
 
