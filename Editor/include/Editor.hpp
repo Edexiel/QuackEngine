@@ -3,23 +3,31 @@
 
 #include <vector>
 #include <memory>
-#include "GLFW/glfw3.h"
-
+#include <string>
 
 class Editor
 {
 private:
     std::vector<std::unique_ptr<class Widget>> _widgets;
+    std::unique_ptr<class Widget> _menuBar;
+
+    class Engine &_engine;
 
     void InitWidgets();
-    void InitImGui(GLFWwindow * window);
+    void InitImGui(class GLFWwindow *window);
     void SetStyle();
     void SetIo();
-public:
 
-    explicit Editor(GLFWwindow * window);
+public:
+    /*** Selection ***/
+    std::int32_t selectedEntity = -1;
+    bool showProperties{false};
+    std::string assetName;
+
+    explicit Editor();
     ~Editor();
     void Draw();
+    Engine &GetEngine() const;
 };
 
 

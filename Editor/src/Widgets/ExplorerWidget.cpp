@@ -2,17 +2,17 @@
 
 #include "Scene/Core/World.hpp"
 #include "Engine.hpp"
+#include "Editor.hpp"
 
-ExplorerWidget::ExplorerWidget()
+ExplorerWidget::ExplorerWidget(Editor &editor) : Widget(editor)
 {
     _title = "Explorer";
 }
 
 void ExplorerWidget::UpdateVisible()
 {
-    Engine &engine = Engine::Instance();
 
-    std::vector<std::string> listName = engine.GetResourcesManager().GetMaterialNameList();
+    std::vector<std::string> listName = _engine.GetResourcesManager().GetMaterialNameList();
 
     unsigned int offset = 0;
 
@@ -24,17 +24,17 @@ void ExplorerWidget::UpdateVisible()
         RemoveMaterial(listName);
 
     }
-    listName = engine.GetResourcesManager().GetTextureNameList();
+    listName = _engine.GetResourcesManager().GetTextureNameList();
 
     if (!ImGui::CollapsingHeader("Texture"))
         offset += DisplayList(listName, offset);
 
-    listName = engine.GetResourcesManager().GetModelNameList();
+    listName = _engine.GetResourcesManager().GetModelNameList();
 
     if (!ImGui::CollapsingHeader("Model"))
         offset += DisplayList(listName, offset);
 
-    listName = engine.GetResourcesManager().GetAnimationNameList();
+    listName = _engine.GetResourcesManager().GetAnimationNameList();
     if (!ImGui::CollapsingHeader("Animation"))
         offset += DisplayList(listName, offset);
 }
@@ -45,9 +45,9 @@ unsigned int ExplorerWidget::DisplayList(std::vector<std::string> &listName, uns
     {
         if (ImGui::Selectable(listName[i].c_str(), _selected == i + offset))
         {
-            _propertiesSwitch = PROPERTIES_SHOW_ASSET;
+            _editor.showProperties = false;
             _selected = i + offset;
-            _assetName = listName[i];
+            _editor.assetName = listName.at(i);
         }
     }
     return listName.size();
@@ -64,7 +64,7 @@ void ExplorerWidget::AddMaterial(unsigned int& offset)
         ImGui::InputText("New Material Name", _newMaterialTextBuffer, 32);
         if (_newMaterial && ImGui::Button("Create"))
         {
-            Engine::Instance().GetResourcesManager().GenerateMaterial(_newMaterialTextBuffer, Renderer::Material());
+            _engine.GetResourcesManager().GenerateMaterial(_newMaterialTextBuffer, Renderer::Material());
             _newMaterial = false;
         }
     }
@@ -75,7 +75,7 @@ void ExplorerWidget::RemoveMaterial(const std::vector<std::string>& listMaterial
     if (ImGui::Button("Remove Material"))
         if (_selected < listMaterialName.size())
         {
-            Engine::Instance().GetResourcesManager().DestroyMaterial(listMaterialName[_selected]);
+            _engine.GetResourcesManager().DestroyMaterial(listMaterialName[_selected]);
             _selected = 0;
         }
 

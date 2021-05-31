@@ -1,7 +1,7 @@
 #include "GLFW/glfw3.h"
 
-#include "Editor.hpp"
 #include "Engine.hpp"
+#include "Editor.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
 
@@ -32,13 +32,14 @@ int main()
     Engine engine(settings);
     Engine::SetInstance(engine);
 
-    Editor editor{engine.GetWindow()};
+    Editor editor{};
 
     Game game;
     game.Init(engine);
 
     engine.GetPhysicsManager();
     engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
+
 
     while (!engine.WindowShouldClose())
     {

@@ -1,4 +1,7 @@
 #include "Editor.hpp"
+#include "Engine.hpp"
+
+#include "GLFW/glfw3.h"
 
 #include "Widgets/ExplorerWidget.hpp"
 #include "Widgets/LogWidget.hpp"
@@ -6,9 +9,8 @@
 #include "Widgets/SceneWidget.hpp"
 #include "Widgets/ViewportWidget.hpp"
 #include "Widgets/ViewerWidget.hpp"
-#include "Widgets/AssetWidget.hpp"
 #include "Widgets/ToolboxWidget.hpp"
-
+#include "Widgets/MenuWidget.hpp"
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -16,10 +18,11 @@
 #include "imgui.h"
 
 
-Editor::Editor(GLFWwindow *window)
+
+Editor::Editor():_engine{Engine::Instance()}
 {
     InitWidgets();
-    InitImGui(window);
+    InitImGui(_engine.GetWindow());
 }
 
 Editor::~Editor()
@@ -33,14 +36,16 @@ Editor::~Editor()
 //todo : init from config.ini
 void Editor::InitWidgets()
 {
-    _widgets.emplace_back(std::make_unique<LogWidget>());
-    _widgets.emplace_back(std::make_unique<ExplorerWidget>());
-    _widgets.emplace_back(std::make_unique<PropertiesWidget>());
-    _widgets.emplace_back(std::make_unique<SceneWidget>());
-    _widgets.emplace_back(std::make_unique<ViewportWidget>());
-    _widgets.emplace_back(std::make_unique<ViewerWidget>());
-    _widgets.emplace_back(std::make_unique<AssetWidget>());
-    _widgets.emplace_back(std::make_unique<ToolboxWidget>());
+
+    _menuBar = std::make_unique<MenuWidget>(*this);
+
+    _widgets.emplace_back(std::make_unique<LogWidget>(*this));
+    _widgets.emplace_back(std::make_unique<ExplorerWidget>(*this));
+    _widgets.emplace_back(std::make_unique<PropertiesWidget>(*this));
+    _widgets.emplace_back(std::make_unique<SceneWidget>(*this));
+    _widgets.emplace_back(std::make_unique<ViewportWidget>(*this));
+    _widgets.emplace_back(std::make_unique<ViewerWidget>(*this));
+    _widgets.emplace_back(std::make_unique<ToolboxWidget>(*this));
 }
 
 void Editor::InitImGui(GLFWwindow *window)
@@ -61,8 +66,10 @@ void Editor::Draw()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode|ImGuiDockNodeFlags_AutoHideTabBar);
+    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(),
+                                 ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_AutoHideTabBar);
 
+    _menuBar->Draw();
     for (const auto &widget : _widgets)
     {
         widget->Draw();
@@ -168,6 +175,11 @@ void Editor::SetIo()
     // io.ConfigViewportsNoTaskBarIcon = true;
 
 
+}
+
+Engine &Editor::GetEngine() const
+{
+    return _engine;
 }
 
 

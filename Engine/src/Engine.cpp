@@ -22,7 +22,7 @@ namespace fs = std::filesystem;
 
 inline Engine *instance = nullptr;
 
-Engine &Engine::Instance()
+Engine &Engine::Instance() noexcept
 {
     return *instance;
 }
@@ -37,7 +37,7 @@ Engine::~Engine()
     glfwTerminate();
 }
 
-Engine::Engine(const EngineSettings &settings)
+Engine::Engine(const EngineSettings &settings) noexcept
 {
     Assert_Fatal_Error(instance != nullptr, "There should be only one Engine");
     Assert_Fatal_Error(!glfwInit(), "GLFW was not correctly initialized, aborting");

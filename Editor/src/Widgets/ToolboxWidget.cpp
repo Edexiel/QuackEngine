@@ -3,7 +3,7 @@
 #include "Engine.hpp"
 #include "Scene/Core/World.hpp"
 
-ToolboxWidget::ToolboxWidget() : _engine{Engine::Instance()}
+ToolboxWidget::ToolboxWidget(Editor &editor) : Widget(editor)
 {
     _title = "Toolbox";
 }
@@ -16,7 +16,7 @@ void ToolboxWidget::Save()
 void ToolboxWidget::Reload()
 {
 
-    World &world = _engine.GetCurrentWorld();
+    World &world = Widget::_engine.GetCurrentWorld();
     world.Clear();
 
     _engine.LoadWorld(world);

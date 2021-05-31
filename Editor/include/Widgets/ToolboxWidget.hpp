@@ -8,13 +8,11 @@ class ToolboxWidget : public Widget
 {
 private:
 
-    class Engine &_engine;
-
     bool isPlaying = false;
     void Save();
     void Reload();
 public:
-    ToolboxWidget();
+    ToolboxWidget(Editor &editor);
     void UpdateVisible() final;
 };
 

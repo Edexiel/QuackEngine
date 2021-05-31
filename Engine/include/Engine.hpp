@@ -80,10 +80,10 @@ private:
     bool _gamePlaying{false};
 
 public:
-    static Engine &Instance();
+    static Engine &Instance() noexcept;
     static void SetInstance(Engine &engine);
 
-    explicit Engine(const EngineSettings &settings);
+    explicit Engine(const EngineSettings &settings) noexcept;
     ~Engine();
 
     GLFWwindow *GetWindow();
@@ -106,7 +106,7 @@ public:
     class World &CreateWorld(std::string name);
     void LoadWorld(class World &world);
     void SaveWorld(const std::string &worldName);
-    void ClearWorld(const std::string& worldName);
+    void ClearWorld(const std::string &worldName);
     void RemoveWorld(const std::string &name);
 
     Input::InputManager &GetInputManager();
