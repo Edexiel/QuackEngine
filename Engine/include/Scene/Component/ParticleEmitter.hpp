@@ -23,6 +23,7 @@ namespace Component
         void Process(const Renderer::Framebuffer& buffer, const Renderer::Mesh& screenMesh);
 
         void ResetParticle(Renderer::Particle& particle);
+        void DrawParticle(const Renderer::Particle& particle, const Renderer::Mesh &screenMesh);
 
     };
 }

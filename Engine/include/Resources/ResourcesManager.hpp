@@ -55,6 +55,7 @@ namespace Resources
         ~ResourcesManager() = default;
 
         void Init();
+        void Clear();
 
         Renderer::ModelRenderer
         LoadModel(const std::filesystem::path &path, Renderer::VertexType vertexType = Renderer::VertexType::V_CLASSIC);

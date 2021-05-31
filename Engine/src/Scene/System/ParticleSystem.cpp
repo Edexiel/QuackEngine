@@ -12,6 +12,6 @@ void ParticleSystem::Process(const Framebuffer &buffer, const Mesh &screenMesh)
     World& world = Engine::Instance().GetCurrentWorld();
     for (Entity entity : _entities)
     {
-        world.GetComponent<Component::ParticleEmitter>(entity);
+        world.GetComponent<Component::ParticleEmitter>(entity).Process(buffer, screenMesh);
     }
 }
