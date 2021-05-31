@@ -158,26 +158,19 @@ Shader Shader::LoadShader(const char *path)
 
 Shader Shader::LoadObjectShader(const ShaderConstructData &shaderData)
 {
-    std::string vertexShaderCode;
+    std::string vertexShaderCode = "#version 460 core\n";
 
-    // Read the Vertex Shader code from the file
-    if (shaderData.hasNormalMap)
-    {
-        if (shaderData.hasSkeleton)
-            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Light/VertexNormalMap.vs");
-        else
-            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Skeletal/SkeletalVertex.vs");
-    }
-    else
-    {
-        if (shaderData.hasSkeleton)
-            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Skeletal/SkeletalVertex.vs");
-        else
-            vertexShaderCode = LoadStringFromFile("../../Engine/Shader/Object/Base/Vertex.vs");
-    }
+    if (shaderData.hasLight)
+        vertexShaderCode += "#define LIGHT\n";
 
+    if (shaderData.hasSkeleton)
+        vertexShaderCode += "#define SKELETON\n";
+    else if (shaderData.hasNormalMap)
+        vertexShaderCode += "#define NORMALMAP\n";
 
-    std::string fragmentShaderCode = "#version 330 core\n";
+    vertexShaderCode += LoadStringFromFile("./Shader/Object/ObjectVertex.vs");
+
+    std::string fragmentShaderCode = "#version 460 core\n";
     if (shaderData.hasLight)
     {
         fragmentShaderCode += "#define NB_MAX_DIRECTIONAL_LIGHT " +
@@ -187,90 +180,25 @@ Shader Shader::LoadObjectShader(const ShaderConstructData &shaderData)
         fragmentShaderCode += "#define NB_MAX_SPOT_LIGHT " +
                               std::to_string(MAX_SPOT_LIGHT_NB) + "\n";
 
-        fragmentShaderCode +=
-                LoadStringFromFile("../../Engine/Shader/Object/Light/FragmentStartLight.fs");
-    }
-    else
-    {
-        fragmentShaderCode +=
-                LoadStringFromFile("../../Engine/Shader/Object/Base/FragmentStart.fs");
-    }
-
-    fragmentShaderCode += CreateMaterial(shaderData);
-    fragmentShaderCode += "uniform Material material;\n\n";
-    fragmentShaderCode += CreateColorFunctions(shaderData);
-
-    if (shaderData.hasLight)
-    {
+        fragmentShaderCode += "#define LIGHT\n";
         if (shaderData.hasNormalMap)
         {
-            fragmentShaderCode +=
-                    LoadStringFromFile("../../Engine/Shader/Object/Light/FragmentNormalMapLight.fs");
-            fragmentShaderCode += LoadStringFromFile(
-                    "../../Engine/Shader/Object/Light/FragmentMainLightNormal.fs");
+            fragmentShaderCode += "#define NORMALMAP\n";
         }
-        else
-        {
-            fragmentShaderCode +=
-                    LoadStringFromFile("../../Engine/Shader/Object/Light/FragmentBasicLight.fs");
-            fragmentShaderCode += LoadStringFromFile(
-                    "../../Engine/Shader/Object/Light/FragmentMainLight.fs");
-        }
-    }
-    else
-        fragmentShaderCode += LoadStringFromFile("../../Engine/Shader/Object/Base/FragmentMain.fs");
 
-    //std::cout << FragmentShaderCode << std::endl;
+        if (shaderData.hasDiffuseTexture)
+            fragmentShaderCode += "#define TEXTUREDIFFUSE\n";
+
+        if (shaderData.hasSpecularTexture)
+            fragmentShaderCode += "#define TEXTURESPECULAR\n";
+    }
+    if (shaderData.hasColorTexture)
+        fragmentShaderCode += "#define TEXTURECOLOR\n";
+
+    fragmentShaderCode += LoadStringFromFile("./Shader/Object/ObjectFragment.fs");
 
     return RendererPlatform::CreateShader(vertexShaderCode.c_str(), fragmentShaderCode.c_str());
 
-}
-
-std::string Shader::CreateMaterial(const ShaderConstructData &shaderData)
-{
-    std::string frag;
-
-    frag += "struct Material \n{\n  vec4 color;\n";
-
-    if (shaderData.hasColorTexture)
-        frag += "  sampler2D colorTexture;\n";
-
-    if (shaderData.hasDiffuseTexture)
-        frag += "  sampler2D diffuseTexture;\n";
-
-    if (shaderData.hasSpecularTexture)
-        frag += "  sampler2D specularTexture;\n";
-
-    if (shaderData.hasNormalMap)
-        frag += "  sampler2D normalMap;\n";
-
-    frag += "  vec3 ambient;\n  vec3 diffuse;\n  vec3 specular;\n  float shininess;\n};\n\n";
-
-    return frag;
-}
-
-std::string Shader::CreateColorFunctions(const ShaderConstructData &shaderData)
-{
-    std::string frag;
-
-    if (shaderData.hasColorTexture)
-        frag += LoadStringFromFile("../../Engine/Shader/Object/FragmentColor/FragmentTextureColor.fs");
-    else
-        frag += LoadStringFromFile("../../Engine/Shader/Object/FragmentColor/FragmentColor.fs");
-
-    if (shaderData.hasLight)
-    {
-        if (shaderData.hasDiffuseTexture)
-            frag += LoadStringFromFile("../../Engine/Shader/Object/Light/Texture/FragmentAmbientDiffuseColor.fs");
-        else
-            frag += LoadStringFromFile("../../Engine/Shader/Object/Light/Color/FragmentAmbientDiffuseColor.fs");
-
-        if (shaderData.hasSpecularTexture)
-            frag += LoadStringFromFile("../../Engine/Shader/Object/Light/Texture/FragmentSpecularColor.fs");
-        else
-            frag += LoadStringFromFile("../../Engine/Shader/Object/Light/Color/FragmentSpecularColor.fs");
-    }
-    return frag;
 }
 
 std::string Shader::LoadStringFromFile(const std::filesystem::path &path)
@@ -290,20 +218,4 @@ std::string Shader::LoadStringFromFile(const std::filesystem::path &path)
         return {0};
     }
     return fileData;
-}
-
-std::string Shader::GetStringInFile(std::ifstream &file, const std::string &start, const std::string &end)
-{
-    std::string result;
-    std::string line;
-    while (getline(file, line))
-        if (line.substr(0, start.size()) == start)
-            while (getline(file, line))
-            {
-                if (line.substr(0, end.size()) == end)
-                    return result;
-                result += line + "\n";
-            }
-
-    return result;
 }

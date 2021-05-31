@@ -6,7 +6,6 @@
 #include <unordered_map>
 #include <filesystem>
 
-
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Vertex.hpp"
 #include "Renderer/Material.hpp"
@@ -23,6 +22,9 @@ namespace Renderer
 
         std::vector<Renderer::Mesh> _meshList;
         std::vector<Renderer::MaterialInterface> _materialList;
+
+        //SkeletonOffset _skeletonOffset;
+
     public:
         const std::vector<Renderer::MaterialInterface> &GetMaterialList() const;
     private:
@@ -32,6 +34,8 @@ namespace Renderer
         static ModelRenderer LoadClassicModel(const void *loadedScene);
         static ModelRenderer LoadNormalMapModel(const void *loadedScene);
         static ModelRenderer LoadSkeletalMeshModel(const void *loadedScene);
+
+        void LoadSkeleton(const void* meshAssimp);
 
         static void SetVertexBoneData(Renderer::SkeletalVertex &vertex, int boneID, float weight);
         static void ExtractBoneWeightForVertices(std::vector<Renderer::SkeletalVertex> &vertices,
