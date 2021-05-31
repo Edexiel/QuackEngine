@@ -220,16 +220,16 @@ inline Matrix4 Matrix4::LookAtMatrixRotation(const Vector3f& eye, const Vector3f
     Vector3f up = (Vector3f::CrossProduct(side, forward)).Normalize();
 
     result.e[0] = side.x;
-    result.e[1] = up.x;
-    result.e[2] = -forward.x;
+    result.e[4] = up.x;
+    result.e[8] = -forward.x;
 
 
-    result.e[4] = side.y;
+    result.e[1] = side.y;
     result.e[5] = up.y;
-    result.e[6] = -forward.y;
+    result.e[9] = -forward.y;
 
-    result.e[8] = side.z;
-    result.e[9] = up.z;
+    result.e[2] = side.z;
+    result.e[6] = up.z;
     result.e[10] = -forward.z;
 
     result.e[15] = 1;
