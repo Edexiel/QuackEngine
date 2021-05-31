@@ -7,6 +7,8 @@
 #include "Scene/System/RenderSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
+#include "Scene/Component/CameraGameplay.hpp"
+#include "Player/Player.hpp"
 
 #include "Renderer/ModelRenderer.hpp"
 
@@ -45,7 +47,8 @@ void PropertiesWidget::UpdateVisible()
         AnimatorReader();
     if(world.HasComponent<CharacterController>(_entity))
         CharacterControllerReader();
-
+    if(world.HasComponent<CameraGameplay>(_entity))
+        CameraGameplayReader();
     AddComponent();
     DeleteComponent();
 }
@@ -312,6 +315,16 @@ void PropertiesWidget::AddComponent()
             Component::CharacterController characterController;
             world.AddComponent(_entity, characterController);
         }
+        if (ImGui::MenuItem("Player component"))
+        {
+            PlayerComponent playerComponent;
+            world.AddComponent(_entity, playerComponent);
+        }
+        if (ImGui::MenuItem("Camera gameplay"))
+        {
+            CameraGameplay cameraGameplay;
+            world.AddComponent(_entity, cameraGameplay);
+        }
         if(world.HasComponent<Transform>(_entity))
             AddRigidBody();
 
@@ -385,6 +398,14 @@ void PropertiesWidget::DeleteComponent()
         if (world.HasComponent<CharacterController>(_entity) && ImGui::MenuItem("Character controller"))
         {
             world.RemoveComponent<CharacterController>(_entity);
+        }
+        if (world.HasComponent<PlayerComponent>(_entity) && ImGui::MenuItem("Player component"))
+        {
+            world.RemoveComponent<PlayerComponent>(_entity);
+        }
+        if (world.HasComponent<CameraGameplay>(_entity) && ImGui::MenuItem("Camera gameplay"))
+        {
+            world.RemoveComponent<CameraGameplay>(_entity);
         }
         ImGui::EndPopup();
     }
@@ -516,8 +537,16 @@ void PropertiesWidget::RigidBodySetBounciness(RigidBody &rigidBody)
 
 void PropertiesWidget::CharacterControllerReader()
 {
-    if (ImGui::CollapsingHeader("CharacterController"))
+    if (ImGui::CollapsingHeader("Character controller"))
         return;
     auto &characterController = Engine::Instance().GetCurrentWorld().GetComponent<CharacterController>(_entity);
     ImGui::DragFloat("Speed", &characterController.speed);
+}
+
+void PropertiesWidget::CameraGameplayReader()
+{
+    if (ImGui::CollapsingHeader("Camera Gameplay"))
+        return;
+    auto &cameraController = Engine::Instance().GetCurrentWorld().GetComponent<CameraGameplay>(_entity);
+    ImGui::DragFloat3("Distance", cameraController.distance.e);
 }
