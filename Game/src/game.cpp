@@ -46,6 +46,7 @@ void Game::Init(Engine &engine) const
     world.RegisterComponent<Component::RigidBody>();
     world.RegisterComponent<Component::CharacterController>();
     world.RegisterComponent<Component::Animator>();
+    //world.RegisterComponent<C>()
 
     world.RegisterComponent<EnemyComponent>();
     world.RegisterComponent<PlayerComponent>();

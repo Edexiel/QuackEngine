@@ -13,6 +13,7 @@ class System
 {
 public:
     std::set<Entity> _entities;
+
 };
 
 #endif //QUACKENGINE_SYSTEM_HPP

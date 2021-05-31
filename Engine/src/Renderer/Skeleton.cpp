@@ -214,3 +214,20 @@ unsigned int Skeleton::GetBonesNb() const
 {
     return listBones.size();
 }
+
+Matrix4 SkeletonOffset::GetBoneOffset(const std::string& name) const
+{
+    auto it = mapOffset.find(name);
+    if(it == mapOffset.end())
+    {
+        return Matrix4::Identity();
+    }
+
+    return it->second;
+}
+
+void SkeletonOffset::AddBone(const std::string &name, const Matrix4 &offset)
+{
+    mapOffset.insert({name, offset});
+}
+

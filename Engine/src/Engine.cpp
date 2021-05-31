@@ -380,6 +380,5 @@ double Engine::GetDeltaTime()
 void Engine::ClearWorld(const std::string &worldName)
 {
     _worlds[_worldLut[worldName]].Clear();
-
 }
 
