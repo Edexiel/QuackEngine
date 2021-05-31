@@ -12,16 +12,18 @@
 #include "Types.hpp"
 #include "System.hpp"
 #include "Debug/Assertion.hpp"
+#include <Tools/Type.hpp>
+#include "Debug/Log.hpp"
 
 class SystemManager
 {
 private:
     std::unordered_map<std::string_view, Signature> _signatures;
-    std::unordered_map<std::string_view, std::shared_ptr<System>> _systems;
+    std::unordered_map<std::string_view, std::unique_ptr<System>> _systems;
 
 public:
     template<typename T>
-    std::shared_ptr<T> RegisterSystem();
+    T* RegisterSystem();
 
     template<typename T>
     void SetSignature(Signature signature);
@@ -31,23 +33,30 @@ public:
     void EntitySignatureChanged(Entity id, Signature entitySignature);
 
     template<typename T>
-    T * GetSystem();
+    T* GetSystem();
 
 };
 
 template<typename T>
-inline std::shared_ptr<T> SystemManager::RegisterSystem()
+T* SystemManager::RegisterSystem()
 {
     std::string_view typeName = typeid(T).name();
-    Assert_Fatal_Error(_systems.find(typeName) != _systems.end(), "Registering system more than once.");
+    auto search = _systems.find(typeName);
+    if (search != _systems.end())
+    {
+        Log_Warning("Already registered, skipping: {}", demangle(typeid(T).name()));
+        return static_cast<T*>(search->second.get());
+    }
 
-    auto system = std::make_shared<T>();
-    _systems.insert({typeName, system});
-    return system;
+    Log_Info("Registering: {}", demangle(typeid(T).name()));
+
+    auto result =  _systems.insert({typeName, std::make_unique<T>()});
+
+    return static_cast<T*>(result.first->second.get());
 }
 
 template<typename T>
-inline void SystemManager::SetSignature(Signature signature)
+void SystemManager::SetSignature(Signature signature)
 {
     std::string_view typeName = typeid(T).name();
     Assert_Fatal_Error(_systems.find(typeName) == _systems.end(), "System used before registered.");
@@ -88,7 +97,7 @@ inline void SystemManager::EntitySignatureChanged(Entity id, Signature entitySig
 }
 
 template<typename T>
-T * SystemManager::GetSystem()
+T* SystemManager::GetSystem()
 {
     std::string_view typeName = typeid(T).name();
     auto search = _systems.find(typeName);

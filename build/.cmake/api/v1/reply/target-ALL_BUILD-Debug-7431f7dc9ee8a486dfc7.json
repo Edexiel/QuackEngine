@@ -1,0 +1,67 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "assimp::@0569b91250192000a502"
+		},
+		{
+			"id" : "glad::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "glfw::@3bc8d31f350e23de9c6e"
+		},
+		{
+			"id" : "zlibstatic::@8cea4c496c7dd69ac2de"
+		},
+		{
+			"id" : "fmt::@5d8f49674edd15c760ad"
+		},
+		{
+			"id" : "Runner::@05667c7e905441f82ed1"
+		},
+		{
+			"id" : "Engine::@8f69bdd092c897d92c1e"
+		},
+		{
+			"id" : "Game::@971b28586fb25e7ff763"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "reactphysics3d::@3c34d624f7b2d8adfeda"
+		},
+		{
+			"id" : "Editor::@b58ce4ae47b5f4fc4f99"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

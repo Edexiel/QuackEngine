@@ -2,6 +2,7 @@
 #define _ASSET_HPP
 
 #include <string>
+#include <filesystem>
 
 namespace Resources
 {
@@ -11,13 +12,20 @@ namespace Resources
     {
     protected:
         AssetType _type;
+        std::string _path;
 
     public:
 
-        std::string name;
+        //todo : private ?
 
         Asset(AssetType assetType);
         AssetType GetType() const;
+
+        const std::string GetName() const;
+        std::string& Path();
+        const std::string& GetPath() const;
+
+
     };
 
     inline Asset::Asset(AssetType assetType) : _type{assetType}{}
@@ -25,6 +33,20 @@ namespace Resources
     inline AssetType Asset::GetType() const
     {
         return _type;
+    }
+
+    inline const std::string Asset::GetName() const
+    {
+        return (std::filesystem::path(_path)).filename().string();
+    }
+
+    inline std::string &Asset::Path()
+    {
+        return _path;
+    }
+    inline const std::string& Asset::GetPath() const
+    {
+        return _path;
     }
 }
 

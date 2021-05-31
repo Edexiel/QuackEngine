@@ -16,22 +16,19 @@ void ExplorerWidget::UpdateVisible()
 
     unsigned int offset = 0;
 
+    if (ImGui::Button("Refresh"))
+    {
+        engine.GetResourcesManager().Clear();
+        engine.GetResourcesManager().LoadFolder("./Asset");
+    }
+
     if (!ImGui::CollapsingHeader("Material"))
     {
         offset += DisplayList(listName, offset);
-        if (!_newMaterial && ImGui::Button("Add Material"))
-        {
-            _newMaterial = true;
-        }
-        else if (_newMaterial)
-        {
-            ImGui::InputText("New Material Name", _newMaterialTextBuffer, 32);
-            if (_newMaterial && ImGui::Button("Create"))
-            {
-                engine.GetResourcesManager().GenerateMaterial(_newMaterialTextBuffer, Renderer::Material());
-                _newMaterial = false;
-            }
-        }
+        AddMaterial(offset);
+        ImGui::SameLine();
+        RemoveMaterial(listName);
+
     }
     listName = engine.GetResourcesManager().GetTextureNameList();
 
@@ -46,6 +43,7 @@ void ExplorerWidget::UpdateVisible()
     listName = engine.GetResourcesManager().GetAnimationNameList();
     if (!ImGui::CollapsingHeader("Animation"))
         offset += DisplayList(listName, offset);
+
 }
 
 unsigned int ExplorerWidget::DisplayList(std::vector<std::string> &listName, unsigned int offset)
@@ -60,4 +58,32 @@ unsigned int ExplorerWidget::DisplayList(std::vector<std::string> &listName, uns
         }
     }
     return listName.size();
+}
+
+void ExplorerWidget::AddMaterial(unsigned int& offset)
+{
+    if (!_newMaterial && ImGui::Button("Add Material"))
+    {
+        _newMaterial = true;
+    }
+    else if (_newMaterial)
+    {
+        ImGui::InputText("New Material Name", _newMaterialTextBuffer, 32);
+        if (_newMaterial && ImGui::Button("Create"))
+        {
+            Engine::Instance().GetResourcesManager().GenerateMaterial(_newMaterialTextBuffer, Renderer::Material());
+            _newMaterial = false;
+        }
+    }
+}
+
+void ExplorerWidget::RemoveMaterial(const std::vector<std::string>& listMaterialName)
+{
+    if (ImGui::Button("Remove Material"))
+        if (_selected < listMaterialName.size())
+        {
+            Engine::Instance().GetResourcesManager().DestroyMaterial(listMaterialName[_selected]);
+            _selected = 0;
+        }
+
 }

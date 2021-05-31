@@ -43,6 +43,12 @@ namespace Maths
         Vector4<T> operator+(const Vector4<T> &v2) const;
         Vector4<T> operator-(const Vector4<T> &v2) const;
         Vector4<T> operator*(const T &f) const;
+
+        template<class Archive>
+        void serialize(Archive &archive)
+        {
+            archive(x, y, z, w);
+        }
     };
 
 #include "Maths/Vector4.inl"

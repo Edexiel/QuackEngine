@@ -1,7 +1,3 @@
-//
-// Created by gnisi on 16/03/2021.
-//
-
 #ifndef QUACKENGINE_ENTITYMANAGER_HPP
 #define QUACKENGINE_ENTITYMANAGER_HPP
 
@@ -17,16 +13,13 @@
 class EntityManager
 {
 private:
-    Entity _idCount = 0;
-
+    Entity _idCount {0};
     std::vector<Entity> _entities{};
-public:
-    const std::vector<Entity> &GetEntities() const;
 
-private:
     std::vector<Signature> _signatures{};
 
     std::unordered_map<Entity, size_t> _entityLut{};
+
 
 public:
     EntityManager();
@@ -34,6 +27,9 @@ public:
     Entity Create();
 
     Signature GetSignature(Entity id);
+
+    std::vector<Entity> &GetEntities();
+
 
     void SetSignature(Entity id, Signature signature);
 
@@ -113,7 +109,7 @@ inline void EntityManager::SetSignature(Entity id, Signature signature)
     _signatures[_entityLut[id]] = signature;
 }
 
-inline const std::vector<Entity> &EntityManager::GetEntities() const
+inline std::vector<Entity> &EntityManager::GetEntities()
 {
     return _entities;
 }

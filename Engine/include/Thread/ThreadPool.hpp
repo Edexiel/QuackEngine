@@ -8,12 +8,11 @@
 #include <queue>
 #include <atomic>
 
-#define MAX_THREAD std::thread::hardware_concurrency() - 1
+const unsigned int maxThread = std::thread::hardware_concurrency() - 1;
 
-
-enum THREAD_STATE
+enum ThreadState
 {
-    init, paused, running, completed
+    T_INIT, T_PAUSED, T_RUNNING, T_COMPLETE
 };
 
 namespace Thread
@@ -21,16 +20,16 @@ namespace Thread
     class ThreadInterface
     {
         public:
-        THREAD_STATE state {THREAD_STATE::init};
+        ThreadState _state {ThreadState::T_INIT};
 
-        class ThreadPool* threadPool;
-        std::shared_ptr<TaskInterface> task;
-        std::unique_ptr<std::thread> thread {nullptr};
+        class ThreadPool* _threadPool {nullptr};
+        std::unique_ptr<TaskInterface> _task;
+        std::unique_ptr<std::thread> _thread {nullptr};
 
 
-        ThreadInterface(ThreadPool* _threadPool) : threadPool{_threadPool}{};
+        ThreadInterface(ThreadPool* threadPool) : _threadPool{threadPool}{};
 
-        void Initialise(std::shared_ptr<TaskInterface> tsk);
+        void Initialise(std::unique_ptr<TaskInterface>& tsk);
 
         void Execute();
         void Reset();
@@ -43,22 +42,16 @@ namespace Thread
 
         /* ==== Variable ==== */
 
-        std::mutex m;
+        std::mutex _mutex;
 
-        std::vector<std::unique_ptr<ThreadInterface>> threadList;
-
-        TaskSystem* taskSystem;
+        std::vector<std::unique_ptr<ThreadInterface>> _threadList;
+        TaskSystem* _taskSystem;
 
         /* ==== Function ==== */
         ThreadPool();
         ~ThreadPool (){};
 
         void Run(TaskSystem* taskSys);
-
-        void Play();
-        void Add(TaskSystem& taskSys);
-
-        bool TaskAvailable();
         bool GetTask(ThreadInterface* thd);
     };
 }

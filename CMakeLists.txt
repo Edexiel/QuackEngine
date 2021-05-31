@@ -5,10 +5,19 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-#find_package(OpenGL REQUIRED)
-
-#option(QUACK_BUILD_EDITOR "Build Editor" OFF)
 option(QUACK_BUILD_TESTS "Build Tests" OFF)
+
+include(CheckIPOSupported)
+check_ipo_supported(RESULT supported OUTPUT error)
+
+option(FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." FALSE)
+if (${FORCE_COLORED_OUTPUT})
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        add_compile_options(-fdiagnostics-color=always)
+    elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        add_compile_options(-fcolor-diagnostics)
+    endif ()
+endif ()
 
 if (QUACK_BUILD_EDITOR)
     set(QUACK_EDITOR TRUE)
@@ -71,7 +80,7 @@ target_sources(imgui INTERFACE
         "${IMGUI_FOLDER}/misc/cpp/imgui_stdlib.cpp"
         )
 target_include_directories(imgui INTERFACE ${IMGUI_FOLDER})
-target_link_libraries(imgui INTERFACE glfw glad)
+#target_link_libraries(imgui INTERFACE glfw glad)
 
 #IMGUIZMO
 #set(IMGUI_IMPL_OPENGL_LOADER_GLAD2 TRUE)
@@ -85,7 +94,6 @@ target_sources(ImGuizmo INTERFACE
         "${IMGUIZMO_FOLDER}/ImSequencer.cpp"
         )
 target_include_directories(ImGuizmo INTERFACE ${IMGUIZMO_FOLDER})
-target_link_libraries(ImGuizmo INTERFACE glfw glad)
 
 #STB
 add_library(stb INTERFACE)
@@ -109,16 +117,18 @@ set(ASSIMP_BUILD_ASSBIN_EXPORTER ON CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ASSXML_EXPORTER ON CACHE BOOL "" FORCE)
 add_subdirectory(${external_lib}/assimp)
 
-
-#flatbuffer
-#set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-#set(FLATBUFFERS_MAX_PARSING_DEPTH 16)
-#add_subdirectory(${external_lib}/flatbuffers ${CMAKE_CURRENT_BINARY_DIR}/flatbuffers-build EXCLUDE_FROM_ALL)
-
+#Cereal
+set(SKIP_PERFORMANCE_COMPARISON ON CACHE BOOL "Skip performance comparison(requires boost)" FORCE)
+set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(JUST_INSTALL_CEREAL ON CACHE BOOL "" FORCE)
+add_subdirectory(${external_lib}/cereal)
 
 #reactphysics3d
 add_subdirectory(${external_lib}/reactphysics3d)
 target_compile_options(reactphysics3d PRIVATE -w --no-warnings)
+
+#fmt
+add_subdirectory(${external_lib}/fmt)
 
 #gtest
 if (QUACK_BUILD_TESTS)
@@ -128,9 +138,9 @@ endif ()
 
 add_subdirectory(Editor)
 
-
 #Runner
 add_subdirectory(Runner)
+
 
 #Engine
 add_subdirectory(Engine)
@@ -138,19 +148,62 @@ add_subdirectory(Engine)
 #Game
 add_subdirectory(Game)
 
+set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install)
+
+#install(CODE "file(REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE})")
+
+install(TARGETS Editor RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
+install(TARGETS Engine RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
+
+if (WIN32)
+#    file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Asset LINK)
+#    file(TO_NATIVE_PATH ${PROJECT_SOURCE_DIR}/Game/Asset TARGET)
+##    install(CODE "EXECUTE_PROCESS(COMMAND \"cmd.exe\" \"/K\" \"mklink\" \"/j\" \"${LINK_ASSET}\" \"${TARGET_ASSET}\")")
+#    EXECUTE_PROCESS(COMMAND "cmd.exe" "/K" "mklink" "/j" "${LINK}" "${TARGET}")
+
+#    file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Shader LINK)
+#    file(TO_NATIVE_PATH ${PROJECT_SOURCE_DIR}/Engine/Shader TARGET)
+#    EXECUTE_PROCESS(COMMAND "cmd.exe" "/K" "mklink" "/j" "${LINK}" "${TARGET}")
+
+#    install(CODE "EXECUTE_PROCESS(COMMAND \"cmd.exe\" \"/K\" \"mklink\" \"/j\" \"${LINK_SHADER}\" \"${TARGET_SHADER}\")")
+
+else ()
+
+    install(CODE "file(CREATE_LINK ${PROJECT_SOURCE_DIR}/Game/Asset ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Asset SYMBOLIC)")
+    install(CODE "file(CREATE_LINK ${PROJECT_SOURCE_DIR}/Engine/Shader ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Shader SYMBOLIC)")
+endif ()
+
+#install(TARGETS Runner
+#        CONFIGURATIONS Release
+#        RUNTIME DESTINATION Release/bin)
+
+#if( supported )
+#    message(STATUS "IPO / LTO enabled")
+#    set_property(TARGET Editor PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+#    set_property(TARGET Engine PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+#    set_property(TARGET Game PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+#else()
+#    message(STATUS "IPO / LTO not supported: <${error}>")
+#endif()
+
+
+
+
+
 
 #if(NOT MSVC)
-#    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
+##    target_compile_options(Runner PRIVATE -Wall -Wextra -pedantic)
 #    target_compile_options(Editor PRIVATE -Wall -Wextra -pedantic)
 #    target_compile_options(Engine PRIVATE -Wall -Wextra -pedantic)
 #    target_compile_options(Game PRIVATE -Wall -Wextra -pedantic)
 #endif()
 
-
-
-#Installer
-include(InstallRequiredSystemLibraries)
-#set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
-set(CPACK_PACKAGE_VERSION_MAJOR "${Tutorial_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${Tutorial_VERSION_MINOR}")
-include(CPack)
+##Installer
+#include(InstallRequiredSystemLibraries)
+##set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
+#set(CPACK_PACKAGE_VERSION_MAJOR "${Tutorial_VERSION_MAJOR}")
+#set(CPACK_PACKAGE_VERSION_MINOR "${Tutorial_VERSION_MINOR}")
+#SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Quack Engine project")
+#SET(CPACK_PACKAGE_VENDOR "Quack Team")
+#SET(CPACK_PACKAGE_EXECUTABLES "Hello" "Hello")
+#include(CPack)
