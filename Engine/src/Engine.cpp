@@ -214,6 +214,7 @@ void Engine::SaveWorld(const std::string &worldName)
     {
         Log_Info("Saving world : {}", worldName);
         std::filesystem::path worldPath = path;
+        worldPath.append("Scenes");
         worldPath.append(worldName).replace_extension(".qck");
         std::ofstream os(worldPath);
 
