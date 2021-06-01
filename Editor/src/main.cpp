@@ -61,7 +61,7 @@ int main()
         {
             /** UPDATE **/
             engine.GetCurrentWorld().GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
-            engine.GetCurrentWorld().GetSystem<CameraSystem>()->Update();
+//            engine.GetCurrentWorld().GetSystem<CameraSystem>()->Update();
             engine.GetCurrentWorld().GetSystem<CharacterControllerSystem>()->Update();
             engine.GetCurrentWorld().GetSystem<CameraGameplaySystem>()->Update();
             engine.GetCurrentWorld().GetSystem<Renderer::AnimatorSystem>()->Update();
