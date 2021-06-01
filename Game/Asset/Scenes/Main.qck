@@ -13,6 +13,14 @@
                         "value": true
                     },
                     {
+                        "key": "CameraGameplay",
+                        "value": true
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -39,8 +47,8 @@
                 "Transform": {
                     "position": {
                         "x": 2.062415599822998,
-                        "y": 53.16899108886719,
-                        "z": -176.2100067138672
+                        "y": 9.168999671936036,
+                        "z": -17.209999084472658
                     },
                     "scale": {
                         "x": 0.9999582767486572,
@@ -56,11 +64,18 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 824,
+                    "_width": 825,
                     "_height": 520,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
                     "_fov": 0.7853749394416809
+                },
+                "CameraGameplay": {
+                    "value0": {
+                        "x": 0.0,
+                        "y": 12.0,
+                        "z": -6.0
+                    }
                 }
             },
             {
@@ -72,6 +87,14 @@
                     {
                         "key": "Camera",
                         "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": true
                     },
                     {
                         "key": "Light",
@@ -99,14 +122,14 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": -3.3599977493286135,
-                        "y": -1.0,
-                        "z": 135.0
+                        "x": -1.3600000143051148,
+                        "y": -2.5,
+                        "z": 10.0
                     },
                     "scale": {
-                        "x": 0.20000000298023225,
-                        "y": 0.20000000298023225,
-                        "z": 0.20000000298023225
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
                     },
                     "rotation": {
                         "w": 1.0,
@@ -137,6 +160,9 @@
                         "y": 1.0,
                         "z": 0.0
                     }
+                },
+                "CharacterController": {
+                    "value0": 1.0
                 }
             },
             {
@@ -147,6 +173,14 @@
                     },
                     {
                         "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
                         "value": false
                     },
                     {
@@ -223,6 +257,14 @@
                         "value": false
                     },
                     {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -296,6 +338,14 @@
                         "value": false
                     },
                     {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -349,7 +399,7 @@
                     "bounciness": 0.0,
                     "gravity": true,
                     "trigger": false,
-                    "bodyType": 2,
+                    "bodyType": 0,
                     "shapeType": 2,
                     "shapeParams": {
                         "x": 20.0,
@@ -366,6 +416,14 @@
                     },
                     {
                         "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
                         "value": false
                     },
                     {
@@ -432,59 +490,6 @@
                     "quadratic": 0.000007000000096013537,
                     "spotAngle": 8.5,
                     "outerSpotAngle": 10.5
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Tartiflette"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
                 }
             }
         ]
