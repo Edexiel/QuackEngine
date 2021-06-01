@@ -20,8 +20,8 @@ private:
 
 public:
     /*** Selection ***/
-    std::int32_t selectedEntity = -1;
-    bool showProperties{false};
+    std::int32_t selectedEntity = 0;
+    bool showProperties{true};
     std::string assetName;
 
     explicit Editor();

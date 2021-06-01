@@ -95,19 +95,20 @@ public:
 
     bool WindowShouldClose();
     void TestWindowShouldClose();
-    class World &GetCurrentWorld();
     void SwapBuffers();
 
     float GetFps() const;
     bool IsGamePlaying() const;
     void SetGamePlaying(bool gamePlaying);
 
-
+    class World &GetCurrentWorld();
+    void SetCurrentWorld(const std::string& name);
     class World &CreateWorld(std::string name);
     void LoadWorld(class World &world);
     void SaveWorld(const std::string &worldName);
     void ClearWorld(const std::string &worldName);
     void RemoveWorld(const std::string &name);
+    std::vector<std::string> GetWorldList() const;
 
     Input::InputManager &GetInputManager();
     Renderer::RendererInterface &GetRendererInterface();

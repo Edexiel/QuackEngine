@@ -1,4 +1,7 @@
 #include "Widgets/MenuWidget.hpp"
+#include "Scene/Core/World.hpp"
+#include "Engine.hpp"
+#include <fmt/core.h>
 
 MenuWidget::MenuWidget(Editor &editor) : Widget(editor)
 {
@@ -9,74 +12,123 @@ MenuWidget::MenuWidget(Editor &editor) : Widget(editor)
 
 void MenuWidget::UpdateVisible()
 {
-    bool new_scene{false};
+    bool show_scenes{false};
+
     if (ImGui::BeginMenu("Files"))
     {
-        if (ImGui::MenuItem("New scene..."))
+        if (ImGui::MenuItem("Scenes"))
         {
-            new_scene = true;
+            show_scenes = true;
         }
 
-        if (ImGui::MenuItem("Load scene"))
-        {
-//            for (const auto &item : _assetName)
-//            {
-//
-//            }
-        }
-
-        ImGui::Separator();
-        if (ImGui::MenuItem("Import object"))
-        {}
+//        ImGui::Separator();
+//        if (ImGui::MenuItem("Import object"))
+//        {}
         ImGui::EndMenu();
     }
 
-    if (new_scene)
+    if (show_scenes)
     {
-        ImGui::OpenPopup("New scene");
+        ImGui::OpenPopup("Scenes");
     }
+    /** Modals **/
 
-    if (ImGui::BeginMenu("Edit"))
+    //Scenes
+    if (ImGui::BeginPopupModal("Scenes", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        if (ImGui::MenuItem("Undo", "CTRL+Z"))
+        if (ImGui::BeginTable("Scenes", 4, ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersV))
         {
-            if (ImGui::BeginPopup("my_select_popup"))
             {
-                ImGui::Text("Aquarium");
-                ImGui::Separator();
-                ImGui::EndPopup();
+                ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthFixed, 100.f);
+                ImGui::TableSetupColumn("Active", ImGuiTableColumnFlags_WidthFixed, 100.f);
+                ImGui::TableSetupColumn("Delete", ImGuiTableColumnFlags_WidthFixed, 100.f);
+                ImGui::TableSetupColumn("Save", ImGuiTableColumnFlags_WidthFixed, 70.f);
+                ImGui::TableHeadersRow();
             }
+            std::string CurrentWorld = _engine.GetCurrentWorld().GetName();
+            int n=0;
+            for (const auto &item : _engine.GetWorldList())
+            {
+                ImGui::TableNextRow();
 
-        }
-        if (ImGui::MenuItem("Redo", "CTRL+Y"))
-        {
-        } // Disabled item
-        ImGui::Separator();
-        if (ImGui::MenuItem("Cut", "CTRL+X"))
-        {
-        }
-        if (ImGui::MenuItem("Copy", "CTRL+C"))
-        {
-        }
-        if (ImGui::MenuItem("Paste", "CTRL+V"))
-        {
-        }
-        ImGui::EndMenu();
-    }
+                ImGui::TableSetColumnIndex(0);
+                ImGui::Text("%s", item.c_str());
 
-    if (ImGui::BeginPopupModal("New scene", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
-    {
-        ImGui::Text("All those beautiful files will be deleted.\nThis operation cannot be undone!\n\n");
-        ImGui::Separator();
+                ImGui::TableSetColumnIndex(1);
+                if (CurrentWorld == item)
+                    ImGui::Text("Active");
+                else
+                {
+                    if (ImGui::Button(fmt::format("SetActive##{}",n).c_str()))
+                        _engine.SetCurrentWorld(item);
+                }
 
-        if (ImGui::Button("OK", ImVec2(120, 0)))
-        { ImGui::CloseCurrentPopup(); }
-        ImGui::SetItemDefaultFocus();
+                ImGui::TableSetColumnIndex(2);
+                if (ImGui::Button(fmt::format("Delete##{}",n).c_str()))
+                    _engine.RemoveWorld(item);
+
+                ImGui::TableSetColumnIndex(3);
+                if (ImGui::Button(fmt::format("Save##{}",n).c_str()))
+                    _engine.SaveWorld(item);
+
+                n++;
+            }
+            ImGui::EndTable();
+        }
+
+        ImGui::Text("Scene name:");
         ImGui::SameLine();
+        static char buff[32] = "";
+        ImGui::InputText("", buff, IM_ARRAYSIZE(buff));
+
+        if (ImGui::IsItemHovered())
+        {
+            ImGui::SetTooltip("Enter new scene name without extension");
+        }
+        ImGui::SameLine();
+
+        ImGui::SetItemDefaultFocus();
+
+        if (ImGui::Button("Create", ImVec2(100, 0)))
+        {
+            std::string worldname = buff;
+            World &world = _engine.CreateWorld(worldname);
+            world.Init(_engine);
+        }
+        ImGui::Separator();
         if (ImGui::Button("Cancel", ImVec2(120, 0)))
         { ImGui::CloseCurrentPopup(); }
         ImGui::EndPopup();
     }
+//    if (ImGui::BeginMenu("Edit"))
+//    {
+//        if (ImGui::MenuItem("Undo", "CTRL+Z"))
+//        {
+//            if (ImGui::BeginPopup("my_select_popup"))
+//            {
+//                ImGui::Text("Aquarium");
+//                ImGui::Separator();
+//                ImGui::EndPopup();
+//            }
+//
+//        }
+//        if (ImGui::MenuItem("Redo", "CTRL+Y"))
+//        {
+//        } // Disabled item
+//        ImGui::Separator();
+//        if (ImGui::MenuItem("Cut", "CTRL+X"))
+//        {
+//        }
+//        if (ImGui::MenuItem("Copy", "CTRL+C"))
+//        {
+//        }
+//        if (ImGui::MenuItem("Paste", "CTRL+V"))
+//        {
+//        }
+//        ImGui::EndMenu();
+//    }
+
+
 }
 
 
@@ -87,6 +139,5 @@ void MenuWidget::Draw()
         UpdateVisible();
         ImGui::EndMainMenuBar();
     }
-
 }
 

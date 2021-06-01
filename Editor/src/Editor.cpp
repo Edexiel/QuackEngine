@@ -18,8 +18,7 @@
 #include "imgui.h"
 
 
-
-Editor::Editor():_engine{Engine::Instance()}
+Editor::Editor() : _engine{Engine::Instance()}
 {
     InitWidgets();
     InitImGui(_engine.GetWindow());

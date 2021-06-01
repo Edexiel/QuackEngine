@@ -26,6 +26,13 @@
 #include "Scene/Component/Name.hpp"
 #include "Scene/Component/Animator.hpp"
 
+#include "Scene/System/AnimatorSystem.hpp"
+#include "Scene/System/CameraSystem.hpp"
+#include "Scene/System/CharacterControllerSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
+#include "Scene/System/PhysicsSystem.hpp"
+#include "Scene/System/RenderSystem.hpp"
+
 #include "Tools/Type.hpp"
 
 #include "Engine.hpp"
@@ -55,7 +62,7 @@ public:
     void Clear();
 
     // Entity methods
-    Entity CreateEntity(const std::string& name) const;
+    Entity CreateEntity(const std::string &name) const;
 
     Entity CreateEntity() const;
 
@@ -82,7 +89,7 @@ public:
 
     // System methods
     template<typename T>
-    T* RegisterSystem() const;
+    T *RegisterSystem() const;
 
     template<typename T>
     void SetSystemSignature(Signature signature);
@@ -96,7 +103,7 @@ public:
     //const std::unique_ptr<SystemManager> &GetSystemManager() const;
 
     template<class T>
-    T* GetSystem();
+    T *GetSystem();
 
 
     ///***************SERIALIZATION**************/////////
@@ -159,8 +166,6 @@ public:
         template<class Archive>
         void save(Archive &archive) const
         {
-            //archive(CEREAL_NVP(id));
-
             archive(CEREAL_NVP(components));
             write<Archive, Component::Name>(archive, id, "Name");
             write<Archive, Component::Transform>(archive, id, "Transform");
@@ -169,6 +174,7 @@ public:
             write<Archive, Component::Model>(archive, id, "Model");
             write<Archive, Component::Animator>(archive, id, "Animator");
             write<Archive, Component::RigidBody>(archive, id, "RigidBody");
+            //todo : callback(archive, id);
         }
 
         template<class Archive>
@@ -187,7 +193,32 @@ public:
             read<Archive, Component::Animator>(archive, w, e, "Animator");
             read<Archive, Component::RigidBody>(archive, w, e, "RigidBody");
         }
+    };
 
+    struct SystemHandler
+    {
+        template<class Archive>
+        void save(Archive &archive) const
+        {
+            //todo:ici
+            //write<S>()
+        }
+
+        template<class Archive>
+        void load(Archive &archive)
+        {
+        }
+
+    private:
+
+        template<class Archive, class T>
+        void write(Archive &archive, Entity e, const std::string &name) const
+        {
+        }
+        template<class Archive, class T>
+        void read(Archive &archive, World &w, Entity entity, const std::string &name) const
+        {
+        }
 
     };
 
@@ -203,6 +234,9 @@ public:
         for (auto &item : entities)
             item.BuildArray();
 
+        SystemHandler systems{};
+        archive(CEREAL_NVP(systems));
+
         archive(CEREAL_NVP(entities));
     }
 
@@ -211,6 +245,7 @@ public:
     {
         archive(_name);
         std::vector<EntityHandler> entities;
+
         archive(CEREAL_NVP(entities));
     }
 };

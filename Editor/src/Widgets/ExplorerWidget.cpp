@@ -62,7 +62,7 @@ void ExplorerWidget::AddMaterial(unsigned int& offset)
     else if (_newMaterial)
     {
         ImGui::InputText("New Material Name", _newMaterialTextBuffer, 32);
-        if (_newMaterial && ImGui::Button("Create"))
+        if (ImGui::Button("Create"))
         {
             _engine.GetResourcesManager().GenerateMaterial(_newMaterialTextBuffer, Renderer::Material());
             _newMaterial = false;

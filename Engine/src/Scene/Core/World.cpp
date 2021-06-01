@@ -11,6 +11,7 @@ void World::Init(Engine &engine)
     _systemManager = std::make_unique<SystemManager>();
     _physicsWorld = engine.GetPhysicsManager().createPhysicsWorld();
     _physicsWorld->setEventListener(&engine.GetPhysicsEventManager());
+
 }
 
 rp3d::PhysicsWorld *World::GetPhysicsWorld() const

@@ -291,7 +291,8 @@ void Engine::LoadWorld(World &world)
                         FillTexture(material.specularTexture);
                         FillTexture(material.normalMap);
 
-                        _resourcesManager.GenerateMaterial(p.path().filename().replace_extension("").string().c_str(), material);
+                        _resourcesManager.GenerateMaterial(p.path().filename().replace_extension("").string(),
+                                                           material);
                     }
                 }
 
@@ -315,11 +316,20 @@ void Engine::LoadWorld(World &world)
 
 void Engine::RemoveWorld(const std::string &name)
 {
-    uint_fast16_t index = _worldLut[name];
+    auto it = _worldLut.find(name);
+    if (it == _worldLut.end())
+    {
+        Log_Error("Could not find world \"{}\" to delete", name);
+        return;
+    }
+
+    uint_fast16_t index = _worldLut.at(name);
     std::string back_name = _worlds.back().GetName();
     std::swap(_worlds[index], _worlds.back());
     _worlds.pop_back();
     _worldLut[back_name] = index;
+    _worldLut.erase(name);
+
 }
 
 PhysicsEventManager &Engine::GetPhysicsEventManager()
@@ -362,6 +372,7 @@ void Engine::UpdateTime()
     }
 
 }
+
 PhysicsCollisionCallback &Engine::GetPhysicsCollisionCallback()
 {
     return _physicsCollisionCallback;
@@ -381,5 +392,22 @@ void Engine::ClearWorld(const std::string &worldName)
 {
     _worlds[_worldLut[worldName]].Clear();
 
+}
+
+std::vector<std::string> Engine::GetWorldList() const
+{
+    std::vector<std::string> res{};
+    for (const auto &item : _worldLut)
+        res.push_back(item.first);
+
+    return res;
+}
+
+void Engine::SetCurrentWorld(const std::string &name)
+{
+    auto it = _worldLut.find(name);
+    if (it == _worldLut.end())
+        return;
+    _currentWorld = it->second;
 }
 
