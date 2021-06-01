@@ -27,16 +27,6 @@ namespace Component
         float _far{0};
         float _near{0};
 
-        float _scaleAxisX = 0;
-        float _scaleAxisY = 0;
-        float _scaleAxisZ = 0;
-
-        float _yaw = 0;
-        float _pitch = 0;
-
-        float _speedTranslation = 0.1f;
-        float _speedRotation = 0.1f;
-
         Renderer::Framebuffer _framebuffer{};
 
         Maths::Matrix4 _projection;
@@ -52,7 +42,6 @@ namespace Component
 
         Camera() = default;
         Camera(unsigned int width, unsigned int height, float far, float near, float fov);
-        Camera(unsigned int width, unsigned int height, float far, float near);
 
         void Resize(unsigned int width, unsigned int height);
 
