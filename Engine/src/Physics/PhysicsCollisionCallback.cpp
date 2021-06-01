@@ -1,8 +1,9 @@
+#include <Scene/System/CharacterControllerSystem.hpp>
 #include "Physics/PhysicsCollisionCallback.hpp"
 #include "Engine.hpp"
 #include "Scene/Core/World.hpp"
 #include "Scene/System/CharacterControllerSystem.hpp"
-#include "Scene/Component//CharacterController.hpp"
+#include "Scene/Component/CharacterController.hpp"
 
 void PhysicsCollisionCallback::onContact(const rp3d::CollisionCallback::CallbackData &callbackData)
 {
