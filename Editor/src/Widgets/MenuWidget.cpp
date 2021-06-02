@@ -81,18 +81,18 @@ void MenuWidget::UpdateVisible()
             ImGui::EndTable();
         }
 
-        ImGui::Text("Scene name:");
-        ImGui::SameLine();
-        static char buff[32] = "";
-        ImGui::InputText("", buff, IM_ARRAYSIZE(buff));
-
-        if (ImGui::IsItemHovered())
-        {
-            ImGui::SetTooltip("Enter new scene name without extension");
-        }
-        ImGui::SameLine();
-
-        ImGui::SetItemDefaultFocus();
+//        ImGui::Text("Scene name:");
+//        ImGui::SameLine();
+//        static char buff[32] = "";
+//        ImGui::InputText("", buff, IM_ARRAYSIZE(buff));
+//
+//        if (ImGui::IsItemHovered())
+//        {
+//            ImGui::SetTooltip("Enter new scene name without extension");
+//        }
+//        ImGui::SameLine();
+//
+//        ImGui::SetItemDefaultFocus();
 //
 //        if (ImGui::Button("Create", ImVec2(100, 0)))
 //        {
