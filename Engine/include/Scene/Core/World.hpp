@@ -30,6 +30,7 @@
 #include "Scene/Component/Animator.hpp"
 #include "Scene/Component/CameraGameplay.hpp"
 #include "Scene/Component/CharacterController.hpp"
+#include "Scene/Component/ParticleEmitter.hpp"
 
 #include "Tools/Type.hpp"
 
@@ -161,6 +162,7 @@ public:
             build<Component::RigidBody>("RigidBody");
             build<Component::CameraGameplay>("CameraGameplay");
             build<Component::CharacterController>("CharacterController");
+            build<Component::ParticleEmitter>("ParticleEmitter");
         }
 
         template<class Archive>
@@ -178,6 +180,7 @@ public:
             write<Archive, Component::RigidBody>(archive, id, "RigidBody");
             write<Archive, Component::CameraGameplay>(archive, id, "CameraGameplay");
             write<Archive, Component::CharacterController>(archive, id, "CharacterController");
+            write<Archive, Component::ParticleEmitter>(archive, id, "ParticleEmitter");
         }
 
         template<class Archive>
@@ -197,6 +200,7 @@ public:
             read<Archive, Component::RigidBody>(archive, w, e, "RigidBody");
             read<Archive, Component::CameraGameplay>(archive, w, e, "CameraGameplay");
             read<Archive, Component::CharacterController>(archive, w, e, "CharacterController");
+            read<Archive, Component::ParticleEmitter>(archive, w, e, "ParticleEmitter");
         }
 
 

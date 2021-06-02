@@ -49,6 +49,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Physics/PhysicsEventManager.cpp
         src/Physics/PhysicsCollisionCallback.cpp
         src/Tools/Type.cpp
+        src/Tools/Random.cpp
 
         src/Time/TimePlatformGLFW.cpp
         src/Time/TimeManager.cpp
@@ -58,7 +59,7 @@ add_library(${PROJECT_NAME} STATIC
         include/Scene/System/AnimatorSystem.hpp
         src/Renderer/Particle.cpp
         src/Scene/Component/ParticleEmitter.cpp
-        src/Scene/System/ParticleSystem.cpp)
+        src/Scene/System/ParticleSystem.cpp src/Tools/Random.cpp)
 
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

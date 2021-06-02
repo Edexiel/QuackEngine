@@ -33,6 +33,10 @@
                         "value": true
                     },
                     {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": false
                     },
@@ -64,7 +68,7 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 825,
+                    "_width": 726,
                     "_height": 520,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
@@ -107,6 +111,10 @@
                     {
                         "key": "Name",
                         "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
                     },
                     {
                         "key": "RigidBody",
@@ -196,6 +204,10 @@
                         "value": true
                     },
                     {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": true
                     },
@@ -275,6 +287,10 @@
                     {
                         "key": "Name",
                         "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
                     },
                     {
                         "key": "RigidBody",
@@ -358,6 +374,10 @@
                         "value": true
                     },
                     {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": true
                     },
@@ -439,6 +459,10 @@
                         "value": true
                     },
                     {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": false
                     },
@@ -490,6 +514,92 @@
                     "quadratic": 0.000007000000096013537,
                     "spotAngle": 8.5,
                     "outerSpotAngle": 10.5
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": true
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "Tartiflette"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "ParticleEmitter": {
+                    "_colorStart": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0,
+                        "w": 1.0
+                    },
+                    "_colorEnd": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0,
+                        "w": 0.0
+                    },
+                    "_angleStart": 0.0,
+                    "_angleEnd": 6.2829999923706059,
+                    "_lengthStart": 1.0,
+                    "_lengthEnd": 2.0,
+                    "_duration": 5.0,
+                    "Size": 10,
+                    "Texture": "./Asset/Texture/Stylized_Feathers_001_normal.jpg"
                 }
             }
         ]

@@ -1,3 +1,6 @@
+
+#include "Vector4.hpp"
+
 using Vector4f = Vector4<float>;
 using Color4f = Vector4<float>;
 using Vector4d = Vector4<double>;
@@ -66,6 +69,12 @@ T Vector4<T>::DotProduct(const Vector4 <T> &v1, const Vector4 <T> &v2)
 }
 
 template<typename T>
+Vector4<T> Vector4<T>::Lerp(const Vector4<T> &v1, const Vector4<T> &v2, float t)
+{
+    return v1 * (1 - t) + v2 * t;
+}
+
+template<typename T>
 Vector4 <T> Vector4<T>::Zero()
 {
     return {0, 0, 0, 0};
@@ -94,4 +103,3 @@ Vector4 <T> Vector4<T>::operator*(const T &f) const
 {
     return {this->x * f, this->y * f, this->z * f, this->w * f};
 }
-

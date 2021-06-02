@@ -46,11 +46,11 @@ namespace Maths
         float GetDeterminant() const;
         Matrix4 GetInvert() const;
 
-        Matrix4 operator*(const Matrix4 &m);
+        Matrix4 operator*(const Matrix4 &m) const;
         Matrix4 &operator*=(const Matrix4 &m);
-        Matrix4 operator*(float f);
+        Matrix4 operator*(float f) const;
         Vector4f operator*(const Vector4f &v) const;
-        Matrix4 operator+(const Matrix4 &m2);
+        Matrix4 operator+(const Matrix4 &m2) const;
 
         template<class Archive>
         void serialize(Archive &archive)

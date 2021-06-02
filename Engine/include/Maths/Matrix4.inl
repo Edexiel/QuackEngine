@@ -308,7 +308,7 @@ inline Matrix4 Matrix4::GetInvert() const
     return result;
 }
 
-inline Matrix4 Matrix4::operator*(const Matrix4 &m)
+inline Matrix4 Matrix4::operator*(const Matrix4 &m) const
 {
     Matrix4 result;
 
@@ -326,7 +326,7 @@ inline Matrix4 &Matrix4::operator*=(const Matrix4 &m)
     return *this;
 }
 
-inline Matrix4 Matrix4::operator*(float f)
+inline Matrix4 Matrix4::operator*(float f) const
 {
     Matrix4 result;
 
@@ -348,7 +348,7 @@ inline Vector4f Matrix4::operator*(const Vector4f &v) const
     return result;
 }
 
-inline Matrix4 Matrix4::operator+(const Matrix4 &m2)
+inline Matrix4 Matrix4::operator+(const Matrix4 &m2) const
 {
     Matrix4 result;
 
