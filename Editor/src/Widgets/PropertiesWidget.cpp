@@ -8,6 +8,7 @@
 #include "Scene/System/LightSystem.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/Component/CameraGameplay.hpp"
+#include "Scene/Component/ParticleEmitter.hpp"
 #include "Player/Player.hpp"
 
 #include "Renderer/ModelRenderer.hpp"
@@ -49,6 +50,8 @@ void PropertiesWidget::UpdateVisible()
         CharacterControllerReader();
     if(world.HasComponent<CameraGameplay>(_entity))
         CameraGameplayReader();
+    if(world.HasComponent<ParticleEmitter>(_entity))
+        ParticleReader();
     AddComponent();
     ImGui::SameLine();
     DeleteComponent();
@@ -327,6 +330,8 @@ void PropertiesWidget::AddComponent()
 
         if (ImGui::MenuItem("Animator"))
             world.AddComponent(_entity, Animator());
+        if (ImGui::MenuItem("Particle Emitter"))
+            world.AddComponent(_entity, ParticleEmitter());
 
         ImGui::EndPopup();
     }
@@ -404,6 +409,10 @@ void PropertiesWidget::DeleteComponent()
         if (world.HasComponent<CameraGameplay>(_entity) && ImGui::MenuItem("Camera gameplay"))
         {
             world.RemoveComponent<CameraGameplay>(_entity);
+        }
+        if (world.HasComponent<ParticleEmitter>(_entity) && ImGui::MenuItem("ParticleEmitter"))
+        {
+            world.RemoveComponent<ParticleEmitter>(_entity);
         }
         ImGui::EndPopup();
     }
@@ -547,4 +556,51 @@ void PropertiesWidget::CameraGameplayReader()
         return;
     auto &cameraController = Engine::Instance().GetCurrentWorld().GetComponent<CameraGameplay>(_entity);
     ImGui::DragFloat3("Distance", cameraController.distance.e);
+}
+
+void PropertiesWidget::ParticleReader()
+{
+    if (ImGui::CollapsingHeader("Particle Emitter"))
+        return;
+
+    auto& particleEmitter = Engine::Instance().GetCurrentWorld().GetComponent<ParticleEmitter>(_entity);
+
+    ImGui::DragFloat4("Start Color", particleEmitter.ColorStart().e, 0.1f, 0.0f, 1.0f);
+    ImGui::DragFloat4("End Color", particleEmitter.ColorEnd().e, 0.1f, 0.0f, 1.0f);
+
+    Maths::Vector2<float*> length (&particleEmitter.LengthStart(), &particleEmitter.LengthEnd());
+    ImGui::DragFloat2("Length", *length.e);
+    Maths::Vector2<float*> angle (&particleEmitter.AngleStart(), &particleEmitter.AngleEnd());
+    ImGui::DragFloat2("Angle", *angle.e, 0.1f, particleEmitter.AngleEnd() - 0.1f, 6.283185307f);
+
+    float duration = particleEmitter.GetDuration();
+    if (ImGui::DragFloat("Duration", &duration, 0.1f))
+        particleEmitter.SetDuration(duration);
+
+    int size = particleEmitter.GetSize();
+    if (ImGui::DragInt("Size", &size, 1, 0))
+        particleEmitter.SetSize(size);
+
+    Renderer::Texture& texture = particleEmitter.GetTexture();
+    std::vector<std::string> listTexture = Engine::Instance().GetResourcesManager().GetTextureNameList();
+    listTexture.insert(listTexture.begin(), "NONE");
+
+    if (ImGui::BeginCombo("Texture", texture.GetName().c_str()))
+    {
+        for (auto &n : listTexture)
+        {
+            bool isSelected = (texture.Path() == n);
+            if (ImGui::Selectable(n.c_str(), isSelected))
+            {
+                if (n == "NONE")
+                    texture = Renderer::Texture();
+                else
+                    texture = Engine::Instance().GetResourcesManager().LoadTexture(n.c_str());
+            }
+
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+        }
+        ImGui::EndCombo();
+    }
 }
