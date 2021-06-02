@@ -127,7 +127,11 @@ public:
         template<class Archive, class T>
         void write(Archive &archive, Entity e, const std::string &name) const
         {
-            if (components.at(name))
+            auto it = components.find(name);
+            if (it == components.end())
+                return;
+
+            if (it->second)
             {
                 archive(cereal::make_nvp(name, world->GetComponent<T>(e)));
             }
@@ -136,7 +140,10 @@ public:
         template<class Archive, class T>
         void read(Archive &archive, World &w, Entity entity, const std::string &name) const
         {
-            if (components.at(name))
+            auto it = components.find(name);
+            if (it == components.end())
+                return;
+            if (it->second)
             {
                 T component;
                 archive(cereal::make_nvp(name, component));

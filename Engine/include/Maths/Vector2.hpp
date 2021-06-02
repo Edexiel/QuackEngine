@@ -1,7 +1,7 @@
 #ifndef QUACKENGINE_VECTOR2_HPP
 #define QUACKENGINE_VECTOR2_HPP
 
-#include <iostream>
+#include <cmath>
 
 namespace Maths
 {

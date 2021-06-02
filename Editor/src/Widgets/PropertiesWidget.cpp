@@ -739,7 +739,7 @@ void PropertiesWidget::CameraGameplayReader()
 {
     if (ImGui::CollapsingHeader("Camera Gameplay"))
         return;
-    auto &cameraController = Engine::Instance().GetCurrentWorld().GetComponent<CameraGameplay>(_entity);
+    auto &cameraController = Engine::Instance().GetCurrentWorld().GetComponent<CameraGameplay>(_editor.selectedEntity);
     ImGui::DragFloat3("Distance", cameraController.distance.e);
 }
 
@@ -748,7 +748,7 @@ void PropertiesWidget::ParticleReader()
     if (ImGui::CollapsingHeader("Particle Emitter"))
         return;
 
-    auto& particleEmitter = Engine::Instance().GetCurrentWorld().GetComponent<ParticleEmitter>(_entity);
+    auto& particleEmitter = Engine::Instance().GetCurrentWorld().GetComponent<ParticleEmitter>(_editor.selectedEntity);
 
     ImGui::DragFloat4("Start Color", particleEmitter.ColorStart().e, 0.1f, 0.0f, 1.0f);
     ImGui::DragFloat4("End Color", particleEmitter.ColorEnd().e, 0.1f, 0.0f, 1.0f);

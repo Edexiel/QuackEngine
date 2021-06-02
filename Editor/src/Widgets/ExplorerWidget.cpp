@@ -18,8 +18,8 @@ void ExplorerWidget::UpdateVisible()
 
     if (ImGui::Button("Refresh"))
     {
-        engine.GetResourcesManager().Clear();
-        engine.GetResourcesManager().LoadFolder("./Asset");
+        _engine.GetResourcesManager().Clear();
+        _engine.GetResourcesManager().LoadFolder("./Asset");
     }
 
     if (!ImGui::CollapsingHeader("Material"))
