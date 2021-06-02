@@ -13,7 +13,6 @@
 
 EnemyManagerSystem::EnemyManagerSystem()
 {
-
     Engine &engine = Engine::Instance();
     _listTexture[0] = engine.GetResourcesManager().LoadTexture("./Asset/Texture/Arrow/Up.png");
     _listTexture[1] = engine.GetResourcesManager().LoadTexture("./Asset/Texture/Arrow/Down.png");
@@ -142,7 +141,7 @@ void EnemyManagerSystem::Process(const Renderer::Framebuffer &buffer, const Rend
             shader.SetMatrix4("model",
             Maths::Matrix4::Translate(transform.position)
             *
-            Maths::Matrix4::LookAtMatrix(transform.position,  transform.position + cameraTransform.Forward(), {0,1,0}).GetInvert()
+            Maths::Matrix4::LookAtMatrix(transform.position,  transform.position - cameraTransform.Forward(), {0,1,0})
             * Maths::Matrix4::Scale(transform.scale * _arrowScale));
 
             screenMesh.Draw();
@@ -176,7 +175,7 @@ EnemyManagerSystem::MoveEnemy(EnemyComponent &enemy, Component::Transform &trans
 NoteDisplayProcess::NoteDisplayProcess() :
         Renderer::ProcessBase("EnemyManagerSystem",
                               Engine::Instance().GetResourcesManager().LoadShader
-                                      ("../../Game/Asset/Shader/NoteDisplayShader.qsh"))
+                                      ("./Asset/Shader/NoteDisplayShader.qsh"))
 {}
 
 void NoteDisplayProcess::Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &screenMesh)

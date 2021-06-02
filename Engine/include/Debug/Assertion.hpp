@@ -3,6 +3,7 @@
 
 #include <string>
 #include <chrono>
+#include <ctime>
 #include <fmt/core.h>
 #include <fmt/color.h>
 

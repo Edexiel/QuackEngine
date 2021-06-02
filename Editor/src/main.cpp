@@ -5,11 +5,13 @@
 
 #include "Renderer/RendererPlatform.hpp"
 
-#include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
 #include "Scene/System/AnimatorSystem.hpp"
-
 #include "Scene/System/CharacterControllerSystem.hpp"
+#include "Scene/System/PhysicsSystem.hpp"
+
+#include "Scene/System/AnimatorSystem.hpp"
+#include "Scene/System/CameraGameplaySystem.hpp"
 
 #include "game.hpp"
 
@@ -54,8 +56,8 @@ int main()
         {
             /** UPDATE **/
             engine.GetCurrentWorld().GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
-            engine.GetCurrentWorld().GetSystem<CameraSystem>()->Update();
             engine.GetCurrentWorld().GetSystem<CharacterControllerSystem>()->Update();
+            engine.GetCurrentWorld().GetSystem<CameraGameplaySystem>()->Update();
             engine.GetCurrentWorld().GetSystem<Renderer::AnimatorSystem>()->Update();
 
         }

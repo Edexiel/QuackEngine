@@ -7,6 +7,10 @@
 #include "Scene/Component/Animator.hpp"
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/Component/CharacterController.hpp"
+#include "Scene/Component/CameraGameplay.hpp"
+
+
+
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/RendererInterface.hpp"
 
@@ -15,9 +19,11 @@
 #include "Scene/System/CameraSystem.hpp"
 #include "Scene/System/RenderSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
-#include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/System/CharacterControllerSystem.hpp"
+#include "Scene/System/CameraGameplaySystem.hpp"
+#include "Scene/System/ParticleSystem.hpp"
 
+#include "Scene/System/AnimatorSystem.hpp"
 
 #include "Enemy/EnemyComponent.hpp"
 
@@ -62,7 +68,7 @@ void Game::Register(World &world)
     Log_Info("Registering Comp/Sys for: {}", world.GetName());
 
     /** Register components **/
-
+    //global
     world.RegisterComponent<Component::Name>();
     world.RegisterComponent<Component::Transform>();
     world.RegisterComponent<Component::Model>();
@@ -71,6 +77,9 @@ void Game::Register(World &world)
     world.RegisterComponent<Component::RigidBody>();
     world.RegisterComponent<Component::CharacterController>();
     world.RegisterComponent<Component::Animator>();
+    world.RegisterComponent<Component::CameraGameplay>();
+    world.RegisterComponent<Component::ParticleEmitter>();
+    //local
     world.RegisterComponent<EnemyComponent>();
     world.RegisterComponent<PlayerComponent>();
 
@@ -80,9 +89,11 @@ void Game::Register(World &world)
     world.RegisterSystem<LightSystem>();
     world.RegisterSystem<PhysicsSystem>();
     world.RegisterSystem<CharacterControllerSystem>();
+    world.RegisterSystem<CameraGameplaySystem>();
     world.RegisterSystem<AnimatorSystem>();
     world.RegisterSystem<PlayerSystem>();
     world.RegisterSystem<EnemyManagerSystem>();
+    world.RegisterSystem<ParticleSystem>();
 
     /** Set signature of systems **/
     //Signature Renderer
@@ -114,6 +125,14 @@ void Game::Register(World &world)
         signatureCharacterController.set(world.GetComponentType<Component::CharacterController>());
         world.SetSystemSignature<CharacterControllerSystem>(signatureCharacterController);
     }
+    //Signature CameraGameplay
+    {
+        Signature signatureCameraGameplay;
+        signatureCameraGameplay.set(world.GetComponentType<Component::Transform>());
+        signatureCameraGameplay.set(world.GetComponentType<Component::Camera>());
+        signatureCameraGameplay.set(world.GetComponentType<Component::CameraGameplay>());
+        world.SetSystemSignature<CameraGameplaySystem>(signatureCameraGameplay);
+    }
     //Signature Physics
     {
         Signature signaturePhysics;
@@ -144,6 +163,14 @@ void Game::Register(World &world)
         world.SetSystemSignature<PlayerSystem>(signaturePlayer);
     }
 
+    //Signature particle
+    {
+        Signature signatureParticle;
+        signatureParticle.set(world.GetComponentType<Component::Transform>());
+        signatureParticle.set(world.GetComponentType<Component::ParticleEmitter>());
+        world.SetSystemSignature<ParticleSystem>(signatureParticle);
+    }
+
 
 }
 
@@ -163,6 +190,7 @@ void Game::InitSystems(World &world)
     world.GetSystem<LightSystem>()->Update();
 
     /** Post process ? **/
+    Engine::Instance().GetPostProcessManager().AddProcess(new ParticleProcess());
     //NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();
 //    std::unique_ptr <ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
 //    engine.GetPostProcessManager().AddProcess(ptr);

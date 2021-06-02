@@ -25,7 +25,8 @@ public:
     void UpdateVisible() final;
 
 private:
-    Maths::Vector3f _eulerRot{0, 0, 0};
+    Maths::Vector3f _eulerRot{0,0,0};
+
     void ShowComponents();
     void ShowAssets();
 
@@ -37,6 +38,8 @@ private:
     void CameraReader();
     void RigidBodyReader();
     void CharacterControllerReader();
+    void CameraGameplayReader();
+    void ParticleReader();
     void AddComponent();
     void DeleteComponent();
 

@@ -70,7 +70,7 @@ void SceneWidget::CameraUpdate()
     RendererInterface::UpdateSceneFramebufferEditor(projection, view, _camera._framebuffer);
     ImGui::Image((ImTextureID) (size_t) _camera._framebuffer.GetTexture(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 
-    ImGuizmoUpdate(view, projection);
+    //ImGuizmoUpdate(view, projection);
 }
 
 void SceneWidget::ImGuizmoUpdate(const Maths::Matrix4& view, const Maths::Matrix4& projection)

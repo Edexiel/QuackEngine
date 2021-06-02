@@ -12,9 +12,11 @@
 #include "Scene/System/RenderSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
 
+#include "Thread/ThreadPool.hpp"
+
 #include <filesystem>
 #include <fmt/color.h>
-
+#include <algorithm>
 
 using namespace Resources;
 using namespace Renderer;
@@ -42,7 +44,7 @@ ModelRenderer ResourcesManager::LoadModel(const std::filesystem::path &path, Ver
         return (it->second);
     }
 
-    // return null Texture if the file doesn't exist
+    // return null Model if the file doesn't exist
     if (!exists(path))
     {
         Log_Warning("File {} doesn't exist", path.string());
@@ -234,7 +236,7 @@ Renderer::MaterialInterface ResourcesManager::LoadMaterial(const std::filesystem
     if (!exists(name))
     {
         Log_Error("File doesn't exists: {}", name.string());
-        return nullptr;
+        return _mapMaterial.find(DEFAULT_MATERIAL_STRING)->second;
     }
 
     // Create a new Material
@@ -264,6 +266,11 @@ Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const std::string
 
 void ResourcesManager::DestroyMaterial(const std::string &name)
 {
+    if (name == DEFAULT_MATERIAL_STRING)
+        return;
+
+    std::remove((std::string("./Asset/Materials/") + name + ".qmt").c_str());
+
     _mapMaterial.erase(name);
     _globalAssetMap.erase(name);
 }
@@ -276,19 +283,22 @@ void ResourcesManager::LoadFolder(const std::filesystem::path &path)
     {
         if (!p.is_directory())
         {
+            std::string path = p.path().string();
+            std::replace(path.begin(), path.end(), '\\', '/');
+
             std::string extension = p.path().extension().string();
 
             if (extension == ".glb" || extension == ".gltf")
-                LoadModel(p.path(), VertexType::V_NORMALMAP);
+                LoadModel(path, VertexType::V_NORMALMAP);
             if (extension == ".fbx")
             {
-                LoadModel(p.path(), VertexType::V_NORMALMAP);
-                LoadAnimation(p.path());
+                LoadModel(path, VertexType::V_NORMALMAP);
+                LoadAnimation(path);
             }
             else if (extension == ".ogg" || extension == ".mp3" || extension == ".wav")
-                LoadSound(p.path(), Audio::SoundType::S_MASTER);
+                LoadSound(path, Audio::SoundType::S_MASTER);
             else if (extension == ".png" || extension == ".jpg" || extension == ".jpeg")
-                LoadTexture(p.path());
+                LoadTexture(path);
             else if (extension == ".qsh")
                 LoadShader(p.path().string().c_str());
         }
@@ -344,4 +354,20 @@ const Asset *ResourcesManager::GetAsset(const std::string &name)
     if (it == _globalAssetMap.cend())
         return nullptr;
     return it->second;
+}
+
+void ResourcesManager::Clear()
+{
+    _mapModel.clear();
+    _mapTexture.clear();
+    _mapShader.clear();
+    _mapDynamicShader.clear();
+    _mapSound.clear();
+    _mapMaterial.clear();
+    _mapAnimation.clear();
+
+    _textureToName.clear();
+    _soundToName.clear();
+    _globalAssetMap.clear();
+
 }

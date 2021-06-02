@@ -26,8 +26,8 @@ void PostProcessManager::Init()
 {
     _quadMesh = Shape::CreateQuad();
     _shader = Shader::LoadShader(
-            "../../Engine/Shader/Framebuffer/BasicVertex.vs",
-            "../../Engine/Shader/Framebuffer/BasicFragment.fs");
+            "./Shader/Framebuffer/BasicVertex.vs",
+            "./Shader/Framebuffer/BasicFragment.fs");
 }
 
 void PostProcessManager::ApplyPostProcess(const Framebuffer& framebuffer)

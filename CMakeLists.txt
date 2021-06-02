@@ -150,15 +150,27 @@ add_subdirectory(Game)
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install)
 
-install(CODE "file(REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE})")
+#install(CODE "file(REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE})")
 
 install(TARGETS Editor RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
 install(TARGETS Engine RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
 
-if ((${CMAKE_BUILD_TYPE} STREQUAL "Release") OR WIN32 )
-    install(DIRECTORY "${PROJECT_SOURCE_DIR}/Game/Asset" DESTINATION ${CMAKE_BUILD_TYPE})
+if (WIN32)
+    #    file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Asset LINK)
+    #    file(TO_NATIVE_PATH ${PROJECT_SOURCE_DIR}/Game/Asset TARGET)
+    ##    install(CODE "EXECUTE_PROCESS(COMMAND \"cmd.exe\" \"/K\" \"mklink\" \"/j\" \"${LINK_ASSET}\" \"${TARGET_ASSET}\")")
+    #    EXECUTE_PROCESS(COMMAND "cmd.exe" "/K" "mklink" "/j" "${LINK}" "${TARGET}")
+    #
+    #    file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Shader LINK)
+    #    file(TO_NATIVE_PATH ${PROJECT_SOURCE_DIR}/Engine/Shader TARGET)
+    #    EXECUTE_PROCESS(COMMAND "cmd.exe" "/K" "mklink" "/j" "${LINK}" "${TARGET}")
+    #
+    #    install(CODE "EXECUTE_PROCESS(COMMAND \"cmd.exe\" \"/K\" \"mklink\" \"/j\" \"${LINK_SHADER}\" \"${TARGET_SHADER}\")")
+
 else ()
+
     install(CODE "file(CREATE_LINK ${PROJECT_SOURCE_DIR}/Game/Asset ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Asset SYMBOLIC)")
+    install(CODE "file(CREATE_LINK ${PROJECT_SOURCE_DIR}/Engine/Shader ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Shader SYMBOLIC)")
 endif ()
 
 #install(TARGETS Runner
