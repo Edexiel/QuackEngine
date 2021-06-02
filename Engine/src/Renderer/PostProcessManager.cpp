@@ -32,9 +32,9 @@ void PostProcessManager::Init()
 
 void PostProcessManager::ApplyPostProcess(const Framebuffer& framebuffer)
 {
-    for (unsigned int i = 0; i < _listProcess.size(); i++)
+    for (auto & _listProces : _listProcess)
     {
-        _listProcess[i]->Process(framebuffer, _quadMesh);
+        _listProces->Process(framebuffer, _quadMesh);
     }
 }
 

@@ -10,11 +10,11 @@
                     },
                     {
                         "key": "Camera",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "Light",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "Model",
@@ -34,79 +34,18 @@
                     }
                 ],
                 "Name": {
-                    "name": "Camera"
+                    "name": "Light"
                 },
                 "Transform": {
                     "position": {
-                        "x": 2.062415599822998,
-                        "y": 53.16899108886719,
-                        "z": -22.20970344543457
+                        "x": -10.0,
+                        "y": -10.0,
+                        "z": -10.0
                     },
                     "scale": {
-                        "x": 0.9999582767486572,
-                        "y": 0.9999995827674866,
-                        "z": 0.9999994039535523
-                    },
-                    "rotation": {
-                        "w": 0.9967842102050781,
-                        "x": 0.07932547479867935,
-                        "y": 0.011306601576507092,
-                        "z": -0.0008997851982712746
-                    }
-                },
-                "Camera": {
-                    "isActive": true,
-                    "_width": 824,
-                    "_height": 273,
-                    "_far": 1000.0,
-                    "_near": 0.009999999776482582,
-                    "_fov": 0.7853749394416809
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": true
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": true
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": true
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Player"
-                },
-                "Transform": {
-                    "position": {
-                        "x": -3.3599977493286135,
-                        "y": -1.0,
-                        "z": 135.0
-                    },
-                    "scale": {
-                        "x": 0.20000000298023225,
-                        "y": 0.20000000298023225,
-                        "z": 0.20000000298023225
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     "rotation": {
                         "w": 1.0,
@@ -115,28 +54,28 @@
                         "z": 0.0
                     }
                 },
-                "Model": {
-                    "path": "./Asset/Model/Bard.fbx",
-                    "type": 2,
-                    "materials": [
-                        "AnimationMaterial"
-                    ]
-                },
-                "Animator": {
-                    "path": "./Asset/Model/Standard Run.fbx"
-                },
-                "RigidBody": {
-                    "mass": 1.0,
-                    "bounciness": 0.0,
-                    "gravity": true,
-                    "trigger": false,
-                    "bodyType": 0,
-                    "shapeType": 1,
-                    "shapeParams": {
+                "Light": {
+                    "type": 0,
+                    "ambient": {
+                        "x": 0.10000000149011612,
+                        "y": 0.10000000149011612,
+                        "z": 0.10000000149011612
+                    },
+                    "diffuse": {
                         "x": 1.0,
                         "y": 1.0,
-                        "z": 0.0
-                    }
+                        "z": 1.0
+                    },
+                    "specular": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "constant": 1.0,
+                    "linear": 0.00139999995008111,
+                    "quadratic": 0.000007000000096013537,
+                    "spotAngle": 8.5,
+                    "outerSpotAngle": 10.5
                 }
             },
             {
@@ -171,18 +110,18 @@
                     }
                 ],
                 "Name": {
-                    "name": "TriggerBox"
+                    "name": "Floor"
                 },
                 "Transform": {
                     "position": {
                         "x": 0.0,
-                        "y": -2.5,
+                        "y": -5.0,
                         "z": 20.0
                     },
                     "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "x": 20.0,
+                        "y": 0.25,
+                        "z": 20.0
                     },
                     "rotation": {
                         "w": 1.0,
@@ -202,8 +141,8 @@
                     "mass": 1.0,
                     "bounciness": 0.0,
                     "gravity": false,
-                    "trigger": true,
-                    "bodyType": 0,
+                    "trigger": false,
+                    "bodyType": 1,
                     "shapeType": 2,
                     "shapeParams": {
                         "x": 1.0,
@@ -317,18 +256,18 @@
                     }
                 ],
                 "Name": {
-                    "name": "Floor"
+                    "name": "TriggerBox"
                 },
                 "Transform": {
                     "position": {
                         "x": 0.0,
-                        "y": -5.0,
+                        "y": -2.5,
                         "z": 20.0
                     },
                     "scale": {
-                        "x": 20.0,
-                        "y": 0.25,
-                        "z": 20.0
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     "rotation": {
                         "w": 1.0,
@@ -347,14 +286,14 @@
                 "RigidBody": {
                     "mass": 1.0,
                     "bounciness": 0.0,
-                    "gravity": true,
-                    "trigger": false,
-                    "bodyType": 2,
+                    "gravity": false,
+                    "trigger": true,
+                    "bodyType": 0,
                     "shapeType": 2,
                     "shapeParams": {
-                        "x": 20.0,
-                        "y": 0.25,
-                        "z": 20.0
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     }
                 }
             },
@@ -370,11 +309,11 @@
                     },
                     {
                         "key": "Light",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "Model",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "Name",
@@ -382,7 +321,7 @@
                     },
                     {
                         "key": "RigidBody",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "Transform",
@@ -390,18 +329,18 @@
                     }
                 ],
                 "Name": {
-                    "name": "Light"
+                    "name": "Player"
                 },
                 "Transform": {
                     "position": {
-                        "x": -10.0,
-                        "y": -10.0,
-                        "z": -10.0
+                        "x": -3.3599977493286135,
+                        "y": -1.0,
+                        "z": 135.0
                     },
                     "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "x": 0.20000000298023225,
+                        "y": 0.20000000298023225,
+                        "z": 0.20000000298023225
                     },
                     "rotation": {
                         "w": 1.0,
@@ -410,28 +349,25 @@
                         "z": 0.0
                     }
                 },
-                "Light": {
-                    "type": 0,
-                    "ambient": {
-                        "x": 0.10000000149011612,
-                        "y": 0.10000000149011612,
-                        "z": 0.10000000149011612
-                    },
-                    "diffuse": {
+                "Model": {
+                    "path": "./Asset/Model/Bard.fbx",
+                    "type": 1,
+                    "materials": [
+                        "AnimationMaterial"
+                    ]
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": false,
+                    "trigger": false,
+                    "bodyType": 1,
+                    "shapeType": 2,
+                    "shapeParams": {
                         "x": 1.0,
                         "y": 1.0,
                         "z": 1.0
-                    },
-                    "specular": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "constant": 1.0,
-                    "linear": 0.00139999995008111,
-                    "quadratic": 0.000007000000096013537,
-                    "spotAngle": 8.5,
-                    "outerSpotAngle": 10.5
+                    }
                 }
             },
             {
@@ -442,7 +378,7 @@
                     },
                     {
                         "key": "Camera",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "Light",
@@ -466,1032 +402,33 @@
                     }
                 ],
                 "Name": {
-                    "name": "Enemy"
+                    "name": "Camera"
                 },
                 "Transform": {
                     "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
+                        "x": 2.062415599822998,
+                        "y": 53.16899108886719,
+                        "z": -22.20970344543457
                     },
                     "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "x": 0.9998841285705566,
+                        "y": 0.9999995827674866,
+                        "z": 0.9999994039535523
                     },
                     "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
+                        "w": 0.9967842102050781,
+                        "x": 0.07932547479867935,
+                        "y": 0.01130648609250784,
+                        "z": -0.0008997760596685112
                     }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
                 },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Enemy"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
+                "Camera": {
+                    "isActive": true,
+                    "_width": 824,
+                    "_height": 273,
+                    "_far": 1000.0,
+                    "_near": 0.009999999776482582,
+                    "_fov": 0.7853749394416809
                 }
             }
         ]

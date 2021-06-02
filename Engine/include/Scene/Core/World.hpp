@@ -26,16 +26,12 @@
 #include "Scene/Component/Name.hpp"
 #include "Scene/Component/Animator.hpp"
 
-#include "Scene/System/AnimatorSystem.hpp"
-#include "Scene/System/CameraSystem.hpp"
-#include "Scene/System/CharacterControllerSystem.hpp"
-#include "Scene/System/LightSystem.hpp"
-#include "Scene/System/PhysicsSystem.hpp"
-#include "Scene/System/RenderSystem.hpp"
 
 #include "Tools/Type.hpp"
 
 #include "Engine.hpp"
+
+typedef void (*InitFn)(World &world);
 
 
 namespace reactphysics3d
@@ -53,12 +49,19 @@ private:
 
     std::string _name;
 
+    InitFn InitSystemsPtr = nullptr;
+    InitFn InitGamePtr = nullptr;
+    InitFn RegisterPtr = nullptr;
+    InitFn InitSettingsPtr = nullptr;
+
 public:
     World() = delete;
     explicit World(std::string &name);
 
-    void Init(Engine &engine);
-
+    void Register();
+    void InitSystems();
+    void InitGame();
+    void InitSettings();
     void Clear();
 
     // Entity methods
@@ -104,6 +107,11 @@ public:
 
     template<class T>
     T *GetSystem();
+
+    void SetInitGame(InitFn ptr);
+    void SetInitSystems(InitFn ptr);
+    void SetInitSettings(InitFn ptr);
+    void SetRegister(InitFn ptr);
 
 
     ///***************SERIALIZATION**************/////////
@@ -195,33 +203,6 @@ public:
         }
     };
 
-    struct SystemHandler
-    {
-        template<class Archive>
-        void save(Archive &archive) const
-        {
-            //todo:ici
-            //write<S>()
-        }
-
-        template<class Archive>
-        void load(Archive &archive)
-        {
-        }
-
-    private:
-
-        template<class Archive, class T>
-        void write(Archive &archive, Entity e, const std::string &name) const
-        {
-        }
-        template<class Archive, class T>
-        void read(Archive &archive, World &w, Entity entity, const std::string &name) const
-        {
-        }
-
-    };
-
     template<class Archive>
     void save(Archive &archive) const
     {
@@ -233,9 +214,6 @@ public:
 
         for (auto &item : entities)
             item.BuildArray();
-
-        SystemHandler systems{};
-        archive(CEREAL_NVP(systems));
 
         archive(CEREAL_NVP(entities));
     }

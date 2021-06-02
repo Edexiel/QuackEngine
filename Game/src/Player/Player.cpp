@@ -23,9 +23,6 @@ PlayerSound &PlayerComponent::GetPlayerSound()
 
 PlayerSystem::PlayerSystem()
 {
-
-    std::cout << "Load Player" << std::endl;
-
     Engine &engine = Engine::Instance();
     Input::InputManager& inputManager = engine.GetInputManager();
 

@@ -1,14 +1,20 @@
 #ifndef QUACKENGINE_GAME_HPP
 #define QUACKENGINE_GAME_HPP
 
+class Engine;
+
+class World;
+
 class Game
 {
+private:
+    static void Register(World &world);
+    static void InitGame(World &world);
+    static void InitSystems(World &world);
+    static void InitSettings(World &world);
 public:
-    Game() = default;
-    virtual ~Game() = default;
-
-    void Init(class Engine& engine) const;
-    void Update(float deltaTime);
+    Game() = delete;
+    static void Init(Engine &engine);
 };
 
 #endif // QUACKENGINE_GAME_HPP

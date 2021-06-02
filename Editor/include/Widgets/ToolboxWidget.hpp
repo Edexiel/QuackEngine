@@ -7,12 +7,11 @@
 class ToolboxWidget : public Widget
 {
 private:
-
     bool isPlaying = false;
     void Save();
     void Reload();
 public:
-    ToolboxWidget(Editor &editor);
+    explicit ToolboxWidget(Editor &editor);
     void UpdateVisible() final;
 };
 

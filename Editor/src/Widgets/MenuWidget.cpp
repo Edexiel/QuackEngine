@@ -21,9 +21,6 @@ void MenuWidget::UpdateVisible()
             show_scenes = true;
         }
 
-//        ImGui::Separator();
-//        if (ImGui::MenuItem("Import object"))
-//        {}
         ImGui::EndMenu();
     }
 
@@ -46,7 +43,7 @@ void MenuWidget::UpdateVisible()
                 ImGui::TableHeadersRow();
             }
             std::string CurrentWorld = _engine.GetCurrentWorld().GetName();
-            int n=0;
+            int n = 0;
             for (const auto &item : _engine.GetWorldList())
             {
                 ImGui::TableNextRow();
@@ -59,18 +56,26 @@ void MenuWidget::UpdateVisible()
                     ImGui::Text("Active");
                 else
                 {
-                    if (ImGui::Button(fmt::format("SetActive##{}",n).c_str()))
+                    if (ImGui::Button(fmt::format("SetActive##{}", n).c_str()))
+                    {
                         _engine.SetCurrentWorld(item);
+                    }
                 }
 
                 ImGui::TableSetColumnIndex(2);
-                if (ImGui::Button(fmt::format("Delete##{}",n).c_str()))
+                if (ImGui::Button(fmt::format("Delete##{}", n).c_str()))
                     _engine.RemoveWorld(item);
 
                 ImGui::TableSetColumnIndex(3);
-                if (ImGui::Button(fmt::format("Save##{}",n).c_str()))
-                    _engine.SaveWorld(item);
-
+                if (!_engine.IsGamePlaying())
+                {
+                    if (ImGui::Button(fmt::format("Save##{}", n).c_str()))
+                        _engine.SaveWorld(item);
+                }
+                else
+                {
+                    ImGui::Text("Playing ..");
+                }
                 n++;
             }
             ImGui::EndTable();
@@ -88,47 +93,17 @@ void MenuWidget::UpdateVisible()
         ImGui::SameLine();
 
         ImGui::SetItemDefaultFocus();
-
-        if (ImGui::Button("Create", ImVec2(100, 0)))
-        {
-            std::string worldname = buff;
-            World &world = _engine.CreateWorld(worldname);
-            world.Init(_engine);
-        }
+//
+//        if (ImGui::Button("Create", ImVec2(100, 0)))
+//        {
+//            std::string worldname = buff;
+//            World &world = _engine.CreateWorld(worldname);
+//        }
         ImGui::Separator();
         if (ImGui::Button("Cancel", ImVec2(120, 0)))
         { ImGui::CloseCurrentPopup(); }
         ImGui::EndPopup();
     }
-//    if (ImGui::BeginMenu("Edit"))
-//    {
-//        if (ImGui::MenuItem("Undo", "CTRL+Z"))
-//        {
-//            if (ImGui::BeginPopup("my_select_popup"))
-//            {
-//                ImGui::Text("Aquarium");
-//                ImGui::Separator();
-//                ImGui::EndPopup();
-//            }
-//
-//        }
-//        if (ImGui::MenuItem("Redo", "CTRL+Y"))
-//        {
-//        } // Disabled item
-//        ImGui::Separator();
-//        if (ImGui::MenuItem("Cut", "CTRL+X"))
-//        {
-//        }
-//        if (ImGui::MenuItem("Copy", "CTRL+C"))
-//        {
-//        }
-//        if (ImGui::MenuItem("Paste", "CTRL+V"))
-//        {
-//        }
-//        ImGui::EndMenu();
-//    }
-
-
 }
 
 

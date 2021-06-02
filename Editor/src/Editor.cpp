@@ -22,6 +22,8 @@ Editor::Editor() : _engine{Engine::Instance()}
 {
     InitWidgets();
     InitImGui(_engine.GetWindow());
+
+    _engine.GetResourcesManager().LoadFolder(R"(./Asset)");
 }
 
 Editor::~Editor()
@@ -31,11 +33,8 @@ Editor::~Editor()
     ImGui::DestroyContext();
 }
 
-
-//todo : init from config.ini
 void Editor::InitWidgets()
 {
-
     _menuBar = std::make_unique<MenuWidget>(*this);
 
     _widgets.emplace_back(std::make_unique<LogWidget>(*this));
@@ -57,42 +56,6 @@ void Editor::InitImGui(GLFWwindow *window)
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 460");
-}
-
-void Editor::Draw()
-{
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-
-    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(),
-                                 ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_AutoHideTabBar);
-
-    _menuBar->Draw();
-    for (const auto &widget : _widgets)
-    {
-        widget->Draw();
-    }
-
-    ImGui::Render();
-
-    //int display_w, display_h;
-    //glfwGetFramebufferSize(_window, &display_w, &display_h);
-//     glViewport(0, 0, display_w, display_h);
-//     glClearColor(1.f,0.f,0.f,0.f);
-//     glClear(GL_COLOR_BUFFER_BIT);
-
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-//    const ImGuiIO &io = ImGui::GetIO();
-//
-//    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-//    {
-//        GLFWwindow *backup_current_context = glfwGetCurrentContext();
-//        ImGui::UpdatePlatformWindows();
-//        ImGui::RenderPlatformWindowsDefault();
-//        glfwMakeContextCurrent(backup_current_context);
-//    }
 }
 
 void Editor::SetStyle()
@@ -176,10 +139,25 @@ void Editor::SetIo()
 
 }
 
-Engine &Editor::GetEngine() const
+void Editor::Draw()
 {
-    return _engine;
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(),
+                                 ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_AutoHideTabBar);
+
+    _menuBar->Draw();
+    for (const auto &widget : _widgets)
+    {
+        widget->Draw();
+    }
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
+
 
 
 

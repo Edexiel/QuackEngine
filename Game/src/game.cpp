@@ -1,35 +1,67 @@
 #include "game.hpp"
 
-#include <cstdio>
-#include <Enemy/EnemyComponent.hpp>
-#include <Scene/System/CharacterControllerSystem.hpp>
 #include "Engine.hpp"
-
 #include "Scene/Core/World.hpp"
+
 #include "Scene/Component/Transform.hpp"
 #include "Scene/Component/Animator.hpp"
 #include "Scene/Component/RigidBody.hpp"
 #include "Scene/Component/CharacterController.hpp"
-
-
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/RendererInterface.hpp"
+
 #include "Renderer/ProcessBase.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
 #include "Scene/System/RenderSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
 #include "Scene/System/AnimatorSystem.hpp"
+#include "Scene/System/CharacterControllerSystem.hpp"
+
+
+#include "Enemy/EnemyComponent.hpp"
 
 #include "Player/Player.hpp"
 
 using namespace Resources;
 using namespace Renderer;
 
-void Game::Init(Engine &engine) const
+void Game::Init(Engine &engine)
 {
-    World &world = engine.CreateWorld("Main");
-    world.Init(engine);
+    // Loading of scene "main"
+    {
+        World &main = engine.CreateWorld("Main");
+        main.SetRegister(&Register);
+        main.SetInitGame(&InitGame);
+        main.SetInitSystems(&InitGame);
+        main.SetInitSettings(&InitSettings);
+
+        Register(main);
+        InitSystems(main);
+
+        engine.LoadWorld(main);
+    }
+
+    engine.SetCurrentWorld("Main"); //obligatoire
+/** Exemple of adding a new scene **/
+
+//    //Loading of scene "..."
+//    {
+//        World &main = engine.CreateWorld("...");
+//        main.SetRegisterFunctionPtr(&Register...);
+//        main.SetInitFunctionPtr(&Init...);
+//        engine.LoadWorld(...);
+//    }
+
+/** You can select the active scene , default will be the first scene added **/
+
+}
+
+void Game::Register(World &world)
+{
+    Log_Info("Registering Comp/Sys for: {}", world.GetName());
+
+    /** Register components **/
 
     world.RegisterComponent<Component::Name>();
     world.RegisterComponent<Component::Transform>();
@@ -42,6 +74,7 @@ void Game::Init(Engine &engine) const
     world.RegisterComponent<EnemyComponent>();
     world.RegisterComponent<PlayerComponent>();
 
+    /** Register systems **/
     world.RegisterSystem<RenderSystem>();
     world.RegisterSystem<CameraSystem>();
     world.RegisterSystem<LightSystem>();
@@ -51,9 +84,7 @@ void Game::Init(Engine &engine) const
     world.RegisterSystem<PlayerSystem>();
     world.RegisterSystem<EnemyManagerSystem>();
 
-    engine.GetResourcesManager().Init();
-
-
+    /** Set signature of systems **/
     //Signature Renderer
     {
         Signature signatureRender;
@@ -61,7 +92,6 @@ void Game::Init(Engine &engine) const
         signatureRender.set(world.GetComponentType<Component::Transform>());
         world.SetSystemSignature<RenderSystem>(signatureRender);
     }
-
     //Signature Camera
     {
         Signature signatureCamera;
@@ -69,7 +99,6 @@ void Game::Init(Engine &engine) const
         signatureCamera.set(world.GetComponentType<Component::Transform>());
         world.SetSystemSignature<CameraSystem>(signatureCamera);
     }
-
     //Signature Light
     {
         Signature signatureLight;
@@ -92,14 +121,12 @@ void Game::Init(Engine &engine) const
         signaturePhysics.set(world.GetComponentType<Component::RigidBody>());
         world.SetSystemSignature<PhysicsSystem>(signaturePhysics);
     }
-
     //signature Animation
     {
         Signature signatureAnimation;
         signatureAnimation.set(world.GetComponentType<Component::Animator>());
         world.SetSystemSignature<AnimatorSystem>(signatureAnimation);
     }
-
     //signature enemymanager
     {
         Signature signatureEnemy;
@@ -117,25 +144,32 @@ void Game::Init(Engine &engine) const
         world.SetSystemSignature<PlayerSystem>(signaturePlayer);
     }
 
-    engine.LoadWorld(world);
-    engine.GetResourcesManager().LoadFolder(R"(./Asset)");
-
-    world.GetSystem<PhysicsSystem>()->Init();
-
-    //NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();
-    std::unique_ptr <ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
-    engine.GetPostProcessManager().AddProcess(ptr);
-
-    world.GetSystem<EnemyManagerSystem>()->GenerateEnemies(10, {0, 0, 0}, 50.f, 100.f);
-
-
-    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
-
-    Renderer::RendererPlatform::EnableDepthBuffer(true);
 
 }
 
-void Game::Update(float deltaTime)
+void Game::InitGame(World &world)
 {
-    printf("Update");
+    Log_Info("Initializing scene: {}", world.GetName());
+
+    world.GetSystem<EnemyManagerSystem>()->GenerateEnemies(10, {0, 0, 0}, 50.f, 100.f);
+}
+
+void Game::InitSystems(World &world)
+{
+    Log_Info("Initializing systems: {}", world.GetName());
+
+    /** Init Systems **/
+    world.GetSystem<PhysicsSystem>()->Init();
+    world.GetSystem<LightSystem>()->Update();
+
+    /** Post process ? **/
+    //NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();
+//    std::unique_ptr <ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
+//    engine.GetPostProcessManager().AddProcess(ptr);
+}
+
+void Game::InitSettings(World &world)
+{
+    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
+    Renderer::RendererPlatform::EnableDepthBuffer(true);
 }

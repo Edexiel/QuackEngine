@@ -7,7 +7,6 @@
 
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
-#include "Scene/System/LightSystem.hpp"
 #include "Scene/System/AnimatorSystem.hpp"
 
 #include "Scene/System/CharacterControllerSystem.hpp"
@@ -34,19 +33,13 @@ int main()
 
     Editor editor{};
 
-    Game game;
-    game.Init(engine);
-
-    engine.GetPhysicsManager();
-    engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
-
+    Game::Init(engine);
 
     while (!engine.WindowShouldClose())
     {
 
         /** Time Update **/
         engine.UpdateTime();
-
         const auto deltaTime = (float) engine.GetDeltaTime();
 
         /** POLL INPUT **/
@@ -56,6 +49,7 @@ int main()
         /** Editor draw **/
         editor.Draw();
 
+        /** When editor is in play mode **/
         if (engine.IsGamePlaying())
         {
             /** UPDATE **/

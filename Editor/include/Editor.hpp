@@ -14,9 +14,9 @@ private:
     class Engine &_engine;
 
     void InitWidgets();
-    void InitImGui(class GLFWwindow *window);
-    void SetStyle();
-    void SetIo();
+    static void InitImGui(class GLFWwindow *window);
+    static void SetStyle();
+    static void SetIo();
 
 public:
     /*** Selection ***/
@@ -30,5 +30,9 @@ public:
     Engine &GetEngine() const;
 };
 
+inline Engine &Editor::GetEngine() const
+{
+    return _engine;
+}
 
 #endif //QUACKENGINE_EDITOR_HPP

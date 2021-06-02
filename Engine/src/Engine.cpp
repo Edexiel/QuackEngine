@@ -115,11 +115,12 @@ Engine::Engine(const EngineSettings &settings) noexcept
             break;
     }
     _platformInput = std::make_unique<Input::PlatformInputGLFW>(_window);
-    //Assert_Fatal_Error(_platformInput, "Platform input not declared");
     _inputManager.Init(_platformInput.get());
     _timeManager.Init(new Time::TimePlatformGLFW(_window));
     _postProcessManager.Init();
     _soundManager.Init();
+    _resourcesManager.Init();
+
 }
 
 GLFWwindow *Engine::GetWindow()
@@ -226,7 +227,7 @@ void Engine::SaveWorld(const std::string &worldName)
 //Materials
     {
         std::filesystem::path materialPath = path;
-        Log_Info("Saving materials", "");
+        Log_Info("Saving materials");
         materialPath.append("Materials");
         if (!exists(materialPath))
         {
@@ -260,11 +261,11 @@ void Engine::FillTexture(Renderer::Texture &T)
 
 void Engine::LoadWorld(World &world)
 {
+
     const fs::path path{"./Asset"};
     if (!exists(path))
-    {
         Log_Error("Path does not exists: {}", path.string());
-    }
+
 
     //Materials
     {
@@ -312,6 +313,7 @@ void Engine::LoadWorld(World &world)
 
         iarchive(world);
     }
+
 }
 
 void Engine::RemoveWorld(const std::string &name)
@@ -409,5 +411,6 @@ void Engine::SetCurrentWorld(const std::string &name)
     if (it == _worldLut.end())
         return;
     _currentWorld = it->second;
+    _worlds.at(_currentWorld).InitSettings();
 }
 

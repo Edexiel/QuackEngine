@@ -6,7 +6,7 @@ void World::RegisterComponent() const
     if (std::is_base_of<Component::ComponentBase, T>())
         _componentManager->RegisterComponent<T>();
     else
-        Log_Error("The class you're trying to register isn't a child of Component: {}",demangle(typeid(T).name()));
+        Log_Error("The class you're trying to register isn't a child of Component: {}", demangle(typeid(T).name()));
 
 }
 
@@ -14,7 +14,7 @@ template<typename T>
 inline void World::AddComponent(Entity id, T component) const
 {
     Component::ComponentBase::LinkEntityToComponent(id, &component);
-    Log_Info("Adding component: {}",demangle(typeid(T).name()));
+    Log_Info("Adding component: {}", demangle(typeid(T).name()));
     _componentManager->AddComponent<T>(id, component);
 
     auto signature = _entityManager->GetSignature(id);
@@ -27,7 +27,7 @@ inline void World::AddComponent(Entity id, T component) const
 template<typename T>
 inline void World::RemoveComponent(Entity id)
 {
-    Log_Info("Remove component: {} from {}",demangle(typeid(T).name()),id);
+    Log_Info("Remove component: {} from {}", demangle(typeid(T).name()), id);
 
     _componentManager->RemoveComponent<T>(id);
 
@@ -41,7 +41,8 @@ inline void World::RemoveComponent(Entity id)
 template<>
 inline void World::RemoveComponent<Component::RigidBody>(Entity id)
 {
-    fmt::print(fg(fmt::color::forest_green),"[ECS] Remove component: {} from {}\n",demangle(typeid(Component::RigidBody).name()),id);
+    fmt::print(fg(fmt::color::forest_green), "[ECS] Remove component: {} from {}\n",
+               demangle(typeid(Component::RigidBody).name()), id);
 
     _physicsWorld->destroyRigidBody(GetComponent<Component::RigidBody>(id).rb);
     _componentManager->RemoveComponent<Component::RigidBody>(id);
@@ -72,7 +73,7 @@ inline ComponentType World::GetComponentType()
 }
 
 template<typename T>
-inline T* World::RegisterSystem() const
+inline T *World::RegisterSystem() const
 {
     return _systemManager->RegisterSystem<T>();
 }
@@ -100,9 +101,7 @@ inline const std::unique_ptr<EntityManager> &World::GetEntityManager() const
 //}
 
 template<class T>
-T* World::GetSystem()
+T *World::GetSystem()
 {
     return _systemManager->GetSystem<T>();
 }
-
-

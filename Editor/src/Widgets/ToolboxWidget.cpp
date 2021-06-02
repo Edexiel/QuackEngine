@@ -22,18 +22,17 @@ void ToolboxWidget::Reload()
     _engine.LoadWorld(world);
 }
 
-
 void ToolboxWidget::UpdateVisible()
 {
 
-    if (ImGui::Button("Save"))
+    if (!_engine.IsGamePlaying())
     {
-        Save();
+        if (ImGui::Button("Save"))
+        {
+            Save();
+        }
     }
-//    if (ImGui::Button("Load"))
-//    {
-//        Load();
-//    }
+
     ImGui::SameLine();
 
     if (isPlaying)
@@ -56,6 +55,7 @@ void ToolboxWidget::UpdateVisible()
             Save();
             isPlaying = !isPlaying;
             _engine.SetGamePlaying(isPlaying);
+            _engine.GetCurrentWorld().InitGame();
         }
     }
 
