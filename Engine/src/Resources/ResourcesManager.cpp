@@ -16,7 +16,7 @@
 
 #include <filesystem>
 #include <fmt/color.h>
-
+#include <algorithm>
 
 using namespace Resources;
 using namespace Renderer;
@@ -236,7 +236,7 @@ Renderer::MaterialInterface ResourcesManager::LoadMaterial(const std::filesystem
     if (!exists(name))
     {
         Log_Error("File doesn't exists: {}", name.string());
-        return nullptr;
+        return _mapMaterial.find(DEFAULT_MATERIAL_STRING)->second;
     }
 
     // Create a new Material
@@ -266,6 +266,11 @@ Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const std::string
 
 void ResourcesManager::DestroyMaterial(const std::string &name)
 {
+    if (name == DEFAULT_MATERIAL_STRING)
+        return;
+
+    std::remove((std::string("./Asset/Materials/") + name + ".qmt").c_str());
+
     _mapMaterial.erase(name);
     _globalAssetMap.erase(name);
 }
