@@ -266,6 +266,9 @@ Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const std::string
 
 void ResourcesManager::DestroyMaterial(const std::string &name)
 {
+    if (name == DEFAULT_MATERIAL_STRING)
+        return;
+
     _mapMaterial.erase(name);
     _globalAssetMap.erase(name);
 }

@@ -68,8 +68,8 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 726,
-                    "_height": 520,
+                    "_width": 672,
+                    "_height": 381,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
                     "_fov": 0.7853749394416809
@@ -150,7 +150,7 @@
                     "path": "../../Game/Asset\\Model\\Bard.fbx",
                     "type": 2,
                     "materials": [
-                        "AnimationMaterial"
+                        "AnimationBard"
                     ]
                 },
                 "Animator": {
@@ -564,7 +564,7 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": 0.0,
+                        "x": 9.0,
                         "y": 0.0,
                         "z": 0.0
                     },
