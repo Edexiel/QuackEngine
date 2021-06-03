@@ -9,6 +9,10 @@
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/RendererInterface.hpp"
 
+#include "Renderer/ProcessBase.hpp"
+#include "Renderer/PostProcess/KernelPostProcess.hpp"
+
+
 #include "Enemy/EnemyComponent.hpp"
 #include "Player/PlayerComponent.hpp"
 #include "Player/PlayerSystem.hpp"
@@ -54,6 +58,7 @@ void Game::Register(World &world)
     world.RegisterComponent<Component::RigidBody>();
     world.RegisterComponent<Component::CharacterController>();
     world.RegisterComponent<Component::Animator>();
+    world.RegisterComponent<Component::SimpleShadow>();
     world.RegisterComponent<Component::CameraGameplay>();
     world.RegisterComponent<Component::ParticleEmitter>();
     //local
@@ -71,6 +76,8 @@ void Game::Register(World &world)
     world.RegisterSystem<PlayerSystem>();
     world.RegisterSystem<EnemyManagerSystem>();
     world.RegisterSystem<ParticleSystem>();
+    world.RegisterSystem<SimpleShadowSystem>();
+
 
     /** Set signature of systems **/
     //Signature Renderer
@@ -147,6 +154,13 @@ void Game::Register(World &world)
         signatureParticle.set(world.GetComponentType<Component::ParticleEmitter>());
         world.SetSystemSignature<ParticleSystem>(signatureParticle);
     }
+    //Signature Shadow
+    {
+        Signature signatureShadow;
+        signatureShadow.set(world.GetComponentType<Component::Transform>());
+        signatureShadow.set(world.GetComponentType<Component::SimpleShadow>());
+        world.SetSystemSignature<SimpleShadowSystem>(signatureShadow);
+    }
 
 
 }
@@ -162,15 +176,18 @@ void Game::InitSystems(World &world)
 {
     Log_Info("Initializing systems: {}", world.GetName());
 
+    Engine& engine = Engine::Instance();
+
     /** Init Systems **/
     world.GetSystem<PhysicsSystem>()->Init();
     world.GetSystem<LightSystem>()->Update();
 
     /** Post process ? **/
-    Engine::Instance().GetPostProcessManager().AddProcess(new ParticleProcess());
-    //NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();
-//    std::unique_ptr <ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
-//    engine.GetPostProcessManager().AddProcess(ptr);
+    std::unique_ptr<ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
+    engine.GetPostProcessManager().AddProcess(ptr);
+
+    engine.GetPostProcessManager().AddProcess(new ParticleProcess());
+    engine.GetPostProcessManager().AddProcess(new SimpleShadowProcess());
 }
 
 void Game::InitSettings(World &world)

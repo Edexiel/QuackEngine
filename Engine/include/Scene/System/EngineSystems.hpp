@@ -6,3 +6,4 @@
 #include "Scene/System/CameraGameplaySystem.hpp"
 #include "Scene/System/ParticleSystem.hpp"
 #include "Scene/System/AnimatorSystem.hpp"
+#include "Scene/System/SimpleShadowSystem.hpp"

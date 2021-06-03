@@ -2,16 +2,7 @@
 #include "Engine.hpp"
 
 
-#include "Scene/Component/Camera.hpp"
-#include "Scene/Component/Light.hpp"
-#include "Scene/Component/Model.hpp"
-#include "Scene/Component/RigidBody.hpp"
-#include "Scene/Component/Transform.hpp"
-#include "Scene/Component/Name.hpp"
-#include "Scene/Component/Animator.hpp"
-#include "Scene/Component/CameraGameplay.hpp"
-#include "Scene/Component/CharacterController.hpp"
-#include "Scene/Component/ParticleEmitter.hpp"
+#include "Scene/Component/EngineComponents.hpp"
 
 
 #include "Scene/System/RenderSystem.hpp"
@@ -172,6 +163,7 @@ void World::EntityHandler::BuildArray()
     build<Component::CameraGameplay>("CameraGameplay");
     build<Component::CharacterController>("CharacterController");
     build<Component::ParticleEmitter>("ParticleEmitter");
+    build<Component::SimpleShadow>("SimpleShadow");
     world->Build(components, id);
 }
 
@@ -188,6 +180,7 @@ void World::EntityHandler::save(cereal::JSONOutputArchive &archive) const
     write<Component::CameraGameplay>(archive, id, "CameraGameplay");
     write<Component::CharacterController>(archive, id, "CharacterController");
     write<Component::ParticleEmitter>(archive, id, "ParticleEmitter");
+    write<Component::SimpleShadow>(archive, id, "SimpleShadow");
     world->Save(archive, components, id);
 }
 
@@ -208,6 +201,7 @@ void World::EntityHandler::load(cereal::JSONInputArchive &archive)
     read<Component::CameraGameplay>(archive, w, e, "CameraGameplay");
     read<Component::CharacterController>(archive, w, e, "CharacterController");
     read<Component::ParticleEmitter>(archive, w, e, "ParticleEmitter");
+    read<Component::SimpleShadow>(archive, w, e, "SimpleShadow");
     w.Load(archive, components, id);
 }
 

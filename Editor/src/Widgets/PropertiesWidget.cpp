@@ -58,6 +58,8 @@ void PropertiesWidget::ShowComponents()
         CameraGameplayReader();
     if (world.HasComponent<ParticleEmitter>(entity))
         ParticleReader();
+    if (world.HasComponent<SimpleShadow>(entity))
+        SimpleShadowReader();
 
     AddComponent();
     ImGui::SameLine();
@@ -331,8 +333,9 @@ void PropertiesWidget::ModelReader()
     if (ImGui::CollapsingHeader("Model"))
         return;
 
-    Renderer::ModelRenderer &model = _engine.GetCurrentWorld().GetComponent<Component::Model>(
-            _editor.selectedEntity).model;
+
+    Component::Model& component = _engine.GetCurrentWorld().GetComponent<Component::Model>(_editor.selectedEntity);
+    Renderer::ModelRenderer &model = component.model;
 
     std::vector<std::string> listModel = _engine.GetResourcesManager().GetModelNameList();
 
@@ -343,10 +346,7 @@ void PropertiesWidget::ModelReader()
             bool isSelected = (model.Path() == n);
             if (ImGui::Selectable(n.c_str(), isSelected))
             {
-                //todo check if need to put back
-                //model.name = n;
-                model = _engine.GetResourcesManager().LoadModel(n,
-                                                                Renderer::VertexType::V_NORMALMAP);
+                model = _engine.GetResourcesManager().LoadModel(n,Renderer::VertexType::V_CLASSIC);
                 _engine.GetCurrentWorld().GetSystem<RenderSystem>()->SetMaterials();
             }
 
@@ -355,6 +355,8 @@ void PropertiesWidget::ModelReader()
         }
         ImGui::EndCombo();
     }
+
+    ImGui::DragFloat3("Offset", component.offset.e, 0.1f);
 
     for (unsigned int i = 0; i < model.GetNumberMesh(); i++)
     {
@@ -461,18 +463,18 @@ void PropertiesWidget::AddComponent()
     if (ImGui::BeginPopup("##ComponentContextMenu_Add"))
     {
         //Camera
-        if (ImGui::MenuItem("Camera"))
+        if (!world.HasComponent<Camera>(_editor.selectedEntity) && ImGui::MenuItem("Camera"))
         {
             world.AddComponent(_editor.selectedEntity, Component::Camera(1280, 720, 1000, -1, 20 * 3.1415 / 180));
         }
-        //Light
-        if (ImGui::BeginMenu("Light"))
+            //Light
+        if (!world.HasComponent<Light>(_editor.selectedEntity) && ImGui::BeginMenu("Light"))
         {
             AddLight();
             ImGui::EndMenu();
         }
 
-        if (ImGui::BeginMenu("Model"))
+        if (!world.HasComponent<Model>(_editor.selectedEntity) && ImGui::BeginMenu("Model"))
         {
             std::vector<std::string> listModel = _engine.GetResourcesManager().GetModelNameList();
             for (const auto &n : listModel)
@@ -488,29 +490,20 @@ void PropertiesWidget::AddComponent()
             ImGui::EndMenu();
         }
 
-        if (ImGui::MenuItem("Character controller"))
-        {
-            Component::CharacterController characterController;
-            world.AddComponent(_editor.selectedEntity, characterController);
-        }
-
-        if (ImGui::MenuItem("Player component"))
-        {
-            PlayerComponent playerComponent;
-            world.AddComponent(_editor.selectedEntity, playerComponent);
-        }
-        if (ImGui::MenuItem("Camera gameplay"))
-        {
-            CameraGameplay cameraGameplay;
-            world.AddComponent(_editor.selectedEntity, cameraGameplay);
-        }
-        if (world.HasComponent<Transform>(_editor.selectedEntity))
+        if (!world.HasComponent<CharacterController>(_editor.selectedEntity) && ImGui::MenuItem("Character controller"))
+            world.AddComponent(_editor.selectedEntity, CharacterController());
+        if (!world.HasComponent<PlayerComponent>(_editor.selectedEntity) && ImGui::MenuItem("Player component"))
+            world.AddComponent(_editor.selectedEntity, PlayerComponent());
+        if (!world.HasComponent<CameraGameplay>(_editor.selectedEntity) && ImGui::MenuItem("Camera gameplay"))
+            world.AddComponent(_editor.selectedEntity, CameraGameplay());
+        if(world.HasComponent<Transform>(_editor.selectedEntity))
             AddRigidBody(); // Propose to add a RigidBody only if the entity already have a Transform
-
-        if (ImGui::MenuItem("Animator"))
+        if (!world.HasComponent<Animator>(_editor.selectedEntity) && ImGui::MenuItem("Animator"))
             world.AddComponent(_editor.selectedEntity, Animator());
-        if (ImGui::MenuItem("Particle Emitter"))
+        if (!world.HasComponent<ParticleEmitter>(_editor.selectedEntity) && ImGui::MenuItem("Particle Emitter"))
             world.AddComponent(_editor.selectedEntity, ParticleEmitter());
+        if (!world.HasComponent<SimpleShadow>(_editor.selectedEntity) && ImGui::MenuItem("Simple Shadow"))
+            world.AddComponent(_editor.selectedEntity, SimpleShadow());
 
         ImGui::EndPopup();
     }
@@ -561,40 +554,23 @@ void PropertiesWidget::DeleteComponent()
     if (ImGui::BeginPopup("##ComponentContextMenu_Delete"))
     {
         if (world.HasComponent<Camera>(_editor.selectedEntity) && ImGui::MenuItem("Camera"))
-        {
             world.RemoveComponent<Camera>(_editor.selectedEntity);
-        }
-
-        //Light
         if (world.HasComponent<Light>(_editor.selectedEntity) && ImGui::MenuItem("Light"))
-        {
             world.RemoveComponent<Light>(_editor.selectedEntity);
-        }
-
         if (world.HasComponent<Model>(_editor.selectedEntity) && ImGui::MenuItem("Model"))
-        {
             world.RemoveComponent<Model>(_editor.selectedEntity);
-        }
         if (world.HasComponent<RigidBody>(_editor.selectedEntity) && ImGui::MenuItem("Rigidbody"))
-        {
             world.RemoveComponent<RigidBody>(_editor.selectedEntity);
-        }
-        if (world.HasComponent<CharacterController>(_editor.selectedEntity) && ImGui::MenuItem("Character controller"))
-        {
+        if (world.HasComponent<CharacterController>(_editor.selectedEntity) && ImGui::MenuItem("Character Controller"))
             world.RemoveComponent<CharacterController>(_editor.selectedEntity);
-        }
         if (world.HasComponent<PlayerComponent>(_editor.selectedEntity) && ImGui::MenuItem("Player component"))
-        {
             world.RemoveComponent<PlayerComponent>(_editor.selectedEntity);
-        }
         if (world.HasComponent<CameraGameplay>(_editor.selectedEntity) && ImGui::MenuItem("Camera gameplay"))
-        {
             world.RemoveComponent<CameraGameplay>(_editor.selectedEntity);
-        }
         if (world.HasComponent<ParticleEmitter>(_editor.selectedEntity) && ImGui::MenuItem("ParticleEmitter"))
-        {
             world.RemoveComponent<ParticleEmitter>(_editor.selectedEntity);
-        }
+        if (world.HasComponent<SimpleShadow>(_editor.selectedEntity) && ImGui::MenuItem("Simple Shadow"))
+            world.RemoveComponent<SimpleShadow>(_editor.selectedEntity);
         ImGui::EndPopup();
     }
 }
@@ -759,7 +735,7 @@ void PropertiesWidget::ParticleReader()
         particleEmitter.SetDuration(duration);
 
     int size = particleEmitter.GetSize();
-    if (ImGui::DragInt("Size", &size, 1, 0))
+    if (ImGui::DragInt("Size", &size, 1, 1, INT32_MAX))
         particleEmitter.SetSize(size);
 
     Renderer::Texture& texture = particleEmitter.GetTexture();
@@ -784,4 +760,36 @@ void PropertiesWidget::ParticleReader()
         }
         ImGui::EndCombo();
     }
+}
+
+const char* listShadowType[2] = {"SQUARE", "CIRCLE"};
+
+void PropertiesWidget::SimpleShadowReader()
+{
+    if (ImGui::CollapsingHeader("Simple Shadow"))
+        return;
+
+    auto& shadow = Engine::Instance().GetCurrentWorld().GetComponent<SimpleShadow>(_editor.selectedEntity);
+
+    if (ImGui::BeginCombo("Shadow Type", listShadowType[shadow.type]))
+    {
+        for (unsigned int i = 0; i < 2 ; i++)
+        {
+            bool isSelected = (listShadowType[shadow.type] == listShadowType[i]);
+            if (ImGui::Selectable(listShadowType[i], isSelected))
+            {
+                shadow.type = (SimpleShadow::ShadowType)i;
+            }
+
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+        }
+        ImGui::EndCombo();
+    }
+    ImGui::DragFloat2("Scale ##Shadow", shadow.scale.e, 0.1f, FLT_MIN, FLT_MAX);
+    ImGui::DragFloat3("Offset ##Shadow", shadow.offset.e, 0.1f);
+
+    float degAngle = shadow.yRotation * RadToDeg<float>();
+    ImGui::DragFloat("Angle", &degAngle);
+    shadow.yRotation = degAngle * DegToRad<float>();
 }

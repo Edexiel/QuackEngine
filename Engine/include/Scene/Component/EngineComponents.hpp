@@ -8,3 +8,4 @@
 #include "Scene/Component/CameraGameplay.hpp"
 #include "Scene/Component/CharacterController.hpp"
 #include "Scene/Component/ParticleEmitter.hpp"
+#include "Scene/Component/SimpleShadow.hpp"

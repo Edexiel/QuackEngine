@@ -25,7 +25,7 @@ public:
     void UpdateVisible() final;
 
 private:
-    Maths::Vector3f _eulerRot{0,0,0};
+    Maths::Vector3f _eulerRot{0, 0, 0};
 
     void ShowComponents();
     void ShowAssets();
@@ -40,6 +40,9 @@ private:
     void CharacterControllerReader();
     void CameraGameplayReader();
     void ParticleReader();
+    void SimpleShadowReader();
+
+
     void AddComponent();
     void DeleteComponent();
 
@@ -64,9 +67,6 @@ private:
     bool
     SelectTexture(Renderer::Texture &texture, const std::vector<std::string> &list, const std::string &currentTexture,
                   const std::string &comboName);
-
-
-
 };
 
 
