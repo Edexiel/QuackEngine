@@ -9,8 +9,6 @@
 #include "Scene/Component/CharacterController.hpp"
 #include "Scene/Component/CameraGameplay.hpp"
 
-
-
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/RendererInterface.hpp"
 
@@ -34,33 +32,19 @@ using namespace Renderer;
 
 void Game::Init(Engine &engine)
 {
-    // Loading of scene "main"
-    {
-        World &main = engine.CreateWorld("Main");
-        main.SetRegister(&Register);
-        main.SetInitGame(&InitGame);
-        main.SetInitSystems(&InitSystems);
-        main.SetInitSettings(&InitSettings);
+    World &main = engine.CreateWorld("Main");
+    main.SetRegister(&Register);
+    main.SetInitGame(&InitGame);
+    main.SetInitSystems(&InitSystems);
+    main.SetInitSettings(&InitSettings);
 
-        Register(main);
-        InitSystems(main);
+    Register(main);
+    InitSystems(main);
 
-        engine.LoadWorld(main);
-    }
-
-    engine.SetCurrentWorld("Main"); //obligatoire
-/** Exemple of adding a new scene **/
-
-//    //Loading of scene "..."
-//    {
-//        World &main = engine.CreateWorld("...");
-//        main.SetRegisterFunctionPtr(&Register...);
-//        main.SetInitFunctionPtr(&Init...);
-//        engine.LoadWorld(...);
-//    }
+    engine.LoadWorld(main);
 
 /** You can select the active scene , default will be the first scene added **/
-
+    engine.SetCurrentWorld("Main"); //obligatoire
 }
 
 void Game::Register(World &world)
