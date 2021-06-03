@@ -6,9 +6,16 @@
 #include <string>
 #include "Scene/Core/Types.hpp"
 
+
 class Engine;
 
 class World;
+
+namespace cereal
+{
+    class JSONInputArchive;
+    class JSONOutputArchive;
+}
 
 class Game
 {
@@ -18,18 +25,11 @@ private:
     static void InitSystems(World &world);
     static void InitSettings(World &world);
 
-    static void Build(const World& world,std::map<std::string, bool> &c,Entity id);
-    template<class Archive>
-    static void Save(const World& w,Archive *archive)
-    {
-        Log_Warning("SAVINNNNNG");
-    }
+    static void Build(const World &world, std::map<std::string, bool> &c, Entity id);
 
-    template<class Archive>
-    static void Load(const World& w,Archive *archive)
-    {
-        Log_Warning("LOADINGGGGGG");
-    }
+    static void Save(const World &w, cereal::JSONOutputArchive &a,const std::map<std::string, bool> &c, Entity e);
+
+    static void Load(const World &w, cereal::JSONInputArchive &a, const std::map<std::string, bool> &c, Entity e);
 
 public:
     Game() = delete;

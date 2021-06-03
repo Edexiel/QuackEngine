@@ -37,6 +37,10 @@
                         "value": false
                     },
                     {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": false
                     },
@@ -117,6 +121,10 @@
                         "value": false
                     },
                     {
+                        "key": "Player",
+                        "value": true
+                    },
+                    {
                         "key": "RigidBody",
                         "value": true
                     },
@@ -171,6 +179,9 @@
                 },
                 "CharacterController": {
                     "value0": 1.0
+                },
+                "Player": {
+                    "ok": 0
                 }
             },
             {
@@ -206,6 +217,10 @@
                     {
                         "key": "ParticleEmitter",
                         "value": true
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
                     },
                     {
                         "key": "RigidBody",
@@ -291,6 +306,10 @@
                     },
                     {
                         "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
                         "value": false
                     },
                     {
@@ -382,6 +401,10 @@
                         "value": false
                     },
                     {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": true
                     },
@@ -464,6 +487,10 @@
                     },
                     {
                         "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
                         "value": false
                     },
                     {

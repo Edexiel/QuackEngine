@@ -59,7 +59,7 @@ void World::SetInitGame(InitFn ptr)
 
 void World::SetInitSystems(InitFn ptr)
 {
-    InitGamePtr = ptr;
+    InitSystemsPtr = ptr;
 }
 
 void World::SetInitSettings(InitFn ptr)
@@ -72,12 +72,12 @@ void World::SetRegister(InitFn ptr)
     RegisterPtr = ptr;
 }
 
-void World::SetSave(serializeFn ptr)
+void World::SetSave(SaveFn ptr)
 {
     SavePtr = ptr;
 }
 
-void World::SetLoad(serializeFn ptr)
+void World::SetLoad(LoadFn ptr)
 {
     LoadPtr = ptr;
 }
@@ -122,11 +122,26 @@ void World::InitSettings()
 
 }
 
-void World::Build(std::map<std::string, bool> &c,Entity id) const
+void World::Build(std::map<std::string, bool> &c, Entity id) const
 {
     if (BuildPtr)
-        BuildPtr(*this,c,id);
+        BuildPtr(*this, c, id);
     else
         Log_Error("No Build function bind to world {}", _name);
 }
 
+void World::Save(cereal::JSONOutputArchive& a,const std::map<std::string, bool> &c,Entity id) const
+{
+    if (SavePtr)
+        SavePtr(*this,a,c,id);
+    else
+        Log_Error("No Save settings function bind to world {}", _name);
+}
+
+void World::Load(cereal::JSONInputArchive& a,const std::map<std::string, bool> &c,Entity id) const
+{
+    if (LoadPtr)
+        LoadPtr(*this,a,c,id);
+    else
+        Log_Error("No Load function bind to world {}", _name);
+}

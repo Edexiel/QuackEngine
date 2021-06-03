@@ -27,6 +27,9 @@
 #include "Player/PlayerComponent.hpp"
 #include "Player/PlayerSystem.hpp"
 
+#include <cereal/archives/json.hpp>
+
+
 
 using namespace Resources;
 using namespace Renderer;
@@ -40,8 +43,8 @@ void Game::Init(Engine &engine)
     main.SetInitSettings(&InitSettings);
 
     /*** Serialization of external components**/
-    main.SetLoad(&Save);
-    main.SetSave(&Load);
+    main.SetLoad(&Load);
+    main.SetSave(&Save);
     main.SetBuild(&Build);
     /*****************************************/
 
@@ -56,7 +59,7 @@ void Game::Init(Engine &engine)
 
 void Game::Register(World &world)
 {
-    Log_Info("Registering Comp/Sys for: {}", world.GetName());
+    Log_Info("Registering Component and Systems for: {}", world.GetName());
 
     /** Register components **/
     //global
@@ -194,12 +197,54 @@ void Game::InitSettings(World &world)
 }
 
 template<typename T>
-void build(const World &world, std::map<std::string, bool> &components, const std::string &name, Entity id)
+void build(const World &w, std::map<std::string, bool> &c, Entity e, const std::string &n)
 {
-    components[name] = world.HasComponent<T>(id);
+    c[n] = w.HasComponent<T>(e);
+}
+
+template<class T>
+void write(const World &w, cereal::JSONOutputArchive &a, Entity e,const std::map<std::string, bool> &c, const std::string &n)
+{
+    auto it = c.find(n);
+    if (it == c.end())
+        return;
+
+    if (it->second)
+    {
+
+        a(cereal::make_nvp(n, w.GetComponent<T>(e)));
+    }
+}
+
+
+template<class T>
+void read(const World &w, cereal::JSONInputArchive &a, Entity e, const std::map<std::string, bool> &c,
+          const std::string &n)
+{
+    auto it = c.find(n);
+    if (it == c.end())
+        return;
+    if (it->second)
+    {
+        T component;
+        a(cereal::make_nvp(n, component));
+        //w.RegisterComponent<T>();
+        w.AddComponent(e, component);
+    }
+}
+
+
+void Game::Save(const World &w, cereal::JSONOutputArchive &a,const std::map<std::string, bool> &c, Entity e)
+{
+    write<PlayerComponent>(w, a, e, c, "Player");
+}
+
+void Game::Load(const World &w, cereal::JSONInputArchive &a, const std::map<std::string, bool> &c, Entity e)
+{
+    read<PlayerComponent>(w,a,e,c,"Player");
 }
 
 void Game::Build(const World &world, std::map<std::string, bool> &c, Entity id)
 {
-    //build<>
+    build<PlayerComponent>(world, c, id, "Player");
 }

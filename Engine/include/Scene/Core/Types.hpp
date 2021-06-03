@@ -7,7 +7,7 @@
 #include <cereal/types/string.hpp>
 
 
-const std::uint32_t COMPONENTS_NUMBER = 12;
+const std::uint_fast8_t COMPONENTS_NUMBER = 12;
 const size_t START_SIZE = 10000;
 typedef std::uint_fast32_t Entity;
 using ComponentType = std::uint_fast8_t;

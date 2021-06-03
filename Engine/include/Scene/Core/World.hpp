@@ -22,21 +22,25 @@
 #include "Scene/Component/CharacterController.hpp"
 #include "Scene/Component/ParticleEmitter.hpp"
 
-#include <cereal/types/map.hpp>
 
 #include "Debug/Log.hpp"
 
 //Serialization, yeah sorry
 #include <cereal/types/string.hpp>
+#include <cereal/types/map.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/access.hpp>
+#include <cereal/archives/json.hpp>
+#include <functional>
+
 
 #include "Tools/Type.hpp"
 
 #include "Engine.hpp"
 
 typedef void (*InitFn)(World &world);
-typedef void (*serializeFn)(const World &world, void *a);
+typedef void (*LoadFn)(const World &w, cereal::JSONInputArchive &a, const std::map<std::string, bool> &c, Entity id);
+typedef void (*SaveFn)(const World &w, cereal::JSONOutputArchive &a, const std::map<std::string, bool> &c, Entity id);
 typedef void (*BuildFn)(const World &world, std::map<std::string, bool> &c, Entity id);
 
 
@@ -59,8 +63,8 @@ private:
     InitFn InitGamePtr = nullptr;
     InitFn RegisterPtr = nullptr;
     InitFn InitSettingsPtr = nullptr;
-    serializeFn SavePtr = nullptr;
-    serializeFn LoadPtr = nullptr;
+    SaveFn SavePtr = nullptr;
+    LoadFn LoadPtr = nullptr;
     BuildFn BuildPtr = nullptr;
 
 public:
@@ -71,8 +75,8 @@ public:
     void SetInitSystems(InitFn ptr);
     void SetInitSettings(InitFn ptr);
     void SetRegister(InitFn ptr);
-    void SetSave(serializeFn ptr);
-    void SetLoad(serializeFn ptr);
+    void SetSave(SaveFn ptr);
+    void SetLoad(LoadFn ptr);
     void SetBuild(BuildFn ptr);
 
     void Register();
@@ -81,11 +85,9 @@ public:
     void InitSettings();
     void Build(std::map<std::string, bool> &c, Entity id) const;
 
-    template<class Archive>
-    void Save(Archive &a);
+    void Save(cereal::JSONOutputArchive &a, const std::map<std::string, bool> &c, Entity id) const;
 
-    template<class Archive>
-    void Load(Archive &a) const;
+    void Load(cereal::JSONInputArchive &a, const std::map<std::string, bool> &c, Entity id) const;
 
     void Clear();
 
@@ -215,7 +217,7 @@ public:
             write<Archive, Component::CameraGameplay>(archive, id, "CameraGameplay");
             write<Archive, Component::CharacterController>(archive, id, "CharacterController");
             write<Archive, Component::ParticleEmitter>(archive, id, "ParticleEmitter");
-            world->Load<Archive>(archive);
+            world->Save(archive, components, id);
         }
 
         template<class Archive>
@@ -236,7 +238,7 @@ public:
             read<Archive, Component::CameraGameplay>(archive, w, e, "CameraGameplay");
             read<Archive, Component::CharacterController>(archive, w, e, "CharacterController");
             read<Archive, Component::ParticleEmitter>(archive, w, e, "ParticleEmitter");
-            w.Load<Archive>(archive);
+            w.Load(archive, components, id);
         }
     };
 

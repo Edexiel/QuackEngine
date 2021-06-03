@@ -55,31 +55,31 @@ inline void World::RemoveComponent<Component::RigidBody>(Entity id)
 }
 
 template<typename T>
-inline T &World::GetComponent(Entity id) const
+T &World::GetComponent(Entity id) const
 {
     return _componentManager->GetComponent<T>(id);
 }
 
 template<typename T>
-inline bool World::HasComponent(Entity id) const
+bool World::HasComponent(Entity id) const
 {
     return _componentManager->HasComponent<T>(id);
 }
 
 template<typename T>
-inline ComponentType World::GetComponentType()
+ComponentType World::GetComponentType()
 {
     return _componentManager->GetComponentType<T>();
 }
 
 template<typename T>
-inline T *World::RegisterSystem() const
+T *World::RegisterSystem() const
 {
     return _systemManager->RegisterSystem<T>();
 }
 
 template<typename T>
-inline void World::SetSystemSignature(Signature signature)
+void World::SetSystemSignature(Signature signature)
 {
     _systemManager->SetSignature<T>(signature);
 }
@@ -88,7 +88,6 @@ inline const std::string &World::GetName() const
 {
     return _name;
 }
-
 
 inline const std::unique_ptr<EntityManager> &World::GetEntityManager() const
 {
@@ -104,22 +103,4 @@ template<class T>
 T *World::GetSystem()
 {
     return _systemManager->GetSystem<T>();
-}
-
-template<class Archive>
-void World::Save(Archive& a)
-{
-    if (SavePtr)
-        SavePtr(*this,(void*)&a);
-    else
-        Log_Error("No Save settings function bind to world {}", _name);
-}
-
-template<class Archive>
-void World::Load(Archive& a) const
-{
-    if (LoadPtr)
-        SavePtr(*this,(void*)&a);
-    else
-        Log_Error("No Load function bind to world {}", _name);
 }
