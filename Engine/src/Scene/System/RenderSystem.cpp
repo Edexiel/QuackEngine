@@ -2,9 +2,10 @@
 
 #include "Engine.hpp"
 #include "Renderer/RendererPlatform.hpp"
-#include "Scene/Component/Animator.hpp"
 #include "Scene/Core/World.hpp"
 
+#include "Scene/Component/Animator.hpp"
+#include "Scene/Component/Model.hpp"
 #include "Scene/Component/Camera.hpp"
 #include "Scene/Component/Transform.hpp"
 

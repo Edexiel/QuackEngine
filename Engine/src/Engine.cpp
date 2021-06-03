@@ -1,5 +1,5 @@
-#include <algorithm>
 #include <vector>
+#include <algorithm>
 #include "Engine.hpp"
 
 #include "Scene/Core/World.hpp"
@@ -318,6 +318,8 @@ void Engine::LoadWorld(World &world)
 
 void Engine::RemoveWorld(const std::string &name)
 {
+    Log_Info("Removing world {}",name);
+
     auto it = _worldLut.find(name);
     if (it == _worldLut.end())
     {
@@ -331,6 +333,14 @@ void Engine::RemoveWorld(const std::string &name)
     _worlds.pop_back();
     _worldLut[back_name] = index;
     _worldLut.erase(name);
+
+    std::filesystem::path worldPath("./Asset/Scenes");
+    worldPath.append(name).replace_extension("qck");
+
+    if (std::filesystem::remove(worldPath))
+    {
+        Log_Info("World {} removed",name);
+    }
 
 }
 

@@ -1,13 +1,9 @@
 #include "Widgets/PropertiesWidget.hpp"
 #include "Engine.hpp"
 
-#include "Scene/Component/RigidBody.hpp"
-#include "Scene/Component/CharacterController.hpp"
-#include "Scene/System/RenderSystem.hpp"
-#include "Scene/System/LightSystem.hpp"
-#include "Scene/System/PhysicsSystem.hpp"
-#include "Scene/Component/CameraGameplay.hpp"
-#include "Scene/Component/ParticleEmitter.hpp"
+#include "Scene/Component/EngineComponents.hpp"
+#include "Scene/System/EngineSystems.hpp"
+
 #include "Player/PlayerComponent.hpp"
 
 #include "Renderer/ModelRenderer.hpp"

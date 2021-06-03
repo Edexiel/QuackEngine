@@ -1,3 +1,4 @@
+#include <Scene/Component/Name.hpp>
 #include "Widgets/ViewerWidget.hpp"
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/Transform.hpp"

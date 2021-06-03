@@ -14,6 +14,7 @@ class World;
 namespace cereal
 {
     class JSONInputArchive;
+
     class JSONOutputArchive;
 }
 
@@ -26,9 +27,7 @@ private:
     static void InitSettings(World &world);
 
     static void Build(const World &world, std::map<std::string, bool> &c, Entity id);
-
-    static void Save(const World &w, cereal::JSONOutputArchive &a,const std::map<std::string, bool> &c, Entity e);
-
+    static void Save(const World &w, cereal::JSONOutputArchive &a, const std::map<std::string, bool> &c, Entity e);
     static void Load(const World &w, cereal::JSONInputArchive &a, const std::map<std::string, bool> &c, Entity e);
 
 public:

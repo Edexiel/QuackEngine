@@ -3,33 +3,17 @@
 #include "Engine.hpp"
 #include "Scene/Core/World.hpp"
 
-#include "Scene/Component/Transform.hpp"
-#include "Scene/Component/Animator.hpp"
-#include "Scene/Component/RigidBody.hpp"
-#include "Scene/Component/CharacterController.hpp"
-#include "Scene/Component/CameraGameplay.hpp"
+#include "Scene/Component/EngineComponents.hpp"
+#include "Scene/System/EngineSystems.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/RendererInterface.hpp"
-
-#include "Renderer/ProcessBase.hpp"
-#include "Scene/System/PhysicsSystem.hpp"
-#include "Scene/System/CameraSystem.hpp"
-#include "Scene/System/RenderSystem.hpp"
-#include "Scene/System/LightSystem.hpp"
-#include "Scene/System/CharacterControllerSystem.hpp"
-#include "Scene/System/CameraGameplaySystem.hpp"
-#include "Scene/System/ParticleSystem.hpp"
-#include "Scene/System/AnimatorSystem.hpp"
-
 
 #include "Enemy/EnemyComponent.hpp"
 #include "Player/PlayerComponent.hpp"
 #include "Player/PlayerSystem.hpp"
 
 #include <cereal/archives/json.hpp>
-
-
 
 using namespace Resources;
 using namespace Renderer;
@@ -53,7 +37,6 @@ void Game::Init(Engine &engine)
 
     engine.LoadWorld(main);
 
-    /** You can select the active scene , default will be the first scene added **/
     engine.SetCurrentWorld("Main"); //obligatoire
 }
 
@@ -203,7 +186,8 @@ void build(const World &w, std::map<std::string, bool> &c, Entity e, const std::
 }
 
 template<class T>
-void write(const World &w, cereal::JSONOutputArchive &a, Entity e,const std::map<std::string, bool> &c, const std::string &n)
+void write(const World &w, cereal::JSONOutputArchive &a, Entity e, const std::map<std::string, bool> &c,
+           const std::string &n)
 {
     auto it = c.find(n);
     if (it == c.end())
@@ -211,7 +195,6 @@ void write(const World &w, cereal::JSONOutputArchive &a, Entity e,const std::map
 
     if (it->second)
     {
-
         a(cereal::make_nvp(n, w.GetComponent<T>(e)));
     }
 }
@@ -228,20 +211,18 @@ void read(const World &w, cereal::JSONInputArchive &a, Entity e, const std::map<
     {
         T component;
         a(cereal::make_nvp(n, component));
-        //w.RegisterComponent<T>();
         w.AddComponent(e, component);
     }
 }
 
-
-void Game::Save(const World &w, cereal::JSONOutputArchive &a,const std::map<std::string, bool> &c, Entity e)
+void Game::Save(const World &w, cereal::JSONOutputArchive &a, const std::map<std::string, bool> &c, Entity e)
 {
     write<PlayerComponent>(w, a, e, c, "Player");
 }
 
 void Game::Load(const World &w, cereal::JSONInputArchive &a, const std::map<std::string, bool> &c, Entity e)
 {
-    read<PlayerComponent>(w,a,e,c,"Player");
+    read<PlayerComponent>(w, a, e, c, "Player");
 }
 
 void Game::Build(const World &world, std::map<std::string, bool> &c, Entity id)

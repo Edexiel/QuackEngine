@@ -1,4 +1,4 @@
-#include "World.hpp"
+#include "Scene/Component/RigidBody.hpp"
 
 template<typename T>
 void World::RegisterComponent() const
