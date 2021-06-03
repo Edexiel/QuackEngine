@@ -22,8 +22,6 @@ Editor::Editor() : _engine{Engine::Instance()}
 {
     InitWidgets();
     InitImGui(_engine.GetWindow());
-
-    _engine.GetResourcesManager().LoadFolder(R"(./Asset)");
 }
 
 Editor::~Editor()

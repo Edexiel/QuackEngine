@@ -5,14 +5,8 @@
 
 using namespace Component;
 
-void LightSystem::Update(bool force)
+void LightSystem::Update()
 {
-    if (!force)
-    {
-        if (_lastEntitiesSize == _entities.size())
-            return;
-    }
-
     _lastEntitiesSize = _entities.size();
 
     unsigned int pointNb{0}, directionalNb{0}, spotNb{0};

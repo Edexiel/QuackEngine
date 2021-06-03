@@ -103,12 +103,12 @@ void PropertiesWidget::DisplayMaterial(const Resources::Asset *asset)
     if (ImGui::Checkbox("Check Lights", &material->checkLight))
     {
         material->GenerateShader();
-        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
     if (ImGui::Checkbox("Has Skeleton", &material->hasSkeleton))
     {
         material->GenerateShader();
-        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
 
     if (material->checkLight)
@@ -126,7 +126,7 @@ void PropertiesWidget::DisplayMaterial(const Resources::Asset *asset)
     if (SelectTexture(material->colorTexture, listTexture, name, "Color Texture"))
     {
         material->GenerateShader();
-        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
 
     if (!material->checkLight)
@@ -136,21 +136,21 @@ void PropertiesWidget::DisplayMaterial(const Resources::Asset *asset)
     if (SelectTexture(material->diffuseTexture, listTexture, name, "Diffuse Texture"))
     {
         material->GenerateShader();
-        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
 
     name = _engine.GetResourcesManager().GetName(material->specularTexture);
     if (SelectTexture(material->specularTexture, listTexture, name, "Specular Texture"))
     {
         material->GenerateShader();
-        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
 
     name = _engine.GetResourcesManager().GetName(material->normalMap);
     if (SelectTexture(material->normalMap, listTexture, name, "Normal Texture"))
     {
         material->GenerateShader();
-        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
 }
 
@@ -297,7 +297,7 @@ void PropertiesWidget::LightReader()
                         break;
 
                 }
-                _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+                _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
             }
             if (isSelected)
                 ImGui::SetItemDefaultFocus();
@@ -309,14 +309,14 @@ void PropertiesWidget::LightReader()
         ImGui::ColorEdit3("Diffuse", light.diffuse.e) ||
         ImGui::ColorEdit3("Specular", light.specular.e))
     {
-        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
     if (light.type != Component::LightType::L_DIRECTIONAL)
     {
         if (ImGui::InputFloat("Linear Attenuation", &light.linear, 0.0f, 0.0f, "%.9f") ||
             ImGui::InputFloat("Quadratic Attenuation", &light.quadratic, 0.0f, 0.0f, "%.9f"))
         {
-            _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+            _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
         }
     }
     if (light.type == Component::LightType::L_SPOT)
@@ -324,7 +324,7 @@ void PropertiesWidget::LightReader()
         if (ImGui::DragFloat("Spot Angle", &light.spotAngle) ||
             ImGui::DragFloat("Outer Spot Angle", &light.outerSpotAngle))
         {
-            _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+            _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
         }
     }
 

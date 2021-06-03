@@ -14,7 +14,7 @@ private:
     class Engine &_engine;
 
     void InitWidgets();
-    static void InitImGui(class GLFWwindow *window);
+    static void InitImGui(struct GLFWwindow *window);
     static void SetStyle();
     static void SetIo();
 

@@ -128,6 +128,8 @@ in mat3 TBN;
     }
 #endif
 
+#ifdef LIGHT
+
 vec3 GetColorAfterDirectionalLight(DirectionalLight light, vec3 position, vec3 normal, vec2 texCoord)
 {
 
@@ -198,6 +200,8 @@ vec3 GetColorAfterSpotLight(SpotLight light, vec3 position, vec3 normal, vec2 te
     * intensity) * attenuation;
 
 }
+
+#endif
 
 void main()
 {

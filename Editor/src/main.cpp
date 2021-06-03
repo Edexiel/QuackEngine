@@ -9,6 +9,7 @@
 #include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/System/CharacterControllerSystem.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
 
 #include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/System/CameraGameplaySystem.hpp"
@@ -33,9 +34,9 @@ int main()
     Engine engine(settings);
     Engine::SetInstance(engine);
 
-    Editor editor{};
-
     Game::Init(engine);
+
+    Editor editor{};
 
     while (!engine.WindowShouldClose())
     {
@@ -50,6 +51,8 @@ int main()
 
         /** Editor draw **/
         editor.Draw();
+
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
 
         /** When editor is in play mode **/
         if (engine.IsGamePlaying())

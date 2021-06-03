@@ -39,7 +39,7 @@ void Game::Init(Engine &engine)
         World &main = engine.CreateWorld("Main");
         main.SetRegister(&Register);
         main.SetInitGame(&InitGame);
-        main.SetInitSystems(&InitGame);
+        main.SetInitSystems(&InitSystems);
         main.SetInitSettings(&InitSettings);
 
         Register(main);

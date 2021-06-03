@@ -68,8 +68,8 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 672,
-                    "_height": 381,
+                    "_width": 824,
+                    "_height": 273,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
                     "_fov": 0.7853749394416809
@@ -130,9 +130,9 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": -1.3600000143051148,
-                        "y": -2.5,
-                        "z": 10.0
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
                     },
                     "scale": {
                         "x": 0.009999999776482582,
@@ -326,9 +326,9 @@
                 "Light": {
                     "type": 1,
                     "ambient": {
-                        "x": 0.10000000149011612,
-                        "y": 0.10000000149011612,
-                        "z": 0.10000000149011612
+                        "x": 0.10196078568696976,
+                        "y": 0.10196078568696976,
+                        "z": 0.10196078568696976
                     },
                     "diffuse": {
                         "x": 1.0,
@@ -430,6 +430,78 @@
                         "y": 0.25,
                         "z": 20.0
                     }
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "GameObject"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/Cube.fbx",
+                    "type": 1,
+                    "materials": [
+                        "Default material"
+                    ]
                 }
             }
         ]
