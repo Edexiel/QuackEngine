@@ -99,6 +99,10 @@ target_include_directories(ImGuizmo INTERFACE ${IMGUIZMO_FOLDER})
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE ${external_lib}/stb)
 
+#FreeType
+add_subdirectory(${external_lib}/freetype)
+
+
 #miniaudio
 add_library(miniaudio INTERFACE)
 target_include_directories(miniaudio INTERFACE ${external_lib}/miniaudio)

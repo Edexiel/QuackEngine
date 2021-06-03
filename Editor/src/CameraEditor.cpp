@@ -50,8 +50,8 @@ void CameraEditor::FreeFly()
 void CameraEditor::MouseMovement(const Vector2d &currentPos, const Vector2d &oldPos)
 {
     Vector2d angleRotation = (currentPos - oldPos) * (_speedRotation * Pi<float>() / 180.f);
-    _yaw += (float)angleRotation.x;
-    _pitch = (float)std::clamp(_pitch + angleRotation.y, -Pi<float>() / 2.0, Pi<float>() / 2.0);
-    float deltatime = (float)Engine::Instance().GetTimeManager().GetDeltaTime();
-    _rotation = Quaternion({0, 1, 0}, _yaw * deltatime) * Quaternion({1, 0, 0}, _pitch * deltatime);
+    float deltatime = (float)Engine::Instance().GetDeltaTime();
+    _yaw += (float)angleRotation.x * deltatime;
+    _pitch = (float)std::clamp(_pitch + angleRotation.y * deltatime, -Pi<float>() / 2.0, Pi<float>() / 2.0);
+    _rotation = Quaternion({0, 1, 0}, _yaw) * Quaternion({1, 0, 0}, _pitch);
 }

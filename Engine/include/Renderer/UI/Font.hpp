@@ -17,13 +17,13 @@ namespace Renderer
     class Font : public ProcessBase
     {
     private:
-        void TestFont();
         std::unordered_map<char, Character> _characters;
         void LoadFont(const char * path);
     public:
         Font() = default;
         Font(const std::string &name);
         void Process(const Framebuffer &buffer, const Mesh &screenMesh) final;
+        void Font::RenderText(std::string text, float x, float y, float scale, Maths::Vector3f color);
     };
 }
 #endif //QUACKENGINE_FONT_HPP

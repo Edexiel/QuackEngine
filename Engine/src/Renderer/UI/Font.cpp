@@ -6,87 +6,64 @@
 
 #include <cstdlib>
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h" /* http://nothings.org/stb/stb_image_write.h */
+#include "ft2build.h"
+#include FT_FREETYPE_H
 
-#define STB_TRUETYPE_IMPLEMENTATION
-#include "stb_truetype.h" /* http://nothings.org/stb/stb_truetype.h */
 
 using namespace Renderer;
 
 Font::Font(const std::string &name):ProcessBase(name, Engine::Instance().GetResourcesManager().LoadShader("./Shader/Fonts/Font.qsh"))
 {
-//    LoadFont("../../Game/Asset/Fonts/cmunrm.ttf");
+    LoadFont("../../Game/Asset/Fonts/cmunrm.ttf");
 }
 
 void Font::LoadFont(const char *path)
 {
-    /* load font file */
-    long size;
-    unsigned char* fontBuffer;
-
-    FILE* fontFile = fopen(path, "rb");
-    fseek(fontFile, 0, SEEK_END);
-    size = ftell(fontFile); /* how long is the file ? */
-    fseek(fontFile, 0, SEEK_SET); /* reset */
-
-    fontBuffer = (unsigned char*)malloc(size);
-
-    fread(fontBuffer, size, 1, fontFile);
-    fclose(fontFile);
-
-    /* prepare font */
-    stbtt_fontinfo info;
-    if (!stbtt_InitFont(&info, fontBuffer, 0))
+    RendererPlatform::SetTransparency(true);
+    FT_Library ft;
+    if (FT_Init_FreeType(&ft))
     {
-        printf("failed\n");
+        std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+        return;
     }
 
-    /* create a bitmap for the phrase */
-    int l_h = 50;
+    FT_Face face;
+    if (FT_New_Face(ft, path, 0, &face))
+    {
+        std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+        return;
+    }
 
-    /* calculate font scaling */
-    float scale = stbtt_ScaleForPixelHeight(&info, (float)l_h);
-
-    int ascent, descent, lineGap;
-    stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
-
-    ascent = roundf(ascent * scale);
-    descent = roundf(descent * scale);
-
+    FT_Set_Pixel_Sizes(face, 0, 128);
+    RendererPlatform::PixelStore(1);
     for (unsigned char c = 0; c < 128; c++)
     {
-        Character character;
-        character.size = {256, 256};
-
-        stbtt_GetCodepointHMetrics(&info, c, &character.advance, &character.bearing.x);//how wide is this character
-
-        int c_x1, c_y1, c_x2, c_y2;
-        /* get bounding box for character (may be offset to account for chars that dip above or below the line */
-        stbtt_GetCodepointBitmapBox(&info, c, scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
-
-        /* compute y (different characters have different heights */
-        int y = ascent + c_y1;
-        int x = roundf(character.advance * scale);
-
-        /* render character (stride and offset is important here) */
-//        int byteOffset = roundf(character.bearing.x * scale) + (y * character.size.x);
-
-        auto* tempBitmap = (unsigned char*)calloc(character.size.x * character.size.y, sizeof(unsigned char));
-        stbtt_MakeCodepointBitmap(&info, tempBitmap, c_x2 - c_x1, c_y2 - c_y1, character.size.x, scale, scale, c);
-
+        // load character glyph
+        if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+        {
+            std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+            continue;
+        }
+        // generate texture
         Renderer::Texture texture = RendererPlatform::CreateTexture();
+        RendererPlatform::SetTextureImage2D(
+                face->glyph->bitmap.buffer,
+                1,
+                face->glyph->bitmap.width,
+                face->glyph->bitmap.rows
+                );
+        // set texture options
         RendererPlatform::TextureParameter();
-        RendererPlatform::EnableBlend(true);
-        RendererPlatform::SetTextureImage2D(tempBitmap, 1, character.size.x, character.size.y);
 
-//        _characters[c] = character;
+        // now store character for later use
+        Character character = {
+                texture,
+                {(int)face->glyph->bitmap.width, (int)face->glyph->bitmap.rows},
+                {face->glyph->bitmap_left, face->glyph->bitmap_top},
+                face->glyph->advance.x
+        };
         _characters.insert(std::pair<char, Character>(c, character));
-//        texture.Bind();
-        free(tempBitmap);
     }
-    free(fontBuffer);
-//    free(bitmapReverse);
 }
 
 void Font::Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &screenMesh)
@@ -96,99 +73,55 @@ void Font::Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &sc
 
     _shader.Use();
 //    _shader.SetMatrix4("view", Maths::Matrix4::Scale(0.5f));
-    _shader.SetMatrix4("view", Maths::Matrix4::Scale(1.0f));
-//    buffer.BindTexture();
-//    TestFont();
-//    _characters['a'].texture.Bind();
+    _shader.SetMatrix4("view", Maths::Matrix4::Scale(0.5f));
+    buffer.BindTexture();
+    RenderText("Bien le bonjour le Denis!", 0, 0, 1, {1,1,1});
     screenMesh.Draw();
     RendererPlatform::BindFramebuffer(0);
 }
 
-void Font::TestFont()
+void Font::RenderText(std::string text, float x, float y, float scale, Maths::Vector3f color)
 {
-    /* load font file */
-    long size;
-    unsigned char* fontBuffer;
+    // activate corresponding render state
+    _shader.Use();
+//    glUniform3f(glGetUniformLocation(shader.ID, "textColor"), color.x, color.y, color.z);
+//    glActiveTexture(GL_TEXTURE0);
+//    glBindVertexArray(VAO);
 
-    FILE* fontFile = fopen("../../Game/Asset/Fonts/cmunrm.ttf", "rb");
-    fseek(fontFile, 0, SEEK_END);
-    size = ftell(fontFile); /* how long is the file ? */
-    fseek(fontFile, 0, SEEK_SET); /* reset */
-
-    fontBuffer = (unsigned char*)malloc(size);
-
-    fread(fontBuffer, size, 1, fontFile);
-    fclose(fontFile);
-
-    /* prepare font */
-    stbtt_fontinfo info;
-    if (!stbtt_InitFont(&info, fontBuffer, 0))
+    // iterate through all characters
+    std::string::const_iterator c;
+    for (c = text.begin(); c != text.end(); c++)
     {
-        printf("failed\n");
+        Character ch = _characters[*c];
+
+        float xpos = x + ch.bearing.x * scale;
+        float ypos = y - (ch.size.y - ch.bearing.y) * scale;
+
+        float w = ch.size.x * scale;
+        float h = ch.size.y * scale;
+        // update VBO for each character
+        float vertices[6][4] = {
+                { xpos,     ypos + h,   0.0f, 0.0f },
+                { xpos,     ypos,       0.0f, 1.0f },
+                { xpos + w, ypos,       1.0f, 1.0f },
+
+                { xpos,     ypos + h,   0.0f, 0.0f },
+                { xpos + w, ypos,       1.0f, 1.0f },
+                { xpos + w, ypos + h,   1.0f, 0.0f }
+        };
+        // render glyph texture over quad
+//        glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+        // update content of VBO memory
+//        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+//        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // be sure to use glBufferSubData and not glBufferData
+
+//        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        // render quad
+//        glDrawArrays(GL_TRIANGLES, 0, 6);
+        // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+        ch.texture.Bind();
+        x += (ch.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
     }
-
-    int b_w = 1920; /* bitmap width */
-    int b_h = 1080; /* bitmap height */
-    int l_h = 540; /* line height */
-
-    /* create a bitmap for the phrase */
-    auto* bitmap = (unsigned char*)calloc(b_w * b_h, sizeof(unsigned char));
-
-    /* calculate font scaling */
-    float scale = stbtt_ScaleForPixelHeight(&info, (float)l_h);
-
-    char* word = "A";
-
-    int x = 0;
-
-    int ascent, descent, lineGap;
-    stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
-
-    ascent = roundf(ascent * scale);
-    descent = roundf(descent * scale);
-
-    int i;
-    for (i = 0; i < strlen(word); ++i)
-    {
-        /* how wide is this character */
-        int ax;
-        int lsb;
-        stbtt_GetCodepointHMetrics(&info, word[i], &ax, &lsb);
-
-        /* get bounding box for character (may be offset to account for chars that dip above or below the line */
-        int c_x1, c_y1, c_x2, c_y2;
-        stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
-
-        /* compute y (different characters have different heights */
-        int y = ascent + c_y1;
-
-        /* render character (stride and offset is important here) */
-        int byteOffset = x + roundf(lsb * scale) + (y * b_w);
-        stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, b_w, scale, scale, word[i]);
-
-        /* advance x */
-        x += roundf(ax * scale);
-
-        /* add kerning */
-        int kern;
-        kern = stbtt_GetCodepointKernAdvance(&info, word[i], word[i + 1]);
-        x += roundf(kern * scale);
-    }
-
-    auto* bitmapReverse = (unsigned char*)calloc(b_w * b_h, sizeof(unsigned char));
-    for(int i = 0; i < b_h; i++)
-        for(int j = 0; j < b_w; j++)
-            bitmapReverse[j + i * b_w] = bitmap[j + (b_h - i) * b_w];
-
-    Renderer::Texture texture = RendererPlatform::CreateTexture();
-    RendererPlatform::TextureParameter();
-    RendererPlatform::EnableBlend(true);
-    RendererPlatform::SetTextureImage2D(bitmapReverse, 1, b_w, b_h);
-    texture.Bind();
-//    _shader.SetSampler("ourTexture");
-
-    free(fontBuffer);
-    free(bitmap);
-    free(bitmapReverse);
+//    glBindVertexArray(0);
+//    glBindTexture(GL_TEXTURE_2D, 0);
 }
-

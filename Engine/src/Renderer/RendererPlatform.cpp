@@ -60,17 +60,9 @@ void RendererPlatform::EnableDepthBuffer(bool isEnable)
     }
 }
 
-void RendererPlatform::EnableBlend(bool isEnable)
+void RendererPlatform::PixelStore(float param)
 {
-    if (isEnable)
-    {
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
-    else
-    {
-        glDisable(GL_BLEND);
-    }
+    glPixelStorei(GL_UNPACK_ALIGNMENT, param);
 }
 
 void RendererPlatform::SetTransparency(bool transparency)

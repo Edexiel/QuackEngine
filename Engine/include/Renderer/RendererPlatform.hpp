@@ -11,7 +11,6 @@ namespace Component
 {
     struct Light;
 }
-
 namespace Renderer
 {
     struct Vertex;
@@ -34,7 +33,7 @@ namespace Renderer
         static void ClearColor(const Maths::Vector4f &color);
         static void Clear();
         static void EnableDepthBuffer(bool isEnable);
-        static void EnableBlend(bool isEnable);
+        static void PixelStore(float param);
 
         static void SetTransparency(bool transparency);
 
