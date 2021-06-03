@@ -19,8 +19,8 @@ int main()
     Engine engine(settings);
     Engine::SetInstance(engine);
 
-    Game game;
-    game.Init(engine);
+//    Game game;
+//    game::Init();
     //loadScene();
 
     while (!engine.WindowShouldClose())

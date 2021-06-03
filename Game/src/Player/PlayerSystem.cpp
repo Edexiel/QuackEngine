@@ -1,32 +1,11 @@
-#include "Player/Player.hpp"
+#include "Player/PlayerSystem.hpp"
 
-#include "Engine.hpp"
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/CharacterController.hpp"
+#include "Player/PlayerComponent.hpp"
 
-PlayerComponent::PlayerComponent()
+PlayerSystem::PlayerSystem():engine{Engine::Instance()}
 {
-    Engine& engine = Engine::Instance();
-    Resources::ResourcesManager& resourcesManager = engine.GetResourcesManager();
-    Audio::Sound upSound = resourcesManager.LoadSound("../../Game/Asset/Player/Sound/inactive.ogg", Audio::SoundType::S_EFFECT);
-    Audio::Sound downSound = resourcesManager.LoadSound("../../Game/Asset/Player/Sound/inactive.ogg", Audio::SoundType::S_EFFECT);
-    Audio::Sound rightSound = resourcesManager.LoadSound("../../Game/Asset/Player/Sound/inactive.ogg", Audio::SoundType::S_EFFECT);
-    Audio::Sound leftSound = resourcesManager.LoadSound("../../Game/Asset/Player/Sound/inactive.ogg", Audio::SoundType::S_EFFECT);
-
-    _playerSound = {upSound, downSound, rightSound, leftSound};
-}
-
-PlayerSound &PlayerComponent::GetPlayerSound()
-{
-    return _playerSound;
-}
-
-PlayerSystem::PlayerSystem()
-{
-
-    std::cout << "Load Player" << std::endl;
-
-    Engine &engine = Engine::Instance();
     Input::InputManager& inputManager = engine.GetInputManager();
 
     inputManager.BindEvent("Up", Input::Key::KEY_UP);
@@ -58,7 +37,7 @@ void PlayerSystem::Up()
 {
     for (Entity entity : _entities)
     {
-        Engine::Instance().GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
+        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
     }
 }
 
@@ -66,7 +45,7 @@ void PlayerSystem::Down()
 {
     for (Entity entity : _entities)
     {
-        Engine::Instance().GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
+        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
     }
 }
 
@@ -74,7 +53,7 @@ void PlayerSystem::Right()
 {
     for (Entity entity : _entities)
     {
-        Engine::Instance().GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
+        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
     }
 }
 
@@ -82,13 +61,13 @@ void PlayerSystem::Left()
 {
     for (Entity entity : _entities)
     {
-        Engine::Instance().GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
+        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
     }
 }
 
 void PlayerSystem::MoveForward(float verticalAxis)
 {
-    auto &world = Engine::Instance().GetCurrentWorld();
+    auto &world = engine.GetCurrentWorld();
 
     for(Entity entity : _entities)
     {
@@ -99,7 +78,7 @@ void PlayerSystem::MoveForward(float verticalAxis)
 
 void PlayerSystem::MoveRight(float horizontalAxis)
 {
-    auto &world = Engine::Instance().GetCurrentWorld();
+    auto &world = engine.GetCurrentWorld();
     for(Entity entity : _entities)
     {
         auto &characterController = world.GetComponent<Component::CharacterController>(entity);
@@ -109,7 +88,7 @@ void PlayerSystem::MoveRight(float horizontalAxis)
 
 void PlayerSystem::MoveBackward(float verticalAxis)
 {
-    auto &world = Engine::Instance().GetCurrentWorld();
+    auto &world = engine.GetCurrentWorld();
     for(Entity entity : _entities)
     {
         auto &characterController = world.GetComponent<Component::CharacterController>(entity);
@@ -119,7 +98,7 @@ void PlayerSystem::MoveBackward(float verticalAxis)
 
 void PlayerSystem::MoveLeft(float horizontalAxis)
 {
-    auto &world = Engine::Instance().GetCurrentWorld();
+    auto &world = engine.GetCurrentWorld();
     for(Entity entity : _entities)
     {
         auto &characterController = world.GetComponent<Component::CharacterController>(entity);

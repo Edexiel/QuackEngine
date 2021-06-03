@@ -1,9 +1,9 @@
-#ifndef _PLAYER_HPP
-#define _PLAYER_HPP
+#ifndef QUACKENGINE_PLAYERSYSTEM_HPP
+#define QUACKENGINE_PLAYERSYSTEM_HPP
 
 #include "Scene/Core/System.hpp"
-#include "Scene/Component/ComponentBase.hpp"
-#include "PlayerSound.hpp"
+#include "Engine.hpp"
+
 
 class PlayerSystem : public System
 {
@@ -15,22 +15,14 @@ public:
     void Down();
     void Right();
     void Left();
+
 private:
+    Engine& engine;
     void MoveForward(float verticalAxis);
     void MoveBackward(float verticalAxis);
     void MoveLeft(float horizontalAxis);
     void MoveRight(float horizontalAxis);
 };
 
-class PlayerComponent : public Component::ComponentBase
-{
-    PlayerSound _playerSound;
 
-public:
-    PlayerComponent();
-
-    PlayerSound& GetPlayerSound();
-
-};
-
-#endif //_PLAYER_HPP
+#endif //QUACKENGINE_PLAYERSYSTEM_HPP

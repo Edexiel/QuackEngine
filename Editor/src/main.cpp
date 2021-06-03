@@ -1,15 +1,15 @@
 #include "GLFW/glfw3.h"
 
-#include "Editor.hpp"
 #include "Engine.hpp"
+#include "Editor.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
 
 #include "Scene/System/CameraSystem.hpp"
-#include "Scene/System/LightSystem.hpp"
 #include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/System/CharacterControllerSystem.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
 
 #include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/System/CameraGameplaySystem.hpp"
@@ -34,20 +34,15 @@ int main()
     Engine engine(settings);
     Engine::SetInstance(engine);
 
-    Editor editor{engine.GetWindow()};
+    Game::Init(engine);
 
-    Game game;
-    game.Init(engine);
-
-    engine.GetPhysicsManager();
-    engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
+    Editor editor{};
 
     while (!engine.WindowShouldClose())
     {
 
         /** Time Update **/
         engine.UpdateTime();
-
         const auto deltaTime = (float) engine.GetDeltaTime();
 
         /** POLL INPUT **/
@@ -57,6 +52,9 @@ int main()
         /** Editor draw **/
         editor.Draw();
 
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
+
+        /** When editor is in play mode **/
         if (engine.IsGamePlaying())
         {
             /** UPDATE **/

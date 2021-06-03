@@ -42,8 +42,9 @@ public:
 template<typename T>
 void ComponentArray<T>::AddData(Entity id, const T& data)
 {
-    Assert_Fatal_Error(_entityToIndex.find(id) != _entityToIndex.end(),
-                       "Component added to same entity more than once.");
+
+    if(_entityToIndex.find(id) != _entityToIndex.end())
+        Log_Warning("Component added to same entity more than once.");
 
     size_t end = _components.size();
 

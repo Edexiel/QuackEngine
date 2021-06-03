@@ -37,6 +37,10 @@
                         "value": false
                     },
                     {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": false
                     },
@@ -121,6 +125,10 @@
                         "value": false
                     },
                     {
+                        "key": "Player",
+                        "value": true
+                    },
+                    {
                         "key": "RigidBody",
                         "value": true
                     },
@@ -155,7 +163,7 @@
                     }
                 },
                 "Model": {
-                    "path": "../../Game/Asset\\Model\\Bard.fbx",
+                    "path": "./Asset/Model/Bard.fbx",
                     "type": 2,
                     "offset": {
                         "x": 0.0,
@@ -167,7 +175,7 @@
                     ]
                 },
                 "Animator": {
-                    "path": "../../Game/Asset\\Model\\Standard Run.fbx"
+                    "path": "./Asset/Model/Standard Run.fbx"
                 },
                 "RigidBody": {
                     "mass": 1.0,
@@ -184,6 +192,9 @@
                 },
                 "CharacterController": {
                     "speed": 1.0
+                },
+                "Player": {
+                    "ok": 0
                 },
                 "SimpleShadow": {
                     "scale": {
@@ -234,6 +245,10 @@
                         "value": false
                     },
                     {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": true
                     },
@@ -268,7 +283,7 @@
                     }
                 },
                 "Model": {
-                    "path": "../../Game/Asset\\Model\\Cube.fbx",
+                    "path": "./Asset/Model/Cube.fbx",
                     "type": 1,
                     "offset": {
                         "x": 0.0,
@@ -328,6 +343,10 @@
                         "value": false
                     },
                     {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": true
                     },
@@ -362,7 +381,7 @@
                     }
                 },
                 "Model": {
-                    "path": "../../Game/Asset\\Model\\Cube.fbx",
+                    "path": "./Asset/Model/Cube.fbx",
                     "type": 1,
                     "offset": {
                         "x": 0.0,
@@ -422,6 +441,10 @@
                         "value": false
                     },
                     {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": true
                     },
@@ -456,7 +479,7 @@
                     }
                 },
                 "Model": {
-                    "path": "../../Game/Asset\\Model\\Cube.fbx",
+                    "path": "./Asset/Model/Cube.fbx",
                     "type": 1,
                     "offset": {
                         "x": 0.0,
@@ -513,6 +536,10 @@
                     },
                     {
                         "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
                         "value": false
                     },
                     {

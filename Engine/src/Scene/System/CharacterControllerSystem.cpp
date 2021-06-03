@@ -1,11 +1,11 @@
+#include "reactphysics3d/reactphysics3d.h"
+
 #include "Scene/System/CharacterControllerSystem.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
 
-#include "reactphysics3d/reactphysics3d.h"
 #include "Engine.hpp"
-#include "Scene/Core/World.hpp"
-#include "Input/InputManager.hpp"
 #include "Scene/Component/RigidBody.hpp"
+#include "Scene/Component/Transform.hpp"
 #include "Scene/Component/CharacterController.hpp"
 
 using namespace Component;

@@ -50,7 +50,7 @@ public:
     CameraEditor(unsigned int width, unsigned int height,
                  float far, float near, float fov);
 
-    void SetInput(Input::InputManager& inputManager);
+    void SetInput();
 
 };
 
