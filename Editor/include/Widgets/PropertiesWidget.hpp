@@ -27,6 +27,7 @@ private:
     static void CharacterControllerReader();
     static void CameraGameplayReader();
     static void ParticleReader();
+    static void SimpleShadowReader();
     static void AddComponent();
     static void DeleteComponent();
 

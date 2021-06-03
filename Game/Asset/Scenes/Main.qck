@@ -41,6 +41,10 @@
                         "value": false
                     },
                     {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
                         "key": "Transform",
                         "value": true
                     }
@@ -121,6 +125,10 @@
                         "value": true
                     },
                     {
+                        "key": "SimpleShadow",
+                        "value": true
+                    },
+                    {
                         "key": "Transform",
                         "value": true
                     }
@@ -131,7 +139,7 @@
                 "Transform": {
                     "position": {
                         "x": -1.3600000143051148,
-                        "y": -2.5,
+                        "y": -4.0,
                         "z": 10.0
                     },
                     "scale": {
@@ -149,6 +157,11 @@
                 "Model": {
                     "path": "../../Game/Asset\\Model\\Bard.fbx",
                     "type": 2,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.5,
+                        "z": 0.0
+                    },
                     "materials": [
                         "AnimationBard"
                     ]
@@ -170,7 +183,20 @@
                     }
                 },
                 "CharacterController": {
-                    "value0": 1.0
+                    "speed": 1.0
+                },
+                "SimpleShadow": {
+                    "scale": {
+                        "x": 157.8000030517578,
+                        "y": 100.0
+                    },
+                    "offset": {
+                        "x": -0.20000000298023225,
+                        "y": 0.0,
+                        "z": 1.100000023841858
+                    },
+                    "type": 1,
+                    "yRotation": 3.76982045173645
                 }
             },
             {
@@ -212,6 +238,10 @@
                         "value": true
                     },
                     {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
                         "key": "Transform",
                         "value": true
                     }
@@ -240,6 +270,11 @@
                 "Model": {
                     "path": "../../Game/Asset\\Model\\Cube.fbx",
                     "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
                     "materials": [
                         "Default material"
                     ]
@@ -297,6 +332,10 @@
                         "value": true
                     },
                     {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
                         "key": "Transform",
                         "value": true
                     }
@@ -325,6 +364,11 @@
                 "Model": {
                     "path": "../../Game/Asset\\Model\\Cube.fbx",
                     "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
                     "materials": [
                         "Default material"
                     ]
@@ -382,6 +426,10 @@
                         "value": true
                     },
                     {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
                         "key": "Transform",
                         "value": true
                     }
@@ -410,6 +458,11 @@
                 "Model": {
                     "path": "../../Game/Asset\\Model\\Cube.fbx",
                     "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
                     "materials": [
                         "Default material"
                     ]
@@ -464,6 +517,10 @@
                     },
                     {
                         "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
                         "value": false
                     },
                     {
@@ -552,6 +609,10 @@
                     },
                     {
                         "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
                         "value": false
                     },
                     {

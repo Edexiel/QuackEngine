@@ -28,7 +28,15 @@ namespace Renderer
 
 class RenderSystem : public System
 {
-    std::unordered_map<Renderer::MaterialInterface, std::vector<std::pair<Renderer::Mesh, Entity>>> _mapMaterial;
+    struct MaterialMeshData
+    {
+        Renderer::Mesh mesh;
+        Maths::Vector3f offset {0.f,10.f,0.f};
+        Entity entity {0};
+    };
+
+
+    std::unordered_map<Renderer::MaterialInterface, std::vector<MaterialMeshData>> _mapMaterial;
     unsigned int _lastLinkEntitiesNumbers{0};
 
 public:
@@ -50,8 +58,9 @@ public:
     void Clear();
 
 private:
+
     void DrawMaterials(const Maths::Matrix4 &projection, const Maths::Matrix4 &view);
-    void AddMesh(const Renderer::MaterialInterface &materialInterface, const Renderer::Mesh &mesh, Entity entity);
+    void AddMesh(const Renderer::MaterialInterface &materialInterface, const Renderer::Mesh &mesh, Maths::Vector3f offset, Entity entity);
 
 };
 
