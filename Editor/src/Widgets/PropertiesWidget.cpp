@@ -119,7 +119,7 @@ void PropertiesWidget::LightReader()
                         break;
 
                 }
-                Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+                Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->Update();
             }
             if (isSelected)
                 ImGui::SetItemDefaultFocus();
@@ -131,14 +131,14 @@ void PropertiesWidget::LightReader()
         ImGui::ColorEdit3("Diffuse", light.diffuse.e) ||
         ImGui::ColorEdit3("Specular", light.specular.e))
     {
-        Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
     if (light.type != Component::LightType::L_DIRECTIONAL)
     {
         if (ImGui::InputFloat("Linear Attenuation", &light.linear, 0.0f, 0.0f, "%.9f") ||
             ImGui::InputFloat("Quadratic Attenuation", &light.quadratic, 0.0f, 0.0f, "%.9f"))
         {
-            Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+            Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->Update();
         }
     }
     if (light.type == Component::LightType::L_SPOT)
@@ -146,7 +146,7 @@ void PropertiesWidget::LightReader()
         if (ImGui::DragFloat("Spot Angle", &light.spotAngle) ||
             ImGui::DragFloat("Outer Spot Angle", &light.outerSpotAngle))
         {
-            Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+            Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->Update();
         }
     }
 
@@ -609,6 +609,10 @@ void PropertiesWidget::SimpleShadowReader()
         }
         ImGui::EndCombo();
     }
-    ImGui::DragFloat("Scale ##Shadow", &shadow.scale, 0.1f, FLT_MIN, FLT_MAX);
+    ImGui::DragFloat2("Scale ##Shadow", shadow.scale.e, 0.1f, FLT_MIN, FLT_MAX);
     ImGui::DragFloat3("Offset ##Shadow", shadow.offset.e, 0.1f);
+
+    float degAngle = shadow.yRotation * RadToDeg<float>();
+    ImGui::DragFloat("Angle", &degAngle);
+    shadow.yRotation = degAngle * DegToRad<float>();
 }

@@ -11,25 +11,24 @@ namespace Component
 
         enum ShadowType {S_SQUARE, S_CIRCLE};
 
-        float scale {1.f};
+        Maths::Vector2f scale {1.f, 1.f};
         Maths::Vector3f offset {0.f, 0.f, 0.f};
+        float yRotation {0.f};
         ShadowType type {ShadowType::S_CIRCLE};
 
         template<class Archive>
         void save(Archive &archive) const
         {
-            archive(CEREAL_NVP(scale),
-                    CEREAL_NVP(offset),
-                    CEREAL_NVP(type));
+            archive(CEREAL_NVP(scale), CEREAL_NVP(offset),
+                    CEREAL_NVP(type), CEREAL_NVP(yRotation));
 
         }
 
         template<class Archive>
         void load(Archive &archive)
         {
-            archive(CEREAL_NVP(scale),
-                    CEREAL_NVP(offset),
-                    CEREAL_NVP(type));
+            archive(CEREAL_NVP(scale), CEREAL_NVP(offset),
+                    CEREAL_NVP(type), CEREAL_NVP(yRotation));
         }
     };
 }

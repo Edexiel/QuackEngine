@@ -49,8 +49,10 @@ void SimpleShadowSystem::Process(const Renderer::Framebuffer &buffer, const Rend
 
         shader.Use();
         shader.SetMatrix4("model", Maths::Matrix4::Translate(transform.position + shadow.offset)
-                * Maths::Quaternion::EulerToQuaternion({Pi<float>()/2.f, 0, 0}).ToMatrix()
-                * Maths::Matrix4::Scale(transform.scale * shadow.scale));
+                * Maths::Quaternion::EulerToQuaternion({Pi<float>() / 2.f, shadow.yRotation, 0}).ToMatrix()
+                * Maths::Matrix4::Scale({transform.scale.x * shadow.scale.x,
+                                         transform.scale.y * shadow.scale.y,
+                                         transform.scale.z}));
 
         screenMesh.Draw();
     }

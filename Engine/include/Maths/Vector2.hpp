@@ -2,6 +2,7 @@
 #define QUACKENGINE_VECTOR2_HPP
 
 #include <iostream>
+#include "cereal/cereal.hpp"
 
 namespace Maths
 {
@@ -40,6 +41,12 @@ struct Vector2
   Vector2<T> operator+(const Vector2<T>& v2)   const;
   Vector2<T> operator-(const Vector2<T>& v2)   const;
   Vector2<T> operator*(const T& f)             const;
+
+    template<class Archive>
+    void serialize(Archive &archive)
+    {
+        archive(CEREAL_NVP(x),CEREAL_NVP(y));
+    }
 };
 #include "Maths/Vector2.inl"
 }

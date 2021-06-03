@@ -57,12 +57,12 @@ void AssetWidget::DisplayMaterial(const Resources::Asset* asset)
     if (ImGui::Checkbox("Check Lights", &material->checkLight))
     {
         material->GenerateShader();
-        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
     if (ImGui::Checkbox("Has Skeleton", &material->hasSkeleton))
     {
         material->GenerateShader();
-        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
 
     if (material->checkLight)
@@ -80,7 +80,7 @@ void AssetWidget::DisplayMaterial(const Resources::Asset* asset)
     if (SelectTexture(material->colorTexture, listTexture, name.c_str(), "Color Texture"))
     {
         material->GenerateShader();
-        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
 
     if (!material->checkLight)
@@ -90,21 +90,21 @@ void AssetWidget::DisplayMaterial(const Resources::Asset* asset)
     if (SelectTexture(material->diffuseTexture, listTexture, name.c_str(), "Diffuse Texture"))
     {
         material->GenerateShader();
-        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
 
     name = engine.GetResourcesManager().GetName(material->specularTexture);
     if (SelectTexture(material->specularTexture, listTexture, name.c_str(), "Specular Texture"))
     {
         material->GenerateShader();
-        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
 
     name = engine.GetResourcesManager().GetName(material->normalMap);
     if (SelectTexture(material->normalMap, listTexture, name.c_str(), "Normal Texture"))
     {
         material->GenerateShader();
-        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update(true);
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
 }
 
