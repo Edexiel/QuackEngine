@@ -18,7 +18,7 @@ namespace Component
         template<class Archive>
         void serialize(Archive &archive)
         {
-            archive(speed);
+            archive(CEREAL_NVP(speed));
         }
     };
 }

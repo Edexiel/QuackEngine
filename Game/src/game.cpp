@@ -12,13 +12,10 @@
 #include "Scene/Component/CharacterController.hpp"
 #include "Scene/Component/CameraGameplay.hpp"
 
-
-
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/RendererInterface.hpp"
 #include "Renderer/ProcessBase.hpp"
 #include "Renderer/PostProcess/KernelPostProcess.hpp"
-
 
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/CameraSystem.hpp"
@@ -27,6 +24,7 @@
 #include "Scene/System/CharacterControllerSystem.hpp"
 #include "Scene/System/CameraGameplaySystem.hpp"
 #include "Scene/System/ParticleSystem.hpp"
+#include "Scene/System/SimpleShadowSystem.hpp"
 
 #include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/Component/Animator.hpp"
@@ -49,6 +47,7 @@ void Game::Init(Engine &engine) const
     world.RegisterComponent<Component::RigidBody>();
     world.RegisterComponent<Component::CharacterController>();
     world.RegisterComponent<Component::Animator>();
+    world.RegisterComponent<Component::SimpleShadow>();
     world.RegisterComponent<Component::CameraGameplay>();
 
     world.RegisterComponent<EnemyComponent>();
@@ -65,6 +64,8 @@ void Game::Init(Engine &engine) const
     auto characterControllerSystem = world.RegisterSystem<CharacterControllerSystem>();
     auto cameraGameplaySystem = world.RegisterSystem<CameraGameplaySystem>();
     auto animatorSystem = world.RegisterSystem<AnimatorSystem>();
+    auto shadowSystem = world.RegisterSystem<SimpleShadowSystem>();
+
     auto playerSystem = world.RegisterSystem<PlayerSystem>();
 
     auto noteDisplaySystem = world.RegisterSystem<EnemyManagerSystem>();
@@ -144,12 +145,20 @@ void Game::Init(Engine &engine) const
         world.SetSystemSignature<PlayerSystem>(signaturePlayer);
     }
 
-    //Signature Physics
+    //Signature Particle
     {
         Signature signatureParticle;
         signatureParticle.set(world.GetComponentType<Component::Transform>());
         signatureParticle.set(world.GetComponentType<Component::ParticleEmitter>());
         world.SetSystemSignature<ParticleSystem>(signatureParticle);
+    }
+
+    //Signature Shadow
+    {
+        Signature signatureShadow;
+        signatureShadow.set(world.GetComponentType<Component::Transform>());
+        signatureShadow.set(world.GetComponentType<Component::SimpleShadow>());
+        world.SetSystemSignature<SimpleShadowSystem>(signatureShadow);
     }
 
     engine.LoadWorld(world);
@@ -161,10 +170,11 @@ void Game::Init(Engine &engine) const
     std::unique_ptr<ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
     engine.GetPostProcessManager().AddProcess(ptr);
 
-    noteDisplaySystem->GenerateEnemies(10, {0,0,0}, 50.f, 100.f);
+    //noteDisplaySystem->GenerateEnemies(10, {0,0,0}, 50.f, 100.f);
 
 
     engine.GetPostProcessManager().AddProcess(new ParticleProcess());
+    engine.GetPostProcessManager().AddProcess(new SimpleShadowProcess());
 
     RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
 
