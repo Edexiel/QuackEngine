@@ -3,7 +3,7 @@
 #include "Engine.hpp"
 #include "Scene/Core/World.hpp"
 
-ToolboxWidget::ToolboxWidget() : _engine{Engine::Instance()}
+ToolboxWidget::ToolboxWidget(Editor &editor) : Widget(editor)
 {
     _title = "Toolbox";
 }
@@ -16,24 +16,23 @@ void ToolboxWidget::Save()
 void ToolboxWidget::Reload()
 {
 
-    World &world = _engine.GetCurrentWorld();
+    World &world = Widget::_engine.GetCurrentWorld();
     world.Clear();
 
     _engine.LoadWorld(world);
 }
 
-
 void ToolboxWidget::UpdateVisible()
 {
 
-    if (ImGui::Button("Save"))
+    if (!_engine.IsGamePlaying())
     {
-        Save();
+        if (ImGui::Button("Save"))
+        {
+            Save();
+        }
     }
-//    if (ImGui::Button("Load"))
-//    {
-//        Load();
-//    }
+
     ImGui::SameLine();
 
     if (isPlaying)
@@ -56,6 +55,7 @@ void ToolboxWidget::UpdateVisible()
             Save();
             isPlaying = !isPlaying;
             _engine.SetGamePlaying(isPlaying);
+            _engine.GetCurrentWorld().InitGame();
         }
     }
 

@@ -1,13 +1,14 @@
-#include "Scene/Component/ParticleEmitter.hpp"
-
 #include "Engine.hpp"
-#include "Scene/Core/World.hpp"
 
+#include "Scene/Core/World.hpp"
 #include "Renderer/Texture.hpp"
-#include "Renderer/Shader.hpp"
+
 #include "Renderer/Framebuffer.hpp"
 
 #include "Scene/System/CameraSystem.hpp"
+
+#include "Scene/Component/ParticleEmitter.hpp"
+#include "Scene/Component/Transform.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
 

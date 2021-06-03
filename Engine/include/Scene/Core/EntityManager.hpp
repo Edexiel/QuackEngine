@@ -26,7 +26,7 @@ public:
 
     Entity Create();
 
-    Signature GetSignature(Entity id);
+    Signature GetSignature(Entity id) const;
 
     std::vector<Entity> &GetEntities();
 
@@ -89,11 +89,11 @@ inline void EntityManager::Destroy(Entity id)
  * @param id
  * @return The signature of the entity
  */
-inline Signature EntityManager::GetSignature(Entity id)
+inline Signature EntityManager::GetSignature(Entity id) const
 {
     Assert_Fatal_Error(_entityLut.find(id) == _entityLut.end(), "Entity id does not exists");
 
-    return _signatures[_entityLut[id]];
+    return _signatures.at(_entityLut.at(id));
 
 }
 

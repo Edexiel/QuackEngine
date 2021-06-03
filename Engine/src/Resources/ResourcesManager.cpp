@@ -28,7 +28,7 @@ void ResourcesManager::Init()
     material.ambient = {1, 1, 1};
     material.diffuse = {1, 1, 1};
     material.specular = {1, 1, 1};
-    material.checkLight = true;
+    material.checkLight = false;
 
     MaterialInterface materialInterface = GenerateMaterial("Default material", material);
 }

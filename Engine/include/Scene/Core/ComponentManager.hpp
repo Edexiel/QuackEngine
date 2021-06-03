@@ -6,10 +6,10 @@
 #include <unordered_map>
 #include <memory>
 
-#include "Types.hpp"
-#include "ComponentArray.hpp"
+#include "Scene/Core/Types.hpp"
+#include "Scene/Core/ComponentArray.hpp"
 #include "Debug/Assertion.hpp"
-#include <Tools/Type.hpp>
+#include "Tools/Type.hpp"
 
 #include "Debug/Log.hpp"
 
