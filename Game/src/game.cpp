@@ -20,12 +20,13 @@
 #include "Scene/System/CharacterControllerSystem.hpp"
 #include "Scene/System/CameraGameplaySystem.hpp"
 #include "Scene/System/ParticleSystem.hpp"
-
 #include "Scene/System/AnimatorSystem.hpp"
 
-#include "Enemy/EnemyComponent.hpp"
 
-#include "Player/Player.hpp"
+#include "Enemy/EnemyComponent.hpp"
+#include "Player/PlayerComponent.hpp"
+#include "Player/PlayerSystem.hpp"
+
 
 using namespace Resources;
 using namespace Renderer;
@@ -38,12 +39,18 @@ void Game::Init(Engine &engine)
     main.SetInitSystems(&InitSystems);
     main.SetInitSettings(&InitSettings);
 
-    Register(main);
-    InitSystems(main);
+    /*** Serialization of external components**/
+    main.SetLoad(&Save);
+    main.SetSave(&Load);
+    main.SetBuild(&Build);
+    /*****************************************/
+
+    main.Register();
+    main.InitSystems();
 
     engine.LoadWorld(main);
 
-/** You can select the active scene , default will be the first scene added **/
+    /** You can select the active scene , default will be the first scene added **/
     engine.SetCurrentWorld("Main"); //obligatoire
 }
 
@@ -184,4 +191,15 @@ void Game::InitSettings(World &world)
 {
     RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
     Renderer::RendererPlatform::EnableDepthBuffer(true);
+}
+
+template<typename T>
+void build(const World &world, std::map<std::string, bool> &components, const std::string &name, Entity id)
+{
+    components[name] = world.HasComponent<T>(id);
+}
+
+void Game::Build(const World &world, std::map<std::string, bool> &c, Entity id)
+{
+    //build<>
 }

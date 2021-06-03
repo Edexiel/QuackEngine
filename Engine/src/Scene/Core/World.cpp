@@ -30,6 +30,7 @@ void World::Clear()
     GetSystem<RenderSystem>()->Clear();
 }
 
+
 Entity World::CreateEntity(const std::string &name) const
 {
     Entity id = _entityManager->Create();
@@ -60,6 +61,7 @@ void World::SetInitSystems(InitFn ptr)
 {
     InitGamePtr = ptr;
 }
+
 void World::SetInitSettings(InitFn ptr)
 {
     InitSettingsPtr = ptr;
@@ -68,6 +70,21 @@ void World::SetInitSettings(InitFn ptr)
 void World::SetRegister(InitFn ptr)
 {
     RegisterPtr = ptr;
+}
+
+void World::SetSave(serializeFn ptr)
+{
+    SavePtr = ptr;
+}
+
+void World::SetLoad(serializeFn ptr)
+{
+    LoadPtr = ptr;
+}
+
+void World::SetBuild(BuildFn ptr)
+{
+    BuildPtr = ptr;
 }
 
 void World::Register()
@@ -95,6 +112,7 @@ void World::InitSystems()
         Log_Error("No init systems function bind to world {}", _name);
 
 }
+
 void World::InitSettings()
 {
     if (InitSettingsPtr)
@@ -103,3 +121,12 @@ void World::InitSettings()
         Log_Error("No init settings function bind to world {}", _name);
 
 }
+
+void World::Build(std::map<std::string, bool> &c,Entity id) const
+{
+    if (BuildPtr)
+        BuildPtr(*this,c,id);
+    else
+        Log_Error("No Build function bind to world {}", _name);
+}
+

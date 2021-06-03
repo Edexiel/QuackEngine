@@ -105,3 +105,21 @@ T *World::GetSystem()
 {
     return _systemManager->GetSystem<T>();
 }
+
+template<class Archive>
+void World::Save(Archive& a)
+{
+    if (SavePtr)
+        SavePtr(*this,(void*)&a);
+    else
+        Log_Error("No Save settings function bind to world {}", _name);
+}
+
+template<class Archive>
+void World::Load(Archive& a) const
+{
+    if (LoadPtr)
+        SavePtr(*this,(void*)&a);
+    else
+        Log_Error("No Load function bind to world {}", _name);
+}

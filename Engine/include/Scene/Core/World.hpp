@@ -11,14 +11,6 @@
 #include "Scene/Core/ComponentManager.hpp"
 #include "Physics/PhysicsEventManager.hpp"
 
-#include "Debug/Log.hpp"
-
-//Serialization, yeah sorry
-#include <cereal/types/string.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/types/map.hpp>
-#include <cereal/access.hpp>
-
 #include "Scene/Component/Camera.hpp"
 #include "Scene/Component/Light.hpp"
 #include "Scene/Component/Model.hpp"
@@ -30,11 +22,22 @@
 #include "Scene/Component/CharacterController.hpp"
 #include "Scene/Component/ParticleEmitter.hpp"
 
+#include <cereal/types/map.hpp>
+
+#include "Debug/Log.hpp"
+
+//Serialization, yeah sorry
+#include <cereal/types/string.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/access.hpp>
+
 #include "Tools/Type.hpp"
 
 #include "Engine.hpp"
 
 typedef void (*InitFn)(World &world);
+typedef void (*serializeFn)(const World &world, void *a);
+typedef void (*BuildFn)(const World &world, std::map<std::string, bool> &c, Entity id);
 
 
 namespace reactphysics3d
@@ -56,15 +59,34 @@ private:
     InitFn InitGamePtr = nullptr;
     InitFn RegisterPtr = nullptr;
     InitFn InitSettingsPtr = nullptr;
+    serializeFn SavePtr = nullptr;
+    serializeFn LoadPtr = nullptr;
+    BuildFn BuildPtr = nullptr;
 
 public:
     World() = delete;
     explicit World(std::string &name);
 
+    void SetInitGame(InitFn ptr);
+    void SetInitSystems(InitFn ptr);
+    void SetInitSettings(InitFn ptr);
+    void SetRegister(InitFn ptr);
+    void SetSave(serializeFn ptr);
+    void SetLoad(serializeFn ptr);
+    void SetBuild(BuildFn ptr);
+
     void Register();
     void InitSystems();
     void InitGame();
     void InitSettings();
+    void Build(std::map<std::string, bool> &c, Entity id) const;
+
+    template<class Archive>
+    void Save(Archive &a);
+
+    template<class Archive>
+    void Load(Archive &a) const;
+
     void Clear();
 
     // Entity methods
@@ -110,11 +132,6 @@ public:
 
     template<class T>
     T *GetSystem();
-
-    void SetInitGame(InitFn ptr);
-    void SetInitSystems(InitFn ptr);
-    void SetInitSettings(InitFn ptr);
-    void SetRegister(InitFn ptr);
 
 
     ///***************SERIALIZATION**************/////////
@@ -169,7 +186,6 @@ public:
         Entity id{0};
         std::map<std::string, bool> components{};
 
-
         void BuildArray()
         {
             build<Component::Name>("Name");
@@ -182,6 +198,7 @@ public:
             build<Component::CameraGameplay>("CameraGameplay");
             build<Component::CharacterController>("CharacterController");
             build<Component::ParticleEmitter>("ParticleEmitter");
+            world->Build(components, id);
         }
 
         template<class Archive>
@@ -198,7 +215,7 @@ public:
             write<Archive, Component::CameraGameplay>(archive, id, "CameraGameplay");
             write<Archive, Component::CharacterController>(archive, id, "CharacterController");
             write<Archive, Component::ParticleEmitter>(archive, id, "ParticleEmitter");
-            //todo : callback(archive, id);
+            world->Load<Archive>(archive);
         }
 
         template<class Archive>
@@ -219,8 +236,10 @@ public:
             read<Archive, Component::CameraGameplay>(archive, w, e, "CameraGameplay");
             read<Archive, Component::CharacterController>(archive, w, e, "CharacterController");
             read<Archive, Component::ParticleEmitter>(archive, w, e, "ParticleEmitter");
+            w.Load<Archive>(archive);
         }
     };
+
 
     template<class Archive>
     void save(Archive &archive) const

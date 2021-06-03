@@ -8,7 +8,7 @@
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/Component/CameraGameplay.hpp"
 #include "Scene/Component/ParticleEmitter.hpp"
-#include "Player/Player.hpp"
+#include "Player/PlayerComponent.hpp"
 
 #include "Renderer/ModelRenderer.hpp"
 
