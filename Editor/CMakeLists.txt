@@ -8,15 +8,16 @@ project(Editor VERSION 0.1.0 LANGUAGES CXX C)
 add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Editor.cpp
+        src/Widgets/Widget.cpp
         src/Widgets/SceneWidget.cpp
         src/Widgets/ViewportWidget.cpp
         src/Widgets/PropertiesWidget.cpp
         src/Widgets/LogWidget.cpp
         src/Widgets/ExplorerWidget.cpp
         src/Widgets/ViewerWidget.cpp
-        src/Widgets/AssetWidget.cpp
         src/CameraEditor.cpp
-        src/Widgets/ToolboxWidget.cpp include/Widgets/ToolboxWidget.hpp)
+        src/Widgets/ToolboxWidget.cpp
+        src/Widgets/MenuWidget.cpp)
 
 
 target_include_directories (${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)

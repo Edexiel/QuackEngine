@@ -8,9 +8,9 @@
 
 
 #ifdef NDEBUG
-#define Log_Release(...)
-#define Log_Error(...)
-#define Log_Warning(...)
+#define Log_Release(...) Debug::Log(fmt::format(__VA_ARGS__), __FILE__, __LINE__, Debug::LOG_LEVEL::L_RELEASE)
+#define Log_Error(...) Debug::Log(fmt::format(__VA_ARGS__), __FILE__, __LINE__, Debug::LOG_LEVEL::L_ERROR)
+#define Log_Warning(...) Debug::Log(fmt::format(__VA_ARGS__), __FILE__, __LINE__, Debug::LOG_LEVEL::L_WARNING)
 #define Log_Info(...)
 #define Log_Debug(...)
 #else
