@@ -89,7 +89,6 @@ void PlayerSystem::Left()
 void PlayerSystem::MoveForward(float verticalAxis)
 {
     auto &world = Engine::Instance().GetCurrentWorld();
-
     for(Entity entity : _entities)
     {
         auto &characterController = world.GetComponent<Component::CharacterController>(entity);

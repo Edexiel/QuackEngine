@@ -60,6 +60,19 @@ void RendererPlatform::EnableDepthBuffer(bool isEnable)
     }
 }
 
+void RendererPlatform::EnableBlend(bool isEnable)
+{
+    if (isEnable)
+    {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+    else
+    {
+        glDisable(GL_BLEND);
+    }
+}
+
 void RendererPlatform::SetTransparency(bool transparency)
 {
     if (transparency)
@@ -387,6 +400,8 @@ void RendererPlatform::SetTextureImage2D(unsigned char *image, unsigned int nrCh
 {
     if (nrChannels == 4)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+    else if(nrChannels == 1)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, image);
     else
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 

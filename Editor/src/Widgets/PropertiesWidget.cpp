@@ -394,7 +394,9 @@ void PropertiesWidget::DeleteComponent()
         if (world.HasComponent<RigidBody>(_entity) && ImGui::MenuItem("Rigidbody"))
         {
             world.RemoveComponent<RigidBody>(_entity);
+        }
         if (world.HasComponent<CharacterController>(_entity) && ImGui::MenuItem("Character Controller"))
+        {
             world.RemoveComponent<CharacterController>(_entity);
         }
         if (world.HasComponent<PlayerComponent>(_entity) && ImGui::MenuItem("Player component"))

@@ -21,13 +21,10 @@ void InputManager::OnKeyEvent(Action action, Key key)
     {
         for (Input::Key _key : eventKey.second)
         {
-            if(!_eventFuncs[eventKey.first].empty())
+            if(_eventFuncs[eventKey.first].first)
             {
-                for (const std::pair<std::function<void()>, Action> &function :_eventFuncs[eventKey.first])
-                {
-                    if (_key == key && function.second == action)
-                        function.first();
-                }
+                if (_key == key && _eventFuncs[eventKey.first].second == action)
+                    _eventFuncs[eventKey.first].first();
             }
         }
     }
@@ -36,15 +33,12 @@ void InputManager::OnKeyEvent(Action action, Key key)
     {
         for (std::pair<Key, float> _key : eventKeyAxis.second)
         {
-            if(!_eventFuncsAxis[eventKeyAxis.first].empty())
+            if(_eventFuncsAxis[eventKeyAxis.first])
             {
-                for (const std::function<void(float)> &function : _eventFuncsAxis[eventKeyAxis.first])
-                {
                     if (_key.first == key && action == Action::PRESS)
-                        function(_key.second);
+                        _eventFuncsAxis[eventKeyAxis.first](_key.second);
                     else if (_key.first == key && action == Action::RELEASE)
-                        function(0);
-                }
+                        _eventFuncsAxis[eventKeyAxis.first](0);
             }
         }
     }
@@ -56,14 +50,10 @@ void InputManager::OnMouseButtonEvent(Action action, MouseButton button)
     {
         for (Input::MouseButton _button : eventMouseButton.second)
         {
-            if(!_eventFuncs[eventMouseButton.first].empty())
+            if(_eventFuncs[eventMouseButton.first].first)
             {
-                for (const std::pair<std::function<void()>, Action> &function :
-                        _eventFuncs[eventMouseButton.first])
-                {
-                    if (_button == button && function.second == action)
-                        function.first();
-                }
+                if (_button == button && _eventFuncs[eventMouseButton.first].second == action)
+                    _eventFuncs[eventMouseButton.first].first();
             }
         }
     }
@@ -106,6 +96,18 @@ void InputManager::BindEventAxis(const std::string &event, Key key, float scale)
     _eventKeysAxis[event].push_back(std::pair<Key, float>(key, scale));
 }
 
+void InputManager::UnregisterEvent(const std::string &event)
+{
+    if(_eventFuncs[event].first)
+        _eventFuncs.erase(event);
+}
+
+void InputManager::UnregisterEventAxis(const std::string &event)
+{
+    if(_eventFuncsAxis[event])
+        _eventFuncsAxis.erase(event);
+}
+
 void InputManager::Update()
 {
     Assert_Error(!_platformInput, "Plateform input not initialized");
@@ -117,6 +119,7 @@ void InputManager::Update()
 /**
  * Bind event. have to be replace by serialization.
  */
+
 void InputManager::InitInput()
 {
   BindEventAxis("CameraEditorMovementForward", Input::Key::KEY_W, 1.0f);
@@ -126,10 +129,5 @@ void InputManager::InitInput()
   BindEventAxis("CameraEditorMovementUp", Input::Key::KEY_SPACE, 1.0f);
   BindEventAxis("CameraEditorMovementUp", Input::Key::KEY_LEFT_CONTROL,-1.0f);
 
-  BindEventAxis("CameraMovementForward", Input::Key::KEY_W, 1.0f);
-  BindEventAxis("CameraMovementForward", Input::Key::KEY_S, -1.0f);
-  BindEventAxis("CameraMovementRight", Input::Key::KEY_D, 1.0f);
-  BindEventAxis("CameraMovementRight", Input::Key::KEY_A, -1.0f);
-  BindEventAxis("CameraMovementUp", Input::Key::KEY_SPACE, 1.0f);
-  BindEventAxis("CameraMovementUp", Input::Key::KEY_LEFT_CONTROL, -1.0f);
+  BindEvent("Test unbind", Input::Key::KEY_SPACE);
 }

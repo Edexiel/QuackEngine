@@ -20,7 +20,8 @@ void PhysicsCollisionCallback::onContact(const rp3d::CollisionCallback::Callback
         rp3d::Vector3 tempNormal =  cp.getWorldNormal();
         Maths::Vector3f normal {tempNormal.x, tempNormal.y, tempNormal.z};
 
-        if(contactPair.getEventType() == rp3d::CollisionCallback::ContactPair::EventType::ContactStart)
+        if(contactPair.getEventType() == rp3d::CollisionCallback::ContactPair::EventType::ContactStart
+        || contactPair.getEventType() == rp3d::CollisionCallback::ContactPair::EventType::ContactStay)
         {
             if(world.HasComponent<Component::CharacterController>(entity1))
                     CharacterControllerSystem::CollideWithWall(entity1, normal, cp.getPenetrationDepth());

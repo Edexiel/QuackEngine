@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <Enemy/EnemyComponent.hpp>
 #include <Scene/System/CharacterControllerSystem.hpp>
+#include <Renderer/UI/Font.hpp>
 #include "Engine.hpp"
 
 #include "Scene/Core/World.hpp"
@@ -18,6 +19,7 @@
 #include "Renderer/RendererInterface.hpp"
 #include "Renderer/ProcessBase.hpp"
 #include "Renderer/PostProcess/KernelPostProcess.hpp"
+#include "Renderer/UI/Font.hpp"
 
 
 #include "Scene/System/PhysicsSystem.hpp"
@@ -151,12 +153,14 @@ void Game::Init(Engine &engine) const
     std::unique_ptr<ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
     engine.GetPostProcessManager().AddProcess(ptr);
 
+    std::unique_ptr<ProcessBase> ptr2 = std::make_unique<Renderer::Font>(Font("FontTest"));
+    engine.GetPostProcessManager().AddProcess(ptr2);
+
     noteDisplaySystem->GenerateEnemies(10, {0,0,0}, 50.f, 100.f);
 
     RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
 
     Renderer::RendererPlatform::EnableDepthBuffer(true);
-
 }
 
 void Game::Update(float deltaTime)
