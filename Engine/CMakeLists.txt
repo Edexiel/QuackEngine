@@ -59,7 +59,9 @@ add_library(${PROJECT_NAME} STATIC
         include/Scene/System/AnimatorSystem.hpp
         src/Renderer/Particle.cpp
         src/Scene/Component/ParticleEmitter.cpp
-        src/Scene/System/ParticleSystem.cpp src/Tools/Random.cpp)
+        src/Scene/System/ParticleSystem.cpp
+        src/Tools/Random.cpp
+        src/Scene/Component/SimpleShadow.cpp src/Scene/System/SimpleShadowSystem.cpp)
 
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

@@ -31,6 +31,7 @@
 #include "Scene/Component/CameraGameplay.hpp"
 #include "Scene/Component/CharacterController.hpp"
 #include "Scene/Component/ParticleEmitter.hpp"
+#include "Scene/Component/SimpleShadow.hpp"
 
 #include "Tools/Type.hpp"
 
@@ -124,7 +125,10 @@ public:
         template<class Archive, class T>
         void read(Archive &archive, World &w, Entity entity, const std::string &name) const
         {
-            if (components.at(name))
+            auto it = components.find(name);
+            if (it == components.end())
+                return;
+            if (it->second)
             {
                 T component;
                 archive(cereal::make_nvp(name, component));
@@ -163,6 +167,7 @@ public:
             build<Component::CameraGameplay>("CameraGameplay");
             build<Component::CharacterController>("CharacterController");
             build<Component::ParticleEmitter>("ParticleEmitter");
+            build<Component::SimpleShadow>("SimpleShadow");
         }
 
         template<class Archive>
@@ -181,6 +186,7 @@ public:
             write<Archive, Component::CameraGameplay>(archive, id, "CameraGameplay");
             write<Archive, Component::CharacterController>(archive, id, "CharacterController");
             write<Archive, Component::ParticleEmitter>(archive, id, "ParticleEmitter");
+            write<Archive, Component::SimpleShadow>(archive, id, "SimpleShadow");
         }
 
         template<class Archive>
@@ -199,8 +205,9 @@ public:
             read<Archive, Component::Animator>(archive, w, e, "Animator");
             read<Archive, Component::RigidBody>(archive, w, e, "RigidBody");
             read<Archive, Component::CameraGameplay>(archive, w, e, "CameraGameplay");
-            read<Archive, Component::CharacterController>(archive, w, e, "CharacterController");
             read<Archive, Component::ParticleEmitter>(archive, w, e, "ParticleEmitter");
+            read<Archive, Component::CharacterController>(archive, w, e, "CharacterController");
+            read<Archive, Component::SimpleShadow>(archive, w, e, "SimpleShadow");
         }
 
 
