@@ -3,6 +3,8 @@
 #include "Renderer/RendererPlatform.hpp"
 #include "Input/InputManager.hpp"
 #include "Maths/Quaternion.hpp"
+
+#include "Engine.hpp"
 #include <algorithm>
 #include "Engine.hpp"
 
@@ -44,14 +46,14 @@ void CameraEditor::FreeFly()
     Vector3f up = Vector3f::Up() * _scaleAxisY;
     Vector3f direction = (forward + right + up).GetNormalized();
 
-    _position = _position + (direction * _speedTranslation);
+    _position = _position + (direction * _speedTranslation) * Engine::Instance().GetTimeManager().GetDeltaTime();
 }
 
 void CameraEditor::MouseMovement(const Vector2d &currentPos, const Vector2d &oldPos)
 {
     Vector2d angleRotation = (currentPos - oldPos) * (_speedRotation * Pi<float>() / 180.f);
-    _yaw += (float)angleRotation.x;
-    _pitch = (float)std::clamp(_pitch + angleRotation.y, -Pi<float>() / 2.0, Pi<float>() / 2.0);
-
+    float deltatime = (float)Engine::Instance().GetDeltaTime();
+    _yaw += (float)angleRotation.x * deltatime;
+    _pitch = (float)std::clamp(_pitch + angleRotation.y * deltatime, -Pi<float>() / 2.0, Pi<float>() / 2.0);
     _rotation = Quaternion({0, 1, 0}, _yaw) * Quaternion({1, 0, 0}, _pitch);
 }

@@ -190,6 +190,35 @@ Renderer::Shader ResourcesManager::LoadObjectShader(const Renderer::ShaderConstr
     return shader;
 }
 
+Renderer::Font ResourcesManager::LoadFont(const std::filesystem::path &path)
+{
+    // Check if the Texture already exist
+    auto it = _mapFont.find(path.string());
+
+    // Check if the shader already exist
+    if (it != _mapFont.end())
+    {
+        return it->second;
+    }
+
+    // return null Shader if the file doesn't exist
+    if (!std::filesystem::exists(path.string()))
+    {
+        Log_Error("File doesn't exists: {}", path.string());
+        return Font();
+    }
+
+    // Create a new Shader
+
+    Font font = Font::LoadFont(path.string().c_str());
+
+    font.Path() = path.string();
+    _mapFont.insert({path.string(), font});
+    _globalAssetMap.insert({path.string(), &_mapFont.find(path.string())->second});
+
+    return font;
+}
+
 Audio::Sound ResourcesManager::LoadSound(const std::filesystem::path &path, Audio::SoundType soundType)
 {
     // Check if the Sound already exist

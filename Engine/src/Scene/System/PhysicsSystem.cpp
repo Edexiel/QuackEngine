@@ -27,7 +27,7 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
         PhysicsSystem::SetTransform(entity, t.position, t.rotation);
     }
 
-//    world->GetPhysicsWorld()->update(fixedDeltaTime);
+    world->GetPhysicsWorld()->update(fixedDeltaTime);
 
     for (Entity entity: _entities)
     {

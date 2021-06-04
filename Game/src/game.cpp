@@ -1,5 +1,9 @@
 #include "game.hpp"
 
+#include <cstdio>
+#include <Enemy/EnemyComponent.hpp>
+#include <Scene/System/CharacterControllerSystem.hpp>
+#include <Renderer/UI/Text.hpp>
 #include "Engine.hpp"
 #include "Scene/Core/World.hpp"
 
@@ -206,6 +210,9 @@ void Game::InitSystems(World &world)
 
     engine.GetPostProcessManager().AddProcess(new ParticleProcess());
     engine.GetPostProcessManager().AddProcess(new SimpleShadowProcess());
+
+    std::unique_ptr<ProcessBase> ptr2 = std::make_unique<Renderer::Text>(Text("FontTest"));
+    engine.GetPostProcessManager().AddProcess(ptr2);
 }
 
 void Game::InitSettings(World &world)

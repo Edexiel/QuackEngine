@@ -6,6 +6,8 @@
     <mapping directory="$PROJECT_DIR$/Vendor/assimp" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/cereal" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/fmt" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Vendor/freetype" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Vendor/freetype/subprojects/dlg" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/glfw" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/googletest" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Vendor/imgui" vcs="Git" />

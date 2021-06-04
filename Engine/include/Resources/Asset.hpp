@@ -6,7 +6,7 @@
 
 namespace Resources
 {
-    enum class AssetType{A_TEXTURE, A_MODEL, A_SOUND, A_ANIMATION, A_MATERIAL, A_SHADER};
+    enum class AssetType{A_TEXTURE, A_MODEL, A_SOUND, A_ANIMATION, A_MATERIAL, A_SHADER, A_FONT};
 
     class Asset
     {
