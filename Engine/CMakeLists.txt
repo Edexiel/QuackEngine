@@ -24,7 +24,9 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/Skeleton.cpp
         src/Renderer/Animation.cpp
         src/Renderer/ModelRenderer.cpp
-
+        src/Renderer/UI/Font.cpp
+        src/Renderer/UI/Text.cpp
+        src/Renderer/UI/DialogBox.cpp
         src/Scene/Component/Animator.cpp
 
         src/Renderer/ProcessBase.cpp
@@ -66,5 +68,5 @@ add_library(${PROJECT_NAME} STATIC
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw cereal fmt reactphysics3d)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad glfw cereal fmt reactphysics3d freetype)
 target_link_libraries(${PROJECT_NAME} PRIVATE assimp stb miniaudio)

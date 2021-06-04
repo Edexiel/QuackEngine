@@ -53,7 +53,7 @@ void CharacterControllerSystem::CharacterMovement(Entity entity)
         rot = Maths::Quaternion{q.w, q.x, q.y, q.z};
     }
 
-    PhysicsSystem::SetTransform(entity, pos + characterController.direction * characterController.speed * 0.06f, rot);
+    PhysicsSystem::SetTransform(entity, pos + characterController.direction * characterController.speed * (float)Engine::Instance().GetDeltaTime(), rot);
 }
 
 void CharacterControllerSystem::CollideWithWall(Entity player,const Maths::Vector3f &normal, float depth)
