@@ -1,3 +1,6 @@
+
+#include "Vector2.hpp"
+
 using Vector2f = Vector2<float>;
 using Vector2d = Vector2<double>;
 using Vector2i = Vector2<int>;
@@ -56,6 +59,20 @@ T Vector2<T>::DotProduct(const Vector2 <T> &v1, const Vector2 <T> &v2)
     return v1.x * v2.x + v1.y * v2.y;
 }
 
+template<typename T>
+Vector2<T> Vector2<T>::Lerp(const Vector2<T> &v1, const Vector2<T> &v2, float t)
+{
+    return v1 * (1 - t) + v2 * t;
+}
+
+template<typename T>
+Vector2<T> Vector2<T>::Rotate(const Vector2<T> &vector, float angle)
+{
+    Vector2<T> result;
+    result.x = cosf(angle) * vector.x + sinf(angle) * vector.y;
+    result.y = sinf(angle) * vector.x - cosf(angle) * vector.y;
+    return result;
+}
 
 template<typename T>
 Vector2 <T> Vector2<T>::Up()

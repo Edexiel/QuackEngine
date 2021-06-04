@@ -11,7 +11,7 @@
 class LogWidget: public Widget
 {
 public:
-    LogWidget();
+    LogWidget(Editor &editor);
 
     void UpdateVisible() final;
 };

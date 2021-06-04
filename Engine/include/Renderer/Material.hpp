@@ -37,7 +37,7 @@ namespace Renderer
         void Apply();
 
         template<class Archive>
-        void serialize(Archive &archive)
+        void save(Archive &archive) const
         {
             archive(CEREAL_NVP(checkLight),
                     CEREAL_NVP(color),
@@ -46,11 +46,40 @@ namespace Renderer
                     CEREAL_NVP(specular),
                     CEREAL_NVP(shininess),
                     CEREAL_NVP(hasSkeleton),
-                    cereal::make_nvp("colorTexture", colorTexture.Path()),
-                    cereal::make_nvp("diffuseTexture", diffuseTexture.Path()),
-                    cereal::make_nvp("specularTexture", specularTexture.Path()),
-                    cereal::make_nvp("normalMap", normalMap.Path())
+                    cereal::make_nvp("colorTexture", colorTexture.GetPath()),
+                    cereal::make_nvp("diffuseTexture", diffuseTexture.GetPath()),
+                    cereal::make_nvp("specularTexture", specularTexture.GetPath()),
+                    cereal::make_nvp("normalMap", normalMap.GetPath())
             );
+        }
+
+
+            template<class Archive>
+            void load(Archive &archive)
+            {
+                std::string _colorTexture;
+                std::string _diffuseTexture;
+                std::string _specularTexture;
+                std::string _normalMap;
+
+                archive(CEREAL_NVP(checkLight),
+                        CEREAL_NVP(color),
+                        CEREAL_NVP(ambient),
+                        CEREAL_NVP(diffuse),
+                        CEREAL_NVP(specular),
+                        CEREAL_NVP(shininess),
+                        CEREAL_NVP(hasSkeleton),
+                        cereal::make_nvp("colorTexture", _colorTexture),
+                        cereal::make_nvp("diffuseTexture", _diffuseTexture),
+                        cereal::make_nvp("specularTexture", _specularTexture),
+                        cereal::make_nvp("normalMap", _normalMap)
+                );
+
+                colorTexture.SetPath(_colorTexture);
+                diffuseTexture.SetPath(_diffuseTexture);
+                specularTexture.SetPath(_specularTexture);
+                normalMap.SetPath(_normalMap);
+
         }
     };
 

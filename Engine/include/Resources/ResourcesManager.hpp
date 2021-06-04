@@ -13,6 +13,7 @@
 #include "Renderer/Texture.hpp"
 #include "Renderer/Material.hpp"
 #include "Renderer/Animation.hpp"
+#include "Renderer/UI/Font.hpp"
 
 #include "Audio/Sound.hpp"
 
@@ -38,6 +39,7 @@ namespace Resources
         std::unordered_map<std::string, Audio::Sound> _mapSound;
         std::unordered_map<std::string, Renderer::MaterialInterface> _mapMaterial;
         std::unordered_map<std::string, Renderer::Animation> _mapAnimation;
+        std::unordered_map<std::string, Renderer::Font> _mapFont;
 
         std::vector<Renderer::Mesh> listLoadedShape; //keep loaded shape saved for GPU memory management
         //TODO  Check if really necessary
@@ -64,10 +66,12 @@ namespace Resources
         Renderer::Texture LoadTexture(const std::filesystem::path &path);
         Renderer::Shader LoadShader(const std::filesystem::path& path);
         Renderer::Shader LoadObjectShader(const Renderer::ShaderConstructData &constructData);
+        Renderer::Font LoadFont(const std::filesystem::path &path);
 
         Renderer::MaterialInterface LoadMaterial(const std::filesystem::path &path);
         Renderer::MaterialInterface GenerateMaterial(const std::string& name,
                                                      const Renderer::Material &material); // Should be used to load a material from scratch
+
         void DestroyMaterial(const std::string& name);
 
 

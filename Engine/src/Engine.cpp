@@ -1,5 +1,5 @@
-#include <algorithm>
 #include <vector>
+#include <algorithm>
 #include "Engine.hpp"
 
 #include "Scene/Core/World.hpp"
@@ -22,7 +22,7 @@ namespace fs = std::filesystem;
 
 inline Engine *instance = nullptr;
 
-Engine &Engine::Instance()
+Engine &Engine::Instance() noexcept
 {
     return *instance;
 }
@@ -37,7 +37,7 @@ Engine::~Engine()
     glfwTerminate();
 }
 
-Engine::Engine(const EngineSettings &settings)
+Engine::Engine(const EngineSettings &settings) noexcept
 {
     Assert_Fatal_Error(instance != nullptr, "There should be only one Engine");
     Assert_Fatal_Error(!glfwInit(), "GLFW was not correctly initialized, aborting");
@@ -115,11 +115,12 @@ Engine::Engine(const EngineSettings &settings)
             break;
     }
     _platformInput = std::make_unique<Input::PlatformInputGLFW>(_window);
-    //Assert_Fatal_Error(_platformInput, "Platform input not declared");
     _inputManager.Init(_platformInput.get());
     _timeManager.Init(new Time::TimePlatformGLFW(_window));
     _postProcessManager.Init();
     _soundManager.Init();
+    _resourcesManager.Init();
+
 }
 
 GLFWwindow *Engine::GetWindow()
@@ -203,6 +204,9 @@ World &Engine::CreateWorld(std::string name)
 
 void Engine::SaveWorld(const std::string &worldName)
 {
+    World& oldWorld= GetCurrentWorld();
+    SetCurrentWorld(worldName);
+
     fs::path path{"./Asset"};
 
     if (_worldLut.find(worldName) == _worldLut.end())
@@ -226,7 +230,7 @@ void Engine::SaveWorld(const std::string &worldName)
 //Materials
     {
         std::filesystem::path materialPath = path;
-        Log_Info("Saving materials", "");
+        Log_Info("Saving materials");
         materialPath.append("Materials");
         if (!exists(materialPath))
         {
@@ -246,25 +250,27 @@ void Engine::SaveWorld(const std::string &worldName)
         }
         Log_Info("Materials have been saved", path.string());
     }
-
+    SetCurrentWorld(oldWorld.GetName());
 
 }
 
 void Engine::FillTexture(Renderer::Texture &T)
 {
-    if (!T.Path().empty())
+    if (!T.GetPath().empty())
     {
-        T = _resourcesManager.LoadTexture(T.Path());
+        T = _resourcesManager.LoadTexture(T.GetPath());
     }
 }
 
 void Engine::LoadWorld(World &world)
 {
+    World& oldWorld= GetCurrentWorld();
+    SetCurrentWorld(world.GetName());
+
     const fs::path path{"./Asset"};
     if (!exists(path))
-    {
         Log_Error("Path does not exists: {}", path.string());
-    }
+
 
     //Materials
     {
@@ -291,7 +297,8 @@ void Engine::LoadWorld(World &world)
                         FillTexture(material.specularTexture);
                         FillTexture(material.normalMap);
 
-                        _resourcesManager.GenerateMaterial(p.path().filename().replace_extension("").string().c_str(), material);
+                        _resourcesManager.GenerateMaterial(p.path().filename().replace_extension("").string(),
+                                                           material);
                     }
                 }
 
@@ -311,15 +318,36 @@ void Engine::LoadWorld(World &world)
 
         iarchive(world);
     }
+    world.InitSystems();
+    SetCurrentWorld(oldWorld.GetName());
 }
 
 void Engine::RemoveWorld(const std::string &name)
 {
-    uint_fast16_t index = _worldLut[name];
+    Log_Info("Removing world {}",name);
+
+    auto it = _worldLut.find(name);
+    if (it == _worldLut.end())
+    {
+        Log_Error("Could not find world \"{}\" to delete", name);
+        return;
+    }
+
+    uint_fast16_t index = _worldLut.at(name);
     std::string back_name = _worlds.back().GetName();
     std::swap(_worlds[index], _worlds.back());
     _worlds.pop_back();
     _worldLut[back_name] = index;
+    _worldLut.erase(name);
+
+    std::filesystem::path worldPath("./Asset/Scenes");
+    worldPath.append(name).replace_extension("qck");
+
+    if (std::filesystem::remove(worldPath))
+    {
+        Log_Info("World {} removed",name);
+    }
+
 }
 
 PhysicsEventManager &Engine::GetPhysicsEventManager()
@@ -362,6 +390,7 @@ void Engine::UpdateTime()
     }
 
 }
+
 PhysicsCollisionCallback &Engine::GetPhysicsCollisionCallback()
 {
     return _physicsCollisionCallback;
@@ -380,5 +409,23 @@ double Engine::GetDeltaTime()
 void Engine::ClearWorld(const std::string &worldName)
 {
     _worlds[_worldLut[worldName]].Clear();
+}
+
+std::vector<std::string> Engine::GetWorldList() const
+{
+    std::vector<std::string> res{};
+    for (const auto &item : _worldLut)
+        res.push_back(item.first);
+
+    return res;
+}
+
+void Engine::SetCurrentWorld(const std::string &name)
+{
+    auto it = _worldLut.find(name);
+    if (it == _worldLut.end())
+        return;
+    _currentWorld = it->second;
+    _worlds.at(_currentWorld).InitSettings();
 }
 

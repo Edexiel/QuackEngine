@@ -14,10 +14,9 @@ namespace Renderer
 
     struct Particle
     {
-        Maths::Color3f color        {1, 1, 1};
-        Maths::Vector3f position    {1, 1, 1};
-        Maths::Vector3f direction   {1, 1, 1};
-        float life                  {1.0f};
+        Maths::Vector3f start   {0.f, 0.f, 0.f};
+        Maths::Vector3f end     {1.f, 1.f, 1.f};
+        float life              {1.0f};
     };
 
     class ParticleProcess : public ProcessBase

@@ -4,6 +4,7 @@
 #include "Scene/Core/System.hpp"
 #include "Renderer/Framebuffer.hpp"
 #include "Renderer/Mesh.hpp"
+#include "Scene/Component/ParticleEmitter.hpp"
 
 namespace Renderer
 {

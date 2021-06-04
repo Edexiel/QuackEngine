@@ -8,7 +8,6 @@ using namespace Component;
 
 void PhysicsSystem::Init()
 {
-    auto world = &Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)
     {
         SetRigidBody(entity);
@@ -28,7 +27,7 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
         PhysicsSystem::SetTransform(entity, t.position, t.rotation);
     }
 
-//    world->GetPhysicsWorld()->update(fixedDeltaTime);
+    world->GetPhysicsWorld()->update(fixedDeltaTime);
 
     for (Entity entity: _entities)
     {

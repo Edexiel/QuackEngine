@@ -6,25 +6,23 @@
 
 namespace Resources
 {
-    enum class AssetType{A_TEXTURE, A_MODEL, A_SOUND, A_ANIMATION, A_MATERIAL, A_SHADER};
+    enum class AssetType{A_TEXTURE, A_MODEL, A_SOUND, A_ANIMATION, A_MATERIAL, A_SHADER, A_FONT};
 
     class Asset
     {
     protected:
         AssetType _type;
-        std::string _path;
+        std::filesystem::path _path;
 
     public:
 
-        //todo : private ?
+        explicit Asset(AssetType assetType);
 
-        Asset(AssetType assetType);
         AssetType GetType() const;
-
-        const std::string GetName() const;
-        std::string& Path();
-        const std::string& GetPath() const;
-
+        std::string GetName() const;
+        std::string GetPath()const;
+        void SetPath(const std::string& path);
+        void SetPath(const std::filesystem::path& path);
 
     };
 
@@ -35,18 +33,23 @@ namespace Resources
         return _type;
     }
 
-    inline const std::string Asset::GetName() const
+    inline std::string Asset::GetName() const
     {
-        return (std::filesystem::path(_path)).filename().string();
+        return _path.filename().string();
     }
 
-    inline std::string &Asset::Path()
+    inline std::string Asset::GetPath() const
     {
-        return _path;
+
+        return _path.generic_string();
     }
-    inline const std::string& Asset::GetPath() const
+    inline void Asset::SetPath(const std::string& path)
     {
-        return _path;
+        _path = std::filesystem::path{path};
+    }
+    inline void Asset::SetPath(const std::filesystem::path& path)
+    {
+        _path = path;
     }
 }
 

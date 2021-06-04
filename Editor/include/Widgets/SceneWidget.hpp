@@ -23,7 +23,7 @@ private:
     Maths::Matrix4 _mat;
 
 public:
-    SceneWidget();
+    SceneWidget(Editor &editor);
 
     void UpdateVisible() final;
 

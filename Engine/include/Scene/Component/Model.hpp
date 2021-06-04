@@ -11,6 +11,7 @@ namespace Component
     struct Model :public ComponentBase
     {
         Renderer::ModelRenderer model;
+        Maths::Vector3f offset {0.f,0.f,0.f};
 
         template<class Archive>
         void save(Archive &archive) const
@@ -18,10 +19,11 @@ namespace Component
             std::vector<std::string> materials;
             for (const auto &mat : model.GetMaterialList())
             {
-                materials.push_back(mat->Path());
+                materials.push_back(mat->GetPath());
             }
             archive(cereal::make_nvp("path", model.GetPath()),
                     cereal::make_nvp("type", model._vertexType),
+                    CEREAL_NVP(offset),
                     CEREAL_NVP(materials));
         }
 
@@ -29,13 +31,18 @@ namespace Component
         void load(Archive &archive)
         {
             std::vector<std::string> materials;
+            std::string path;
 
-            archive(cereal::make_nvp("path", model.Path()),
-                    cereal::make_nvp("type", model._vertexType));
+            archive(cereal::make_nvp("path", path),
+                    cereal::make_nvp("type", model._vertexType),
+                    CEREAL_NVP(offset));
+
             archive(CEREAL_NVP(materials));
 
+            model.SetPath(path);
+
             Resources::ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
-            model = resourcesManager.LoadModel(model.Path(), model._vertexType);
+            model = resourcesManager.LoadModel(model.GetPath(), model._vertexType);
             for (const auto &mat : materials)
             {
                 model.AddMaterial(resourcesManager.LoadMaterial(mat));

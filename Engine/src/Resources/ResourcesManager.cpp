@@ -16,7 +16,7 @@
 
 #include <filesystem>
 #include <fmt/color.h>
-
+#include <algorithm>
 
 using namespace Resources;
 using namespace Renderer;
@@ -28,7 +28,7 @@ void ResourcesManager::Init()
     material.ambient = {1, 1, 1};
     material.diffuse = {1, 1, 1};
     material.specular = {1, 1, 1};
-    material.checkLight = true;
+    material.checkLight = false;
 
     MaterialInterface materialInterface = GenerateMaterial("Default material", material);
 }
@@ -104,7 +104,7 @@ Animation ResourcesManager::LoadAnimation(const std::filesystem::path &path)
 
     if (animation.GetDuration() > 0.0f) // Check if the file has an animation
     {
-        animation.Path() = path.string();
+        animation.SetPath(path.string());
         _mapAnimation.insert({path.string(), animation});
         _globalAssetMap.insert({path.string(), &_mapAnimation.find(path.string())->second});
     }
@@ -134,7 +134,7 @@ Texture ResourcesManager::LoadTexture(const std::filesystem::path &path)
     // Create a new Texture
 
     Texture texture = Texture::LoadTexture(path);
-    texture.Path() = path.string();
+    texture.SetPath(path.string());
     _mapTexture.insert({path.string(), texture});
     _textureToName.insert({texture.GetID(), path.string()});
     _globalAssetMap.insert({path.string(), &_mapTexture.find(path.string())->second});
@@ -190,6 +190,35 @@ Renderer::Shader ResourcesManager::LoadObjectShader(const Renderer::ShaderConstr
     return shader;
 }
 
+Renderer::Font ResourcesManager::LoadFont(const std::filesystem::path &path)
+{
+    // Check if the Texture already exist
+    auto it = _mapFont.find(path.string());
+
+    // Check if the shader already exist
+    if (it != _mapFont.end())
+    {
+        return it->second;
+    }
+
+    // return null Shader if the file doesn't exist
+    if (!std::filesystem::exists(path.string()))
+    {
+        Log_Error("File doesn't exists: {}", path.string());
+        return Font();
+    }
+
+    // Create a new Shader
+
+    Font font = Font::LoadFont(path.string().c_str());
+
+    font.SetPath(path.string());
+    _mapFont.insert({path.string(), font});
+    _globalAssetMap.insert({path.string(), &_mapFont.find(path.string())->second});
+
+    return font;
+}
+
 Audio::Sound ResourcesManager::LoadSound(const std::filesystem::path &path, Audio::SoundType soundType)
 {
     // Check if the Sound already exist
@@ -236,7 +265,7 @@ Renderer::MaterialInterface ResourcesManager::LoadMaterial(const std::filesystem
     if (!exists(name))
     {
         Log_Error("File doesn't exists: {}", name.string());
-        return nullptr;
+        return _mapMaterial.find(DEFAULT_MATERIAL_STRING)->second;
     }
 
     // Create a new Material
@@ -251,7 +280,7 @@ Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const std::string
 
     MaterialInterface materialInterface = std::make_shared<Material>(material);
 
-    materialInterface->Path() = name;
+    materialInterface->SetPath(name);
 
     _mapMaterial.insert({name, materialInterface});
 
@@ -266,6 +295,11 @@ Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const std::string
 
 void ResourcesManager::DestroyMaterial(const std::string &name)
 {
+    if (name == DEFAULT_MATERIAL_STRING)
+        return;
+
+    std::remove((std::string("./Asset/Materials/") + name + ".qmt").c_str());
+
     _mapMaterial.erase(name);
     _globalAssetMap.erase(name);
 }
