@@ -126,7 +126,7 @@ void EnemyManagerSystem::Process(const Renderer::Framebuffer &buffer, const Rend
     Renderer::RendererPlatform::EnableDepthBuffer(false);
 
     Maths::Matrix4 invertView = camera.GetView().GetInvert();
-    Component::Transform cameraTransform = world.GetComponent<Component::Transform>(camera.GetEntity());
+    Component::Transform& cameraTransform = world.GetComponent<Component::Transform>(camera.GetEntity());
 
     for (Entity entity: _entities)
     {

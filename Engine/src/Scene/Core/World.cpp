@@ -25,10 +25,10 @@ rp3d::PhysicsWorld *World::GetPhysicsWorld() const
 
 void World::Clear()
 {
-    std::vector<Entity> entities = _entityManager->GetEntities();
-    for (const Entity &entity : entities)
+    std::vector<Entity> &entities = _entityManager->GetEntities();
+    for (Entity entity : entities)
     {
-        DestroyEntity(entity);
+        DestroyEntity(entities[0]);
     }
 
     GetSystem<RenderSystem>()->Clear();
@@ -134,18 +134,18 @@ void World::Build(std::map<std::string, bool> &c, Entity id) const
         Log_Error("No Build function bind to world {}", _name);
 }
 
-void World::Save(cereal::JSONOutputArchive& a,const std::map<std::string, bool> &c,Entity id) const
+void World::Save(cereal::JSONOutputArchive &a, const std::map<std::string, bool> &c, Entity id) const
 {
     if (SavePtr)
-        SavePtr(*this,a,c,id);
+        SavePtr(*this, a, c, id);
     else
         Log_Error("No Save settings function bind to world {}", _name);
 }
 
-void World::Load(cereal::JSONInputArchive& a,const std::map<std::string, bool> &c,Entity id) const
+void World::Load(cereal::JSONInputArchive &a, const std::map<std::string, bool> &c, Entity id) const
 {
     if (LoadPtr)
-        LoadPtr(*this,a,c,id);
+        LoadPtr(*this, a, c, id);
     else
         Log_Error("No Load function bind to world {}", _name);
 }
@@ -164,7 +164,7 @@ void World::EntityHandler::BuildArray()
     build<Component::CharacterController>("CharacterController");
     build<Component::ParticleEmitter>("ParticleEmitter");
     build<Component::SimpleShadow>("SimpleShadow");
-    world->Build(components, id);
+    world.Build(components, id);
 }
 
 void World::EntityHandler::save(cereal::JSONOutputArchive &archive) const
@@ -181,37 +181,36 @@ void World::EntityHandler::save(cereal::JSONOutputArchive &archive) const
     write<Component::CharacterController>(archive, id, "CharacterController");
     write<Component::ParticleEmitter>(archive, id, "ParticleEmitter");
     write<Component::SimpleShadow>(archive, id, "SimpleShadow");
-    world->Save(archive, components, id);
+    world.Save(archive, components, id);
 }
 
 void World::EntityHandler::load(cereal::JSONInputArchive &archive)
 {
-    World &w = Engine::Instance().GetCurrentWorld();
-    Entity e = w.CreateEntity();
+    Entity e = world.CreateEntity();
 
     archive(CEREAL_NVP(components));
 
-    read<Component::Name>(archive, w, e, "Name");
-    read<Component::Transform>(archive, w, e, "Transform");
-    read<Component::Camera>(archive, w, e, "Camera");
-    read<Component::Light>(archive, w, e, "Light");
-    read<Component::Model>(archive, w, e, "Model");
-    read<Component::Animator>(archive, w, e, "Animator");
-    read<Component::RigidBody>(archive, w, e, "RigidBody");
-    read<Component::CameraGameplay>(archive, w, e, "CameraGameplay");
-    read<Component::CharacterController>(archive, w, e, "CharacterController");
-    read<Component::ParticleEmitter>(archive, w, e, "ParticleEmitter");
-    read<Component::SimpleShadow>(archive, w, e, "SimpleShadow");
-    w.Load(archive, components, id);
+    read<Component::Name>(archive, e, "Name");
+    read<Component::Transform>(archive, e, "Transform");
+    read<Component::Camera>(archive, e, "Camera");
+    read<Component::Light>(archive, e, "Light");
+    read<Component::Model>(archive, e, "Model");
+    read<Component::Animator>(archive, e, "Animator");
+    read<Component::RigidBody>(archive, e, "RigidBody");
+    read<Component::CameraGameplay>(archive, e, "CameraGameplay");
+    read<Component::CharacterController>(archive, e, "CharacterController");
+    read<Component::ParticleEmitter>(archive, e, "ParticleEmitter");
+    read<Component::SimpleShadow>(archive, e, "SimpleShadow");
+    world.Load(archive, components, id);
 }
 
 void World::save(cereal::JSONOutputArchive &archive) const
 {
     archive(cereal::make_nvp("name", _name));
-
+    const World &world = *this;
     std::vector<EntityHandler> entities;
     for (Entity &entity : _entityManager->GetEntities())
-        entities.emplace_back(entity, this);
+        entities.emplace_back(entity, world);
 
     for (auto &item : entities)
         item.BuildArray();

@@ -59,6 +59,7 @@ void MenuWidget::UpdateVisible()
                     if (ImGui::Button(fmt::format("SetActive##{}", n).c_str()))
                     {
                         _engine.SetCurrentWorld(item);
+                        //_engine.LoadWorld(_engine.GetCurrentWorld());
                     }
                 }
 

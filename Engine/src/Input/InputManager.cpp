@@ -1,5 +1,6 @@
 #include "Input/InputManager.hpp"
 #include "Debug/Assertion.hpp"
+#include "Debug/Log.hpp"
 
 using namespace Input;
 
@@ -80,7 +81,7 @@ void InputManager::BindEvent(const std::string &event, Key key)
     {
         if (_key == key)
         {
-            std::cout << "This input already exist for this action!\n";
+            Log_Error("This input already exist for this action!");
             return;
         }
     }
@@ -94,7 +95,7 @@ void InputManager::BindEvent(const std::string &event, MouseButton button)
     {
         if (_button == button)
         {
-            std::cout << "This input already exist for this action!\n";
+            Log_Error("This input already exist for this action!");
             return;
         }
     }

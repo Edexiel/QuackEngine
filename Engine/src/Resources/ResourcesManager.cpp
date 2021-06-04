@@ -104,7 +104,7 @@ Animation ResourcesManager::LoadAnimation(const std::filesystem::path &path)
 
     if (animation.GetDuration() > 0.0f) // Check if the file has an animation
     {
-        animation.Path() = path.string();
+        animation.SetPath(path.string());
         _mapAnimation.insert({path.string(), animation});
         _globalAssetMap.insert({path.string(), &_mapAnimation.find(path.string())->second});
     }
@@ -134,7 +134,7 @@ Texture ResourcesManager::LoadTexture(const std::filesystem::path &path)
     // Create a new Texture
 
     Texture texture = Texture::LoadTexture(path);
-    texture.Path() = path.string();
+    texture.SetPath(path.string());
     _mapTexture.insert({path.string(), texture});
     _textureToName.insert({texture.GetID(), path.string()});
     _globalAssetMap.insert({path.string(), &_mapTexture.find(path.string())->second});
@@ -251,7 +251,7 @@ Renderer::MaterialInterface ResourcesManager::GenerateMaterial(const std::string
 
     MaterialInterface materialInterface = std::make_shared<Material>(material);
 
-    materialInterface->Path() = name;
+    materialInterface->SetPath(name);
 
     _mapMaterial.insert({name, materialInterface});
 

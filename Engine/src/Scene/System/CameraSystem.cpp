@@ -18,12 +18,14 @@ Component::Camera& CameraSystem::GetActiveCamera()
         if (cam.isActive)
         {
             _activeCamera = entity;
+            // todo : en vrai ref ce serait bien mais on doit inverser la scale du z
             Transform trs = world.GetComponent<Transform>(entity);
-            trs.scale.z *= -1; // revert Z axis of the camera
+            trs.scale.z *=-1;// -fabsf(trs.scale.z); // revert Z axis of the camera
             cam.SetView(trs.GetMatrix().GetInvert());
             return cam;
         }
     }
+
     Assert_Fatal_Error(true, "No Camera Active");
     exit(-1);
 

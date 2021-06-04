@@ -8,7 +8,6 @@ using namespace Component;
 
 void PhysicsSystem::Init()
 {
-    auto world = &Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)
     {
         SetRigidBody(entity);

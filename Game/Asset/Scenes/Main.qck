@@ -38,7 +38,7 @@
                     },
                     {
                         "key": "Player",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "RigidBody",
@@ -76,8 +76,8 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 672,
-                    "_height": 381,
+                    "_width": 766,
+                    "_height": 408,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
                     "_fov": 0.7853749394416809
@@ -88,6 +88,9 @@
                         "y": 12.0,
                         "z": -6.0
                     }
+                },
+                "Player": {
+                    "ok": 0
                 }
             },
             {
@@ -126,7 +129,7 @@
                     },
                     {
                         "key": "Player",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "RigidBody",
@@ -192,9 +195,6 @@
                 },
                 "CharacterController": {
                     "speed": 1.0
-                },
-                "Player": {
-                    "ok": 0
                 },
                 "SimpleShadow": {
                     "scale": {
@@ -635,6 +635,10 @@
                         "value": true
                     },
                     {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": false
                     },
@@ -648,7 +652,101 @@
                     }
                 ],
                 "Name": {
-                    "name": "Tartiflette"
+                    "name": "Smoke"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 9.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "ParticleEmitter": {
+                    "_colorStart": {
+                        "x": 0.3960784375667572,
+                        "y": 0.3960784375667572,
+                        "z": 0.3960784375667572,
+                        "w": 0.6549019813537598
+                    },
+                    "_colorEnd": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0,
+                        "w": 0.21176470816135407
+                    },
+                    "_angleStart": 1.3089970350265504,
+                    "_angleEnd": 2.0071287155151369,
+                    "_lengthStart": 1.0,
+                    "_lengthEnd": 12.100000381469727,
+                    "_duration": 3.0999999046325685,
+                    "Size": 12,
+                    "Texture": "./Asset/Texture/Particules/smoke_02.png"
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": true
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "Fire"
                 },
                 "Transform": {
                     "position": {
@@ -671,23 +769,23 @@
                 "ParticleEmitter": {
                     "_colorStart": {
                         "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0,
+                        "y": 0.4117647409439087,
+                        "z": 0.0,
                         "w": 1.0
                     },
                     "_colorEnd": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0,
-                        "w": 0.0
+                        "x": 0.7882353067398071,
+                        "y": 0.40392157435417178,
+                        "z": 0.07450980693101883,
+                        "w": 0.29411765933036806
                     },
-                    "_angleStart": 0.0,
-                    "_angleEnd": 6.2829999923706059,
-                    "_lengthStart": 1.0,
-                    "_lengthEnd": 2.0,
-                    "_duration": 5.0,
-                    "Size": 10,
-                    "Texture": "./Asset/Texture/Stylized_Feathers_001_normal.jpg"
+                    "_angleStart": 1.3962634801864625,
+                    "_angleEnd": 1.919862151145935,
+                    "_lengthStart": 0.20000000298023225,
+                    "_lengthEnd": 1.399999976158142,
+                    "_duration": 1.2000000476837159,
+                    "Size": 9,
+                    "Texture": "./Asset/Texture/Particules/fire_01.png"
                 }
             }
         ]
