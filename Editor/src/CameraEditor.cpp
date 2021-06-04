@@ -6,6 +6,7 @@
 
 #include "Engine.hpp"
 #include <algorithm>
+#include "Engine.hpp"
 
 using namespace Maths;
 
@@ -29,8 +30,9 @@ void CameraEditor::SetScaleAxisZ(float scale)
     _scaleAxisZ = scale;
 }
 
-void CameraEditor::SetInput(Input::InputManager &inputManager)
+void CameraEditor::SetInput()
 {
+    Input::InputManager& inputManager = Engine::Instance().GetInputManager();
     inputManager.RegisterEventAxis("CameraEditorMovementForward", this, &CameraEditor::SetScaleAxisZ);
     inputManager.RegisterEventAxis("CameraEditorMovementRight", this, &CameraEditor::SetScaleAxisX);
     inputManager.RegisterEventAxis("CameraEditorMovementUp", this, &CameraEditor::SetScaleAxisY);

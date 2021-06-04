@@ -33,7 +33,19 @@
                         "value": true
                     },
                     {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
                         "value": false
                     },
                     {
@@ -64,8 +76,8 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 825,
-                    "_height": 502,
+                    "_width": 672,
+                    "_height": 381,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
                     "_fov": 0.7853749394416809
@@ -109,7 +121,19 @@
                         "value": true
                     },
                     {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": true
+                    },
+                    {
                         "key": "RigidBody",
+                        "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
                         "value": true
                     },
                     {
@@ -123,7 +147,7 @@
                 "Transform": {
                     "position": {
                         "x": -1.3600000143051148,
-                        "y": -2.5,
+                        "y": -4.0,
                         "z": 10.0
                     },
                     "scale": {
@@ -139,14 +163,19 @@
                     }
                 },
                 "Model": {
-                    "path": "../../Game/Asset\\Model\\Bard.fbx",
+                    "path": "./Asset/Model/Bard.fbx",
                     "type": 2,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.5,
+                        "z": 0.0
+                    },
                     "materials": [
-                        "AnimationMaterial"
+                        "AnimationBard"
                     ]
                 },
                 "Animator": {
-                    "path": "../../Game/Asset\\Model\\Standard Run.fbx"
+                    "path": "./Asset/Model/Standard Run.fbx"
                 },
                 "RigidBody": {
                     "mass": 1.0,
@@ -162,7 +191,23 @@
                     }
                 },
                 "CharacterController": {
-                    "value0": 1.0
+                    "speed": 1.0
+                },
+                "Player": {
+                    "ok": 0
+                },
+                "SimpleShadow": {
+                    "scale": {
+                        "x": 157.8000030517578,
+                        "y": 100.0
+                    },
+                    "offset": {
+                        "x": -0.20000000298023225,
+                        "y": 0.0,
+                        "z": 1.100000023841858
+                    },
+                    "type": 1,
+                    "yRotation": 3.76982045173645
                 }
             },
             {
@@ -196,8 +241,20 @@
                         "value": true
                     },
                     {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
                     },
                     {
                         "key": "Transform",
@@ -226,8 +283,13 @@
                     }
                 },
                 "Model": {
-                    "path": "../../Game/Asset\\Model\\Cube.fbx",
+                    "path": "./Asset/Model/Cube.fbx",
                     "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
                     "materials": [
                         "Default material"
                     ]
@@ -262,7 +324,7 @@
                     },
                     {
                         "key": "CharacterController",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "Light",
@@ -277,8 +339,20 @@
                         "value": true
                     },
                     {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
                     },
                     {
                         "key": "Transform",
@@ -290,8 +364,8 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": 6.0,
-                        "y": -2.0,
+                        "x": 0.0,
+                        "y": -5.0,
                         "z": 20.0
                     },
                     "scale": {
@@ -307,8 +381,13 @@
                     }
                 },
                 "Model": {
-                    "path": "../../Game/Asset\\Model\\Cube.fbx",
+                    "path": "./Asset/Model/Cube.fbx",
                     "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
                     "materials": [
                         "Default material"
                     ]
@@ -325,9 +404,6 @@
                         "y": 1.0,
                         "z": 1.0
                     }
-                },
-                "CharacterController": {
-                    "value0": 1.0
                 }
             },
             {
@@ -361,8 +437,20 @@
                         "value": true
                     },
                     {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
                         "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
                     },
                     {
                         "key": "Transform",
@@ -391,8 +479,13 @@
                     }
                 },
                 "Model": {
-                    "path": "../../Game/Asset\\Model\\Cube.fbx",
+                    "path": "./Asset/Model/Cube.fbx",
                     "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
                     "materials": [
                         "Default material"
                     ]
@@ -442,7 +535,19 @@
                         "value": true
                     },
                     {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
                         "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
                         "value": false
                     },
                     {
@@ -493,6 +598,96 @@
                     "quadratic": 0.000007000000096013537,
                     "spotAngle": 8.5,
                     "outerSpotAngle": 10.5
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": true
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "Tartiflette"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 9.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "ParticleEmitter": {
+                    "_colorStart": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0,
+                        "w": 1.0
+                    },
+                    "_colorEnd": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0,
+                        "w": 0.0
+                    },
+                    "_angleStart": 0.0,
+                    "_angleEnd": 6.2829999923706059,
+                    "_lengthStart": 1.0,
+                    "_lengthEnd": 2.0,
+                    "_duration": 5.0,
+                    "Size": 10,
+                    "Texture": "./Asset/Texture/Stylized_Feathers_001_normal.jpg"
                 }
             }
         ]

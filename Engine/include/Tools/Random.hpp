@@ -1,26 +1,14 @@
-#ifndef _RANDOM_
-#define _RANDOM_
-
-#include "Debug/Assertion.hpp"
+#ifndef _QUACK_RANDOM_
+#define _QUACK_RANDOM_
 
 class Random
 {
 public:
 
-    inline static int RandomBool()
-    {
-        return std::rand() % 2;
-    }
+    static int RandomBool();
+    static int Range(int start, int end);
+    static float Range(float start, float end);
 
-    inline static int Range(int start, int end)
-    {
-        return start + (std::rand() % (end - start + 1));
-    }
-
-    inline static float Range(float start, float end)
-    {
-        return start + (std::rand() % (unsigned int)((end - start + 1) * 100000) / 100000.f);
-    }    
 };
 
 #endif

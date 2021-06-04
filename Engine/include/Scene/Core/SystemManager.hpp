@@ -23,7 +23,7 @@ private:
 
 public:
     template<typename T>
-    T* RegisterSystem();
+    T *RegisterSystem();
 
     template<typename T>
     void SetSignature(Signature signature);
@@ -33,26 +33,28 @@ public:
     void EntitySignatureChanged(Entity id, Signature entitySignature);
 
     template<typename T>
-    T* GetSystem();
+    T *GetSystem();
 
+    template<typename T>
+    bool HasSystem();
 };
 
 template<typename T>
-T* SystemManager::RegisterSystem()
+T *SystemManager::RegisterSystem()
 {
     std::string_view typeName = typeid(T).name();
     auto search = _systems.find(typeName);
     if (search != _systems.end())
     {
         Log_Warning("Already registered, skipping: {}", demangle(typeid(T).name()));
-        return static_cast<T*>(search->second.get());
+        return static_cast<T *>(search->second.get());
     }
 
     Log_Info("Registering: {}", demangle(typeid(T).name()));
 
-    auto result =  _systems.insert({typeName, std::make_unique<T>()});
+    auto result = _systems.insert({typeName, std::make_unique<T>()});
 
-    return static_cast<T*>(result.first->second.get());
+    return static_cast<T *>(result.first->second.get());
 }
 
 template<typename T>
@@ -97,15 +99,23 @@ inline void SystemManager::EntitySignatureChanged(Entity id, Signature entitySig
 }
 
 template<typename T>
-T* SystemManager::GetSystem()
+T *SystemManager::GetSystem()
 {
     std::string_view typeName = typeid(T).name();
     auto search = _systems.find(typeName);
     if (search != _systems.end())
     {
-        return static_cast<T*>(search->second.get());
+        return static_cast<T *>(search->second.get());
     }
     return nullptr;
+}
+
+template<typename T>
+bool SystemManager::HasSystem()
+{
+    std::string_view typeName = typeid(T).name();
+    auto search = _systems.find(typeName);
+    return search != _systems.end();
 }
 
 #endif //QUACKENGINE_SYSTEMMANAGER_HPP

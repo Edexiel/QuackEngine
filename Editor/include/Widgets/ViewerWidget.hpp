@@ -5,10 +5,8 @@
 
 class ViewerWidget : public Widget
 {
-private:
-    int _selected = -1;
 public:
-    ViewerWidget();
+    explicit ViewerWidget(Editor &editor);
 
     void UpdateVisible() final;
     void AddEntity();

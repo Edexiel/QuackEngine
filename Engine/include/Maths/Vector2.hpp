@@ -1,7 +1,8 @@
 #ifndef QUACKENGINE_VECTOR2_HPP
 #define QUACKENGINE_VECTOR2_HPP
 
-#include <iostream>
+#include <cmath>
+#include "cereal/cereal.hpp"
 
 namespace Maths
 {
@@ -29,6 +30,7 @@ struct Vector2
 
     static T DotProduct(const Vector2<T>& v1, const Vector2<T>& v2);
     static Vector2<T> Lerp(const Vector2<T>& v1, const Vector2<T>& v2, float t);
+    static Vector2<T> Rotate(const Vector2<T>& vector, float angle);
 
   static Vector2<T> Up();
   static Vector2<T> Down();
@@ -39,6 +41,12 @@ struct Vector2
   Vector2<T> operator+(const Vector2<T>& v2)   const;
   Vector2<T> operator-(const Vector2<T>& v2)   const;
   Vector2<T> operator*(const T& f)             const;
+
+    template<class Archive>
+    void serialize(Archive &archive)
+    {
+        archive(CEREAL_NVP(x),CEREAL_NVP(y));
+    }
 };
 #include "Maths/Vector2.inl"
 }

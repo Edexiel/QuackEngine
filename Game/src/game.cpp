@@ -5,44 +5,55 @@
 #include <Scene/System/CharacterControllerSystem.hpp>
 #include <Renderer/UI/Text.hpp>
 #include "Engine.hpp"
-
 #include "Scene/Core/World.hpp"
-#include "Scene/Component/Transform.hpp"
-#include "Scene/Component/Animator.hpp"
-#include "Scene/Component/RigidBody.hpp"
-#include "Scene/Component/CharacterController.hpp"
-#include "Scene/Component/CameraGameplay.hpp"
 
-
+#include "Scene/Component/EngineComponents.hpp"
+#include "Scene/System/EngineSystems.hpp"
 
 #include "Renderer/RendererPlatform.hpp"
 #include "Renderer/RendererInterface.hpp"
+
 #include "Renderer/ProcessBase.hpp"
 #include "Renderer/PostProcess/KernelPostProcess.hpp"
-#include "Renderer/UI/Text.hpp"
 
 
-#include "Scene/System/PhysicsSystem.hpp"
-#include "Scene/System/CameraSystem.hpp"
-#include "Scene/System/RenderSystem.hpp"
-#include "Scene/System/LightSystem.hpp"
-#include "Scene/System/CharacterControllerSystem.hpp"
-#include "Scene/System/CameraGameplaySystem.hpp"
+#include "Enemy/EnemyComponent.hpp"
+#include "Player/PlayerComponent.hpp"
+#include "Player/PlayerSystem.hpp"
 
-
-#include "Scene/System/AnimatorSystem.hpp"
-#include "Scene/Component/Animator.hpp"
-
-#include "Player/Player.hpp"
+#include <cereal/archives/json.hpp>
 
 using namespace Resources;
 using namespace Renderer;
 
-void Game::Init(Engine &engine) const
+void Game::Init(Engine &engine)
 {
-    World &world = engine.CreateWorld("Main");
-    world.Init(engine);
+    World &main = engine.CreateWorld("Main");
+    main.SetRegister(&Register);
+    main.SetInitGame(&InitGame);
+    main.SetInitSystems(&InitSystems);
+    main.SetInitSettings(&InitSettings);
 
+    /*** Serialization of external components**/
+    main.SetLoad(&Load);
+    main.SetSave(&Save);
+    main.SetBuild(&Build);
+    /*****************************************/
+
+    main.Register();
+    main.InitSystems();
+
+    engine.LoadWorld(main);
+
+    engine.SetCurrentWorld("Main"); //obligatoire
+}
+
+void Game::Register(World &world)
+{
+    Log_Info("Registering Component and Systems for: {}", world.GetName());
+
+    /** Register components **/
+    //global
     world.RegisterComponent<Component::Name>();
     world.RegisterComponent<Component::Transform>();
     world.RegisterComponent<Component::Model>();
@@ -51,28 +62,28 @@ void Game::Init(Engine &engine) const
     world.RegisterComponent<Component::RigidBody>();
     world.RegisterComponent<Component::CharacterController>();
     world.RegisterComponent<Component::Animator>();
+    world.RegisterComponent<Component::SimpleShadow>();
     world.RegisterComponent<Component::CameraGameplay>();
-
+    world.RegisterComponent<Component::ParticleEmitter>();
+    //local
     world.RegisterComponent<EnemyComponent>();
     world.RegisterComponent<PlayerComponent>();
 
+    /** Register systems **/
+    world.RegisterSystem<RenderSystem>();
+    world.RegisterSystem<CameraSystem>();
+    world.RegisterSystem<LightSystem>();
+    world.RegisterSystem<PhysicsSystem>();
+    world.RegisterSystem<CharacterControllerSystem>();
+    world.RegisterSystem<CameraGameplaySystem>();
+    world.RegisterSystem<AnimatorSystem>();
+    world.RegisterSystem<PlayerSystem>();
+    world.RegisterSystem<EnemyManagerSystem>();
+    world.RegisterSystem<ParticleSystem>();
+    world.RegisterSystem<SimpleShadowSystem>();
 
 
-
-    auto renderSystem = world.RegisterSystem<RenderSystem>();
-    auto cameraSystem = world.RegisterSystem<CameraSystem>();
-    auto lightSystem = world.RegisterSystem<LightSystem>();
-    auto physicsSystem = world.RegisterSystem<PhysicsSystem>();
-    auto characterControllerSystem = world.RegisterSystem<CharacterControllerSystem>();
-    auto cameraGameplaySystem = world.RegisterSystem<CameraGameplaySystem>();
-    auto animatorSystem = world.RegisterSystem<AnimatorSystem>();
-    auto playerSystem = world.RegisterSystem<PlayerSystem>();
-
-    auto noteDisplaySystem = world.RegisterSystem<EnemyManagerSystem>();
-
-
-    engine.GetResourcesManager().Init();
-
+    /** Set signature of systems **/
     //Signature Renderer
     {
         Signature signatureRender;
@@ -80,7 +91,6 @@ void Game::Init(Engine &engine) const
         signatureRender.set(world.GetComponentType<Component::Transform>());
         world.SetSystemSignature<RenderSystem>(signatureRender);
     }
-
     //Signature Camera
     {
         Signature signatureCamera;
@@ -88,7 +98,6 @@ void Game::Init(Engine &engine) const
         signatureCamera.set(world.GetComponentType<Component::Transform>());
         world.SetSystemSignature<CameraSystem>(signatureCamera);
     }
-
     //Signature Light
     {
         Signature signatureLight;
@@ -119,14 +128,12 @@ void Game::Init(Engine &engine) const
         signaturePhysics.set(world.GetComponentType<Component::RigidBody>());
         world.SetSystemSignature<PhysicsSystem>(signaturePhysics);
     }
-
     //signature Animation
     {
         Signature signatureAnimation;
         signatureAnimation.set(world.GetComponentType<Component::Animator>());
         world.SetSystemSignature<AnimatorSystem>(signatureAnimation);
     }
-
     //signature enemymanager
     {
         Signature signatureEnemy;
@@ -144,202 +151,105 @@ void Game::Init(Engine &engine) const
         world.SetSystemSignature<PlayerSystem>(signaturePlayer);
     }
 
-    engine.LoadWorld(world);
-    engine.GetResourcesManager().LoadFolder(R"(./Asset)");
-    physicsSystem->Init();
+    //Signature particle
+    {
+        Signature signatureParticle;
+        signatureParticle.set(world.GetComponentType<Component::Transform>());
+        signatureParticle.set(world.GetComponentType<Component::ParticleEmitter>());
+        world.SetSystemSignature<ParticleSystem>(signatureParticle);
+    }
+    //Signature Shadow
+    {
+        Signature signatureShadow;
+        signatureShadow.set(world.GetComponentType<Component::Transform>());
+        signatureShadow.set(world.GetComponentType<Component::SimpleShadow>());
+        world.SetSystemSignature<SimpleShadowSystem>(signatureShadow);
+    }
 
 
-    //NoteDisplayProcess* noteDisplayProcess = new NoteDisplayProcess();
+}
+
+void Game::InitGame(World &world)
+{
+    Log_Info("Initializing scene: {}", world.GetName());
+
+    world.GetSystem<EnemyManagerSystem>()->GenerateEnemies(10, {0, 0, 0}, 50.f, 100.f);
+}
+
+void Game::InitSystems(World &world)
+{
+    Log_Info("Initializing systems: {}", world.GetName());
+
+    Engine& engine = Engine::Instance();
+
+    /** Init Systems **/
+    world.GetSystem<PhysicsSystem>()->Init();
+    world.GetSystem<LightSystem>()->Update();
+
+    /** Post process ? **/
     std::unique_ptr<ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
     engine.GetPostProcessManager().AddProcess(ptr);
 
+    engine.GetPostProcessManager().AddProcess(new ParticleProcess());
+    engine.GetPostProcessManager().AddProcess(new SimpleShadowProcess());
+
     std::unique_ptr<ProcessBase> ptr2 = std::make_unique<Renderer::Text>(Text("FontTest"));
     engine.GetPostProcessManager().AddProcess(ptr2);
+}
 
-    noteDisplaySystem->GenerateEnemies(10, {0,0,0}, 50.f, 100.f);
-
+void Game::InitSettings(World &world)
+{
     RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
-
     Renderer::RendererPlatform::EnableDepthBuffer(true);
 }
 
-void Game::Update(float deltaTime)
+template<typename T>
+void build(const World &w, std::map<std::string, bool> &c, Entity e, const std::string &n)
 {
-    printf("Update");
+    c[n] = w.HasComponent<T>(e);
+}
+
+template<class T>
+void write(const World &w, cereal::JSONOutputArchive &a, Entity e, const std::map<std::string, bool> &c,
+           const std::string &n)
+{
+    auto it = c.find(n);
+    if (it == c.end())
+        return;
+
+    if (it->second)
+    {
+        a(cereal::make_nvp(n, w.GetComponent<T>(e)));
+    }
 }
 
 
-//{
-//Entity CameraEntity = world.CreateEntity("Camera");
-//
-//Component::Camera camera(1280,
-//                         720,
-//                         1000, 0.01f, 45.f * 3.1415f / 180.f);
-//
-//Component::Transform cameraTrs;
-//cameraTrs.position = {0, 0, -5};
-//world.AddComponent(CameraEntity, camera);
-//world.AddComponent(CameraEntity, cameraTrs);
-//
-//
-//ResourcesManager &resourcesManager = Engine::Instance().GetResourcesManager();
-//
-//Component::Transform t = {Maths::Vector3f{0, -1, 0}, Maths::Vector3f::One() * 0.2f,
-//                          Maths::Quaternion({0, 1, 0}, Pi<float>())};
-//engine.GetResourcesManager().ReLoadModel(R"(../../Game/Asset/Model/Vampire.fbx)",
-//Renderer::VertexType::V_SKELETAL);
-//Renderer::ModelRenderer md = engine.GetResourcesManager().LoadModel(R"(../../Game/Asset/Model/Vampire.fbx)",
-//                                                                    Renderer::VertexType::V_SKELETAL);
-//
-//Material material;
-//
-//material.ambient = {1, 1, 1};
-//material.diffuse = {1, 1, 1};
-//material.specular = {1, 1, 1};
-//material.checkLight = true;
-//material.colorTexture = engine.GetResourcesManager().LoadTexture(
-//        R"(../../Game/Asset/Texture/Bartender.png)");
-//
-//material.hasSkeleton = true;
-////material.normalMap = engine.GetResourcesManager().LoadTexture(R"(..\..\Game\Asset\Texture\Floor_N.jpg)");
-//
-//MaterialInterface materialInterface = resourcesManager.GenerateMaterial("AnimationMaterial", material);
-//
-//md.AddMaterial(materialInterface);
-//
-//Animation animation = engine.GetResourcesManager().LoadAnimation(R"(../../Game/Asset/Model/Vampire.fbx)");
-//
-//
-//for (int x = 0; x < 1; x++)
-//{
-//for (int y = 0; y < 1; y++)
-//{
-//for (int z = 0; z < 1; z++)
-//{
-//t.position.x = 0;
-////t.position.y = 50.f /*- (float)y * 2*/;
-////t.position.z = 20.f /*+ (float)z * 2*/;
-//
-//Entity id = world.CreateEntity("Sphere");
-//
-//Component::RigidBody rb;
-//
-//
-//Component::Model cmd{md};
-//world.AddComponent(id, t);
-//world.AddComponent(id, cmd);
-////world.AddComponent(id, rb);
-//
-//Component::Animator animator(animation);
-////animator.PlayAnimation(animation);
-//world.AddComponent(id, animator);
-//
-///*physicsSystem->SetRigidBody(id);
-//physicsSystem->SetType(id, BodyType::DYNAMIC);
-//physicsSystem->AddSphereCollider(id, 1.5f);*/
-//}
-//}
-//}
-//
-//material.hasSkeleton = false;
-//
-////Test triggerCollision
-//Component::RigidBody rbTrigger;
-//
-//Component::Transform tTrigger = {Maths::Vector3f{0, -2.5f, 20}, {1, 1, 1}, Maths::Quaternion{}};
-//Entity idTrigger = world.CreateEntity("TriggerBox");
-//
-//Component::Model cmcube{engine.GetResourcesManager().LoadModel(R"(../../Game/Asset/Model/Cube.fbx)",
-//                                                               Renderer::VertexType::V_NORMALMAP)};
-//world.AddComponent(idTrigger, tTrigger);
-//world.AddComponent(idTrigger, cmcube);
-//world.AddComponent(idTrigger, rbTrigger);
-//
-//physicsSystem->SetRigidBody(idTrigger);
-//physicsSystem->SetType(idTrigger, BodyType::STATIC);
-//physicsSystem->AddBoxCollider(idTrigger, {1, 1, 1});
-//physicsSystem->SetIsTrigger(idTrigger, true);
-//
-////Test contactCollision
-//Component::RigidBody rbContact;
-//
-//Component::Transform tContact = {Maths::Vector3f{0, -5.f, 20}, {1, 1, 1}, Maths::Quaternion{}};
-//Entity idContact = world.CreateEntity("ContactBox");
-//
-//world.AddComponent(idContact, tContact);
-//world.AddComponent(idContact, cmcube);
-//world.AddComponent(idContact, rbContact);
-//
-//physicsSystem->SetRigidBody(idContact);
-//physicsSystem->SetType(idContact, BodyType::STATIC);
-//physicsSystem->AddBoxCollider(idContact, {1, 1, 1});
-//
-//Entity idFloor = world.CreateEntity("Floor");
-//
-//Maths::Vector3f scale{20, 0.25, 20};
-//Component::Transform tFloor = {Maths::Vector3f{0, -5, 20}, scale, Maths::Quaternion{}};
-//
-//
-//Component::RigidBody rbFloor;
-//Renderer::ModelRenderer mdFloor = engine.GetResourcesManager().LoadModel(
-//        R"(../../Game/Asset/Model/Cube.fbx)",
-//        Renderer::VertexType::V_NORMALMAP);
-//
-//material.colorTexture = engine.GetResourcesManager().LoadTexture(R"(../../Game/Asset/Texture/Floor_C.jpg)");
-//
-//MaterialInterface materialInterface2 = resourcesManager.GenerateMaterial("mat2", material);
-//
-//mdFloor.AddMaterial(materialInterface2);
-//Component::Model cmFloor{mdFloor};
-//world.AddComponent(idFloor, tFloor);
-//world.AddComponent(idFloor, cmFloor);
-//world.AddComponent(idFloor, rbFloor);
-//
-//physicsSystem->SetRigidBody(idFloor);
-//physicsSystem->SetType(idFloor, BodyType::STATIC);
-//physicsSystem->AddBoxCollider(idFloor, scale);
-//
-//
-//Entity lightID = world.CreateEntity("Light");
-////Entity lightID2 = world.CreateEntity("Light");
-////Entity lightID3 = world.CreateEntity("Light");
-//
-//Component::Light light;
-//
-//light.type = Component::Light_Type::L_POINT;
-//light.ambient = {0.1f, 0.1f, 0.1f};
-//light.diffuse = {1, 1, 1};
-//light.specular = {1, 1, 1};
-//light.constant = 1.0f;
-//light.linear = 0.0014f;
-//light.quadratic = 0.000007f;
-//
-//light.outerSpotAngle = 10.5;
-//light.spotAngle = 8.5;
-//
-//
-//Component::Transform tl1 = {Maths::Vector3f::One() * -10, Maths::Vector3f::One(), Maths::Quaternion{}};
-//world.AddComponent(lightID, light);
-//world.AddComponent(lightID, tl1);
-//
-///*light.type = Component::Light_Type::L_POINT;
-//light.diffuse = {1, 1, 1};
-//light.specular = {1, 1, 1};
-//Transform tl2 = {Maths::Vector3f::One() * -100, Maths::Vector3f::One(), Maths::Quaternion{}};
-//
-//world.AddComponent(lightID2, light);
-//world.AddComponent(lightID2, tl2);
-//
-//light.type = Component::Light_Type::L_DIRECTIONAL;
-//light.diffuse = {0, 0, 1};
-//light.specular = {0, 0, 1};
-//
-////Audio::Sound sound = world.GetSoundManager().CreateSound("../../../inactive.ogg", Audio::SoundType::S_MUSIC);
-////sound.Play();
-////sound.SetVolume(0.05f);
-//
-//Transform tl3 = {Maths::Vector3f::Zero(), Maths::Vector3f::One(), Maths::Quaternion{3.1415 / 2, 1, 0, 0}};
-//
-//world.AddComponent(lightID3, light);
-//world.AddComponent(lightID3, tl3);*/
-//}
+template<class T>
+void read(const World &w, cereal::JSONInputArchive &a, Entity e, const std::map<std::string, bool> &c,
+          const std::string &n)
+{
+    auto it = c.find(n);
+    if (it == c.end())
+        return;
+    if (it->second)
+    {
+        T component;
+        a(cereal::make_nvp(n, component));
+        w.AddComponent(e, component);
+    }
+}
+
+void Game::Save(const World &w, cereal::JSONOutputArchive &a, const std::map<std::string, bool> &c, Entity e)
+{
+    write<PlayerComponent>(w, a, e, c, "Player");
+}
+
+void Game::Load(const World &w, cereal::JSONInputArchive &a, const std::map<std::string, bool> &c, Entity e)
+{
+    read<PlayerComponent>(w, a, e, c, "Player");
+}
+
+void Game::Build(const World &world, std::map<std::string, bool> &c, Entity id)
+{
+    build<PlayerComponent>(world, c, id, "Player");
+}

@@ -1,4 +1,4 @@
-#ifndef QUACKENGINE_CHARACTERCONTROLLER_HPP
+#ifndef QUACKENGINE_CHARACTERCONTROLLERSYSTEM_HPP
 #define QUACKENGINE_CHARACTERCONTROLLERSYSTEM_HPP
 
 #include "Scene/Core/System.hpp"
@@ -14,4 +14,4 @@ public:
     static void CollideWithWall(Entity player,const Maths::Vector3f &normal, float depth);
 };
 
-#endif //QUACKENGINE_CHARACTERCONTROLLER_HPP
+#endif //QUACKENGINE_CHARACTERCONTROLLERSYSTEM_HPP

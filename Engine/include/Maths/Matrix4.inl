@@ -156,9 +156,9 @@ inline Matrix4 Matrix4::OrthoMatrix(unsigned int width, unsigned int height, flo
     ortho.e[5] = 1;
     ortho.e[10] = -2 / (far - near);
 
-    ortho.e[12] = 0;
-    ortho.e[13] = 0;
-    ortho.e[14] = -(far + near) / (far - near);
+//    ortho.e[12] = 0;
+//    ortho.e[13] = 0;
+    ortho.e[14] = (far + near) / (far - near);
     ortho.e[15] = 1;
 
     return ortho;
@@ -308,7 +308,7 @@ inline Matrix4 Matrix4::GetInvert() const
     return result;
 }
 
-inline Matrix4 Matrix4::operator*(const Matrix4 &m)
+inline Matrix4 Matrix4::operator*(const Matrix4 &m) const
 {
     Matrix4 result;
 
@@ -326,7 +326,7 @@ inline Matrix4 &Matrix4::operator*=(const Matrix4 &m)
     return *this;
 }
 
-inline Matrix4 Matrix4::operator*(float f)
+inline Matrix4 Matrix4::operator*(float f) const
 {
     Matrix4 result;
 
@@ -348,7 +348,7 @@ inline Vector4f Matrix4::operator*(const Vector4f &v) const
     return result;
 }
 
-inline Matrix4 Matrix4::operator+(const Matrix4 &m2)
+inline Matrix4 Matrix4::operator+(const Matrix4 &m2) const
 {
     Matrix4 result;
 
