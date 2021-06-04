@@ -156,9 +156,9 @@ inline Matrix4 Matrix4::OrthoMatrix(unsigned int width, unsigned int height, flo
     ortho.e[5] = 1;
     ortho.e[10] = -2 / (far - near);
 
-    ortho.e[12] = 0;
-    ortho.e[13] = 0;
-    ortho.e[14] = -(far + near) / (far - near);
+//    ortho.e[12] = 0;
+//    ortho.e[13] = 0;
+    ortho.e[14] = (far + near) / (far - near);
     ortho.e[15] = 1;
 
     return ortho;

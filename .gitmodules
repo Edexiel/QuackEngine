@@ -22,3 +22,6 @@
 [submodule "Vendor/fmt"]
 	path = Vendor/fmt
 	url = https://github.com/fmtlib/fmt.git
+[submodule "Vendor/freetype"]
+	path = Vendor/freetype
+	url = https://gitlab.freedesktop.org/freetype/freetype.git
