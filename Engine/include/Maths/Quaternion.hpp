@@ -5,6 +5,7 @@
 #include "Common.hpp"
 
 #include "Matrix4.hpp"
+#include "cereal/cereal.hpp"
 
 
 namespace Maths
@@ -31,7 +32,10 @@ namespace Maths
                    float _y,
                    float _z);
         Quaternion(float _w, const Vector3f &_axis);
-        Quaternion(const Vector3f &Axe, float angle);
+        Quaternion(const Vector3f &axis, float angle);
+
+        static Quaternion AngleAxis(float angle, Vector3f axis);
+        static Quaternion Identity();
 
         float GetMagnitude() const;
         Quaternion GetConjugate() const;
@@ -54,6 +58,7 @@ namespace Maths
         static Quaternion Nlerp(const Quaternion &q1,
                                 const Quaternion &q,
                                 float t);
+        static Quaternion LookAt(const Vector3f& origin, const Vector3f& target);
 
         Vector3f XYZVector() const;
 
@@ -66,6 +71,12 @@ namespace Maths
         Quaternion operator/(float scalar) const;
         Vector3f operator*(const Vector3f &v) const;
         bool operator==(const Quaternion &q) const;
+
+        template<class Archive>
+        void serialize(Archive &archive)
+        {
+            archive(CEREAL_NVP(w),CEREAL_NVP(x),CEREAL_NVP(y),CEREAL_NVP(z));
+        }
     };
 
 #include "Maths/Quaternion.inl"

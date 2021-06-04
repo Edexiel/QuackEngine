@@ -28,7 +28,7 @@ private:
     std::vector<T> _components;
 
 public:
-    void AddData(Entity id, T data);
+    void AddData(Entity id, const T& data);
 
     void DeleteData(Entity id);
 
@@ -40,22 +40,26 @@ public:
 };
 
 template<typename T>
-void ComponentArray<T>::AddData(Entity id, T data)
+void ComponentArray<T>::AddData(Entity id, const T& data)
 {
-    Assert_Fatal_Error(_entityToIndex.find(id) != _entityToIndex.end(),
-                       "Component added to same entity more than once.");
+
+    if(_entityToIndex.find(id) != _entityToIndex.end())
+        Log_Warning("Component added to same entity more than once.");
 
     size_t end = _components.size();
 
     _entityToIndex[id] = end;
     _indexToEntity[end] = id;
-    _components.push_back(data);
+    _components.emplace_back(data);
 }
 
 template<typename T>
 void ComponentArray<T>::DeleteData(Entity id)
 {
-//    Assert_Fatal_Error(_entityToIndex.find(id) != _entityToIndex.end(), "Removing non-existent component.");
+    if(_entityToIndex.find(id) == _entityToIndex.end())
+    {
+        Log_Error("Removing non-existent component.");
+    }
 
     size_t indexDelete = _entityToIndex[id];
     size_t indexEnd = _components.size() - 1;

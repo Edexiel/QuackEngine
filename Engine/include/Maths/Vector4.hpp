@@ -36,6 +36,7 @@ namespace Maths
         static void Homogenize(Vector4<T> &v);
 
         static T DotProduct(const Vector4<T> &v1, const Vector4<T> &v2);
+        static Vector4<T> Lerp(const Vector4<T> &v1, const Vector4<T> &v2, float t);
 
         static Vector4<T> Zero();
         static Vector4<T> One();
@@ -43,6 +44,12 @@ namespace Maths
         Vector4<T> operator+(const Vector4<T> &v2) const;
         Vector4<T> operator-(const Vector4<T> &v2) const;
         Vector4<T> operator*(const T &f) const;
+
+        template<class Archive>
+        void serialize(Archive &archive)
+        {
+            archive(CEREAL_NVP(x),CEREAL_NVP(y), CEREAL_NVP(z), CEREAL_NVP(w));
+        }
     };
 
 #include "Maths/Vector4.inl"

@@ -2,16 +2,34 @@
 #define QUACKENGINE_WORLD_HPP
 
 #include <utility>
+#include <string>
+#include <map>
 
 #include "Types.hpp"
-
 #include "Scene/Core/EntityManager.hpp"
 #include "Scene/Core/SystemManager.hpp"
 #include "Scene/Core/ComponentManager.hpp"
-#include "Physics/PhysicsEventManager.hpp"
 
-#include "Scene/Component/Name.hpp"
-#include <string_view>
+#include "Scene/Component/ComponentBase.hpp"
+
+
+#include "Debug/Log.hpp"
+
+//Serialization, yeah sorry
+#include <cereal/types/string.hpp>
+#include <cereal/types/map.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/archives/json.hpp>
+
+#include "Tools/Type.hpp"
+
+#include "Engine.hpp"
+
+typedef void (*InitFn)(World &world);
+typedef void (*LoadFn)(const World &w, cereal::JSONInputArchive &a, const std::map<std::string, bool> &c, Entity id);
+typedef void (*SaveFn)(const World &w, cereal::JSONOutputArchive &a, const std::map<std::string, bool> &c, Entity id);
+typedef void (*BuildFn)(const World &world, std::map<std::string, bool> &c, Entity id);
+
 
 namespace reactphysics3d
 {
@@ -24,160 +42,124 @@ private:
     std::unique_ptr<ComponentManager> _componentManager;
     std::unique_ptr<EntityManager> _entityManager;
     std::unique_ptr<SystemManager> _systemManager;
-public:
-    const std::unique_ptr<SystemManager> &GetSystemManager() const;
-private:
-
     reactphysics3d::PhysicsWorld *_physicsWorld = nullptr;
 
-    std::string_view _name;
+    std::string _name;
 
+    InitFn InitSystemsPtr = nullptr;
+    InitFn InitGamePtr = nullptr;
+    InitFn RegisterPtr = nullptr;
+    InitFn InitSettingsPtr = nullptr;
+    SaveFn SavePtr = nullptr;
+    LoadFn LoadPtr = nullptr;
+    BuildFn BuildPtr = nullptr;
 
 public:
     World() = delete;
-    explicit World(std::string_view &name);
+    explicit World(std::string &name);
 
-    void Init();
+    void SetInitGame(InitFn ptr);
+    void SetInitSystems(InitFn ptr);
+    void SetInitSettings(InitFn ptr);
+    void SetRegister(InitFn ptr);
+    void SetSave(SaveFn ptr);
+    void SetLoad(LoadFn ptr);
+    void SetBuild(BuildFn ptr);
 
+    void Register();
+    void InitSystems();
+    void InitGame();
+    void InitSettings();
+
+    void Build(std::map<std::string, bool> &c, Entity id) const;
+    void Save(cereal::JSONOutputArchive &a, const std::map<std::string, bool> &c, Entity id) const;
+    void Load(cereal::JSONInputArchive &a, const std::map<std::string, bool> &c, Entity id) const;
     void Clear();
 
-    // Entity methods
-    Entity CreateEntity(std::string name);
-
+    Entity CreateEntity(const std::string &name) const;
+    Entity CreateEntity() const;
     void DestroyEntity(Entity id);
 
-    // Component methods
     template<typename T>
-    void RegisterComponent();
-
+    void RegisterComponent() const;
     template<typename T>
-    void AddComponent(Entity id, T component);
-
+    void AddComponent(Entity id, T component) const;
     template<typename T>
     void RemoveComponent(Entity id);
-
     template<typename T>
-    T &GetComponent(Entity id);
-
+    T &GetComponent(Entity id) const;
     template<typename T>
-    bool HasComponent(Entity id);
-
+    bool HasComponent(Entity id) const;
     template<typename T>
     ComponentType GetComponentType();
-
-    // System methods
     template<typename T>
-    std::shared_ptr<T> RegisterSystem();
-
+    T *RegisterSystem() const;
     template<typename T>
     void SetSystemSignature(Signature signature);
-
     reactphysics3d::PhysicsWorld *GetPhysicsWorld() const;
-
-    const std::string_view &GetName() const;
-
+    const std::string &GetName() const;
     const std::unique_ptr<EntityManager> &GetEntityManager() const;
 
+    template<class T>
+    T *GetSystem();
+
+
+    struct EntityHandler
+    {
+    private :
+        template<class T>
+        void write(cereal::JSONOutputArchive &archive, Entity e, const std::string &name) const
+        {
+            auto it = components.find(name);
+            if (it == components.end())
+                return;
+
+            if (it->second)
+                archive(cereal::make_nvp(name, world.GetComponent<T>(e)));
+
+        }
+
+        template<class T>
+        void read(cereal::JSONInputArchive &archive, Entity entity, const std::string &name) const
+        {
+            auto it = components.find(name);
+            if (it == components.end())
+                return;
+            if (it->second)
+            {
+                T component;
+                archive(cereal::make_nvp(name, component));
+                world.AddComponent(entity, component);
+            }
+        }
+
+        template<typename T>
+        void build(const std::string &name)
+        {
+            components[name] = world.HasComponent<T>(id);
+        }
+
+    public :
+
+        EntityHandler():world{Engine::Instance().GetCurrentWorld()}{}
+
+        explicit EntityHandler(Entity id, const World &world) : id{id}, world{world}
+        {}
+
+        const World &world;
+        Entity id{0};
+        std::map<std::string, bool> components{};
+
+        void BuildArray();
+        void save(cereal::JSONOutputArchive &archive) const;
+        void load(cereal::JSONInputArchive &archive);
+    };
+
+    void save(cereal::JSONOutputArchive &archive) const;
+    void load(cereal::JSONInputArchive &archive);
 };
 
-inline reactphysics3d::PhysicsWorld *World::GetPhysicsWorld() const
-{
-    return _physicsWorld;
-}
 
-inline void World::Clear()
-{
-    //todo:
-}
-
-inline Entity World::CreateEntity(std::string name)
-{
-    Entity id = _entityManager->Create();
-    AddComponent(id, Component::Name{std::move(name)});
-    return id;
-}
-
-inline void World::DestroyEntity(Entity id)
-{
-    _entityManager->Destroy(id);
-    _componentManager->EntityDestroyed(id);
-    _systemManager->EntityDestroyed(id);
-}
-
-template<typename T>
-inline void World::RegisterComponent()
-{
-    _componentManager->RegisterComponent<T>();
-}
-
-template<typename T>
-inline void World::AddComponent(Entity id, T component) //todo: maybe pass by const ref
-{
-    _componentManager->AddComponent<T>(id, component);
-
-    auto signature = _entityManager->GetSignature(id);
-    signature.set(_componentManager->GetComponentType<T>(), true);
-    _entityManager->SetSignature(id, signature);
-
-    _systemManager->EntitySignatureChanged(id, signature);
-}
-
-template<typename T>
-inline void World::RemoveComponent(Entity id)
-{
-    _componentManager->RemoveComponent<T>(id);
-
-    auto signature = _entityManager->GetSignature(id);
-    signature.set(_componentManager->GetComponentType<T>(), false);
-
-    _entityManager->SetSignature(id, signature);
-    _systemManager->EntitySignatureChanged(id, signature);
-}
-
-template<typename T>
-inline T &World::GetComponent(Entity id)
-{
-    return _componentManager->GetComponent<T>(id);
-}
-
-template<typename T>
-inline bool World::HasComponent(Entity id)
-{
-    return _componentManager->HasComponent<T>(id);
-}
-
-template<typename T>
-inline ComponentType World::GetComponentType()
-{
-    return _componentManager->GetComponentType<T>();
-}
-
-template<typename T>
-inline std::shared_ptr<T> World::RegisterSystem()
-{
-    return _systemManager->RegisterSystem<T>();
-}
-
-template<typename T>
-inline void World::SetSystemSignature(Signature signature)
-{
-    _systemManager->SetSignature<T>(signature);
-}
-
-inline const std::string_view &World::GetName() const
-{
-    return _name;
-}
-
-
-inline const std::unique_ptr<EntityManager> &World::GetEntityManager() const
-{
-    return _entityManager;
-}
-
-inline const std::unique_ptr<SystemManager> &World::GetSystemManager() const
-{
-    return _systemManager;
-}
+#include "Scene/Core/World.inl"
 
 #endif //QUACKENGINE_WORLD_HPP

@@ -8,13 +8,12 @@
 using namespace Component;
 using namespace Renderer;
 
-Animator::Animator(Renderer::Animation& animation) : _currentAnimation{animation}
+Animator::Animator(const Renderer::Animation& animation) : _currentAnimation{animation}
 {
-    _currentAnimation = animation;
     _bonesOffset.resize(100, Maths::Matrix4::Identity());
 }
 
-void Animator::SetAnimation(Animation &animation)
+void Animator::SetAnimation(const Animation& animation)
 {
     _currentAnimation = animation;
     _bonesOffset.clear();
@@ -37,22 +36,22 @@ void Animator::SetShader(Renderer::Shader &shader)
 
 void Animator::Update(float deltaTime)
 {
-    _currentTime += _currentAnimation.GetTickPerSecond() * deltaTime;
+    _currentTime += _currentAnimation.GetTickPerSecond() * _currentAnimation.GetTickPerSecond() * deltaTime;
     if (_currentTime > _currentAnimation.GetDuration())
         _currentTime = 0;
 
     Maths::Matrix4 identity = Maths::Matrix4::Identity();
     _currentAnimation.Update(_currentTime);
-    CalculateBoneTransform(_currentAnimation.GetRootNode(), identity, identity);
+    CalculateBoneTransform(_currentAnimation.GetRootNode(), identity);
 }
 
-void Animator::PlayAnimation(Renderer::Animation &animation)
+void Animator::PlayAnimation(const Renderer::Animation& animation)
 {
     _currentTime = 0.f;
     _currentAnimation = animation;
 }
 
-void Animator::CalculateBoneTransform(const Renderer::NodeData& node, Maths::Matrix4 parentMatrixWorld, Maths::Matrix4 bonePlace)
+void Animator::CalculateBoneTransform(const Renderer::NodeData& node, Maths::Matrix4 parentMatrixWorld)
 {
     Maths::Matrix4 nodeTransform = node.transform;
 
@@ -71,10 +70,10 @@ void Animator::CalculateBoneTransform(const Renderer::NodeData& node, Maths::Mat
     }
 
     for (int i = 0; i < node.listChildren.size(); i++)
-        CalculateBoneTransform(node.listChildren[i], globalTransform, bonePlace);
+        CalculateBoneTransform(node.listChildren[i], globalTransform);
 }
 
-const Renderer::Animation &Animator::GetAnimation() const
+const Renderer::Animation& Animator::GetAnimation() const
 {
     return _currentAnimation;
 }

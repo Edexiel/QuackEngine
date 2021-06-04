@@ -1,6 +1,8 @@
 #include <Renderer/RendererPlatform.hpp>
 #include "Engine.hpp"
 #include "Renderer/RendererInterface.hpp"
+#include "Renderer/Framebuffer.hpp"
+#include "Scene/System/RenderSystem.hpp"
 #include "game.hpp"
 
 int main()
@@ -17,8 +19,8 @@ int main()
     Engine engine(settings);
     Engine::SetInstance(engine);
 
-    Game game;
-    game.Init();
+//    Game game;
+//    game::Init();
     //loadScene();
 
     while (!engine.WindowShouldClose())
@@ -35,8 +37,8 @@ int main()
         Renderer::RendererInterface &rendererInterface = Engine::Instance().GetRendererInterface();
 
         //rendererInterface.cameraSystem->GetActiveCamera().Resize(wsize.x, wsize.y);
-        Renderer::Framebuffer f = rendererInterface.GetSceneUpdatedFramebuffer();
-        rendererInterface.renderSystem->DrawTextureInFramebuffer(0, f.GetTexture());
+        //Renderer::Framebuffer f = rendererInterface.GetSceneUpdatedFramebuffer();
+        //rendererInterface.renderSystem->DrawTextureInFramebuffer(0, f.GetTexture());
 
 
         /** UPDATE **/

@@ -1,23 +1,19 @@
 #include "GLFW/glfw3.h"
 
-#include "Editor.hpp"
 #include "Engine.hpp"
-#include "Renderer/Material.hpp"
-#include "Scene/Core/World.hpp"
-#include "Scene/Component/Transform.hpp"
-#include "Renderer/RendererInterface.hpp"
+#include "Editor.hpp"
+
 #include "Renderer/RendererPlatform.hpp"
-#include "Renderer/Shape.hpp"
-#include "Scene/Component/RigidBody.hpp"
-#include "Scene/System/PhysicsSystem.hpp"
+
 #include "Scene/System/CameraSystem.hpp"
-#include "Resources/ResourcesManager.hpp"
-
-#include "Scene/Component/Animator.hpp"
-
-#include "Tools/Random.hpp"
-#include "CameraEditor.hpp"
+#include "Scene/System/AnimatorSystem.hpp"
+#include "Scene/System/CharacterControllerSystem.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
+#include "Scene/System/LightSystem.hpp"
+
+#include "Scene/System/AnimatorSystem.hpp"
+#include "Scene/System/CameraGameplaySystem.hpp"
+
 #include "game.hpp"
 
 using namespace Component;
@@ -38,55 +34,38 @@ int main()
     Engine engine(settings);
     Engine::SetInstance(engine);
 
-    Editor editor{engine.GetWindow()};
+    Game::Init(engine);
 
-    Game game;
-    game.Init();
-
-    // Time && fps
-    double tempTime{0.0};
-    double time{0.0};
-    double deltaTime{0.0};
-    unsigned int frames{0};
-    double timeAcc{0.0};
-
-    engine.GetRendererInterface().lightSystem->Update();
-    engine.GetPhysicsManager();
-
-    auto physicsSystem = engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>();
+    Editor editor{};
 
     while (!engine.WindowShouldClose())
     {
-        // DeltaTime
-        {
-            tempTime = glfwGetTime();
-            deltaTime = tempTime - time;
-            time = tempTime;
 
-            timeAcc += deltaTime;
-            frames++;
-
-            if (timeAcc >= 1.0f)
-            {
-                std::cout << "FPS: " << round(1 / (timeAcc / frames)) << std::endl;
-                frames = 0;
-                timeAcc = 0.;
-            }
-        }
+        /** Time Update **/
+        engine.UpdateTime();
+        const auto deltaTime = (float) engine.GetDeltaTime();
 
         /** POLL INPUT **/
         engine.GetInputManager().Update();
         engine.TestWindowShouldClose();
 
-
         /** Editor draw **/
         editor.Draw();
 
-        /** UPDATE **/
-        engine.GetCurrentWorld().GetSystemManager()->GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
-        engine.GetCurrentWorld().GetSystemManager()->GetSystem<CameraSystem>()->Update();
+        engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
 
+        /** When editor is in play mode **/
+        if (engine.IsGamePlaying())
+        {
+            /** UPDATE **/
+            engine.GetCurrentWorld().GetSystem<PhysicsSystem>()->FixedUpdate(deltaTime);
+            engine.GetCurrentWorld().GetSystem<CharacterControllerSystem>()->Update();
+            engine.GetCurrentWorld().GetSystem<CameraGameplaySystem>()->Update();
+            engine.GetCurrentWorld().GetSystem<Renderer::AnimatorSystem>()->Update();
+
+        }
         engine.SwapBuffers();
+        Renderer::RendererPlatform::Clear();
     }
 
     return 0;

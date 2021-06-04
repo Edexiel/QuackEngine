@@ -13,7 +13,7 @@ class ViewportWidget : public Widget
 private:
     bool _isInGame {false};
 public:
-    ViewportWidget();
+    ViewportWidget(Editor &editor);
 
 //    void UpdateAlways() override;
 

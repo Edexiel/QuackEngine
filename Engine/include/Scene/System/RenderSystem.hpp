@@ -2,8 +2,10 @@
 #define _RENDER_SYSTEM_
 
 #include "Scene/Core/System.hpp"
-#include "Scene/Component/Model.hpp"
 #include "Scene/Component/Transform.hpp"
+
+#include "Renderer/Material.hpp"
+#include "Renderer/Mesh.hpp"
 
 #include <vector>
 #include <unordered_map>
@@ -12,42 +14,53 @@ namespace Maths
 {
     class Matrix4;
 }
+
 namespace Component
 {
+    class Transform;
+    class Model;
     class Camera;
+}
+namespace Renderer
+{
+    class ModelRenderer;
 }
 
 class RenderSystem : public System
 {
-    Renderer::Shader _shader;
-    Renderer::Mesh _quadMesh;
+    struct MaterialMeshData
+    {
+        Renderer::Mesh mesh;
+        Maths::Vector3f offset {0.f,10.f,0.f};
+        Entity entity {0};
+    };
 
-    std::unordered_map<Renderer::MaterialInterface, std::vector<std::pair<Renderer::Mesh, Entity>>> _mapMaterial;
-    unsigned int _lastLinkEntitiesNumbers {0};
+
+    std::unordered_map<Renderer::MaterialInterface, std::vector<MaterialMeshData>> _mapMaterial;
+    unsigned int _lastLinkEntitiesNumbers{0};
 
 public:
 
-    RenderSystem();
+    RenderSystem() = default;
     ~RenderSystem() = default;
 
     /**
      * @brief Draw the scene from the camera point of view
      * @param camera
      */
-    void Draw(Component::Camera& camera);
-    void Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view);
-    void DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex);
+    void Draw(Component::Camera &camera);
+    void Draw(const Maths::Matrix4 &projection, const Maths::Matrix4 &view);
 
-    void UpdateModel(const Component::Model& newModel);
+    void UpdateModel(const Renderer::ModelRenderer &newModel);
 
     void SetMaterials();
 
+    void Clear();
+
 private:
 
-    void DrawMaterials(const Maths::Matrix4& projection, const Maths::Matrix4& view);
-
-    void AddMesh(const Renderer::MaterialInterface& materialInterface, const Renderer::Mesh& mesh, Entity entity);
-
+    void DrawMaterials(const Maths::Matrix4 &projection, const Maths::Matrix4 &view);
+    void AddMesh(const Renderer::MaterialInterface &materialInterface, const Renderer::Mesh &mesh, Maths::Vector3f offset, Entity entity);
 
 };
 

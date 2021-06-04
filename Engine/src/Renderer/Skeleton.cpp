@@ -107,7 +107,7 @@ Maths::Matrix4 Bone::InterpolateRotation(float animationTime)
     float scaleFactor = GetTimeScaleFactor(_rotations[p0Index].second,
                                            _rotations[p1Index].second, animationTime);
 
-    Quaternion finalRotation = Quaternion::Lerp(_rotations[p0Index].first,
+    Quaternion finalRotation = Quaternion::Slerp(_rotations[p0Index].first,
                                               _rotations[p1Index].first, scaleFactor);
 
     return  finalRotation.ToMatrix();
@@ -214,3 +214,20 @@ unsigned int Skeleton::GetBonesNb() const
 {
     return listBones.size();
 }
+
+Matrix4 SkeletonOffset::GetBoneOffset(const std::string& name) const
+{
+    auto it = mapOffset.find(name);
+    if(it == mapOffset.end())
+    {
+        return Matrix4::Identity();
+    }
+
+    return it->second;
+}
+
+void SkeletonOffset::AddBone(const std::string &name, const Matrix4 &offset)
+{
+    mapOffset.insert({name, offset});
+}
+

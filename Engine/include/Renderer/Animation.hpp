@@ -3,6 +3,7 @@
 
 #include "Resources/Asset.hpp"
 #include "Renderer/Skeleton.hpp"
+#include <filesystem>
 
 namespace Renderer
 {
@@ -27,7 +28,7 @@ namespace Renderer
 
     public:
         Animation();
-        static Animation LoadAnimation(const char* path);
+        static Animation LoadAnimation(const std::filesystem::path& path);
 
         void Update(float currentTime);
 

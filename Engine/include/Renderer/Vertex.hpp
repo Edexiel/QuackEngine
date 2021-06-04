@@ -4,6 +4,7 @@
 #include "Maths/Vector2.hpp"
 #include "Maths/Vector3.hpp"
 #include "Maths/Vector4.hpp"
+
 namespace Renderer
 {
   enum class VertexType{V_CLASSIC, V_NORMALMAP, V_SKELETAL};

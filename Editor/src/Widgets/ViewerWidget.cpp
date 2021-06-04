@@ -1,32 +1,28 @@
+#include <Scene/Component/Name.hpp>
 #include "Widgets/ViewerWidget.hpp"
 #include "Scene/Core/World.hpp"
 #include "Scene/Component/Transform.hpp"
-#include "Engine.hpp"
+#include "Editor.hpp"
 
 using namespace Component;
 
-ViewerWidget::ViewerWidget()
+ViewerWidget::ViewerWidget(Editor &editor) : Widget(editor)
 {
     _title = "Viewer";
 }
 
 void ViewerWidget::UpdateVisible()
 {
-    World &world = Engine::Instance().GetCurrentWorld();
+    World &world = _engine.GetCurrentWorld();
 
-    int n = 0;
     for (Entity entity : world.GetEntityManager()->GetEntities())
     {
-        char buf[32];
-        sprintf(buf, (world.GetComponent<Name>(entity).name + "(%d)").c_str(), n);
-        if (ImGui::Selectable(buf, _selected == n))
+        std::string name = fmt::format("{}({})", world.GetComponent<Name>(entity).name, entity);
+        if (ImGui::Selectable(name.c_str(), _editor.selectedEntity == (std::int32_t) entity))
         {
-            _propertiesSwitch = PROPERTIES_SHOW_ENTITY;
-            _selected = n;
-            _entity = entity;
-            std::cout << _entity << std::endl;
+            _editor.showProperties = true;
+            _editor.selectedEntity = (std::int32_t) entity;
         }
-        n++;
     }
     AddEntity();
     DestroyEntity();
@@ -36,19 +32,19 @@ void ViewerWidget::AddEntity()
 {
     if (ImGui::Button("Add entity"))
     {
-        World &world = Engine::Instance().GetCurrentWorld();
-        _entity = world.CreateEntity("GameObject");
-        _selected = _entity;
+        World &world = _engine.GetCurrentWorld();
+        _editor.selectedEntity = (std::int32_t) world.CreateEntity("GameObject");
         Transform t;
-        world.AddComponent(_entity, t);
+        world.AddComponent(_editor.selectedEntity, t);
     }
 }
 
 void ViewerWidget::DestroyEntity()
 {
-    if (ImGui::Button("Destroy entity") && _selected > -1)
+    if (ImGui::Button("Destroy entity") && _editor.selectedEntity > -1)
     {
-        Engine::Instance().GetCurrentWorld().DestroyEntity(_entity);
-        _selected = -1;
+        _engine.GetCurrentWorld().DestroyEntity(_editor.selectedEntity);
+        _editor.selectedEntity = -1;
+        _editor.showProperties = false;
     }
 }

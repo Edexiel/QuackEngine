@@ -1,47 +1,45 @@
 #include "Renderer/RendererInterface.hpp"
 
+#include "Engine.hpp"
 #include "Scene/Core/World.hpp"
+#include "Scene/Component/Camera.hpp"
+#include "Renderer/Framebuffer.hpp"
+
 #include "Renderer/RendererPlatform.hpp"
+#include "Scene/System/RenderSystem.hpp"
+#include "Scene/System/CameraSystem.hpp"
+
+#include "Maths/Matrix4.hpp"
 
 using namespace Renderer;
 
-void RendererInterface::Set(std::shared_ptr<RenderSystem> _renderSystem,
-                                     std::shared_ptr<CameraSystem> _cameraSystem,
-                                     std::shared_ptr<LightSystem> _lightSystem)
-{
-    //todo: nettoyer
-    renderSystem = _renderSystem;
-    cameraSystem = _cameraSystem;
-    lightSystem = _lightSystem;
-}
-
 Framebuffer RendererInterface::GetSceneUpdatedFramebuffer()
 {
-    lightSystem->Update();
-    Component::Camera& camera = cameraSystem->GetActiveCamera();
-    renderSystem->Draw(camera);
+    Component::Camera& camera = Engine::Instance().GetCurrentWorld().GetSystem<CameraSystem>()->GetActiveCamera();
+    Engine::Instance().GetCurrentWorld().GetSystem<RenderSystem>()->Draw(camera);
+
+    Engine::Instance().GetPostProcessManager().ApplyPostProcess(camera.GetFramebuffer());
 
     RendererPlatform::BindFramebuffer(0);
 
     return camera.GetFramebuffer();
 }
 
-void RendererInterface::UpdateSceneFramebufferEditor(const Maths::Matrix4& projection, const Maths::Matrix4& view, unsigned int idFramebuffer)
+void RendererInterface::UpdateSceneFramebufferEditor(const Maths::Matrix4& projection, const Maths::Matrix4& view, const Framebuffer& framebuffer)
 {
-    RendererPlatform::BindFramebuffer(idFramebuffer);
+    framebuffer.Bind();
 
-    lightSystem->Update();
-    renderSystem->Draw(projection, view);
+    Engine::Instance().GetCurrentWorld().GetSystem<RenderSystem>()->Draw(projection, view);
 
     RendererPlatform::BindFramebuffer(0);
 }
 
-void RendererInterface::DrawFramebufferinFramebuffer(const Framebuffer& framebufferDrawIn, const Framebuffer& framebuffer2DrawOut)
+void RendererInterface::DrawFramebufferinFramebuffer(const Framebuffer& framebufferDrawIn, const Framebuffer& framebufferDrawOut)
 {
-    renderSystem->DrawTextureInFramebuffer(framebufferDrawIn.GetId(), framebuffer2DrawOut.GetTexture());
+    Engine::Instance().GetPostProcessManager().DrawTextureInFramebuffer(framebufferDrawIn.GetId(), framebufferDrawOut.GetTexture());
 }
 
 void RendererInterface::DrawTextureinFramebuffer(const Framebuffer& framebufferDrawIn, const Texture& textureDrawOut)
 {
-    renderSystem->DrawTextureInFramebuffer(framebufferDrawIn.GetId(), textureDrawOut.GetID());
+    Engine::Instance().GetPostProcessManager().DrawTextureInFramebuffer(framebufferDrawIn.GetId(), textureDrawOut.GetID());
 }

@@ -2,29 +2,54 @@
 #define _ASSET_HPP
 
 #include <string>
+#include <filesystem>
 
 namespace Resources
 {
-    enum class ASSET_TYPE{A_TEXTURE, A_MODEL, A_SOUND, A_ANIMATION, A_MATERIAL};
+    enum class AssetType{A_TEXTURE, A_MODEL, A_SOUND, A_ANIMATION, A_MATERIAL, A_SHADER, A_FONT};
 
     class Asset
     {
     protected:
-        ASSET_TYPE _type;
+        AssetType _type;
+        std::filesystem::path _path;
 
     public:
 
-        std::string name;
+        explicit Asset(AssetType assetType);
 
-        Asset(ASSET_TYPE assetType);
-        ASSET_TYPE GetType() const;
+        AssetType GetType() const;
+        std::string GetName() const;
+        std::string GetPath()const;
+        void SetPath(const std::string& path);
+        void SetPath(const std::filesystem::path& path);
+
     };
 
-    inline Asset::Asset(ASSET_TYPE assetType) : _type{assetType}{}
+    inline Asset::Asset(AssetType assetType) : _type{assetType}{}
 
-    inline ASSET_TYPE Asset::GetType() const
+    inline AssetType Asset::GetType() const
     {
         return _type;
+    }
+
+    inline std::string Asset::GetName() const
+    {
+        return _path.filename().string();
+    }
+
+    inline std::string Asset::GetPath() const
+    {
+
+        return _path.generic_string();
+    }
+    inline void Asset::SetPath(const std::string& path)
+    {
+        _path = std::filesystem::path{path};
+    }
+    inline void Asset::SetPath(const std::filesystem::path& path)
+    {
+        _path = path;
     }
 }
 

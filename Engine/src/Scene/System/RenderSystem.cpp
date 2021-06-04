@@ -2,89 +2,71 @@
 
 #include "Engine.hpp"
 #include "Renderer/RendererPlatform.hpp"
-#include "Renderer/Shape.hpp"
-#include "Scene/Component/Animator.hpp"
+#include "Scene/Core/World.hpp"
 
-#include "Debug/Log.hpp"
+#include "Scene/Component/Animator.hpp"
+#include "Scene/Component/Model.hpp"
+#include "Scene/Component/Camera.hpp"
+#include "Scene/Component/Transform.hpp"
 
 using namespace Renderer;
 using namespace Component;
 
-RenderSystem::RenderSystem()
-{
-    _quadMesh = Shape::CreateQuad();
-    _shader = Engine::Instance().GetResourcesManager().LoadShader(
-            "../../Engine/Shader/Framebuffer/BasicVertex.vs",
-            "../../Engine/Shader/Framebuffer/BasicFragment.fs");
-}
 
-void RenderSystem::Draw(Component::Camera& camera)
+void RenderSystem::Draw(Component::Camera &camera)
 {
-    camera.GetFramebuffer().Bind();
-
-    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 1.f});
+    Renderer::RendererPlatform::SetTransparency(true);
+    Renderer::RendererPlatform::EnableDepthBuffer(true);
     RendererPlatform::Clear();
 
+    camera.GetFramebuffer().Bind();
+    RendererPlatform::Clear();
     DrawMaterials(camera.GetProjection(), camera.GetView());
-
     RendererPlatform::BindFramebuffer(0);
 }
 
-void RenderSystem::Draw(const Maths::Matrix4& projection, const Maths::Matrix4& view)
+void RenderSystem::Draw(const Maths::Matrix4 &projection, const Maths::Matrix4 &view)
 {
-    RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 1.f});
+    RendererPlatform::SetTransparency(true);
+    RendererPlatform::EnableDepthBuffer(true);
     RendererPlatform::Clear();
 
     DrawMaterials(projection, view);
 }
 
-void RenderSystem::DrawTextureInFramebuffer(unsigned int framebufferIndex, unsigned int textureIndex)
-{
-    RendererPlatform::BindFramebuffer(framebufferIndex);
-
-    RendererPlatform::ClearColor({0.2f, 0.2f, 0.2f, 1.f});
-    RendererPlatform::Clear();
-
-    _shader.Use();
-    _shader.SetMatrix4("view", Maths::Matrix4::Identity());
-    RendererPlatform::BindTexture(textureIndex, 0);
-
-    _quadMesh.Draw();
-}
-
-void RenderSystem::AddMesh(const Renderer::MaterialInterface& materialInterface, const Renderer::Mesh& mesh, Entity entity)
+void RenderSystem::AddMesh(const Renderer::MaterialInterface &materialInterface, const Renderer::Mesh &mesh, Maths::Vector3f offset, Entity entity)
 {
     auto it = _mapMaterial.find(materialInterface);
 
     if (it == _mapMaterial.end())
     {
-        _mapMaterial.insert({materialInterface, std::vector<std::pair<Renderer::Mesh, Entity>>()});
+        _mapMaterial.insert({materialInterface, std::vector<MaterialMeshData>()});
         it = _mapMaterial.find(materialInterface);
     }
 
-    it->second.emplace_back(mesh, entity);
+    it->second.push_back({mesh, offset, entity});
 }
 
 void RenderSystem::SetMaterials()
 {
-
     _mapMaterial.erase(_mapMaterial.cbegin(), _mapMaterial.cend());
     MaterialInterface material;
-    World& world = Engine::Instance().GetCurrentWorld();
+    World &world = Engine::Instance().GetCurrentWorld();
+
     for (Entity entity: _entities)
     {
         auto &t = world.GetComponent<Transform>(entity);
         auto &m = world.GetComponent<Model>(entity);
 
-        for (unsigned int i = 0; i < m.GetNumberMesh(); i++)
+        for (unsigned int i = 0; i < m.model.GetNumberMesh(); i++)
         {
-            material = m.GetMaterial(m.GetMesh(i).materialIndex);
-            AddMesh(material, m.GetMesh(i), entity);
+            material = m.model.GetMaterial(m.model.GetMesh(i).materialIndex);
+            AddMesh(material, m.model.GetMesh(i),m.offset, entity);
         }
     }
 }
 
-void RenderSystem::DrawMaterials(const Maths::Matrix4& projection, const Maths::Matrix4& view)
+void RenderSystem::DrawMaterials(const Maths::Matrix4 &projection, const Maths::Matrix4 &view)
 {
     if (_lastLinkEntitiesNumbers != _entities.size() || _lastLinkEntitiesNumbers == 0)
     {
@@ -92,7 +74,7 @@ void RenderSystem::DrawMaterials(const Maths::Matrix4& projection, const Maths::
         SetMaterials();
     }
 
-    Engine & engine= Engine::Instance();
+    Engine &engine = Engine::Instance();
 
     for (auto it : _mapMaterial)
     {
@@ -102,32 +84,45 @@ void RenderSystem::DrawMaterials(const Maths::Matrix4& projection, const Maths::
 
         for (unsigned int i = 0; i < it.second.size(); i++)
         {
-            it.first->shader.SetMatrix4("model", engine.GetCurrentWorld().GetComponent<Transform>(it.second[i].second).GetMatrix());
+            it.first->shader.SetMatrix4("model", Maths::Matrix4::Translate(it.second[i].offset)
+                    * engine.GetCurrentWorld().GetComponent<Transform>(
+                    it.second[i].entity).GetMatrix());
 
-            if (it.second[i].first.GetType() == Renderer::VertexType::V_SKELETAL)
+            if (it.second[i].mesh.GetType() == Renderer::VertexType::V_SKELETAL)
             {
                 if (it.first->hasSkeleton &&
-                        engine.GetCurrentWorld().HasComponent<Animator>(it.second[i].second))
+                    engine.GetCurrentWorld().HasComponent<Animator>(it.second[i].entity))
                 {
-                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).Update(0.01f);
-                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].second).SetShader(it.first->shader);
+                    engine.GetCurrentWorld().GetComponent<Animator>(it.second[i].entity).SetShader(it.first->shader);
                 }
             }
-            it.second[i].first.Draw();
+            it.second[i].mesh.Draw();
         }
     }
 }
 
-void RenderSystem::UpdateModel(const Model &newModel)
+void RenderSystem::Clear()
 {
-    World& world = Engine::Instance().GetCurrentWorld();
+    for (auto it : _mapMaterial)
+    {
+        it.second.clear();
+    }
+
+    _mapMaterial.clear();
+    _mapMaterial.rehash(0);
+    _lastLinkEntitiesNumbers = 0;
+}
+
+void RenderSystem::UpdateModel(const Renderer::ModelRenderer &newModel)
+{
+    World &world = Engine::Instance().GetCurrentWorld();
     for (Entity entity: _entities)
     {
-        auto &m = world.GetComponent<Model>(entity);
+        auto &m = world.GetComponent<Model>(entity).model;
 
-        if (m.name == newModel.name)
+        if (m.GetPath() == newModel.GetPath())
         {
-            Model::ReLoadModel(m, newModel);
+            Renderer::ModelRenderer::ReLoadModel(m, newModel);
         }
     }
 }

@@ -5,14 +5,8 @@
 
 using namespace Component;
 
-void LightSystem::Update(bool force)
+void LightSystem::Update()
 {
-    if (!force)
-    {
-        if (_lastEntitiesSize == _entities.size())
-            return;
-    }
-
     _lastEntitiesSize = _entities.size();
 
     unsigned int pointNb{0}, directionalNb{0}, spotNb{0};
@@ -31,17 +25,17 @@ void LightSystem::Update(bool force)
             _listShaderToUpdate[i].Use();
             switch (l.type)
             {
-                case Light_Type::L_POINT        : _listShaderToUpdate[i].SetPointLight(l, pointNb); break;
-                case Light_Type::L_DIRECTIONAL  : _listShaderToUpdate[i].SetDirectionalLight(l, directionalNb); break;
-                case Light_Type::L_SPOT         : _listShaderToUpdate[i].SetSpotLight(l, spotNb); break;
+                case LightType::L_POINT        : _listShaderToUpdate[i].SetPointLight(l, pointNb); break;
+                case LightType::L_DIRECTIONAL  : _listShaderToUpdate[i].SetDirectionalLight(l, directionalNb); break;
+                case LightType::L_SPOT         : _listShaderToUpdate[i].SetSpotLight(l, spotNb); break;
             }
         }
 
         switch (l.type)
         {
-            case Light_Type::L_POINT        : pointNb++; break;
-            case Light_Type::L_DIRECTIONAL  : directionalNb++; break;
-            case Light_Type::L_SPOT         : spotNb++; break;
+            case LightType::L_POINT        : pointNb++; break;
+            case LightType::L_DIRECTIONAL  : directionalNb++; break;
+            case LightType::L_SPOT         : spotNb++; break;
         }
     }
 
