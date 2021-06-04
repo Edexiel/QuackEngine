@@ -15,9 +15,9 @@ namespace Renderer
         Font _font;
     public:
         Text() = default;
-        Text(const std::string &name);
+        explicit Text(const std::string &name);
         void Process(const Framebuffer &buffer, const Mesh &screenMesh) final;
-        void Text::RenderText(std::string text, Maths::Vector2f position, float scale, Maths::Vector4f color, const Mesh& quad);
+        void RenderText(std::string text, Maths::Vector2f position, float scale, Maths::Vector4f color, const Mesh& quad);
     };
 }
 #endif //QUACKENGINE_TEXT_HPP

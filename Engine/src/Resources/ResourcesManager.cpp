@@ -212,7 +212,7 @@ Renderer::Font ResourcesManager::LoadFont(const std::filesystem::path &path)
 
     Font font = Font::LoadFont(path.string().c_str());
 
-    font.Path() = path.string();
+    font.SetPath(path.string());
     _mapFont.insert({path.string(), font});
     _globalAssetMap.insert({path.string(), &_mapFont.find(path.string())->second});
 

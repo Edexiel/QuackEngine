@@ -1,26 +1,28 @@
 #include "Renderer/UI/Font.hpp"
 #include "Renderer/RendererPlatform.hpp"
+#include "Debug/Log.hpp"
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
 using namespace Renderer;
 
-Font::Font() : Resources::Asset(Resources::AssetType::A_FONT){}
+Font::Font() : Resources::Asset(Resources::AssetType::A_FONT)
+{}
 
-Font Font::LoadFont(const char *path)
+Font Font::LoadFont(const std::filesystem::path & path)
 {
     FT_Library ft;
     if (FT_Init_FreeType(&ft))
     {
-        std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+        Log_Error("ERROR::FREETYPE: Could not init FreeType Library");
         return Font();
     }
 
     FT_Face face;
-    if (FT_New_Face(ft, path, 0, &face))
+    if (FT_New_Face(ft, path.string().c_str(), 0, &face))
     {
-        std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+        Log_Error("ERROR::FREETYPE: Failed to load font");
         return Font();
     }
 
@@ -32,7 +34,7 @@ Font Font::LoadFont(const char *path)
         // load character glyph
         if (FT_Load_Char(face, c, FT_LOAD_RENDER))
         {
-            std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+            Log_Error("ERROR::FREETYTPE: Failed to load Glyph");
             continue;
         }
         // generate texture
