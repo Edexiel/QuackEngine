@@ -249,7 +249,7 @@ void PropertiesWidget::TransformReader()
     ImGuiIO &io = ImGui::GetIO();
     auto &transform = _engine.GetCurrentWorld().GetComponent<Transform>(_editor.selectedEntity);
 
-    if (ImGui::CollapsingHeader("Transform"))
+    if (!ImGui::CollapsingHeader("Transform"))
         return;
 
     ImGui::DragFloat3("Position", transform.position.e);
@@ -266,7 +266,7 @@ void PropertiesWidget::LightReader()
 {
     auto &light = _engine.GetCurrentWorld().GetComponent<Component::Light>(_editor.selectedEntity);
 
-    if (ImGui::CollapsingHeader("Light"))
+    if (!ImGui::CollapsingHeader("Light"))
         return;
 
     std::vector<std::string> listLightType;
@@ -330,11 +330,11 @@ void PropertiesWidget::LightReader()
 
 void PropertiesWidget::ModelReader()
 {
-    if (ImGui::CollapsingHeader("Model"))
+    if (!ImGui::CollapsingHeader("Model"))
         return;
 
 
-    Component::Model& component = _engine.GetCurrentWorld().GetComponent<Component::Model>(_editor.selectedEntity);
+    auto& component = _engine.GetCurrentWorld().GetComponent<Component::Model>(_editor.selectedEntity);
     Renderer::ModelRenderer &model = component.model;
 
     std::vector<std::string> listModel = _engine.GetResourcesManager().GetModelNameList();
@@ -343,7 +343,7 @@ void PropertiesWidget::ModelReader()
     {
         for (auto &n : listModel)
         {
-            bool isSelected = (model.Path() == n);
+            bool isSelected = (model.GetPath() == n);
             if (ImGui::Selectable(n.c_str(), isSelected))
             {
                 model = _engine.GetResourcesManager().LoadModel(n,Renderer::VertexType::V_CLASSIC);
@@ -374,7 +374,7 @@ void PropertiesWidget::ModelReader()
         {
             for (auto &n : listMaterial)
             {
-                bool isSelected = (model.Path() == n);
+                bool isSelected = (model.GetPath() == n);
                 if (ImGui::Selectable(n.c_str(), isSelected))
                 {
                     Renderer::MaterialInterface materialInterface = _engine.GetResourcesManager().LoadMaterial(
@@ -426,7 +426,7 @@ void PropertiesWidget::AnimatorReader()
 void PropertiesWidget::CameraReader()
 {
     auto &camera = _engine.GetCurrentWorld().GetComponent<Camera>(_editor.selectedEntity);
-    if (ImGui::CollapsingHeader("Camera"))
+    if (!ImGui::CollapsingHeader("Camera"))
         return;
 
     ImGui::Checkbox("Is perspective", &camera._isPerspective);
@@ -439,7 +439,7 @@ void PropertiesWidget::CameraReader()
 
 void PropertiesWidget::RigidBodyReader()
 {
-    if (ImGui::CollapsingHeader("RigidBody"))
+    if (!ImGui::CollapsingHeader("RigidBody"))
         return;
 
     auto &rigidBody = _engine.GetCurrentWorld().GetComponent<RigidBody>(_editor.selectedEntity);
@@ -701,7 +701,7 @@ void PropertiesWidget::RigidBodySetBounciness(RigidBody &rigidBody)
 
 void PropertiesWidget::CharacterControllerReader()
 {
-    if (ImGui::CollapsingHeader("Character controller"))
+    if (!ImGui::CollapsingHeader("Character controller"))
         return;
     auto &characterController = _engine.GetCurrentWorld().GetComponent<CharacterController>(_editor.selectedEntity);
     ImGui::DragFloat("Speed", &characterController.speed);
@@ -709,50 +709,61 @@ void PropertiesWidget::CharacterControllerReader()
 
 void PropertiesWidget::CameraGameplayReader()
 {
-    if (ImGui::CollapsingHeader("Camera Gameplay"))
+    if (!ImGui::CollapsingHeader("Camera Gameplay"))
         return;
-    auto &cameraController = Engine::Instance().GetCurrentWorld().GetComponent<CameraGameplay>(_editor.selectedEntity);
+    auto &cameraController = _engine.GetCurrentWorld().GetComponent<CameraGameplay>(_editor.selectedEntity);
     ImGui::DragFloat3("Distance", cameraController.distance.e);
 }
 
 void PropertiesWidget::ParticleReader()
 {
-    if (ImGui::CollapsingHeader("Particle Emitter"))
+    if (!ImGui::CollapsingHeader("Particle Emitter"))
         return;
 
-    auto& particleEmitter = Engine::Instance().GetCurrentWorld().GetComponent<ParticleEmitter>(_editor.selectedEntity);
+    auto& particleEmitter = _engine.GetCurrentWorld().GetComponent<ParticleEmitter>(_editor.selectedEntity);
 
-    ImGui::DragFloat4("Start Color", particleEmitter.ColorStart().e, 0.1f, 0.0f, 1.0f);
-    ImGui::DragFloat4("End Color", particleEmitter.ColorEnd().e, 0.1f, 0.0f, 1.0f);
+    if(ImGui::TreeNode("Color##Particle"))
+    {
+        ImGui::ColorEdit4("Start", particleEmitter.ColorStart().e);
+        ImGui::ColorEdit4("End", particleEmitter.ColorEnd().e);
+        ImGui::TreePop();
+    }
 
-    Maths::Vector2<float*> length (&particleEmitter.LengthStart(), &particleEmitter.LengthEnd());
-    ImGui::DragFloat2("Length", *length.e);
-    Maths::Vector2<float*> angle (&particleEmitter.AngleStart(), &particleEmitter.AngleEnd());
-    ImGui::DragFloat2("Angle", *angle.e, 0.1f, particleEmitter.AngleEnd() - 0.1f, 6.283185307f);
-
+    if(ImGui::TreeNode("Length##Particle"))
+    {
+        ImGui::DragFloat("Start", &particleEmitter.LengthStart(),0.1f,0.f);
+        ImGui::DragFloat("End", &particleEmitter.LengthEnd(),0.1f,0.f);
+        ImGui::TreePop();
+    }
+    if(ImGui::TreeNode("Angle##Particle"))
+    {
+        ImGui::SliderAngle("Start", &particleEmitter.AngleStart());
+        ImGui::SliderAngle("End", &particleEmitter.AngleEnd());
+        ImGui::TreePop();
+    }
     float duration = particleEmitter.GetDuration();
-    if (ImGui::DragFloat("Duration", &duration, 0.1f))
+    if (ImGui::DragFloat("Duration", &duration, 0.1f,0.f,60.f))
         particleEmitter.SetDuration(duration);
 
     int size = particleEmitter.GetSize();
-    if (ImGui::DragInt("Size", &size, 1, 1, INT32_MAX))
+    if (ImGui::DragInt("Number", &size, 1, 1, INT32_MAX))
         particleEmitter.SetSize(size);
 
     Renderer::Texture& texture = particleEmitter.GetTexture();
-    std::vector<std::string> listTexture = Engine::Instance().GetResourcesManager().GetTextureNameList();
+    std::vector<std::string> listTexture = _engine.GetResourcesManager().GetTextureNameList();
     listTexture.insert(listTexture.begin(), "NONE");
 
     if (ImGui::BeginCombo("Texture", texture.GetName().c_str()))
     {
         for (auto &n : listTexture)
         {
-            bool isSelected = (texture.Path() == n);
+            bool isSelected = (texture.GetPath() == n);
             if (ImGui::Selectable(n.c_str(), isSelected))
             {
                 if (n == "NONE")
                     texture = Renderer::Texture();
                 else
-                    texture = Engine::Instance().GetResourcesManager().LoadTexture(n.c_str());
+                    texture = _engine.GetResourcesManager().LoadTexture(n.c_str());
             }
 
             if (isSelected)
@@ -766,10 +777,10 @@ const char* listShadowType[2] = {"SQUARE", "CIRCLE"};
 
 void PropertiesWidget::SimpleShadowReader()
 {
-    if (ImGui::CollapsingHeader("Simple Shadow"))
+    if (!ImGui::CollapsingHeader("Simple Shadow"))
         return;
 
-    auto& shadow = Engine::Instance().GetCurrentWorld().GetComponent<SimpleShadow>(_editor.selectedEntity);
+    auto& shadow = _engine.GetCurrentWorld().GetComponent<SimpleShadow>(_editor.selectedEntity);
 
     if (ImGui::BeginCombo("Shadow Type", listShadowType[shadow.type]))
     {

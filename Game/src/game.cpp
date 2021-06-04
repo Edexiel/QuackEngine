@@ -28,22 +28,40 @@ using namespace Renderer;
 
 void Game::Init(Engine &engine)
 {
-    World &main = engine.CreateWorld("Main");
-    main.SetRegister(&Register);
-    main.SetInitGame(&InitGame);
-    main.SetInitSystems(&InitSystems);
-    main.SetInitSettings(&InitSettings);
+    {
 
-    /*** Serialization of external components**/
-    main.SetLoad(&Load);
-    main.SetSave(&Save);
-    main.SetBuild(&Build);
-    /*****************************************/
+        World &main = engine.CreateWorld("Main");
+        main.SetRegister(&Register);
+        main.SetInitGame(&InitGame);
+        main.SetInitSystems(&InitSystems);
+        main.SetInitSettings(&InitSettings);
 
-    main.Register();
-    main.InitSystems();
+        /*** Serialization of external components**/
+        main.SetLoad(&Load);
+        main.SetSave(&Save);
+        main.SetBuild(&Build);
+        /*****************************************/
 
-    engine.LoadWorld(main);
+        main.Register();
+        engine.LoadWorld(main);
+
+    }
+    {
+        World &main = engine.CreateWorld("Main2");
+        main.SetRegister(&Register);
+        main.SetInitGame(&InitGame);
+        main.SetInitSystems(&InitSystems);
+        main.SetInitSettings(&InitSettings);
+
+        /*** Serialization of external components**/
+        main.SetLoad(&Load);
+        main.SetSave(&Save);
+        main.SetBuild(&Build);
+        /*****************************************/
+
+        main.Register();
+    }
+
 
     engine.SetCurrentWorld("Main"); //obligatoire
 }
@@ -172,7 +190,7 @@ void Game::Register(World &world)
 void Game::InitGame(World &world)
 {
     Log_Info("Initializing scene: {}", world.GetName());
-
+    //Engine::Instance().GetTimeManager().SetTime(1);
     world.GetSystem<EnemyManagerSystem>()->GenerateEnemies(10, {0, 0, 0}, 50.f, 100.f);
 }
 
@@ -200,7 +218,6 @@ void Game::InitSystems(World &world)
 void Game::InitSettings(World &world)
 {
     RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
-    Renderer::RendererPlatform::EnableDepthBuffer(true);
 }
 
 template<typename T>

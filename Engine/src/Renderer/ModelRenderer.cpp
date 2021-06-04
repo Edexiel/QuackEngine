@@ -68,7 +68,7 @@ ModelRenderer ModelRenderer::LoadModel(const std::filesystem::path& path, Vertex
             break;
     }
 
-    loadedModel.Path() = path.string();
+    loadedModel.SetPath(path);
     return loadedModel;
 }
 

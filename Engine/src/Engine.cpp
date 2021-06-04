@@ -204,6 +204,9 @@ World &Engine::CreateWorld(std::string name)
 
 void Engine::SaveWorld(const std::string &worldName)
 {
+    World& oldWorld= GetCurrentWorld();
+    SetCurrentWorld(worldName);
+
     fs::path path{"./Asset"};
 
     if (_worldLut.find(worldName) == _worldLut.end())
@@ -247,20 +250,22 @@ void Engine::SaveWorld(const std::string &worldName)
         }
         Log_Info("Materials have been saved", path.string());
     }
-
+    SetCurrentWorld(oldWorld.GetName());
 
 }
 
 void Engine::FillTexture(Renderer::Texture &T)
 {
-    if (!T.Path().empty())
+    if (!T.GetPath().empty())
     {
-        T = _resourcesManager.LoadTexture(T.Path());
+        T = _resourcesManager.LoadTexture(T.GetPath());
     }
 }
 
 void Engine::LoadWorld(World &world)
 {
+    World& oldWorld= GetCurrentWorld();
+    SetCurrentWorld(world.GetName());
 
     const fs::path path{"./Asset"};
     if (!exists(path))
@@ -313,7 +318,8 @@ void Engine::LoadWorld(World &world)
 
         iarchive(world);
     }
-
+    world.InitSystems();
+    SetCurrentWorld(oldWorld.GetName());
 }
 
 void Engine::RemoveWorld(const std::string &name)

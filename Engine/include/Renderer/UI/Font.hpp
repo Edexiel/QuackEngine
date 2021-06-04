@@ -7,6 +7,7 @@
 #include "Renderer/Texture.hpp"
 
 #include <unordered_map>
+#include <filesystem>
 namespace Renderer
 {
     struct Character
@@ -14,15 +15,14 @@ namespace Renderer
         Renderer::Texture texture;  // ID handle of the glyph texture
         Maths::Vector2i size;       // Size of glyph
         Maths::Vector2i bearing;    // Offset from baseline to left/top of glyph
-        int advance;    // Offset to advance to next glyph
+        long advance;    // Offset to advance to next glyph
     };
 
     struct Font : public Resources::Asset
     {
         Font();
-        Font(const char* path);
         std::unordered_map<char, Character> characters;
-        static Font LoadFont(const char *path);
+        static Font LoadFont(const std::filesystem::path & path);
     };
 }
 

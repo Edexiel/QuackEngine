@@ -29,7 +29,8 @@ double TimeManager::GetDeltaTime() const
     return _deltaTime;
 }
 
-void TimeManager::SetDeltaTime(double deltaTime)
+void TimeManager::SetTime(double time)
 {
-    _deltaTime = deltaTime;
+    _timePlatform->SetTime(time);
+    _time = time;
 }

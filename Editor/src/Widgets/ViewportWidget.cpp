@@ -13,7 +13,7 @@ using namespace Renderer;
 
 ViewportWidget::ViewportWidget(Editor &editor) : Widget(editor)
 {
-    _title = "Viewport";
+    _title = "Game";
 }
 
 void ViewportWidget::UpdateVisible()

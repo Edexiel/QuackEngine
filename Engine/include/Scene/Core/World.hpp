@@ -115,12 +115,12 @@ public:
                 return;
 
             if (it->second)
-                archive(cereal::make_nvp(name, world->GetComponent<T>(e)));
+                archive(cereal::make_nvp(name, world.GetComponent<T>(e)));
 
         }
 
         template<class T>
-        void read(cereal::JSONInputArchive &archive, World &w, Entity entity, const std::string &name) const
+        void read(cereal::JSONInputArchive &archive, Entity entity, const std::string &name) const
         {
             auto it = components.find(name);
             if (it == components.end())
@@ -129,24 +129,24 @@ public:
             {
                 T component;
                 archive(cereal::make_nvp(name, component));
-                w.AddComponent(entity, component);
+                world.AddComponent(entity, component);
             }
         }
 
         template<typename T>
         void build(const std::string &name)
         {
-            components[name] = world->HasComponent<T>(id);
+            components[name] = world.HasComponent<T>(id);
         }
 
     public :
 
-        EntityHandler() = default;
+        EntityHandler():world{Engine::Instance().GetCurrentWorld()}{}
 
-        explicit EntityHandler(Entity id, const World *world) : id(id), world(world)
+        explicit EntityHandler(Entity id, const World &world) : id{id}, world{world}
         {}
 
-        const World *world = nullptr;
+        const World &world;
         Entity id{0};
         std::map<std::string, bool> components{};
 
