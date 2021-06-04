@@ -1,27 +1,59 @@
 #include "Renderer/UI/Font.hpp"
-#include "Engine.hpp"
 #include "Renderer/RendererPlatform.hpp"
-#include "Renderer/Framebuffer.hpp"
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h" /* http://nothings.org/stb/stb_image_write.h */
-
-#define STB_TRUETYPE_IMPLEMENTATION
-#include "stb_truetype.h" /* http://nothings.org/stb/stb_truetype.h */
+#include "ft2build.h"
+#include FT_FREETYPE_H
 
 using namespace Renderer;
 
-Font::Font(const std::string &name):ProcessBase(name, Renderer::Shader::LoadShader("./Shader/Framebuffer/BasicVertex.vs", "./Shader/Framebuffer/BasicFragment.fs"))
-{}
+Font::Font() : Resources::Asset(Resources::AssetType::A_FONT){}
 
-void Font::Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &screenMesh)
+Font Font::LoadFont(const char *path)
 {
-    buffer.Bind();
+    FT_Library ft;
+    if (FT_Init_FreeType(&ft))
+    {
+        std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+        return Font();
+    }
 
-    _shader.Use();
-    _shader.SetMatrix4("view", Maths::Matrix4::Identity());
-    buffer.BindTexture();
+    FT_Face face;
+    if (FT_New_Face(ft, path, 0, &face))
+    {
+        std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+        return Font();
+    }
 
-    screenMesh.Draw();
-    RendererPlatform::BindFramebuffer(0);
+    FT_Set_Pixel_Sizes(face, 0, 128);
+    RendererPlatform::PixelStore(1);
+    Font font;
+    for (unsigned char c = 0; c < 128; c++)
+    {
+        // load character glyph
+        if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+        {
+            std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+            continue;
+        }
+        // generate texture
+        Renderer::Texture texture = RendererPlatform::CreateTexture();
+        RendererPlatform::SetTextureImage2D(
+                face->glyph->bitmap.buffer,
+                1,
+                face->glyph->bitmap.width,
+                face->glyph->bitmap.rows
+        );
+        // set texture options
+        RendererPlatform::TextureParameter();
+
+        // now store character for later use
+        Character character = {
+                texture,
+                {(int) face->glyph->bitmap.width, (int) face->glyph->bitmap.rows},
+                {face->glyph->bitmap_left, face->glyph->bitmap_top},
+                face->glyph->advance.x
+        };
+        font.characters.insert(std::pair<char, Character>(c, character));
+    }
+    return font;
 }
