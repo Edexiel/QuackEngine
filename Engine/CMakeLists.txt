@@ -25,6 +25,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Renderer/Animation.cpp
         src/Renderer/ModelRenderer.cpp
         src/Renderer/UI/Font.cpp
+        src/Renderer/UI/Text.cpp
         src/Scene/Component/Animator.cpp
 
         src/Renderer/ProcessBase.cpp

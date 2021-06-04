@@ -123,8 +123,8 @@
                 "Transform": {
                     "position": {
                         "x": -1.3600000143051148,
-                        "y": -4.943047523498535,
-                        "z": 2.980689287185669
+                        "y": -2.5,
+                        "z": 10.0
                     },
                     "scale": {
                         "x": 0.009999999776482582,
@@ -153,7 +153,7 @@
                     "bounciness": 0.0,
                     "gravity": true,
                     "trigger": false,
-                    "bodyType": 1,
+                    "bodyType": 0,
                     "shapeType": 1,
                     "shapeParams": {
                         "x": 1.0,
@@ -162,7 +162,7 @@
                     }
                 },
                 "CharacterController": {
-                    "value0": 10.0
+                    "value0": 1.0
                 }
             },
             {

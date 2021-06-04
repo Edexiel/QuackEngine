@@ -1,9 +1,12 @@
 #ifndef QUACKENGINE_FONT_HPP
 #define QUACKENGINE_FONT_HPP
 
-#include "Renderer/ProcessBase.hpp"
+#include "Resources/Asset.hpp"
+
 #include "Maths/Vector2.hpp"
 #include "Renderer/Texture.hpp"
+
+#include <unordered_map>
 namespace Renderer
 {
     struct Character
@@ -14,16 +17,13 @@ namespace Renderer
         int advance;    // Offset to advance to next glyph
     };
 
-    class Font : public ProcessBase
+    struct Font : public Resources::Asset
     {
-    private:
-        std::unordered_map<char, Character> _characters;
-        void LoadFont(const char * path);
-    public:
-        Font() = default;
-        Font(const std::string &name);
-        void Process(const Framebuffer &buffer, const Mesh &screenMesh) final;
-        void Font::RenderText(std::string text, float x, float y, float scale, Maths::Vector3f color);
+        Font();
+        Font(const char* path);
+        std::unordered_map<char, Character> characters;
+        static Font LoadFont(const char *path);
     };
 }
+
 #endif //QUACKENGINE_FONT_HPP
