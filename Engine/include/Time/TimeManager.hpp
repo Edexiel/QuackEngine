@@ -7,17 +7,16 @@ namespace Time
 
     class TimeManager
     {
-        TimePlatform* _timePlatform {nullptr};
+    private:
+        TimePlatform *_timePlatform{nullptr};
 
         double _time{0.};
         double _deltaTime{0.};
     public:
-        void SetDeltaTime(double deltaTime);
-
-    public:
         ~TimeManager();
 
-        void Init(TimePlatform* timePlatform);
+        void SetTime(double time);
+        void Init(TimePlatform *timePlatform);
         void Update();
 
         double GetTime() const;

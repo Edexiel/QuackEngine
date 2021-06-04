@@ -14,6 +14,8 @@
 
 #include "Tools/Random.hpp"
 
+#include <cmath>
+
 using namespace Component;
 using namespace Renderer;
 
@@ -70,8 +72,8 @@ void ParticleEmitter::Process(const Renderer::Framebuffer &buffer, const Rendere
     }
 
     Component::Camera& camera = world.GetSystem<CameraSystem>()->GetActiveCamera();
-    auto camTrs = world.GetComponent<Component::Transform>(camera.GetEntity());
-    auto trs = world.GetComponent<Component::Transform>(_entity);
+    auto& camTrs = world.GetComponent<Component::Transform>(camera.GetEntity());
+    auto& trs = world.GetComponent<Component::Transform>(_entity);
 
     _shader.SetMatrix4("projection", camera.GetProjection());
     _shader.SetMatrix4("view", camera.GetView());
@@ -97,7 +99,7 @@ void ParticleEmitter::Process(const Renderer::Framebuffer &buffer, const Rendere
 void ParticleEmitter::ResetParticle(Particle &particle)
 {
     particle.life = 0;
-    auto trs = Engine::Instance().GetCurrentWorld().GetComponent<Component::Transform>(_entity);
+    auto& trs = Engine::Instance().GetCurrentWorld().GetComponent<Component::Transform>(_entity);
 
     particle.start = trs.position;
     Maths::Vector2f rotate = Maths::Vector2f::Rotate({1.f, 0.f}, Random::Range(_angleStart, _angleEnd));
@@ -141,9 +143,6 @@ float ParticleEmitter::GetDuration()
 
 void ParticleEmitter::SetDuration(float duration)
 {
-    if(abs(_duration - duration) <= 0.01f)
-        return;
-
     _duration = duration;
     for (unsigned int i = 0; i < _listParticle.size(); i++)
     {

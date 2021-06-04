@@ -67,12 +67,13 @@ namespace Component
         void load(Archive &archive)
         {
             unsigned int size = 0;
-
+            std::string path;
             archive(CEREAL_NVP(_colorStart), CEREAL_NVP(_colorEnd),
                     CEREAL_NVP(_angleStart), CEREAL_NVP(_angleEnd),
                     CEREAL_NVP(_lengthStart), CEREAL_NVP(_lengthEnd),
                     CEREAL_NVP(_duration), cereal::make_nvp("Size", size),
-                    cereal::make_nvp("Texture", _texture.Path()));
+                    cereal::make_nvp("Texture", path));
+            _texture.SetPath(path);
 
             _texture = Engine::Instance().GetResourcesManager().LoadTexture(_texture.GetPath());
             SetSize(size);
