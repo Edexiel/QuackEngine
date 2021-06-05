@@ -1,8 +1,8 @@
 out vec4 FragColor;
 
 in vec3 Position;
-in vec2 TexCoord;
 in vec3 Normal;
+in vec2 TexCoord;
 
 struct Material
 {
@@ -74,12 +74,6 @@ uniform SpotLight spotLights[NB_MAX_SPOT_LIGHT];
 uniform uint nbDirectionalLights = 0u;
 uniform uint nbPointLights = 0u;
 uniform uint nbSpotLights = 0u;
-#endif
-
-#ifdef SHADOW
-uniform sampler2D shadowMapDirectional [NB_MAX_DIRECTIONAL_LIGHT];
-uniform sampler2D shadowMapPoint [NB_MAX_POINT_LIGHT];
-uniform sampler2D shadowMapSpot [NB_MAX_SPOT_LIGHT];
 #endif
 
 uniform Material material;

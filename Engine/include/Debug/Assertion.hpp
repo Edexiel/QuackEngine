@@ -74,7 +74,9 @@ namespace Debug
 #endif
         if (assertLvl < AssertLevel::A_WARNING)
         {
-            exit(5);
+            abort();
+//            int * exit = nullptr;
+//            printf("%i", exit);
         }
         return true;
     }

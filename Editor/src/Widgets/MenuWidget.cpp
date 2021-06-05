@@ -33,13 +33,13 @@ void MenuWidget::UpdateVisible()
     //Scenes
     if (ImGui::BeginPopupModal("Scenes", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        if (ImGui::BeginTable("Scenes", 4, ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersV))
+        if (ImGui::BeginTable("Scenes", 3, ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersV))
         {
             {
                 ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthFixed, 100.f);
                 ImGui::TableSetupColumn("Active", ImGuiTableColumnFlags_WidthFixed, 100.f);
                 ImGui::TableSetupColumn("Delete", ImGuiTableColumnFlags_WidthFixed, 100.f);
-                ImGui::TableSetupColumn("Save", ImGuiTableColumnFlags_WidthFixed, 70.f);
+                //ImGui::TableSetupColumn("Save", ImGuiTableColumnFlags_WidthFixed, 70.f);
                 ImGui::TableHeadersRow();
             }
             std::string CurrentWorld = _engine.GetCurrentWorld().GetName();
@@ -58,8 +58,9 @@ void MenuWidget::UpdateVisible()
                 {
                     if (ImGui::Button(fmt::format("SetActive##{}", n).c_str()))
                     {
+                        _engine.GetCurrentWorld().Clear();
                         _engine.SetCurrentWorld(item);
-                        //_engine.LoadWorld(_engine.GetCurrentWorld());
+                        _engine.LoadWorld(_engine.GetCurrentWorld());
                     }
                 }
 
@@ -67,7 +68,7 @@ void MenuWidget::UpdateVisible()
                 if (ImGui::Button(fmt::format("Delete##{}", n).c_str()))
                     _engine.RemoveWorld(item);
 
-                ImGui::TableSetColumnIndex(3);
+                /*ImGui::TableSetColumnIndex(3);
                 if (!_engine.IsGamePlaying())
                 {
                     if (ImGui::Button(fmt::format("Save##{}", n).c_str()))
@@ -76,7 +77,7 @@ void MenuWidget::UpdateVisible()
                 else
                 {
                     ImGui::Text("Playing ..");
-                }
+                }*/
                 n++;
             }
             ImGui::EndTable();

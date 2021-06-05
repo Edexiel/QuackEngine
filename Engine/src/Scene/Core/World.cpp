@@ -20,6 +20,7 @@ World::World(std::string &name) : _name(name)
     _physicsWorld->setEventListener(&engine.GetPhysicsEventManager());
 }
 
+
 rp3d::PhysicsWorld *World::GetPhysicsWorld() const
 {
     return _physicsWorld;
@@ -36,6 +37,8 @@ void World::Clear()
 
     _physicsWorld = engine.GetPhysicsManager().createPhysicsWorld();
     _physicsWorld->setEventListener(&engine.GetPhysicsEventManager());
+
+    engine.GetInputManager().Clear();
 
 //    std::vector<Entity> entities = _entityManager->GetEntities();
 //

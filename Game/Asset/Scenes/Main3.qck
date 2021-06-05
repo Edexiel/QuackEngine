@@ -1,0 +1,173 @@
+{
+    "world": {
+        "name": "Main3",
+        "entities": [
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": true
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "Camera"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": -10.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Camera": {
+                    "isActive": true,
+                    "_width": 766,
+                    "_height": 406,
+                    "_far": 100.0,
+                    "_near": 0.10000000149011612,
+                    "_fov": 1.0471975803375245
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "GameObject"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/Cube.fbx",
+                    "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "materials": [
+                        "Default material"
+                    ]
+                }
+            }
+        ]
+    }
+}

@@ -24,12 +24,11 @@ layout(location = 2) in vec2 vertexTexture;
     #endif
 #endif
 
+out vec3 Position;
+out vec3 Normal;
 out vec2 TexCoord;
 
 #ifdef LIGHT
-    out vec3 Position;
-    out vec3 Normal;
-
     out vec3 cameraPosition;
 #endif
 

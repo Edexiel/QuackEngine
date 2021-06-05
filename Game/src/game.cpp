@@ -42,8 +42,7 @@ void Game::Init(Engine &engine)
         main.SetBuild(&Build);
         /*****************************************/
 
-        main.Register();
-        engine.LoadWorld(main);
+//        engine.LoadWorld(main);
 
     }
     {
@@ -59,27 +58,24 @@ void Game::Init(Engine &engine)
         main.SetBuild(&Build);
         /*****************************************/
 
-        main.Register();
     }
-
     {
-        World &dungeon = engine.CreateWorld("Dungeon");
-        dungeon.SetRegister(&Register);
-        dungeon.SetInitGame(&InitGame);
-        dungeon.SetInitSystems(&InitSystems);
-        dungeon.SetInitSettings(&InitSettings);
+        World &main = engine.CreateWorld("Main3");
+        main.SetRegister(&Register);
+        main.SetInitGame(&InitGame);
+        main.SetInitSystems(&InitSystems);
+        main.SetInitSettings(&InitSettings);
 
         /*** Serialization of external components**/
-        dungeon.SetLoad(&Load);
-        dungeon.SetSave(&Save);
-        dungeon.SetBuild(&Build);
+        main.SetLoad(&Load);
+        main.SetSave(&Save);
+        main.SetBuild(&Build);
         /*****************************************/
+        engine.LoadWorld(main);
 
-        dungeon.Register();
     }
 
-
-    engine.SetCurrentWorld("Dungeon"); //obligatoire
+    engine.SetCurrentWorld("Main3"); //obligatoire
 }
 
 void Game::Register(World &world)
