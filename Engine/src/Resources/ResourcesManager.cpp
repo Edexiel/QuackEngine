@@ -134,9 +134,8 @@ Texture ResourcesManager::LoadTexture(const std::filesystem::path &path)
     // Create a new Texture
 
     Texture texture = Texture::LoadTexture(path);
-    texture.SetPath(path.string());
+    texture.SetPath(path);
     _mapTexture.insert({path.string(), texture});
-    _textureToName.insert({texture.GetID(), path.string()});
     _globalAssetMap.insert({path.string(), &_mapTexture.find(path.string())->second});
 
     return texture;
@@ -163,6 +162,7 @@ Renderer::Shader ResourcesManager::LoadShader(const std::filesystem::path &path)
     // Create a new Shader
 
     Shader shader = Shader::LoadShader(path.string().c_str());
+    shader.SetPath(path);
     _mapShader.insert({path.string(), shader});
     _globalAssetMap.insert({path.string(), &_mapShader.find(path.string())->second});
 
@@ -238,8 +238,8 @@ Audio::Sound ResourcesManager::LoadSound(const std::filesystem::path &path, Audi
     }
 
     Audio::Sound sound = Engine::Instance().GetSoundManager().CreateSound(path, soundType);
+    sound.SetPath(path);
     _mapSound.insert({path.string(), sound});
-    _soundToName.insert({sound.GetID(), path.string()});
 
     return sound;
 }
@@ -360,23 +360,6 @@ std::vector<std::string> ResourcesManager::GetAnimationNameList() const
     return GetList(_mapAnimation);
 }
 
-
-std::string ResourcesManager::GetName(const Renderer::Texture &texture) const
-{
-    auto it = _textureToName.find(texture.GetID());
-    if (it == _textureToName.end())
-        return std::string(EMPTY_TEXTURE_STRING);
-    return it->second;
-}
-
-std::string ResourcesManager::GetName(const Audio::Sound &sound) const
-{
-    auto it = _soundToName.find(sound.GetID());
-    if (it == _soundToName.end())
-        return std::string(EMPTY_TEXTURE_STRING);
-    return it->second;
-}
-
 const Asset *ResourcesManager::GetAsset(const std::string &name)
 {
     auto it = _globalAssetMap.find(name);
@@ -395,8 +378,6 @@ void ResourcesManager::Clear()
     _mapMaterial.clear();
     _mapAnimation.clear();
 
-    _textureToName.clear();
-    _soundToName.clear();
     _globalAssetMap.clear();
 
 }
