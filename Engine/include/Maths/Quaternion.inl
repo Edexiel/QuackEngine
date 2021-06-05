@@ -197,11 +197,11 @@ inline Quaternion Quaternion::LookAt(const Vector3f& origin, const Vector3f& tar
 
     float dot = Vector3f::DotProduct(Vector3f::Forward(), forwardVector);
 
-    if (abs(dot - (-1.0f)) < 0.000001f)
+    if (std::abs(dot - (-1.0f)) < 0.000001f)
     {
-        return Quaternion(Vector3f::Up(), 3.1415926535897932f);
+        return Quaternion(Vector3f::Up(), Pi<float>());
     }
-    if (abs(dot - (1.0f)) < 0.000001f)
+    if (std::abs(dot - (1.0f)) < 0.000001f)
     {
         return Quaternion::Identity();
     }
