@@ -1,6 +1,7 @@
 out vec4 FragColor;
 
 in vec3 Position;
+in vec3 Normal;
 in vec2 TexCoord;
 
 struct Material
@@ -20,7 +21,6 @@ struct Material
 
 #ifdef LIGHT
 
-in vec3 Normal;
 in vec3 cameraPosition;
 
 struct DirectionalLight
