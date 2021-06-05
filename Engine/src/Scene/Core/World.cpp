@@ -1,4 +1,6 @@
 #include "Scene/Core/World.hpp"
+
+#include <memory>
 #include "Engine.hpp"
 
 
@@ -25,13 +27,23 @@ rp3d::PhysicsWorld *World::GetPhysicsWorld() const
 
 void World::Clear()
 {
-    std::vector<Entity> &entities = _entityManager->GetEntities();
-    for (Entity entity : entities)
-    {
-        DestroyEntity(entities[0]);
-    }
+    Engine &engine = Engine::Instance();
 
-    GetSystem<RenderSystem>()->Clear();
+    _componentManager = std::make_unique<ComponentManager>();
+    _entityManager = std::make_unique<EntityManager>();
+    _systemManager = std::make_unique<SystemManager>();
+    engine.GetPhysicsManager().destroyPhysicsWorld(_physicsWorld);
+
+    _physicsWorld = engine.GetPhysicsManager().createPhysicsWorld();
+    _physicsWorld->setEventListener(&engine.GetPhysicsEventManager());
+
+//    std::vector<Entity> entities = _entityManager->GetEntities();
+//
+//    for (int i = 1; i <= entities.size(); ++i)
+//    {
+//        DestroyEntity(entities[entities.size() - i]);
+//    }
+
 }
 
 
@@ -44,8 +56,7 @@ Entity World::CreateEntity(const std::string &name) const
 
 Entity World::CreateEntity() const
 {
-    Entity id = _entityManager->Create();
-    return id;
+    return _entityManager->Create();
 }
 
 void World::DestroyEntity(Entity id)
@@ -201,7 +212,7 @@ void World::EntityHandler::load(cereal::JSONInputArchive &archive)
     read<Component::CharacterController>(archive, e, "CharacterController");
     read<Component::ParticleEmitter>(archive, e, "ParticleEmitter");
     read<Component::SimpleShadow>(archive, e, "SimpleShadow");
-    world.Load(archive, components, id);
+    world.Load(archive, components, e);
 }
 
 void World::save(cereal::JSONOutputArchive &archive) const

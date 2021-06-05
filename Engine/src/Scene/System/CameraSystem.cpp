@@ -26,16 +26,16 @@ Component::Camera& CameraSystem::GetActiveCamera()
         }
     }
 
-    Assert_Fatal_Error(true, "No Camera Active");
-    exit(-1);
-
-    /*Entity newCamera = world.CreateEntity();
+//    Assert_Fatal_Error(true, "No Camera Active");
+//    exit(-1);
+//
+    Entity newCamera = world.CreateEntity("Camera");
     Component::Transform trs(Vector3f::Zero(), Vector3f::Zero(), Quaternion::Identity());
     Vector2i size = Engine::Instance().GetWindowSize();
-    Component::Camera cameraComponent(size.x, size.y, -1, 100, 45);
+    Component::Camera cameraComponent(size.x, size.y, 100.f, 0.1f, 45);
     world.AddComponent(newCamera, trs);
     world.AddComponent(newCamera, cameraComponent);
-    return world.GetComponent<Component::Camera>(newCamera);*/
+    return world.GetComponent<Component::Camera>(newCamera);
 }
 
 void CameraSystem::Clear()

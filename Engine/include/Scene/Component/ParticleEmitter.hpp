@@ -76,7 +76,7 @@ namespace Component
             _texture.SetPath(path);
 
             _texture = Engine::Instance().GetResourcesManager().LoadTexture(_texture.GetPath());
-            SetSize(size);
+            //SetSize(size);
         }
 
     };

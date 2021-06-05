@@ -62,8 +62,24 @@ void Game::Init(Engine &engine)
         main.Register();
     }
 
+    {
+        World &dungeon = engine.CreateWorld("Dungeon");
+        dungeon.SetRegister(&Register);
+        dungeon.SetInitGame(&InitGame);
+        dungeon.SetInitSystems(&InitSystems);
+        dungeon.SetInitSettings(&InitSettings);
 
-    engine.SetCurrentWorld("Main"); //obligatoire
+        /*** Serialization of external components**/
+        dungeon.SetLoad(&Load);
+        dungeon.SetSave(&Save);
+        dungeon.SetBuild(&Build);
+        /*****************************************/
+
+        dungeon.Register();
+    }
+
+
+    engine.SetCurrentWorld("Dungeon"); //obligatoire
 }
 
 void Game::Register(World &world)
@@ -191,7 +207,7 @@ void Game::InitGame(World &world)
 {
     Log_Info("Initializing scene: {}", world.GetName());
     //Engine::Instance().GetTimeManager().SetTime(1);
-    world.GetSystem<EnemyManagerSystem>()->GenerateEnemies(10, {0, 0, 0}, 50.f, 100.f);
+    //world.GetSystem<EnemyManagerSystem>()->GenerateEnemies(10, {0, 0, 0}, 50.f, 100.f);
 }
 
 void Game::InitSystems(World &world)

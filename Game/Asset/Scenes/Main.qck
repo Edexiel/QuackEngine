@@ -70,14 +70,14 @@
                     "rotation": {
                         "w": 0.9967842102050781,
                         "x": 0.07932547479867935,
-                        "y": 0.011306602507829667,
-                        "z": -0.0008997853146865964
+                        "y": 0.011306523345410824,
+                        "z": -0.0008997790282592177
                     }
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 846,
-                    "_height": 412,
+                    "_width": 766,
+                    "_height": 406,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
                     "_fov": 0.7853749394416809
@@ -86,7 +86,7 @@
                     "value0": {
                         "x": 0.0,
                         "y": 12.0,
-                        "z": -14.0
+                        "z": -6.0
                     }
                 },
                 "Player": {
@@ -129,7 +129,7 @@
                     },
                     {
                         "key": "Player",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "RigidBody",
@@ -170,7 +170,7 @@
                     "type": 2,
                     "offset": {
                         "x": 0.0,
-                        "y": -1.5,
+                        "y": 0.5,
                         "z": 0.0
                     },
                     "materials": [
@@ -194,20 +194,23 @@
                     }
                 },
                 "CharacterController": {
-                    "speed": 10.0
+                    "speed": 1.0
                 },
                 "SimpleShadow": {
                     "scale": {
-                        "x": 100.0,
+                        "x": 157.8000030517578,
                         "y": 100.0
                     },
                     "offset": {
-                        "x": 0.0,
-                        "y": -1.4900000095367432,
-                        "z": 0.0
+                        "x": -0.20000000298023225,
+                        "y": 0.0,
+                        "z": 1.100000023841858
                     },
                     "type": 1,
                     "yRotation": 3.76982045173645
+                },
+                "Player": {
+                    "ok": 0
                 }
             },
             {
@@ -234,6 +237,300 @@
                     },
                     {
                         "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "TriggerBox"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 0.0,
+                        "y": -2.5,
+                        "z": 20.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/Cube.fbx",
+                    "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "materials": [
+                        "Default material"
+                    ]
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": false,
+                    "trigger": true,
+                    "bodyType": 0,
+                    "shapeType": 2,
+                    "shapeParams": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    }
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "ContactBox"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 0.0,
+                        "y": -5.0,
+                        "z": 20.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/Cube.fbx",
+                    "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "materials": [
+                        "Default material"
+                    ]
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": false,
+                    "trigger": false,
+                    "bodyType": 1,
+                    "shapeType": 2,
+                    "shapeParams": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    }
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "Floor"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 0.0,
+                        "y": -5.0,
+                        "z": 20.0
+                    },
+                    "scale": {
+                        "x": 20.0,
+                        "y": 0.25,
+                        "z": 20.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/Cube.fbx",
+                    "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "materials": [
+                        "Default material"
+                    ]
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": true,
+                    "trigger": false,
+                    "bodyType": 0,
+                    "shapeType": 2,
+                    "shapeParams": {
+                        "x": 20.0,
+                        "y": 0.25,
+                        "z": 20.0
+                    }
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": true
+                    },
+                    {
+                        "key": "Model",
                         "value": false
                     },
                     {
@@ -242,7 +539,7 @@
                     },
                     {
                         "key": "ParticleEmitter",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "Player",
@@ -262,13 +559,13 @@
                     }
                 ],
                 "Name": {
-                    "name": "Fire"
+                    "name": "Light"
                 },
                 "Transform": {
                     "position": {
-                        "x": 9.0,
-                        "y": 0.0,
-                        "z": 0.0
+                        "x": -10.0,
+                        "y": -10.0,
+                        "z": -10.0
                     },
                     "scale": {
                         "x": 1.0,
@@ -282,26 +579,28 @@
                         "z": 0.0
                     }
                 },
-                "ParticleEmitter": {
-                    "_colorStart": {
+                "Light": {
+                    "type": 0,
+                    "ambient": {
+                        "x": 0.10000000149011612,
+                        "y": 0.10000000149011612,
+                        "z": 0.10000000149011612
+                    },
+                    "diffuse": {
                         "x": 1.0,
-                        "y": 0.4117647409439087,
-                        "z": 0.0,
-                        "w": 1.0
+                        "y": 1.0,
+                        "z": 1.0
                     },
-                    "_colorEnd": {
-                        "x": 0.7882353067398071,
-                        "y": 0.40392157435417178,
-                        "z": 0.07450980693101883,
-                        "w": 0.29411765933036806
+                    "specular": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
-                    "_angleStart": 1.3962634801864625,
-                    "_angleEnd": 1.919862151145935,
-                    "_lengthStart": 0.20000000298023225,
-                    "_lengthEnd": 1.399999976158142,
-                    "_duration": 1.2000000476837159,
-                    "Size": 9,
-                    "Texture": "./Asset/Texture/Particules/fire_01.png"
+                    "constant": 1.0,
+                    "linear": 0.00139999995008111,
+                    "quadratic": 0.000007000000096013537,
+                    "spotAngle": 8.5,
+                    "outerSpotAngle": 10.5
                 }
             },
             {
@@ -394,7 +693,7 @@
                     "_lengthStart": 1.0,
                     "_lengthEnd": 12.100000381469727,
                     "_duration": 3.0999999046325685,
-                    "Size": 12,
+                    "Size": 0,
                     "Texture": "./Asset/Texture/Particules/smoke_02.png"
                 }
             },
@@ -422,104 +721,6 @@
                     },
                     {
                         "key": "Model",
-                        "value": true
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "ParticleEmitter",
-                        "value": false
-                    },
-                    {
-                        "key": "Player",
-                        "value": false
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": true
-                    },
-                    {
-                        "key": "SimpleShadow",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Floor"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": -5.0,
-                        "z": 20.0
-                    },
-                    "scale": {
-                        "x": 20.0,
-                        "y": 0.25,
-                        "z": 20.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                },
-                "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
-                    "type": 1,
-                    "offset": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "materials": [
-                        "Grass"
-                    ]
-                },
-                "RigidBody": {
-                    "mass": 1.0,
-                    "bounciness": 0.0,
-                    "gravity": true,
-                    "trigger": false,
-                    "bodyType": 0,
-                    "shapeType": 2,
-                    "shapeParams": {
-                        "x": 20.0,
-                        "y": 0.25,
-                        "z": 20.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "CameraGameplay",
-                        "value": false
-                    },
-                    {
-                        "key": "CharacterController",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": true
-                    },
-                    {
-                        "key": "Model",
                         "value": false
                     },
                     {
@@ -528,7 +729,7 @@
                     },
                     {
                         "key": "ParticleEmitter",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "Player",
@@ -548,13 +749,13 @@
                     }
                 ],
                 "Name": {
-                    "name": "Light"
+                    "name": "Fire"
                 },
                 "Transform": {
                     "position": {
-                        "x": -10.0,
-                        "y": 20.0,
-                        "z": -10.0
+                        "x": 9.0,
+                        "y": 0.0,
+                        "z": 0.0
                     },
                     "scale": {
                         "x": 1.0,
@@ -568,126 +769,26 @@
                         "z": 0.0
                     }
                 },
-                "Light": {
-                    "type": 0,
-                    "ambient": {
-                        "x": 0.10000000149011612,
-                        "y": 0.10000000149011612,
-                        "z": 0.10000000149011612
-                    },
-                    "diffuse": {
+                "ParticleEmitter": {
+                    "_colorStart": {
                         "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "y": 0.4117647409439087,
+                        "z": 0.0,
+                        "w": 1.0
                     },
-                    "specular": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                    "_colorEnd": {
+                        "x": 0.7882353067398071,
+                        "y": 0.40392157435417178,
+                        "z": 0.07450980693101883,
+                        "w": 0.29411765933036806
                     },
-                    "constant": 1.0,
-                    "linear": 0.00139999995008111,
-                    "quadratic": 0.000007000000096013537,
-                    "spotAngle": 8.5,
-                    "outerSpotAngle": 10.5
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "CameraGameplay",
-                        "value": false
-                    },
-                    {
-                        "key": "CharacterController",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": true
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "ParticleEmitter",
-                        "value": false
-                    },
-                    {
-                        "key": "Player",
-                        "value": false
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": true
-                    },
-                    {
-                        "key": "SimpleShadow",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Wall"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": -4.982093334197998,
-                        "z": 41.04852294921875
-                    },
-                    "scale": {
-                        "x": 53.0,
-                        "y": 14.390000343322754,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                },
-                "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
-                    "type": 1,
-                    "offset": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "materials": [
-                        "mat2"
-                    ]
-                },
-                "RigidBody": {
-                    "mass": 1.0,
-                    "bounciness": 0.0,
-                    "gravity": false,
-                    "trigger": false,
-                    "bodyType": 0,
-                    "shapeType": 2,
-                    "shapeParams": {
-                        "x": 53.0,
-                        "y": 14.390000343322754,
-                        "z": 1.0
-                    }
+                    "_angleStart": 1.3962634801864625,
+                    "_angleEnd": 1.919862151145935,
+                    "_lengthStart": 0.20000000298023225,
+                    "_lengthEnd": 1.399999976158142,
+                    "_duration": 1.2000000476837159,
+                    "Size": 0,
+                    "Texture": "./Asset/Texture/Particules/fire_01.png"
                 }
             }
         ]

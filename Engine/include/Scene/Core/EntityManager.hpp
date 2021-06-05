@@ -65,7 +65,7 @@ inline Entity EntityManager::Create()
  */
 inline void EntityManager::Destroy(Entity id)
 {
-    Assert_Error(_entityLut.find(id) == _entityLut.end(), "Entity id does not exists");
+    Assert_Error(_entityLut.find(id) == _entityLut.end(), "Entity id does not exists {}",id);
 
     size_t index = _entityLut[id]; //index of the entity and signature
     Entity backId = _entities.back();
