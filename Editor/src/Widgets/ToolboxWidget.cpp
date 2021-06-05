@@ -13,14 +13,7 @@ void ToolboxWidget::Save()
     _engine.SaveWorld(_engine.GetCurrentWorld().GetName());
 }
 
-void ToolboxWidget::Reload()
-{
 
-    World &world = Widget::_engine.GetCurrentWorld();
-    world.Clear();
-
-    _engine.LoadWorld(world);
-}
 
 void ToolboxWidget::UpdateVisible()
 {
@@ -40,9 +33,14 @@ void ToolboxWidget::UpdateVisible()
         if (ImGui::Button("Stop"))
         {
             isPlaying = !isPlaying;
-            Reload();
+            World &world = _engine.GetCurrentWorld();
+            world.Clear();
 
+            world.Register();
+            _engine.LoadWorld(world);
+            _engine.SetCurrentWorld(world.GetName());
             _engine.SetGamePlaying(isPlaying);
+
 
         }
         ImGui::SameLine();
@@ -58,6 +56,9 @@ void ToolboxWidget::UpdateVisible()
             _engine.GetCurrentWorld().InitGame();
         }
     }
+    ImGui::SameLine();
+    ImGui::Text("Entities: %zu",_engine.GetCurrentWorld().GetEntityManager()->GetEntities().size());
+
 
 
 }
