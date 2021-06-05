@@ -58,7 +58,7 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": 13.062000274658204,
+                        "x": 2.062000036239624,
                         "y": 1.1690000295639039,
                         "z": -20.209999084472658
                     },
@@ -76,7 +76,7 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 766,
+                    "_width": 698,
                     "_height": 406,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
@@ -129,7 +129,7 @@
                     },
                     {
                         "key": "Player",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "RigidBody",
@@ -150,7 +150,7 @@
                 "Transform": {
                     "position": {
                         "x": -1.3600000143051148,
-                        "y": -4.0,
+                        "y": 0.0,
                         "z": 10.0
                     },
                     "scale": {
@@ -173,6 +173,9 @@
                         "y": 0.5,
                         "z": 0.0
                     },
+                    "materialsIndex": [
+                        0
+                    ],
                     "materials": [
                         "AnimationBard"
                     ]
@@ -208,6 +211,9 @@
                     },
                     "type": 1,
                     "yRotation": 3.76982045173645
+                },
+                "Player": {
+                    "ok": 0
                 }
             },
             {
@@ -328,7 +334,7 @@
                     },
                     {
                         "key": "Model",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "Name",
@@ -336,7 +342,7 @@
                     },
                     {
                         "key": "ParticleEmitter",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "Player",
@@ -348,7 +354,7 @@
                     },
                     {
                         "key": "SimpleShadow",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "Transform",
@@ -356,18 +362,18 @@
                     }
                 ],
                 "Name": {
-                    "name": "Tree"
+                    "name": "Smoke"
                 },
                 "Transform": {
                     "position": {
-                        "x": 8.384549140930176,
-                        "y": -4.745338439941406,
-                        "z": 2.1665005683898927
+                        "x": 9.0,
+                        "y": 0.0,
+                        "z": 0.0
                     },
                     "scale": {
-                        "x": 0.009599999524652958,
-                        "y": 0.009599999524652958,
-                        "z": 0.009599999524652958
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     "rotation": {
                         "w": 1.0,
@@ -376,30 +382,26 @@
                         "z": 0.0
                     }
                 },
-                "Model": {
-                    "path": "./Asset/Model/Tree.fbx",
-                    "type": 1,
-                    "offset": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
+                "ParticleEmitter": {
+                    "_colorStart": {
+                        "x": 0.3960784375667572,
+                        "y": 0.3960784375667572,
+                        "z": 0.3960784375667572,
+                        "w": 0.6549019813537598
                     },
-                    "materials": [
-                        "Grass"
-                    ]
-                },
-                "SimpleShadow": {
-                    "scale": {
-                        "x": 300.0,
-                        "y": 300.0
+                    "_colorEnd": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0,
+                        "w": 0.21176470816135407
                     },
-                    "offset": {
-                        "x": 0.0,
-                        "y": 2.4000000953674318,
-                        "z": 0.0
-                    },
-                    "type": 1,
-                    "yRotation": 0.0
+                    "_angleStart": 1.3089970350265504,
+                    "_angleEnd": 2.0071287155151369,
+                    "_lengthStart": 1.0,
+                    "_lengthEnd": 12.100000381469727,
+                    "_duration": 3.0999999046325685,
+                    "Size": 0,
+                    "Texture": "./Asset/Texture/Particules/smoke_02.png"
                 }
             },
             {
@@ -459,7 +461,7 @@
                 "Transform": {
                     "position": {
                         "x": 0.0,
-                        "y": -5.0,
+                        "y": -1.0,
                         "z": 20.0
                     },
                     "scale": {
@@ -482,6 +484,9 @@
                         "y": 0.0,
                         "z": 0.0
                     },
+                    "materialsIndex": [
+                        0
+                    ],
                     "materials": [
                         "Ground"
                     ]
@@ -620,7 +625,7 @@
                     },
                     {
                         "key": "Model",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "Name",
@@ -628,7 +633,7 @@
                     },
                     {
                         "key": "ParticleEmitter",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "Player",
@@ -648,18 +653,18 @@
                     }
                 ],
                 "Name": {
-                    "name": "Smoke"
+                    "name": "Tree"
                 },
                 "Transform": {
                     "position": {
-                        "x": 9.0,
-                        "y": 0.0,
-                        "z": 0.0
+                        "x": -16.797561645507814,
+                        "y": -0.9973068237304688,
+                        "z": 3.7905523777008058
                     },
                     "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "x": 0.019999999552965165,
+                        "y": 0.019999999552965165,
+                        "z": 0.019999999552965165
                     },
                     "rotation": {
                         "w": 1.0,
@@ -668,26 +673,22 @@
                         "z": 0.0
                     }
                 },
-                "ParticleEmitter": {
-                    "_colorStart": {
-                        "x": 0.3960784375667572,
-                        "y": 0.3960784375667572,
-                        "z": 0.3960784375667572,
-                        "w": 0.6549019813537598
+                "Model": {
+                    "path": "./Asset/Model/Tree1.fbx",
+                    "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
                     },
-                    "_colorEnd": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0,
-                        "w": 0.21176470816135407
-                    },
-                    "_angleStart": 1.3089970350265504,
-                    "_angleEnd": 2.0071287155151369,
-                    "_lengthStart": 1.0,
-                    "_lengthEnd": 12.100000381469727,
-                    "_duration": 3.0999999046325685,
-                    "Size": 0,
-                    "Texture": "./Asset/Texture/Particules/smoke_02.png"
+                    "materialsIndex": [
+                        0,
+                        1
+                    ],
+                    "materials": [
+                        "LightBrownTrunk",
+                        "GreenLeef"
+                    ]
                 }
             }
         ]

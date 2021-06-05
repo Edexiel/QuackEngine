@@ -8,7 +8,7 @@ PlayerSystem::PlayerSystem():engine{Engine::Instance()}
 {
     Input::InputManager& inputManager = engine.GetInputManager();
 
-    inputManager.BindEvent("Up", Input::Key::KEY_UP);
+    /*inputManager.BindEvent("Up", Input::Key::KEY_UP);
     inputManager.RegisterEvent("Up", Input::Action::PRESS, this, &PlayerSystem::Up);
 
     inputManager.BindEvent("Down", Input::Key::KEY_DOWN);
@@ -18,7 +18,7 @@ PlayerSystem::PlayerSystem():engine{Engine::Instance()}
     inputManager.RegisterEvent("Right", Input::Action::PRESS, this, &PlayerSystem::Right);
 
     inputManager.BindEvent("Left", Input::Key::KEY_LEFT);
-    inputManager.RegisterEvent("Left", Input::Action::PRESS, this, &PlayerSystem::Left);
+    inputManager.RegisterEvent("Left", Input::Action::PRESS, this, &PlayerSystem::Left);*/
 
     inputManager.BindEventAxis("Move up", Input::Key::KEY_W, 1.f);
     inputManager.RegisterEventAxis("Move up", this, &PlayerSystem::MoveForward);
@@ -71,6 +71,8 @@ void PlayerSystem::MoveForward(float verticalAxis)
 
     for(Entity entity : _entities)
     {
+        if(!world.HasComponent<Component::CharacterController>(entity))
+            return;
         auto &characterController = world.GetComponent<Component::CharacterController>(entity);
         characterController.forward = verticalAxis;
     }
@@ -81,6 +83,8 @@ void PlayerSystem::MoveRight(float horizontalAxis)
     auto &world = engine.GetCurrentWorld();
     for(Entity entity : _entities)
     {
+        if(!world.HasComponent<Component::CharacterController>(entity))
+            return;
         auto &characterController = world.GetComponent<Component::CharacterController>(entity);
         characterController.right = horizontalAxis;
     }
@@ -91,6 +95,8 @@ void PlayerSystem::MoveBackward(float verticalAxis)
     auto &world = engine.GetCurrentWorld();
     for(Entity entity : _entities)
     {
+        if(!world.HasComponent<Component::CharacterController>(entity))
+            return;
         auto &characterController = world.GetComponent<Component::CharacterController>(entity);
         characterController.backward = verticalAxis;
     }
@@ -101,6 +107,8 @@ void PlayerSystem::MoveLeft(float horizontalAxis)
     auto &world = engine.GetCurrentWorld();
     for(Entity entity : _entities)
     {
+        if(!world.HasComponent<Component::CharacterController>(entity))
+            return;
         auto &characterController = world.GetComponent<Component::CharacterController>(entity);
         characterController.left = horizontalAxis;
     }

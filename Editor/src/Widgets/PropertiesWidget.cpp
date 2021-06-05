@@ -109,6 +109,8 @@ void PropertiesWidget::DisplayMaterial(const Resources::Asset *asset)
         _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
 
+    ImGui::ColorEdit4("Color", material->color.e);
+
     if (material->checkLight)
     {
         ImGui::ColorEdit3("Ambient", material->ambient.e);
@@ -158,7 +160,11 @@ PropertiesWidget::SelectInList(const std::vector<std::string> &list, const std::
 {
     std::string selected = currentlySelected;
 
-    if (ImGui::BeginCombo(comboName.c_str(), currentlySelected.c_str()))
+    std::string selectedName = currentlySelected;
+    if (selectedName == "")
+        selectedName = "NONE";
+
+    if (ImGui::BeginCombo(comboName.c_str(), selectedName.c_str()))
     {
         for (const std::string &n : list)
         {
@@ -432,9 +438,12 @@ void PropertiesWidget::CameraReader()
     ImGui::Checkbox("Is perspective", &camera._isPerspective);
     float fov = camera._fov * RadToDeg<float>();
     ImGui::DragFloat("FOV", &fov, 1.f, 0.f, 180.f);
+    {
+        camera._fov = fov * DegToRad<float>();
+    }
 
-    camera._fov = fov * DegToRad<float>();
-
+    ImGui::DragFloat("Near", &camera._near, 1.f, 0.01, camera._far);
+    ImGui::DragFloat("Far", &camera._far, 1.f, camera._near, 180.f);
 }
 
 void PropertiesWidget::RigidBodyReader()

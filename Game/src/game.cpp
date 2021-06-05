@@ -71,6 +71,7 @@ void Game::Init(Engine &engine)
         main.SetSave(&Save);
         main.SetBuild(&Build);
         /*****************************************/
+        //engine.LoadWorld(main);
 
     }
 
