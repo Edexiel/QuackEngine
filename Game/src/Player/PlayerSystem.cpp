@@ -71,6 +71,8 @@ void PlayerSystem::MoveForward(float verticalAxis)
 
     for(Entity entity : _entities)
     {
+        if(!world.HasComponent<Component::CharacterController>(entity))
+            return;
         auto &characterController = world.GetComponent<Component::CharacterController>(entity);
         characterController.forward = verticalAxis;
     }
@@ -81,6 +83,8 @@ void PlayerSystem::MoveRight(float horizontalAxis)
     auto &world = engine.GetCurrentWorld();
     for(Entity entity : _entities)
     {
+        if(!world.HasComponent<Component::CharacterController>(entity))
+            return;
         auto &characterController = world.GetComponent<Component::CharacterController>(entity);
         characterController.right = horizontalAxis;
     }
@@ -91,6 +95,8 @@ void PlayerSystem::MoveBackward(float verticalAxis)
     auto &world = engine.GetCurrentWorld();
     for(Entity entity : _entities)
     {
+        if(!world.HasComponent<Component::CharacterController>(entity))
+            return;
         auto &characterController = world.GetComponent<Component::CharacterController>(entity);
         characterController.backward = verticalAxis;
     }
@@ -101,6 +107,8 @@ void PlayerSystem::MoveLeft(float horizontalAxis)
     auto &world = engine.GetCurrentWorld();
     for(Entity entity : _entities)
     {
+        if(!world.HasComponent<Component::CharacterController>(entity))
+            return;
         auto &characterController = world.GetComponent<Component::CharacterController>(entity);
         characterController.left = horizontalAxis;
     }

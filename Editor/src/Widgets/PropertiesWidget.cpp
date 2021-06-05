@@ -432,9 +432,12 @@ void PropertiesWidget::CameraReader()
     ImGui::Checkbox("Is perspective", &camera._isPerspective);
     float fov = camera._fov * RadToDeg<float>();
     ImGui::DragFloat("FOV", &fov, 1.f, 0.f, 180.f);
+    {
+        camera._fov = fov * DegToRad<float>();
+    }
 
-    camera._fov = fov * DegToRad<float>();
-
+    ImGui::DragFloat("Near", &camera._near, 1.f, 0.01, camera._far);
+    ImGui::DragFloat("Far", &camera._far, 1.f, camera._near, 180.f);
 }
 
 void PropertiesWidget::RigidBodyReader()

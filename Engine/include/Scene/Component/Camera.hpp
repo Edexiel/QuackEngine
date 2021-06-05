@@ -24,8 +24,6 @@ namespace Component
         unsigned int _width{0};
         unsigned int _height{0};
 
-        float _far{0};
-        float _near{0};
 
         Renderer::Framebuffer _framebuffer{};
 
@@ -37,7 +35,9 @@ namespace Component
         bool isActive{true};
 
         friend ::CameraSystem;
-        float _fov{50};
+        float _fov{50.0f};
+        float _far{100.0f};
+        float _near{0.01f};
         bool _isPerspective{true};
 
         Camera() = default;

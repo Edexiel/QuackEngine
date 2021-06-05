@@ -27,7 +27,7 @@ void Text::Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &sc
 
     _shader.Use();
     buffer.BindTexture();
-    RenderText("Hello world!", {-1.0f, -1.0f}, 0.5f, {0.0f, 0.5f, 1.0f, 1}, screenMesh);
+    RenderText("QuackEngine Demo:", {-0.99f, 0.925f}, 0.25f, {1.0f, 1.0f, 1.0f, 1}, screenMesh);
     RendererPlatform::BindFramebuffer(0);
 }
 
