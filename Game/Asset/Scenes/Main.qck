@@ -77,7 +77,7 @@
                 "Camera": {
                     "isActive": true,
                     "_width": 766,
-                    "_height": 344,
+                    "_height": 406,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
                     "_fov": 0.7853749394416809
@@ -129,7 +129,7 @@
                     },
                     {
                         "key": "Player",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "RigidBody",
@@ -208,6 +208,9 @@
                     },
                     "type": 1,
                     "yRotation": 3.76982045173645
+                },
+                "Player": {
+                    "ok": 0
                 }
             },
             {

@@ -1,6 +1,6 @@
 {
     "world": {
-        "name": "Main3",
+        "name": "Dungeon",
         "entities": [
             {
                 "components": [
@@ -60,12 +60,12 @@
                     "position": {
                         "x": 0.0,
                         "y": 0.0,
-                        "z": -10.0
+                        "z": -1.0
                     },
                     "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
                     },
                     "rotation": {
                         "w": 1.0,
@@ -79,7 +79,7 @@
                     "_width": 766,
                     "_height": 406,
                     "_far": 100.0,
-                    "_near": 0.10000000149011612,
+                    "_near": 0.009999999776482582,
                     "_fov": 1.0471975803375245
                 }
             },
@@ -135,7 +135,7 @@
                     }
                 ],
                 "Name": {
-                    "name": "GameObject"
+                    "name": "Cube"
                 },
                 "Transform": {
                     "position": {
