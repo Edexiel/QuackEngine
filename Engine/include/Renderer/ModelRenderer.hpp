@@ -23,8 +23,6 @@ namespace Renderer
         std::vector<Renderer::Mesh> _meshList;
         std::vector<Renderer::MaterialInterface> _materialList;
 
-        //SkeletonOffset _skeletonOffset;
-
     public:
         const std::vector<Renderer::MaterialInterface> &GetMaterialList() const;
     private:
@@ -44,7 +42,6 @@ namespace Renderer
 
     public:
 
-        std::unordered_map<std::string, Renderer::Bone> _skeleton;
         Renderer::VertexType _vertexType{Renderer::VertexType::V_CLASSIC};
 
 

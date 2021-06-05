@@ -16,26 +16,31 @@ namespace Component
         template<class Archive>
         void save(Archive &archive) const
         {
+            std::vector<unsigned int> materialsIndex;
             std::vector<std::string> materials;
             for (const auto &mat : model.GetMaterialList())
             {
                 materials.push_back(mat->GetPath());
             }
+            for (unsigned int i = 0; i < model.GetNumberMesh(); i++)
+                materialsIndex.push_back(model.GetMesh(i).materialIndex);
+
             archive(cereal::make_nvp("path", model.GetPath()),
                     cereal::make_nvp("type", model._vertexType),
-                    CEREAL_NVP(offset),
+                    CEREAL_NVP(offset), CEREAL_NVP(materialsIndex),
                     CEREAL_NVP(materials));
         }
 
         template<class Archive>
         void load(Archive &archive)
         {
+            std::vector<unsigned int> materialsIndex;
             std::vector<std::string> materials;
             std::string path;
 
             archive(cereal::make_nvp("path", path),
                     cereal::make_nvp("type", model._vertexType),
-                    CEREAL_NVP(offset));
+                    CEREAL_NVP(offset), CEREAL_NVP(materialsIndex));
 
             archive(CEREAL_NVP(materials));
 
@@ -47,6 +52,8 @@ namespace Component
             {
                 model.AddMaterial(resourcesManager.LoadMaterial(mat));
             }
+            for (unsigned int i = 0; i < model.GetNumberMesh(); i++)
+                model.SetMeshMaterial(i, materialsIndex[i]);
         }
     };
 
