@@ -191,7 +191,7 @@ void Game::InitGame(World &world)
 {
     Log_Info("Initializing scene: {}", world.GetName());
     //Engine::Instance().GetTimeManager().SetTime(1);
-    world.GetSystem<EnemyManagerSystem>()->GenerateEnemies(10, {0, 0, 0}, 50.f, 100.f);
+    //world.GetSystem<EnemyManagerSystem>()->GenerateEnemies(10, {0, 0, 0}, 50.f, 100.f);
 }
 
 void Game::InitSystems(World &world)
