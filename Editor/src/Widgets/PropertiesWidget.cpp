@@ -120,7 +120,7 @@ void PropertiesWidget::DisplayMaterial(const Resources::Asset *asset)
     std::vector<std::string> listTexture = _engine.GetResourcesManager().GetTextureNameList();
     listTexture.insert(listTexture.cbegin(), EMPTY_TEXTURE_STRING);
 
-    std::string name = _engine.GetResourcesManager().GetName(material->colorTexture);
+    std::string name = material->colorTexture.GetPath();
     if (SelectTexture(material->colorTexture, listTexture, name, "Color Texture"))
     {
         material->GenerateShader();
@@ -130,21 +130,21 @@ void PropertiesWidget::DisplayMaterial(const Resources::Asset *asset)
     if (!material->checkLight)
         return;
 
-    name = _engine.GetResourcesManager().GetName(material->diffuseTexture);
+    name = material->diffuseTexture.GetPath();
     if (SelectTexture(material->diffuseTexture, listTexture, name, "Diffuse Texture"))
     {
         material->GenerateShader();
         _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
 
-    name = _engine.GetResourcesManager().GetName(material->specularTexture);
+    name = material->specularTexture.GetPath();
     if (SelectTexture(material->specularTexture, listTexture, name, "Specular Texture"))
     {
         material->GenerateShader();
         _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
 
-    name = _engine.GetResourcesManager().GetName(material->normalMap);
+    name = material->normalMap.GetPath();
     if (SelectTexture(material->normalMap, listTexture, name, "Normal Texture"))
     {
         material->GenerateShader();

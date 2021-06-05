@@ -36,6 +36,7 @@ namespace Renderer
         static void PixelStore(float param);
 
         static void SetTransparency(bool transparency);
+        static void SetViewport(unsigned int widthStart, unsigned int heightStart, unsigned int widthEnd, unsigned int heightEnd);
 
         static Mesh CreateMesh(const Vertex *vertices, unsigned int verticesSize, const unsigned int *indices,
                                unsigned int indicesSize, Renderer::VertexType vertexType);

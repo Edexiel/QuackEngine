@@ -130,5 +130,16 @@ void InputManager::InitInput()
   BindEventAxis("CameraEditorMovementUp", Input::Key::KEY_SPACE, 1.0f);
   BindEventAxis("CameraEditorMovementUp", Input::Key::KEY_LEFT_CONTROL,-1.0f);
 
-  BindEvent("Test unbind", Input::Key::KEY_SPACE);
+}
+
+void InputManager::Clear()
+{
+    _eventFuncs.clear();
+    _eventFuncsAxis.clear();
+
+    _eventKeys.clear();
+    _eventKeysAxis.clear();
+    _eventMouseButtons.clear();
+
+    InitInput();
 }

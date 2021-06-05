@@ -78,6 +78,12 @@ void RendererPlatform::SetTransparency(bool transparency)
     }
 }
 
+void RendererPlatform::SetViewport(unsigned int widthStart, unsigned int heightStart,
+                                   unsigned int widthEnd, unsigned int heightEnd)
+{
+    glViewport(widthStart, heightStart, widthEnd, heightEnd);
+}
+
 Mesh RendererPlatform::CreateMesh(const Vertex *vertices, unsigned int verticesSize, const unsigned int *indices,
                                   unsigned int indicesSize, VertexType vertexType)
 {

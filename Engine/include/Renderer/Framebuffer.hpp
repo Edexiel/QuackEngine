@@ -24,18 +24,13 @@ namespace Renderer
 
 
         unsigned int GetId() const;
-
         unsigned int GetTexture() const;
-
         unsigned int GetRbo() const;
-
         void Bind() const;
-
         void BindTexture(unsigned int index = 0) const;
 
-        unsigned int GetWidth();
-
-        unsigned int GetHeight();
+        unsigned int GetWidth() const;
+        unsigned int GetHeight() const;
 
         void Resize(unsigned int width, unsigned int height);
     };

@@ -42,7 +42,6 @@ void Game::Init(Engine &engine)
         main.SetBuild(&Build);
         /*****************************************/
 
-        main.Register();
         engine.LoadWorld(main);
 
     }
@@ -59,9 +58,21 @@ void Game::Init(Engine &engine)
         main.SetBuild(&Build);
         /*****************************************/
 
-        main.Register();
     }
+    {
+        World &main = engine.CreateWorld("Main3");
+        main.SetRegister(&Register);
+        main.SetInitGame(&InitGame);
+        main.SetInitSystems(&InitSystems);
+        main.SetInitSettings(&InitSettings);
 
+        /*** Serialization of external components**/
+        main.SetLoad(&Load);
+        main.SetSave(&Save);
+        main.SetBuild(&Build);
+        /*****************************************/
+
+    }
 
     engine.SetCurrentWorld("Main"); //obligatoire
 }

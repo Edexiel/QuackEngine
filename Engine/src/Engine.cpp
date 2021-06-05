@@ -266,6 +266,7 @@ void Engine::LoadWorld(World &world)
 {
     World& oldWorld= GetCurrentWorld();
     SetCurrentWorld(world.GetName());
+    _worlds.at(_currentWorld).Register();
 
     const fs::path path{"./Asset"};
     if (!exists(path))
@@ -312,6 +313,11 @@ void Engine::LoadWorld(World &world)
         worldPath.append(world.GetName()).replace_extension(".qck");
 
         Log_Info("Loading world: {}", worldPath.string());
+
+        if (!exists(worldPath))
+        {
+            SaveWorld(world.GetName());
+        }
 
         std::ifstream is(worldPath);
         cereal::JSONInputArchive iarchive(is);

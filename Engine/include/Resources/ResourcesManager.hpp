@@ -44,8 +44,6 @@ namespace Resources
         std::vector<Renderer::Mesh> listLoadedShape; //keep loaded shape saved for GPU memory management
         //TODO  Check if really necessary
 
-        std::unordered_map<unsigned int, std::string> _textureToName;
-        std::unordered_map<unsigned int, std::string> _soundToName;
         std::unordered_map<std::string, Asset *> _globalAssetMap;
 
         template<typename T>
@@ -85,9 +83,6 @@ namespace Resources
         std::vector<std::string> GetMaterialNameList() const;
         std::vector<std::string> GetTextureNameList() const;
         std::vector<std::string> GetAnimationNameList() const;
-
-        std::string GetName(const Renderer::Texture &texture) const;
-        std::string GetName(const Audio::Sound &texture) const;
 
         static std::string GetFileType(const std::filesystem::path &path);
 
