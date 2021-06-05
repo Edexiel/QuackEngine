@@ -22,7 +22,7 @@ void ExplorerWidget::UpdateVisible()
         _engine.GetResourcesManager().LoadFolder("./Asset");
     }
 
-    if (!ImGui::CollapsingHeader("Material"))
+    if (ImGui::CollapsingHeader("Material"))
     {
         offset += DisplayList(listName, offset);
         AddMaterial(offset);
@@ -32,16 +32,16 @@ void ExplorerWidget::UpdateVisible()
     }
     listName = _engine.GetResourcesManager().GetTextureNameList();
 
-    if (!ImGui::CollapsingHeader("Texture"))
+    if (ImGui::CollapsingHeader("Texture"))
         offset += DisplayList(listName, offset);
 
     listName = _engine.GetResourcesManager().GetModelNameList();
 
-    if (!ImGui::CollapsingHeader("Model"))
+    if (ImGui::CollapsingHeader("Model"))
         offset += DisplayList(listName, offset);
 
     listName = _engine.GetResourcesManager().GetAnimationNameList();
-    if (!ImGui::CollapsingHeader("Animation"))
+    if (ImGui::CollapsingHeader("Animation"))
         offset += DisplayList(listName, offset);
 
 }

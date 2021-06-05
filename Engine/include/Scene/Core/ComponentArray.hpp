@@ -44,7 +44,7 @@ void ComponentArray<T>::AddData(Entity id, const T& data)
 {
 
     if(_entityToIndex.find(id) != _entityToIndex.end())
-        Log_Warning("Component added to same entity more than once.");
+        Log_Warning("Component added to same entity more than once for entity {} {}.",id, demangle(typeid(T).name()));
 
     size_t end = _components.size();
 
@@ -58,11 +58,16 @@ void ComponentArray<T>::DeleteData(Entity id)
 {
     if(_entityToIndex.find(id) == _entityToIndex.end())
     {
-        Log_Error("Removing non-existent component.");
+        Log_Error("Removing non-existent component for entity {} {}.", id,demangle(typeid(T).name()));
     }
 
     size_t indexDelete = _entityToIndex[id];
     size_t indexEnd = _components.size() - 1;
+
+//    auto itLast = (_components.begin() + indexDelete);
+//    auto itRemoved = (_components.begin() + indexEnd);
+//    std::swap(itLast, itRemoved);
+//    std::iter_swap(itLast,itRemoved);
 
     std::swap(_components[indexDelete], _components[indexEnd]);
 
@@ -80,7 +85,8 @@ void ComponentArray<T>::DeleteData(Entity id)
 template<typename T>
 T &ComponentArray<T>::GetData(Entity id)
 {
-    Assert_Fatal_Error(_entityToIndex.find(id) == _entityToIndex.end(), "Retrieving non-existent component.");
+    if(_entityToIndex.find(id) == _entityToIndex.end())
+        Assert_Fatal_Error(true, "Retrieving non-existent component for entity {} {}.",id,demangle(typeid(T).name()));
 
     return _components[_entityToIndex[id]];
 }
