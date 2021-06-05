@@ -488,7 +488,7 @@
                         0
                     ],
                     "materials": [
-                        "Ground"
+                        "Default material"
                     ]
                 },
                 "RigidBody": {
@@ -653,41 +653,51 @@
                     }
                 ],
                 "Name": {
-                    "name": "Tree"
+                    "name": "GameObject"
                 },
                 "Transform": {
                     "position": {
-                        "x": -16.797561645507814,
-                        "y": -0.9973068237304688,
-                        "z": 3.7905523777008058
+                        "x": -18.767311096191408,
+                        "y": -0.32043492794036868,
+                        "z": 26.62465476989746
                     },
                     "scale": {
-                        "x": 0.019999999552965165,
-                        "y": 0.019999999552965165,
-                        "z": 0.019999999552965165
+                        "x": 0.4000000059604645,
+                        "y": 0.4000000059604645,
+                        "z": 0.4000000059604645
                     },
                     "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
+                        "w": 0.7071071267127991,
+                        "x": -0.7071064710617065,
+                        "y": -0.0,
                         "z": 0.0
                     }
                 },
                 "Model": {
-                    "path": "./Asset/Model/Tree1.fbx",
-                    "type": 1,
+                    "path": "./Asset/Model/ForestWing.fbx",
+                    "type": 0,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
                     "materialsIndex": [
+                        1,
+                        1,
                         0,
+                        0,
+                        1,
+                        0,
+                        0,
+                        0,
+                        1,
+                        1,
+                        1,
                         1
                     ],
                     "materials": [
-                        "LightBrownTrunk",
-                        "GreenLeef"
+                        "GreenLeef",
+                        "LightBrownTrunk"
                     ]
                 }
             }
