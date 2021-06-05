@@ -42,7 +42,7 @@ void Game::Init(Engine &engine)
         main.SetBuild(&Build);
         /*****************************************/
 
-//        engine.LoadWorld(main);
+        engine.LoadWorld(main);
 
     }
     {
@@ -71,11 +71,11 @@ void Game::Init(Engine &engine)
         main.SetSave(&Save);
         main.SetBuild(&Build);
         /*****************************************/
-        engine.LoadWorld(main);
+        //engine.LoadWorld(main);
 
     }
 
-    engine.SetCurrentWorld("Main3"); //obligatoire
+    engine.SetCurrentWorld("Main"); //obligatoire
 }
 
 void Game::Register(World &world)

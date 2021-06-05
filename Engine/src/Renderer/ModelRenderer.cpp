@@ -39,7 +39,8 @@ ModelRenderer ModelRenderer::LoadModel(const std::filesystem::path& path, Vertex
                                              aiProcess_Triangulate |
                                              aiProcess_SortByPType |
                                              aiProcess_JoinIdenticalVertices |
-                                             aiProcess_CalcTangentSpace);
+                                             aiProcess_CalcTangentSpace |
+                                             aiProcess_ForceGenNormals);
 
 
     if (!scene)

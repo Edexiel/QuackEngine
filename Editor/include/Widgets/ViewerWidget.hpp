@@ -11,6 +11,7 @@ public:
     void UpdateVisible() final;
     void AddEntity();
     void DestroyEntity();
+    void DuplicateEntity();
 };
 
 #endif //QUACKENGINE_VIEWERWIDGET_HPP
