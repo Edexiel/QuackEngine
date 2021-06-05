@@ -318,10 +318,10 @@ void ResourcesManager::LoadFolder(const std::filesystem::path &path)
             std::string extension = p.path().extension().string();
 
             if (extension == ".glb" || extension == ".gltf")
-                LoadModel(path, VertexType::V_NORMALMAP);
+                LoadModel(path, VertexType::V_CLASSIC);
             if (extension == ".fbx")
             {
-                LoadModel(path, VertexType::V_NORMALMAP);
+                LoadModel(path, VertexType::V_CLASSIC);
                 LoadAnimation(path);
             }
             else if (extension == ".ogg" || extension == ".mp3" || extension == ".wav")
@@ -375,7 +375,6 @@ void ResourcesManager::Clear()
     _mapShader.clear();
     _mapDynamicShader.clear();
     _mapSound.clear();
-    _mapMaterial.clear();
     _mapAnimation.clear();
 
     _globalAssetMap.clear();
