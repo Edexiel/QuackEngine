@@ -375,7 +375,6 @@ void ResourcesManager::Clear()
     _mapShader.clear();
     _mapDynamicShader.clear();
     _mapSound.clear();
-    _mapMaterial.clear();
     _mapAnimation.clear();
 
     _globalAssetMap.clear();

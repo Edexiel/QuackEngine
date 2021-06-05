@@ -35,6 +35,7 @@ int main()
     Engine::SetInstance(engine);
 
     Game::Init(engine);
+    engine.GetResourcesManager().LoadFolder("./Asset/");
 
     Editor editor{};
 
