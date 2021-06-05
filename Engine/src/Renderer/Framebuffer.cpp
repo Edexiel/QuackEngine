@@ -37,6 +37,7 @@ unsigned int Framebuffer::GetRbo() const
 
 void Framebuffer::Bind() const
 {
+    RendererPlatform::SetViewport(0,0, _width, _height);
     RendererPlatform::BindFramebuffer(_id);
 }
 
@@ -45,12 +46,12 @@ void Framebuffer::BindTexture(unsigned int index) const
     RendererPlatform::BindTexture(_texture, index);
 }
 
-unsigned int Framebuffer::GetWidth()
+unsigned int Framebuffer::GetWidth() const
 {
     return _width;
 }
 
-unsigned int Framebuffer::GetHeight()
+unsigned int Framebuffer::GetHeight() const
 {
     return _height;
 }

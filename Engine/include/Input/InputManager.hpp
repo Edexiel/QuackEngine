@@ -45,6 +45,8 @@ namespace Input
         void UnregisterEventAxis(const std::string &event);
         void Update();
 
+        void Clear();
+
         MousePosition mousePosition;
     };
 
