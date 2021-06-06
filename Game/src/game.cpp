@@ -42,7 +42,7 @@ void Game::Init(Engine &engine)
         main.SetBuild(&Build);
         /*****************************************/
 
-        engine.LoadWorld(main);
+        //engine.LoadWorld(main);
 
     }
     {
@@ -74,8 +74,21 @@ void Game::Init(Engine &engine)
         //engine.LoadWorld(main);
 
     }
+    {
+        World &main = engine.CreateWorld("CampfireScene");
+        main.SetRegister(&Register);
+        main.SetInitGame(&InitGame);
+        main.SetInitSystems(&InitSystems);
+        main.SetInitSettings(&InitSettings);
 
-    engine.SetCurrentWorld("Main"); //obligatoire
+        /*** Serialization of external components**/
+        main.SetLoad(&Load);
+        main.SetSave(&Save);
+        main.SetBuild(&Build);
+        /*****************************************/
+        engine.LoadWorld(main);
+    }
+    engine.SetCurrentWorld("CampfireScene"); //obligatoire
 }
 
 void Game::Register(World &world)
@@ -222,9 +235,13 @@ void Game::InitSystems(World &world)
 
     engine.GetPostProcessManager().AddProcess(new ParticleProcess());
     engine.GetPostProcessManager().AddProcess(new SimpleShadowProcess());
+    engine.GetPostProcessManager().AddProcess(new ParticleProcess());
+
+    //engine.GetPostProcessManager().AddProcess(new ProcessBase("Night", Renderer::Shader::LoadShader("./Asset/Shader/NightEffect.qsh")));
 
     std::unique_ptr<ProcessBase> ptr2 = std::make_unique<Renderer::Text>(Text("FontTest"));
     engine.GetPostProcessManager().AddProcess(ptr2);
+
 }
 
 void Game::InitSettings(World &world)

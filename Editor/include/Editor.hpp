@@ -1,6 +1,8 @@
 #ifndef QUACKENGINE_EDITOR_HPP
 #define QUACKENGINE_EDITOR_HPP
 
+#include "CameraEditor.hpp"
+
 #include <vector>
 #include <memory>
 #include <string>
@@ -23,6 +25,7 @@ public:
     std::int32_t selectedEntity = 0;
     bool showProperties{true};
     std::string assetName;
+    CameraEditor camera = CameraEditor(1280, 720, 5000.f, 0.01f, 3.1415f * 60 / 180.f);
 
     explicit Editor();
     ~Editor();
