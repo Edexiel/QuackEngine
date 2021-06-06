@@ -11,6 +11,8 @@ public:
 
     PlayerSystem();
 
+    void Update();
+
     void Up();
     void Down();
     void Right();
@@ -18,10 +20,15 @@ public:
 
 private:
     Engine& engine;
+    bool _running {true};
+
     void MoveForward(float verticalAxis);
     void MoveBackward(float verticalAxis);
     void MoveLeft(float horizontalAxis);
     void MoveRight(float horizontalAxis);
+
+    void StartRunning();
+    void StopRunning();
 };
 
 
