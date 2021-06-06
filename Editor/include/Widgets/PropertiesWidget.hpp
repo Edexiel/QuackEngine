@@ -41,6 +41,7 @@ private:
     void CameraGameplayReader();
     void ParticleReader();
     void SimpleShadowReader();
+    void SwitchSceneTriggerReader();
 
 
     void AddComponent();
