@@ -78,7 +78,7 @@ void ParticleEmitter::Process(const Renderer::Framebuffer &buffer, const Rendere
     _shader.SetMatrix4("projection", camera.GetProjection());
     _shader.SetMatrix4("view", camera.GetView());
 
-    Maths::Matrix4 scale = Maths::Matrix4::Scale(camTrs.scale);
+    Maths::Matrix4 scale = Maths::Matrix4::Scale(trs.scale);
     Maths::Matrix4 lookAtCam = Maths::Matrix4::LookAtMatrixRotation(trs.position, trs.position - camTrs.Forward(), {0.f,1.f,0.f});
 
     for (unsigned int i = 0; i < _listParticle.size(); i++)
