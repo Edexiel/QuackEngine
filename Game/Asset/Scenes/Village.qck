@@ -51,6 +51,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -132,6 +136,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -157,7 +165,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 1,
+                    "type": 0,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -220,6 +228,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -316,6 +328,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {

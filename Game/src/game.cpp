@@ -98,7 +98,7 @@ void Game::Init(Engine &engine)
         main.SetInitSystems(&InitSystems);
         main.SetInitSettings(&InitSettings);
 
-    engine.SetCurrentWorld("Dungeon"); //obligatoire
+//    engine.SetCurrentWorld("Dungeon"); //obligatoire
         /*** Serialization of external components**/
         main.SetLoad(&Load);
         main.SetSave(&Save);
