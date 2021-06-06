@@ -11,7 +11,7 @@ using namespace Renderer;
 SceneWidget::SceneWidget(Editor &editor) : Widget(editor)
 {
     _title="Scene";
-    _camera.SetInput();
+    _editor.camera.SetInput();
 }
 
 
@@ -48,7 +48,7 @@ void SceneWidget::MouseMovement()
     if(_isCameraRotating)
     {
         Input::MousePosition mp = _engine.GetInputManager().mousePosition;
-        _camera.MouseMovement(mp.pos, mp.prevPos);
+        _editor.camera.MouseMovement(mp.pos, mp.prevPos);
     }
 }
 
@@ -56,19 +56,19 @@ void SceneWidget::CameraUpdate()
 {
     const ImVec2 wsize = ImGui::GetWindowSize();
 
-    _camera._width = (unsigned int)wsize.x;
-    _camera._height = (unsigned int)wsize.y;
+    _editor.camera._width = (unsigned int)wsize.x;
+    _editor.camera._height = (unsigned int)wsize.y;
 
 
-    _camera.FreeFly();
+    _editor.camera.FreeFly();
 
     RendererInterface &rendererInterface = _engine.GetRendererInterface();
-    Maths::Matrix4 projection = Maths::Matrix4::Perspective((int)_camera._width, (int)_camera._height, _camera._near, _camera._far, _camera._fov);
-    Maths::Matrix4 view = (Maths::Matrix4::Translate(_camera._position) * _camera._rotation.ToMatrix() * Maths::Matrix4::Scale({1, 1, -1})).GetInvert();
+    Maths::Matrix4 projection = Maths::Matrix4::Perspective((int)_editor.camera._width, (int)_editor.camera._height, _editor.camera._near, _editor.camera._far, _editor.camera._fov);
+    Maths::Matrix4 view = (Maths::Matrix4::Translate(_editor.camera._position) * _editor.camera._rotation.ToMatrix() * Maths::Matrix4::Scale({1, 1, -1})).GetInvert();
 
     //todo Add Back
-    RendererInterface::UpdateSceneFramebufferEditor(projection, view, _camera._framebuffer);
-    ImGui::Image((ImTextureID) (size_t) _camera._framebuffer.GetTexture(), wsize, ImVec2(0, 1), ImVec2(1, 0));
+    RendererInterface::UpdateSceneFramebufferEditor(projection, view, _editor.camera._framebuffer);
+    ImGui::Image((ImTextureID) (size_t) _editor.camera._framebuffer.GetTexture(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 
     ImGuizmoUpdate(view, projection);
 }
@@ -79,7 +79,7 @@ void SceneWidget::ImGuizmoUpdate(const Maths::Matrix4& view, const Maths::Matrix
     SelectOperation();
 
     ImGuizmo::SetDrawlist();
-    ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, (float)_camera._width, (float)_camera._height);
+    ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, (float)_editor.camera._width, (float)_editor.camera._height);
 //    ImGuizmo::DrawGrid(view.e, projection.e, Maths::Matrix4::Identity().e, 100.f);
 
     ManipulateEntity(view, projection);

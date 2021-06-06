@@ -2,6 +2,7 @@
 #include "Widgets/ToolboxWidget.hpp"
 #include "Engine.hpp"
 #include "Scene/Core/World.hpp"
+#include "Editor.hpp"
 
 ToolboxWidget::ToolboxWidget(Editor &editor) : Widget(editor)
 {
@@ -40,8 +41,7 @@ void ToolboxWidget::UpdateVisible()
             _engine.LoadWorld(world);
             _engine.SetCurrentWorld(world.GetName());
             _engine.SetGamePlaying(isPlaying);
-
-
+            _editor.camera.SetInput();
         }
         ImGui::SameLine();
         ImGui::Text("FPS: %i", (unsigned int) _engine.GetFps());

@@ -2,13 +2,12 @@
 #define QUACKENGINE_SCENEWIDGET_HPP
 
 #include "Widgets/Widget.hpp"
-#include "CameraEditor.hpp"
 #include "ImGuizmo.h"
+#include "Maths/Matrix4.hpp"
 
 class SceneWidget : public Widget
 {
 private:
-    CameraEditor _camera = CameraEditor(1280, 720, 5000.f, 0.01f, 3.1415f * 60 / 180.f);
     bool _isCameraRotating = false;
 
     ImGuizmo::OPERATION _operation = ImGuizmo::OPERATION::TRANSLATE;

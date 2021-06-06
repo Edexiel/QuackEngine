@@ -81,14 +81,13 @@ void ParticleEmitter::Process(const Renderer::Framebuffer &buffer, const Rendere
     Maths::Matrix4 scale = Maths::Matrix4::Scale(camTrs.scale);
     Maths::Matrix4 lookAtCam = Maths::Matrix4::LookAtMatrixRotation(trs.position, trs.position - camTrs.Forward(), {0.f,1.f,0.f});
 
-    Renderer::RendererPlatform::EnableDepthBuffer(false);
-    Renderer::RendererPlatform::SetTransparency(true);
-
     for (unsigned int i = 0; i < _listParticle.size(); i++)
     {
         _listParticle[i].life += minus;
         if (_listParticle[i].life >= 1.0f)
         {
+            if (i == 0)
+                ReSynch(0);
             ResetParticle(_listParticle[i]);
         }
 
@@ -110,8 +109,9 @@ void ParticleEmitter::DrawParticle(const Renderer::Particle& particle, const Ren
                                    const Maths::Matrix4& scale, const Maths::Matrix4& emitterRotation)
 {
     _shader.SetVector4f("color", Maths::Color4f::Lerp(_colorStart, _colorEnd, particle.life));
-    _shader.SetMatrix4("model", emitterRotation *
-                       Maths::Matrix4::Translate(Maths::Vector3f::Lerp(particle.start, particle.end, particle.life))*
+    _shader.SetMatrix4("model",
+                       Maths::Matrix4::Translate(Maths::Vector3f::Lerp(particle.start, particle.end, particle.life)) *
+                       emitterRotation *
                        scale);
     screenMesh.Draw();
 }
@@ -144,7 +144,8 @@ float ParticleEmitter::GetDuration()
 void ParticleEmitter::SetDuration(float duration)
 {
     _duration = duration;
-    for (unsigned int i = 0; i < _listParticle.size(); i++)
+    for
+    (unsigned int i = 0; i < _listParticle.size(); i++)
     {
         _listParticle[i].life = (float)i / (float)_listParticle.size();
     }
@@ -182,5 +183,13 @@ void ParticleEmitter::SetSize(unsigned int size)
     {
         ResetParticle(_listParticle[i]);
         _listParticle[i].life = (float)i / (float)size;
+    }
+}
+
+void ParticleEmitter::ReSynch(int index)
+{
+    for (unsigned int i = 0; i < _listParticle.size(); i++)
+    {
+        _listParticle[i].life = (float)i / (float)_listParticle.size();
     }
 }
