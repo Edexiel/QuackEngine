@@ -8,6 +8,11 @@
 using namespace Component;
 using namespace Renderer;
 
+Animator::Animator()
+{
+    _bonesOffset.resize(100, Maths::Matrix4::Identity());
+}
+
 Animator::Animator(const Renderer::Animation& animation) : _currentAnimation{animation}
 {
     _bonesOffset.resize(100, Maths::Matrix4::Identity());

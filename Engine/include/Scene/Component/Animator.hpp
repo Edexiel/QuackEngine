@@ -28,7 +28,7 @@ namespace Component
 
     public:
 
-        Animator() = default;
+        Animator();
         explicit Animator(const Renderer::Animation& animation);
         void SetAnimation(const Renderer::Animation& animation);
 

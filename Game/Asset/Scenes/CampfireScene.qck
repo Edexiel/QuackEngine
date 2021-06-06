@@ -1,6 +1,6 @@
 {
     "world": {
-        "name": "Main",
+        "name": "CampfireScene",
         "entities": [
             {
                 "components": [
@@ -58,20 +58,20 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": 3.062000036239624,
-                        "y": 55.16899871826172,
-                        "z": 18.790000915527345
+                        "x": -10.937999725341797,
+                        "y": 2.1689999103546144,
+                        "z": 21.790000915527345
                     },
                     "scale": {
-                        "x": 0.9999568462371826,
-                        "y": 0.999954104423523,
-                        "z": 0.9999619126319885
+                        "x": 0.9999567270278931,
+                        "y": 0.9998340606689453,
+                        "z": 0.9999410510063171
                     },
                     "rotation": {
-                        "w": 0.4919631779193878,
-                        "x": 0.4750726819038391,
-                        "y": -0.5248163938522339,
-                        "z": 0.5067996978759766
+                        "w": 0.3826834559440613,
+                        "x": -4.924683025819832e-7,
+                        "y": 0.9238795042037964,
+                        "z": -4.924683025819832e-7
                     }
                 },
                 "Camera": {
@@ -85,8 +85,8 @@
                 "CameraGameplay": {
                     "value0": {
                         "x": 0.0,
-                        "y": 12.0,
-                        "z": -13.0
+                        "y": 4.0,
+                        "z": -6.0
                     }
                 },
                 "Player": {
@@ -544,9 +544,9 @@
                 "Light": {
                     "type": 0,
                     "ambient": {
-                        "x": 0.10000000149011612,
-                        "y": 0.10000000149011612,
-                        "z": 0.10000000149011612
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
                     },
                     "diffuse": {
                         "x": 0.7107843160629273,
@@ -554,13 +554,13 @@
                         "z": 0.0
                     },
                     "specular": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
                     },
                     "constant": 1.0,
-                    "linear": 0.00139999995008111,
-                    "quadratic": 0.000007000000096013537,
+                    "linear": 0.0010000000474974514,
+                    "quadratic": 0.000699999975040555,
                     "spotAngle": 8.5,
                     "outerSpotAngle": 10.5
                 }
@@ -798,7 +798,7 @@
                     },
                     {
                         "key": "RigidBody",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "SimpleShadow",
@@ -844,6 +844,19 @@
                     "materials": [
                         "FireCamp"
                     ]
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": true,
+                    "trigger": false,
+                    "bodyType": 0,
+                    "shapeType": 2,
+                    "shapeParams": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    }
                 }
             },
             {
@@ -969,7 +982,7 @@
                     },
                     {
                         "key": "CharacterController",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "Light",
@@ -978,6 +991,129 @@
                     {
                         "key": "Model",
                         "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": true
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": true
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "Player"
+                },
+                "Transform": {
+                    "position": {
+                        "x": -2.3259999752044679,
+                        "y": 0.3972446918487549,
+                        "z": 14.424217224121094
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/Bard.fbx",
+                    "type": 2,
+                    "offset": {
+                        "x": 0.0,
+                        "y": -1.25,
+                        "z": 0.0
+                    },
+                    "materialsIndex": [
+                        0
+                    ],
+                    "materials": [
+                        "Player"
+                    ]
+                },
+                "Animator": {
+                    "path": "./Asset/Model/Standard Run.fbx"
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": true,
+                    "trigger": false,
+                    "bodyType": 0,
+                    "shapeType": 1,
+                    "shapeParams": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    }
+                },
+                "CharacterController": {
+                    "speed": 20.0
+                },
+                "SimpleShadow": {
+                    "scale": {
+                        "x": 100.0,
+                        "y": 100.0
+                    },
+                    "offset": {
+                        "x": 0.0,
+                        "y": -1.1399999856948853,
+                        "z": 0.0
+                    },
+                    "type": 1,
+                    "yRotation": 0.0
+                },
+                "Player": {
+                    "ok": 0
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": true
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
                     },
                     {
                         "key": "Name",
@@ -1005,12 +1141,12 @@
                     }
                 ],
                 "Name": {
-                    "name": "GameObject"
+                    "name": "MoonLight"
                 },
                 "Transform": {
                     "position": {
                         "x": 0.0,
-                        "y": 0.646240234375,
+                        "y": 0.0,
                         "z": 0.0
                     },
                     "scale": {
@@ -1025,23 +1161,122 @@
                         "z": 0.0
                     }
                 },
-                "Model": {
-                    "path": "./Asset/Model/BardMesh.fbx",
-                    "type": 0,
-                    "offset": {
+                "Light": {
+                    "type": 1,
+                    "ambient": {
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
-                    "materialsIndex": [
-                        0
-                    ],
-                    "materials": [
-                        "Player"
-                    ]
+                    "diffuse": {
+                        "x": 0.0637248307466507,
+                        "y": 0.0637250766158104,
+                        "z": 0.06372547149658203
+                    },
+                    "specular": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "constant": 1.0,
+                    "linear": 0.00139999995008111,
+                    "quadratic": 0.000007000000096013537,
+                    "spotAngle": 8.5,
+                    "outerSpotAngle": 10.5
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": true
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "FireCamp"
                 },
-                "Animator": {
-                    "path": "./Asset/Model/Standard Run.fbx"
+                "Transform": {
+                    "position": {
+                        "x": -6.099999904632568,
+                        "y": 0.0,
+                        "z": 17.0
+                    },
+                    "scale": {
+                        "x": 2.0,
+                        "y": 2.0,
+                        "z": 2.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 2.7978011019058614e-9
+                    }
+                },
+                "ParticleEmitter": {
+                    "_colorStart": {
+                        "x": 1.0,
+                        "y": 0.2916666269302368,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    "_colorEnd": {
+                        "x": 1.0,
+                        "y": 0.5595234632492065,
+                        "z": 0.0,
+                        "w": 0.0
+                    },
+                    "_angleStart": 0.5235987901687622,
+                    "_angleEnd": 2.268928050994873,
+                    "_lengthStart": 1.0,
+                    "_lengthEnd": 2.0,
+                    "_duration": 6.0,
+                    "Size": 181,
+                    "Texture": "./Asset/Texture/Particules/flame_03.png"
                 }
             }
         ]
