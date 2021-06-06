@@ -76,8 +76,8 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 753,
-                    "_height": 402,
+                    "_width": 698,
+                    "_height": 406,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
                     "_fov": 0.7853749394416809
@@ -1054,7 +1054,7 @@
                     ]
                 },
                 "Animator": {
-                    "path": "./Asset/Model/Standard Run.fbx"
+                    "path": ""
                 },
                 "RigidBody": {
                     "mass": 1.0,
@@ -1246,9 +1246,9 @@
                         "z": 17.0
                     },
                     "scale": {
-                        "x": 2.0,
-                        "y": 2.0,
-                        "z": 2.0
+                        "x": 0.10000000149011612,
+                        "y": 0.10000000149011612,
+                        "z": 0.10000000149011612
                     },
                     "rotation": {
                         "w": 1.0,
@@ -1276,7 +1276,7 @@
                     "_lengthEnd": 2.0,
                     "_duration": 6.0,
                     "Size": 181,
-                    "Texture": "./Asset/Texture/Particules/flame_03.png"
+                    "Texture": ""
                 }
             }
         ]
