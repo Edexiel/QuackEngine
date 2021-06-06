@@ -1084,7 +1084,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Bard.fbx",
-                    "type": 0,
+                    "type": 2,
                     "offset": {
                         "x": 0.0,
                         "y": -1.25,
@@ -1094,7 +1094,7 @@
                         0
                     ],
                     "materials": [
-                        "Player"
+                        "AnimationBard"
                     ]
                 },
                 "Animator": {
