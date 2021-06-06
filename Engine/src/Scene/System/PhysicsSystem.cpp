@@ -26,9 +26,6 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
         auto &t = world->GetComponent<Transform>(entity);
         PhysicsSystem::SetTransform(entity, t.position, t.rotation);
     }
-
-    world->GetPhysicsWorld()->update(fixedDeltaTime);
-
     for (Entity entity: _entities)
     {
         auto &t = world->GetComponent<Transform>(entity);
@@ -38,6 +35,7 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
         t.rotation = {transform.getOrientation().w, transform.getOrientation().x, transform.getOrientation().y,
                       transform.getOrientation().z};
     }
+    world->GetPhysicsWorld()->update(fixedDeltaTime);
 }
 
 void PhysicsSystem::AddBoxCollider(Entity id, const Maths::Vector3f &halfExtend, const Maths::Vector3f &position,
@@ -118,6 +116,9 @@ void PhysicsSystem::SetIsTrigger(Entity id, bool isTrigger)
 void PhysicsSystem::SetRigidBody(Entity id)
 {
     auto world = &Engine::Instance().GetCurrentWorld();
+    if(!world->HasComponent<Component::RigidBody>(id))
+        return;
+
     auto &rigidBody = world->GetComponent<Component::RigidBody>(id);
 
     if (rigidBody.rb)
@@ -152,6 +153,8 @@ void PhysicsSystem::SetRigidBody(Entity id)
     PhysicsSystem::SetType(id, rigidBody._bodyType);
     PhysicsSystem::SetMass(id, rigidBody._mass);
     PhysicsSystem::SetIsGravityEnable(id, rigidBody._isGravityEnabled);
+    if(rigidBody.rb->getNbColliders() > 0)
+        PhysicsSystem::SetIsTrigger(id, rigidBody._isTrigger);
 
     rigidBody.rb->setUserData(reinterpret_cast<void*>(static_cast<size_t>(id)));
 }
