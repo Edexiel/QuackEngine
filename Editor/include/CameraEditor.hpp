@@ -28,9 +28,12 @@ private:
     float _near;
     float _fov;
 
-    float _scaleAxisX = 0;
-    float _scaleAxisY = 0;
-    float _scaleAxisZ = 0;
+    float _rightScale = 0;
+    float _leftScale = 0;
+    float _forwardScale = 0;
+    float _backwardScale = 0;
+    float _upScale = 0;
+    float _downScale = 0;
 
     float _yaw = 0;
     float _pitch = 0;
@@ -38,9 +41,12 @@ private:
     float _speedTranslation = 5.0f;
     float _speedRotation = 10.0f;
 
-    void SetScaleAxisX(float scale);
-    void SetScaleAxisY(float scale);
-    void SetScaleAxisZ(float scale);
+    void SetRightScale(float scale);
+    void SetLeftScale(float scale);
+    void SetForwardScale(float scale);
+    void SetBackwardScale(float scale);
+    void SetUpScale(float scale);
+    void SetDownScale(float scale);
 
     void FreeFly();
     void MouseMovement(const Maths::Vector2d &currentPos, const Maths::Vector2d &oldPos);

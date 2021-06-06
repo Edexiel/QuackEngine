@@ -34,7 +34,7 @@ Animation Animation::LoadAnimation(const std::filesystem::path &path)
     }
     if (!scene->HasAnimations())
     {
-        Log_Warning("Doesn't have animation : {}", path.string());
+        Log_Info("Doesn't have animation : {}", path.string());
         return animation;
     }
 

@@ -5,6 +5,7 @@
 #include "Scene/System/EngineSystems.hpp"
 
 #include "Player/PlayerComponent.hpp"
+#include "TriggerSwitchScene/TriggerSwitchSceneComponent.hpp"
 
 #include "Renderer/ModelRenderer.hpp"
 
@@ -60,6 +61,8 @@ void PropertiesWidget::ShowComponents()
         ParticleReader();
     if (world.HasComponent<SimpleShadow>(entity))
         SimpleShadowReader();
+    if (world.HasComponent<TriggerSwitchSceneComponent>(entity))
+        SwitchSceneTriggerReader();
 
     AddComponent();
     ImGui::SameLine();
@@ -108,6 +111,8 @@ void PropertiesWidget::DisplayMaterial(const Resources::Asset *asset)
         material->GenerateShader();
         _engine.GetCurrentWorld().GetSystem<LightSystem>()->Update();
     }
+
+    ImGui::ColorEdit4("Color", material->color.e);
 
     if (material->checkLight)
     {
@@ -158,7 +163,11 @@ PropertiesWidget::SelectInList(const std::vector<std::string> &list, const std::
 {
     std::string selected = currentlySelected;
 
-    if (ImGui::BeginCombo(comboName.c_str(), currentlySelected.c_str()))
+    std::string selectedName = currentlySelected;
+    if (selectedName == "")
+        selectedName = "NONE";
+
+    if (ImGui::BeginCombo(comboName.c_str(), selectedName.c_str()))
     {
         for (const std::string &n : list)
         {
@@ -507,6 +516,8 @@ void PropertiesWidget::AddComponent()
             world.AddComponent(_editor.selectedEntity, ParticleEmitter());
         if (!world.HasComponent<SimpleShadow>(_editor.selectedEntity) && ImGui::MenuItem("Simple Shadow"))
             world.AddComponent(_editor.selectedEntity, SimpleShadow());
+        if (!world.HasComponent<TriggerSwitchSceneComponent>(_editor.selectedEntity) && ImGui::MenuItem("Trigger switch scene"))
+            world.AddComponent(_editor.selectedEntity, TriggerSwitchSceneComponent());
 
         ImGui::EndPopup();
     }
@@ -574,6 +585,8 @@ void PropertiesWidget::DeleteComponent()
             world.RemoveComponent<ParticleEmitter>(_editor.selectedEntity);
         if (world.HasComponent<SimpleShadow>(_editor.selectedEntity) && ImGui::MenuItem("Simple Shadow"))
             world.RemoveComponent<SimpleShadow>(_editor.selectedEntity);
+        if (world.HasComponent<TriggerSwitchSceneComponent>(_editor.selectedEntity) && ImGui::MenuItem("Trigger switch scene"))
+            world.RemoveComponent<TriggerSwitchSceneComponent>(_editor.selectedEntity);
         ImGui::EndPopup();
     }
 }
@@ -806,4 +819,28 @@ void PropertiesWidget::SimpleShadowReader()
     float degAngle = shadow.yRotation * RadToDeg<float>();
     ImGui::DragFloat("Angle", &degAngle);
     shadow.yRotation = degAngle * DegToRad<float>();
+}
+
+void PropertiesWidget::SwitchSceneTriggerReader()
+{
+    if (!ImGui::CollapsingHeader("Switch scene trigger"))
+        return;
+    auto &triggerSwitchSceneComponent = _engine.GetCurrentWorld().GetComponent<TriggerSwitchSceneComponent>(_editor.selectedEntity);
+    static int test = 0;
+
+    if (ImGui::BeginCombo("##WorldCombo", triggerSwitchSceneComponent.world.c_str()))
+    {
+        for (std::string n : _engine.GetWorldList())
+        {
+            bool isSelected = (triggerSwitchSceneComponent.world == n);
+            if (ImGui::Selectable(n.c_str(), isSelected))
+            {
+                triggerSwitchSceneComponent.world = n;
+            }
+
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+        }
+        ImGui::EndCombo();
+    }
 }
