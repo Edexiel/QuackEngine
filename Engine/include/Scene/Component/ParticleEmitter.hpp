@@ -35,6 +35,7 @@ namespace Component
         void ResetParticle(Renderer::Particle& particle);
         void DrawParticle(const Renderer::Particle& particle, const Renderer::Mesh &screenMesh,
                           const Maths::Matrix4& scale, const Maths::Matrix4& emitterRotation);
+        void ReSynch(int index);
 
         Maths::Color4f& ColorStart();
         Maths::Color4f& ColorEnd();
@@ -76,7 +77,7 @@ namespace Component
             _texture.SetPath(path);
 
             _texture = Engine::Instance().GetResourcesManager().LoadTexture(_texture.GetPath());
-            //SetSize(size);
+            SetSize(size);
         }
 
     };
