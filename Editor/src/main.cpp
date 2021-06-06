@@ -14,6 +14,8 @@
 #include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/System/CameraGameplaySystem.hpp"
 
+#include "Player/PlayerSystem.hpp"
+
 #include "game.hpp"
 
 using namespace Component;
@@ -63,6 +65,8 @@ int main()
             engine.GetCurrentWorld().GetSystem<CharacterControllerSystem>()->Update();
             engine.GetCurrentWorld().GetSystem<CameraGameplaySystem>()->Update();
             engine.GetCurrentWorld().GetSystem<Renderer::AnimatorSystem>()->Update();
+
+            engine.GetCurrentWorld().GetSystem<PlayerSystem>()->Update();
 
         }
         engine.SwapBuffers();

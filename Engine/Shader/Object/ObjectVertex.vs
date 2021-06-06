@@ -49,7 +49,7 @@ void main(void)
         if (int(boneIds[3]) != -1)
             boneTransform += finalBonesMatrices[int(boneIds[3])] * weights[3];
 
-        gl_Position = projection * view * model * boneTransform * vec4(vertexPosition, 1.0f);
+            gl_Position = projection * view * model * boneTransform * vec4(vertexPosition, 1.0f);
         #else
             gl_Position = projection * view * model * vec4(vertexPosition,1);
         #endif
@@ -58,9 +58,13 @@ void main(void)
     TexCoord = vertexTexture;
 
     #ifdef LIGHT
-        Position =  vec3(model * vec4(vertexPosition, 1));
-        Normal = vec3(model  * vec4(vertexNormal, 0));
-
+        #ifdef SKELETON
+            Position =  vec3(model * boneTransform * vec4(vertexPosition, 1));
+            Normal = vec3(model * boneTransform * vec4(vertexNormal, 0));
+        #else
+            Position =  vec3(model * vec4(vertexPosition, 1));
+            Normal = vec3(model * vec4(vertexNormal, 0));
+        #endif
         cameraPosition = vec3(view[3][0], view[3][1], view[3][2]);
     #endif
 
