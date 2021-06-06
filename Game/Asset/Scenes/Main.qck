@@ -58,26 +58,26 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": 3.062000036239624,
-                        "y": 55.16899871826172,
-                        "z": 18.790000915527345
+                        "x": 2.062000036239624,
+                        "y": 1.1690000295639039,
+                        "z": -20.209999084472658
                     },
                     "scale": {
-                        "x": 0.9999568462371826,
-                        "y": 0.999954104423523,
-                        "z": 0.9999619126319885
+                        "x": 0.9999582767486572,
+                        "y": 0.9999995827674866,
+                        "z": 0.9999994039535523
                     },
                     "rotation": {
-                        "w": 0.4919631779193878,
-                        "x": 0.4750726819038391,
-                        "y": -0.5248163938522339,
-                        "z": 0.5067996978759766
+                        "w": 0.9967842102050781,
+                        "x": 0.07932547479867935,
+                        "y": 0.011306523345410824,
+                        "z": -0.0008997790282592177
                     }
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 753,
-                    "_height": 402,
+                    "_width": 698,
+                    "_height": 406,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
                     "_fov": 0.7853749394416809
@@ -85,9 +85,132 @@
                 "CameraGameplay": {
                     "value0": {
                         "x": 0.0,
-                        "y": 12.0,
-                        "z": -13.0
+                        "y": 34.0,
+                        "z": 20.0
                     }
+                },
+                "Player": {
+                    "ok": 0
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": true
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": true
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": true
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": true
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "Player"
+                },
+                "Transform": {
+                    "position": {
+                        "x": -1.3600000143051148,
+                        "y": 0.0,
+                        "z": 10.0
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/Bard.fbx",
+                    "type": 2,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.5,
+                        "z": 0.0
+                    },
+                    "materialsIndex": [
+                        0
+                    ],
+                    "materials": [
+                        "AnimationBard"
+                    ]
+                },
+                "Animator": {
+                    "path": "./Asset/Model/Standard Run.fbx"
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": true,
+                    "trigger": false,
+                    "bodyType": 0,
+                    "shapeType": 1,
+                    "shapeParams": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    }
+                },
+                "CharacterController": {
+                    "speed": 1.0
+                },
+                "SimpleShadow": {
+                    "scale": {
+                        "x": 157.8000030517578,
+                        "y": 100.0
+                    },
+                    "offset": {
+                        "x": -0.20000000298023225,
+                        "y": 0.0,
+                        "z": 1.100000023841858
+                    },
+                    "type": 1,
+                    "yRotation": 3.76982045173645
                 },
                 "Player": {
                     "ok": 0
@@ -125,7 +248,7 @@
                     },
                     {
                         "key": "ParticleEmitter",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "Player",
@@ -133,7 +256,7 @@
                     },
                     {
                         "key": "RigidBody",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "SimpleShadow",
@@ -145,18 +268,18 @@
                     }
                 ],
                 "Name": {
-                    "name": "InvisibleWall"
+                    "name": "Fire"
                 },
                 "Transform": {
                     "position": {
-                        "x": 11.900337219238282,
+                        "x": 9.0,
                         "y": 0.0,
-                        "z": 16.160144805908204
+                        "z": 0.0
                     },
                     "scale": {
                         "x": 1.0,
-                        "y": 11.00100040435791,
-                        "z": 51.0
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     "rotation": {
                         "w": 1.0,
@@ -165,18 +288,26 @@
                         "z": 0.0
                     }
                 },
-                "RigidBody": {
-                    "mass": 1.0,
-                    "bounciness": 0.0,
-                    "gravity": true,
-                    "trigger": false,
-                    "bodyType": 0,
-                    "shapeType": 2,
-                    "shapeParams": {
+                "ParticleEmitter": {
+                    "_colorStart": {
                         "x": 1.0,
-                        "y": 11.0,
-                        "z": 50.0
-                    }
+                        "y": 0.4117647409439087,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    "_colorEnd": {
+                        "x": 0.7882353067398071,
+                        "y": 0.40392157435417178,
+                        "z": 0.07450980693101883,
+                        "w": 0.29411765933036806
+                    },
+                    "_angleStart": 1.3962634801864625,
+                    "_angleEnd": 1.919862151145935,
+                    "_lengthStart": 0.20000000298023225,
+                    "_lengthEnd": 1.399999976158142,
+                    "_duration": 1.2000000476837159,
+                    "Size": 0,
+                    "Texture": "./Asset/Texture/Particules/fire_01.png"
                 }
             },
             {
@@ -203,7 +334,7 @@
                     },
                     {
                         "key": "Model",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "Name",
@@ -211,7 +342,7 @@
                     },
                     {
                         "key": "ParticleEmitter",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "Player",
@@ -231,141 +362,46 @@
                     }
                 ],
                 "Name": {
-                    "name": "Path"
+                    "name": "Smoke"
                 },
                 "Transform": {
                     "position": {
-                        "x": 2.203418493270874,
-                        "y": -1.0013988018035889,
-                        "z": 20.0
+                        "x": 9.0,
+                        "y": 0.0,
+                        "z": 0.0
                     },
                     "scale": {
-                        "x": 2.466693162918091,
-                        "y": 0.20000000298023225,
-                        "z": 20.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                },
-                "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
-                    "type": 1,
-                    "offset": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "materialsIndex": [
-                        0
-                    ],
-                    "materials": [
-                        "GroundPath"
-                    ]
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "CameraGameplay",
-                        "value": false
-                    },
-                    {
-                        "key": "CharacterController",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": true
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "ParticleEmitter",
-                        "value": false
-                    },
-                    {
-                        "key": "Player",
-                        "value": false
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": true
-                    },
-                    {
-                        "key": "SimpleShadow",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "Floor"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 24.311853408813478,
-                        "y": -1.0,
-                        "z": 20.0
-                    },
-                    "scale": {
-                        "x": 19.75002670288086,
-                        "y": 0.25,
-                        "z": 20.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                },
-                "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
-                    "type": 1,
-                    "offset": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "materialsIndex": [
-                        0
-                    ],
-                    "materials": [
-                        "GrassGround"
-                    ]
-                },
-                "RigidBody": {
-                    "mass": 1.0,
-                    "bounciness": 0.0,
-                    "gravity": true,
-                    "trigger": false,
-                    "bodyType": 0,
-                    "shapeType": 2,
-                    "shapeParams": {
                         "x": 1.0,
-                        "y": 11.0,
-                        "z": 50.0
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
                     }
+                },
+                "ParticleEmitter": {
+                    "_colorStart": {
+                        "x": 0.3960784375667572,
+                        "y": 0.3960784375667572,
+                        "z": 0.3960784375667572,
+                        "w": 0.6549019813537598
+                    },
+                    "_colorEnd": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0,
+                        "w": 0.21176470816135407
+                    },
+                    "_angleStart": 1.3089970350265504,
+                    "_angleEnd": 2.0071287155151369,
+                    "_lengthStart": 1.0,
+                    "_lengthEnd": 12.100000381469727,
+                    "_duration": 3.0999999046325685,
+                    "Size": 0,
+                    "Texture": "./Asset/Texture/Particules/smoke_02.png"
                 }
             },
             {
@@ -424,12 +460,12 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": -19.34115219116211,
+                        "x": 0.0,
                         "y": -1.0,
                         "z": 20.0
                     },
                     "scale": {
-                        "x": 19.75002670288086,
+                        "x": 20.0,
                         "y": 0.25,
                         "z": 20.0
                     },
@@ -452,7 +488,7 @@
                         0
                     ],
                     "materials": [
-                        "GrassGround"
+                        "Default material"
                     ]
                 },
                 "RigidBody": {
@@ -521,13 +557,13 @@
                     }
                 ],
                 "Name": {
-                    "name": "FireLight"
+                    "name": "Light"
                 },
                 "Transform": {
                     "position": {
-                        "x": -6.201058864593506,
-                        "y": 1.56801438331604,
-                        "z": 16.11606788635254
+                        "x": -10.0,
+                        "y": -10.0,
+                        "z": -10.0
                     },
                     "scale": {
                         "x": 1.0,
@@ -535,23 +571,23 @@
                         "z": 1.0
                     },
                     "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
+                        "w": 0.8986572623252869,
+                        "x": -0.4383043050765991,
+                        "y": 0.015686118975281717,
+                        "z": 0.007650630082935095
                     }
                 },
                 "Light": {
-                    "type": 0,
+                    "type": 1,
                     "ambient": {
                         "x": 0.10000000149011612,
                         "y": 0.10000000149011612,
                         "z": 0.10000000149011612
                     },
                     "diffuse": {
-                        "x": 0.7107843160629273,
-                        "y": 0.3972010016441345,
-                        "z": 0.0
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     "specular": {
                         "x": 1.0,
@@ -617,416 +653,28 @@
                     }
                 ],
                 "Name": {
-                    "name": "ForestWing"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 12.355374336242676,
-                        "y": -0.18533051013946534,
-                        "z": 26.62465476989746
-                    },
-                    "scale": {
-                        "x": 0.4000000059604645,
-                        "y": 0.4000000059604645,
-                        "z": 0.4000000059604645
-                    },
-                    "rotation": {
-                        "w": 0.7071071267127991,
-                        "x": -0.7071064710617065,
-                        "y": -0.0,
-                        "z": 0.0
-                    }
-                },
-                "Model": {
-                    "path": "./Asset/Model/ForestWing.fbx",
-                    "type": 0,
-                    "offset": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "materialsIndex": [
-                        1,
-                        1,
-                        0,
-                        0,
-                        1,
-                        0,
-                        1,
-                        0,
-                        1,
-                        1,
-                        1,
-                        1,
-                        2,
-                        2,
-                        2,
-                        2,
-                        2,
-                        2
-                    ],
-                    "materials": [
-                        "GreenLeef",
-                        "LightBrownTrunk",
-                        "Rock"
-                    ]
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "CameraGameplay",
-                        "value": false
-                    },
-                    {
-                        "key": "CharacterController",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "ParticleEmitter",
-                        "value": false
-                    },
-                    {
-                        "key": "Player",
-                        "value": false
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": true
-                    },
-                    {
-                        "key": "SimpleShadow",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "InvisibleWall"
-                },
-                "Transform": {
-                    "position": {
-                        "x": -13.956184387207032,
-                        "y": 0.0,
-                        "z": 16.160144805908204
-                    },
-                    "scale": {
-                        "x": 0.9999969005584717,
-                        "y": 11.0,
-                        "z": 50.999996185302737
-                    },
-                    "rotation": {
-                        "w": 0.9975640773773193,
-                        "x": 0.0,
-                        "y": -0.06975644826889038,
-                        "z": 0.0
-                    }
-                },
-                "RigidBody": {
-                    "mass": 1.0,
-                    "bounciness": 0.0,
-                    "gravity": true,
-                    "trigger": false,
-                    "bodyType": 0,
-                    "shapeType": 2,
-                    "shapeParams": {
-                        "x": 1.0,
-                        "y": 11.0,
-                        "z": 50.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "CameraGameplay",
-                        "value": false
-                    },
-                    {
-                        "key": "CharacterController",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": true
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "ParticleEmitter",
-                        "value": false
-                    },
-                    {
-                        "key": "Player",
-                        "value": false
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "SimpleShadow",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "FireCamp"
-                },
-                "Transform": {
-                    "position": {
-                        "x": -6.119401931762695,
-                        "y": -0.500244140625,
-                        "z": 16.647144317626954
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 0.7071071267127991,
-                        "x": -0.7071064710617065,
-                        "y": -0.0,
-                        "z": 0.0
-                    }
-                },
-                "Model": {
-                    "path": "./Asset/Model/camp_fire.fbx",
-                    "type": 0,
-                    "offset": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "materialsIndex": [
-                        0
-                    ],
-                    "materials": [
-                        "FireCamp"
-                    ]
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "CameraGameplay",
-                        "value": false
-                    },
-                    {
-                        "key": "CharacterController",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": true
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "ParticleEmitter",
-                        "value": false
-                    },
-                    {
-                        "key": "Player",
-                        "value": false
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "SimpleShadow",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
-                    "name": "ForestWing"
-                },
-                "Transform": {
-                    "position": {
-                        "x": -23.660869598388673,
-                        "y": -0.18533051013946534,
-                        "z": 26.62465476989746
-                    },
-                    "scale": {
-                        "x": 0.4000000059604645,
-                        "y": 0.4000000059604645,
-                        "z": 0.4000000059604645
-                    },
-                    "rotation": {
-                        "w": 0.7071071267127991,
-                        "x": -0.7071064710617065,
-                        "y": -0.0,
-                        "z": 0.0
-                    }
-                },
-                "Model": {
-                    "path": "./Asset/Model/ForestWing.fbx",
-                    "type": 0,
-                    "offset": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "materialsIndex": [
-                        1,
-                        1,
-                        0,
-                        0,
-                        1,
-                        0,
-                        1,
-                        0,
-                        1,
-                        1,
-                        1,
-                        1,
-                        2,
-                        2,
-                        2,
-                        2,
-                        2,
-                        2
-                    ],
-                    "materials": [
-                        "GreenLeef",
-                        "LightBrownTrunk",
-                        "Rock"
-                    ]
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": true
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "CameraGameplay",
-                        "value": false
-                    },
-                    {
-                        "key": "CharacterController",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": true
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "ParticleEmitter",
-                        "value": false
-                    },
-                    {
-                        "key": "Player",
-                        "value": false
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "SimpleShadow",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    }
-                ],
-                "Name": {
                     "name": "GameObject"
                 },
                 "Transform": {
                     "position": {
-                        "x": 0.0,
-                        "y": 0.646240234375,
-                        "z": 0.0
+                        "x": -18.767311096191408,
+                        "y": -0.32043492794036868,
+                        "z": 26.62465476989746
                     },
                     "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "x": 0.4000000059604645,
+                        "y": 0.4000000059604645,
+                        "z": 0.4000000059604645
                     },
                     "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
+                        "w": 0.7071071267127991,
+                        "x": -0.7071064710617065,
+                        "y": -0.0,
                         "z": 0.0
                     }
                 },
                 "Model": {
-                    "path": "./Asset/Model/BardMesh.fbx",
+                    "path": "./Asset/Model/ForestWing.fbx",
                     "type": 0,
                     "offset": {
                         "x": 0.0,
@@ -1034,14 +682,23 @@
                         "z": 0.0
                     },
                     "materialsIndex": [
-                        0
+                        1,
+                        1,
+                        0,
+                        0,
+                        1,
+                        0,
+                        0,
+                        0,
+                        1,
+                        1,
+                        1,
+                        1
                     ],
                     "materials": [
-                        "Player"
+                        "GreenLeef",
+                        "LightBrownTrunk"
                     ]
-                },
-                "Animator": {
-                    "path": "./Asset/Model/Standard Run.fbx"
                 }
             }
         ]

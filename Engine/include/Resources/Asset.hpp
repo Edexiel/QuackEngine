@@ -40,7 +40,6 @@ namespace Resources
 
     inline std::string Asset::GetPath() const
     {
-
         return _path.generic_string();
     }
     inline void Asset::SetPath(const std::string& path)

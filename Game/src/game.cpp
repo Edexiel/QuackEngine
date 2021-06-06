@@ -233,6 +233,7 @@ void Game::InitSystems(World &world)
     std::unique_ptr<ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
     engine.GetPostProcessManager().AddProcess(ptr);
 
+    engine.GetPostProcessManager().AddProcess(new ParticleProcess());
     engine.GetPostProcessManager().AddProcess(new SimpleShadowProcess());
     engine.GetPostProcessManager().AddProcess(new ParticleProcess());
 
