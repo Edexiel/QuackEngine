@@ -20,9 +20,11 @@ Animator::Animator(const Renderer::Animation& animation) : _currentAnimation{ani
 
 void Animator::SetAnimation(const Animation& animation)
 {
+    _currentTime = 0;
     _currentAnimation = animation;
     _bonesOffset.clear();
     _bonesOffset.resize(100, Maths::Matrix4::Identity());
+    Update(0);
 }
 
 const std::vector<Maths::Matrix4>& Animator::GetBonesOffsets() const

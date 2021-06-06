@@ -51,6 +51,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -142,6 +146,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -181,7 +189,7 @@
                     ]
                 },
                 "Animator": {
-                    "path": "./Asset/Model/Standard Run.fbx"
+                    "path": ""
                 },
                 "RigidBody": {
                     "mass": 1.0,
@@ -265,6 +273,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -359,6 +371,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -453,6 +469,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -478,7 +498,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 1,
+                    "type": 0,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -554,6 +574,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -650,6 +674,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -682,18 +710,24 @@
                         "z": 0.0
                     },
                     "materialsIndex": [
-                        1,
-                        1,
-                        0,
-                        0,
-                        1,
                         0,
                         0,
                         0,
-                        1,
-                        1,
-                        1,
-                        1
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
                     ],
                     "materials": [
                         "GreenLeef",
