@@ -116,6 +116,9 @@ void PhysicsSystem::SetIsTrigger(Entity id, bool isTrigger)
 void PhysicsSystem::SetRigidBody(Entity id)
 {
     auto world = &Engine::Instance().GetCurrentWorld();
+    if(!world->HasComponent<Component::RigidBody>(id))
+        return;
+
     auto &rigidBody = world->GetComponent<Component::RigidBody>(id);
 
     if (rigidBody.rb)
@@ -150,7 +153,8 @@ void PhysicsSystem::SetRigidBody(Entity id)
     PhysicsSystem::SetType(id, rigidBody._bodyType);
     PhysicsSystem::SetMass(id, rigidBody._mass);
     PhysicsSystem::SetIsGravityEnable(id, rigidBody._isGravityEnabled);
-    PhysicsSystem::SetIsTrigger(id, rigidBody._isTrigger);
+    if(rigidBody.rb->getNbColliders() > 0)
+        PhysicsSystem::SetIsTrigger(id, rigidBody._isTrigger);
 
     rigidBody.rb->setUserData(reinterpret_cast<void*>(static_cast<size_t>(id)));
 }
