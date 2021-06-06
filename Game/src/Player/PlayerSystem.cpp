@@ -22,16 +22,38 @@ PlayerSystem::PlayerSystem():engine{Engine::Instance()}
 
     inputManager.BindEventAxis("Move up", Input::Key::KEY_W, 1.f);
     inputManager.RegisterEventAxis("Move up", this, &PlayerSystem::MoveForward);
-
     inputManager.BindEventAxis("Move down", Input::Key::KEY_S, -1.f);
     inputManager.RegisterEventAxis("Move down", this, &PlayerSystem::MoveBackward);
-
     inputManager.BindEventAxis("Move left", Input::Key::KEY_A, -1.f);
     inputManager.RegisterEventAxis("Move left", this, &PlayerSystem::MoveLeft);
-
     inputManager.BindEventAxis("Move right", Input::Key::KEY_D, 1.f);
     inputManager.RegisterEventAxis("Move right", this, &PlayerSystem::MoveRight);
+
 }
+
+void PlayerSystem::Update()
+{
+    if (!_running)
+        return;
+
+    auto &world = engine.GetCurrentWorld();
+
+    for(Entity entity : _entities)
+    {
+        if(!world.HasComponent<Component::CharacterController>(entity))
+            return;
+        auto &characterController = world.GetComponent<Component::CharacterController>(entity);
+        if (characterController.forward == 0.0f &&
+                characterController.backward == 0.0f &&
+                characterController.right == 0.0f &&
+                characterController.left == 0.0f)
+        {
+            StopRunning();
+        }
+
+    }
+}
+
 
 void PlayerSystem::Up()
 {
@@ -67,6 +89,7 @@ void PlayerSystem::Left()
 
 void PlayerSystem::MoveForward(float verticalAxis)
 {
+    StartRunning();
     auto &world = engine.GetCurrentWorld();
 
     for(Entity entity : _entities)
@@ -80,6 +103,7 @@ void PlayerSystem::MoveForward(float verticalAxis)
 
 void PlayerSystem::MoveRight(float horizontalAxis)
 {
+    StartRunning();
     auto &world = engine.GetCurrentWorld();
     for(Entity entity : _entities)
     {
@@ -92,6 +116,7 @@ void PlayerSystem::MoveRight(float horizontalAxis)
 
 void PlayerSystem::MoveBackward(float verticalAxis)
 {
+    StartRunning();
     auto &world = engine.GetCurrentWorld();
     for(Entity entity : _entities)
     {
@@ -104,6 +129,7 @@ void PlayerSystem::MoveBackward(float verticalAxis)
 
 void PlayerSystem::MoveLeft(float horizontalAxis)
 {
+    StartRunning();
     auto &world = engine.GetCurrentWorld();
     for(Entity entity : _entities)
     {
@@ -112,4 +138,30 @@ void PlayerSystem::MoveLeft(float horizontalAxis)
         auto &characterController = world.GetComponent<Component::CharacterController>(entity);
         characterController.left = horizontalAxis;
     }
+}
+
+void PlayerSystem::StartRunning()
+{
+    if (_running)
+        return;
+    auto &world = engine.GetCurrentWorld();
+    for(Entity entity : _entities)
+    {
+        auto &player = world.GetComponent<PlayerComponent>(entity);
+        player.RunAnimation(true);
+    }
+    _running = true;
+}
+
+void PlayerSystem::StopRunning()
+{
+    if (!_running)
+        return;
+    auto &world = engine.GetCurrentWorld();
+    for(Entity entity : _entities)
+    {
+        auto &player = world.GetComponent<PlayerComponent>(entity);
+        player.RunAnimation(false);
+    }
+    _running = false;
 }
