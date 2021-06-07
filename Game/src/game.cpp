@@ -66,7 +66,7 @@ void Game::Init(Engine &engine)
         dungeon.SetRegister(&Register);
         dungeon.SetInitGame(&InitGame);
         dungeon.SetInitSystems(&InitSystems);
-        dungeon.SetInitSettings(&InitSettings);
+        dungeon.SetInitSettings(&InitSettingsDungeon);
 
         /*** Serialization of external components**/
         dungeon.SetLoad(&Load);
@@ -97,8 +97,6 @@ void Game::Init(Engine &engine)
         main.SetInitGame(&InitGame);
         main.SetInitSystems(&InitSystems);
         main.SetInitSettings(&InitSettings);
-
-//    engine.SetCurrentWorld("Dungeon"); //obligatoire
         /*** Serialization of external components**/
         main.SetLoad(&Load);
         main.SetSave(&Save);
@@ -260,6 +258,7 @@ void Game::InitSystems(World &world)
     std::unique_ptr<ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
     engine.GetPostProcessManager().AddProcess(ptr);
 
+    engine.GetPostProcessManager().AddProcess(new ParticleProcess());
     engine.GetPostProcessManager().AddProcess(new SimpleShadowProcess());
     engine.GetPostProcessManager().AddProcess(new ParticleProcess());
 
@@ -273,6 +272,11 @@ void Game::InitSystems(World &world)
 void Game::InitSettings(World &world)
 {
     RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
+}
+
+void Game::InitSettingsDungeon(World &world)
+{
+    RendererPlatform::ClearColor({0.0f, 0.0f, 0.0f, 0.0f});
 }
 
 template<typename T>
