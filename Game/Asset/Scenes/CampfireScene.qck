@@ -80,7 +80,7 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 848,
+                    "_width": 778,
                     "_height": 406,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
@@ -842,7 +842,7 @@
                     },
                     {
                         "key": "TriggerSwitchSceneComponent",
-                        "value": true
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -893,9 +893,6 @@
                         "y": 1.0,
                         "z": 1.0
                     }
-                },
-                "TriggerSwitchSceneComponent": {
-                    "world": "CampfireScene"
                 }
             },
             {
@@ -1108,7 +1105,7 @@
                     "bounciness": 0.0,
                     "gravity": true,
                     "trigger": false,
-                    "bodyType": 0,
+                    "bodyType": 1,
                     "shapeType": 1,
                     "shapeParams": {
                         "x": 1.0,
@@ -1793,6 +1790,192 @@
                         "y": 20.0,
                         "z": 1.0
                     }
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "TpTovillage"
+                },
+                "Transform": {
+                    "position": {
+                        "x": -0.49168550968170168,
+                        "y": 0.0,
+                        "z": 6.419007301330566
+                    },
+                    "scale": {
+                        "x": 14.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": false,
+                    "trigger": true,
+                    "bodyType": 1,
+                    "shapeType": 2,
+                    "shapeParams": {
+                        "x": 14.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    }
+                },
+                "TriggerSwitchSceneComponent": {
+                    "world": "Village"
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "TpToDungeon"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 2.54176664352417,
+                        "y": 0.29780927300453188,
+                        "z": 38.27082824707031
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": false,
+                    "trigger": true,
+                    "bodyType": 1,
+                    "shapeType": 2,
+                    "shapeParams": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    }
+                },
+                "TriggerSwitchSceneComponent": {
+                    "world": "Dungeon"
                 }
             }
         ]
