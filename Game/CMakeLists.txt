@@ -12,8 +12,6 @@ add_library(${PROJECT_NAME} STATIC
         src/Player/PlayerSystem.cpp
         src/Player/PlayerComponent.cpp
         src/TriggerSwitchScene/TriggerSwitchSceneSystem.cpp
-        src/Player/PlayerComponent.cpp
-        include/Enemy/EnemySpawnSystem.hpp
         src/Enemy/EnemySpawnSystem.cpp
         ) #todo change STATIC to SHARED later
 

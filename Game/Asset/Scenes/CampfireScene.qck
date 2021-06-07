@@ -842,7 +842,7 @@
                     },
                     {
                         "key": "TriggerSwitchSceneComponent",
-                        "value": false
+                        "value": true
                     }
                 ],
                 "Name": {
@@ -884,15 +884,18 @@
                 "RigidBody": {
                     "mass": 1.0,
                     "bounciness": 0.0,
-                    "gravity": true,
-                    "trigger": false,
-                    "bodyType": 0,
+                    "gravity": false,
+                    "trigger": true,
+                    "bodyType": 1,
                     "shapeType": 2,
                     "shapeParams": {
                         "x": 1.0,
                         "y": 1.0,
                         "z": 1.0
                     }
+                },
+                "TriggerSwitchSceneComponent": {
+                    "world": "CampfireScene"
                 }
             },
             {

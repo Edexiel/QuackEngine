@@ -14,12 +14,10 @@ void TriggerSwitchSceneSystem::SwitchScene(Entity entity1, Entity entity2)
     auto &world = engine.GetCurrentWorld();
     if(world.HasComponent<TriggerSwitchSceneComponent>(entity1) && world.HasComponent<PlayerComponent>(entity2))
     {
-        auto triggerSwitchSceneComponent = world.GetComponent<TriggerSwitchSceneComponent>(entity1);
-        //Switch the scene
-//        world.Clear();
-        engine.GetCurrentWorld().Clear();
-        Engine::Instance().SetCurrentWorld(triggerSwitchSceneComponent.world);
-        Engine::Instance().LoadWorld(engine.GetCurrentWorld());
+        auto &triggerSwitchSceneComponent = world.GetComponent<TriggerSwitchSceneComponent>(entity1);
+        world.GetSystem<PhysicsSystem>()->SetIsSwitchingScene(true);
+        world.GetSystem<PhysicsSystem>()->SetWorldName(triggerSwitchSceneComponent.world);
+
     }
 }
 
