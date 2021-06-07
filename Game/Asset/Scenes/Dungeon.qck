@@ -80,7 +80,7 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 698,
+                    "_width": 778,
                     "_height": 406,
                     "_far": 100.0,
                     "_near": 0.10000000149011612,
@@ -245,7 +245,7 @@
                     },
                     {
                         "key": "Model",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "Name",
@@ -277,13 +277,13 @@
                     }
                 ],
                 "Name": {
-                    "name": "TriggerBox"
+                    "name": "TpCampFire"
                 },
                 "Transform": {
                     "position": {
                         "x": 0.0,
                         "y": -0.49000000953674319,
-                        "z": -22.0
+                        "z": -24.012889862060548
                     },
                     "scale": {
                         "x": 5.0,
@@ -296,21 +296,6 @@
                         "y": 0.0,
                         "z": 0.0
                     }
-                },
-                "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
-                    "offset": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "materialsIndex": [
-                        0
-                    ],
-                    "materials": [
-                        "Default material"
-                    ]
                 },
                 "RigidBody": {
                     "mass": 1.0,
@@ -326,7 +311,7 @@
                     }
                 },
                 "TriggerSwitchSceneComponent": {
-                    "world": "Main2"
+                    "world": "CampfireScene"
                 }
             },
             {
@@ -830,7 +815,7 @@
                     "bodyType": 0,
                     "shapeType": 2,
                     "shapeParams": {
-                        "x": 15.0,
+                        "x": 10.0,
                         "y": 1.0,
                         "z": 1.0
                     }
@@ -1140,7 +1125,7 @@
                     "bodyType": 0,
                     "shapeType": 2,
                     "shapeParams": {
-                        "x": 15.0,
+                        "x": 10.0,
                         "y": 1.0,
                         "z": 1.0
                     }
