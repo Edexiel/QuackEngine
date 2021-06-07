@@ -15,35 +15,53 @@ CameraEditor::CameraEditor(unsigned int width, unsigned int height,
              : _width{width}, _height{height}, _far{far}, _near{near}, _fov{fov}, _isPerspective{true},
              _framebuffer{Renderer::RendererPlatform::CreateFramebuffer(width, height)}{}
 
-void CameraEditor::SetScaleAxisX(float scale)
+void CameraEditor::SetRightScale(float scale)
 {
-    _scaleAxisX = scale;
+    _rightScale = scale;
 }
 
-void CameraEditor::SetScaleAxisY(float scale)
+void CameraEditor::SetLeftScale(float scale)
 {
-    _scaleAxisY = scale;
+    _leftScale = scale;
 }
 
-void CameraEditor::SetScaleAxisZ(float scale)
+void CameraEditor::SetForwardScale(float scale)
 {
-    _scaleAxisZ = scale;
+    _forwardScale = scale;
+}
+
+void CameraEditor::SetBackwardScale(float scale)
+{
+    _backwardScale = scale;
+}
+
+void CameraEditor::SetUpScale(float scale)
+{
+    _upScale = scale;
+}
+
+void CameraEditor::SetDownScale(float scale)
+{
+    _downScale = scale;
 }
 
 void CameraEditor::SetInput()
 {
     Input::InputManager& inputManager = Engine::Instance().GetInputManager();
-    inputManager.RegisterEventAxis("CameraEditorMovementForward", this, &CameraEditor::SetScaleAxisZ);
-    inputManager.RegisterEventAxis("CameraEditorMovementRight", this, &CameraEditor::SetScaleAxisX);
-    inputManager.RegisterEventAxis("CameraEditorMovementUp", this, &CameraEditor::SetScaleAxisY);
+    inputManager.RegisterEventAxis("CameraEditorMovementForward", this, &CameraEditor::SetForwardScale);
+    inputManager.RegisterEventAxis("CameraEditorMovementBackward", this, &CameraEditor::SetBackwardScale);
+    inputManager.RegisterEventAxis("CameraEditorMovementRight", this, &CameraEditor::SetRightScale);
+    inputManager.RegisterEventAxis("CameraEditorMovementLeft", this, &CameraEditor::SetLeftScale);
+    inputManager.RegisterEventAxis("CameraEditorMovementUp", this, &CameraEditor::SetUpScale);
+    inputManager.RegisterEventAxis("CameraEditorMovementDown", this, &CameraEditor::SetDownScale);
 }
 
 void CameraEditor::FreeFly()
 {
-    Vector3f forward = _rotation * Vector3f::Forward() * _scaleAxisZ;
-    Vector3f right = _rotation * Vector3f::Right() * _scaleAxisX;
+    Vector3f forward = _rotation * Vector3f::Forward() * (_forwardScale + _backwardScale);
+    Vector3f right = _rotation * Vector3f::Right() * (_rightScale + _leftScale);
 
-    Vector3f up = Vector3f::Up() * _scaleAxisY;
+    Vector3f up = Vector3f::Up() * (_upScale + _downScale);
     Vector3f direction = (forward + right + up).GetNormalized();
 
     _position = _position + (direction * _speedTranslation) * Engine::Instance().GetTimeManager().GetDeltaTime();
@@ -57,3 +75,5 @@ void CameraEditor::MouseMovement(const Vector2d &currentPos, const Vector2d &old
     _pitch = (float)std::clamp(_pitch + angleRotation.y * deltatime, -Pi<float>() / 2.0, Pi<float>() / 2.0);
     _rotation = Quaternion({0, 1, 0}, _yaw) * Quaternion({1, 0, 0}, _pitch);
 }
+
+

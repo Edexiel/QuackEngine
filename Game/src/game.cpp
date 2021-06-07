@@ -21,6 +21,9 @@
 #include "Player/PlayerComponent.hpp"
 #include "Player/PlayerSystem.hpp"
 
+#include "TriggerSwitchScene/TriggerSwitchSceneComponent.hpp"
+#include "TriggerSwitchScene/TriggerSwitchSceneSystem.hpp"
+
 #include <cereal/archives/json.hpp>
 
 using namespace Resources;
@@ -42,8 +45,7 @@ void Game::Init(Engine &engine)
         main.SetBuild(&Build);
         /*****************************************/
 
-        //engine.LoadWorld(main);
-
+//        engine.LoadWorld(main);
     }
     {
         World &main = engine.CreateWorld("Main2");
@@ -60,19 +62,18 @@ void Game::Init(Engine &engine)
 
     }
     {
-        World &main = engine.CreateWorld("Main3");
-        main.SetRegister(&Register);
-        main.SetInitGame(&InitGame);
-        main.SetInitSystems(&InitSystems);
-        main.SetInitSettings(&InitSettings);
+        World &dungeon = engine.CreateWorld("Dungeon");
+        dungeon.SetRegister(&Register);
+        dungeon.SetInitGame(&InitGame);
+        dungeon.SetInitSystems(&InitSystems);
+        dungeon.SetInitSettings(&InitSettings);
 
         /*** Serialization of external components**/
-        main.SetLoad(&Load);
-        main.SetSave(&Save);
-        main.SetBuild(&Build);
+        dungeon.SetLoad(&Load);
+        dungeon.SetSave(&Save);
+        dungeon.SetBuild(&Build);
         /*****************************************/
-        //engine.LoadWorld(main);
-
+        //engine.LoadWorld(dungeon);
     }
     {
         World &main = engine.CreateWorld("CampfireScene");
@@ -81,6 +82,7 @@ void Game::Init(Engine &engine)
         main.SetInitSystems(&InitSystems);
         main.SetInitSettings(&InitSettings);
 
+    engine.SetCurrentWorld("Dungeon"); //obligatoire
         /*** Serialization of external components**/
         main.SetLoad(&Load);
         main.SetSave(&Save);
@@ -111,6 +113,7 @@ void Game::Register(World &world)
     //local
     world.RegisterComponent<EnemyComponent>();
     world.RegisterComponent<PlayerComponent>();
+    world.RegisterComponent<TriggerSwitchSceneComponent>();
 
     /** Register systems **/
     world.RegisterSystem<RenderSystem>();
@@ -124,6 +127,7 @@ void Game::Register(World &world)
     world.RegisterSystem<EnemySystem>();
     world.RegisterSystem<ParticleSystem>();
     world.RegisterSystem<SimpleShadowSystem>();
+    world.RegisterSystem<TriggerSwitchSceneSystem>();
 
 
     /** Set signature of systems **/
@@ -208,7 +212,13 @@ void Game::Register(World &world)
         signatureShadow.set(world.GetComponentType<Component::SimpleShadow>());
         world.SetSystemSignature<SimpleShadowSystem>(signatureShadow);
     }
-
+    //Signature TriggerSwitchScene
+    {
+        Signature signatureTriggerSwitchScene;
+        signatureTriggerSwitchScene.set(world.GetComponentType<Component::RigidBody>());
+        signatureTriggerSwitchScene.set(world.GetComponentType<TriggerSwitchSceneComponent>());
+        world.SetSystemSignature<TriggerSwitchSceneSystem>(signatureTriggerSwitchScene);
+    }
 
 }
 
@@ -228,6 +238,7 @@ void Game::InitSystems(World &world)
     /** Init Systems **/
     world.GetSystem<PhysicsSystem>()->Init();
     world.GetSystem<LightSystem>()->Update();
+    world.GetSystem<TriggerSwitchSceneSystem>()->Init();
 
     /** Post process ? **/
     std::unique_ptr<ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
@@ -288,14 +299,17 @@ void read(const World &w, cereal::JSONInputArchive &a, Entity e, const std::map<
 void Game::Save(const World &w, cereal::JSONOutputArchive &a, const std::map<std::string, bool> &c, Entity e)
 {
     write<PlayerComponent>(w, a, e, c, "Player");
+    write<TriggerSwitchSceneComponent>(w, a, e, c, "TriggerSwitchSceneComponent");
 }
 
 void Game::Load(const World &w, cereal::JSONInputArchive &a, const std::map<std::string, bool> &c, Entity e)
 {
     read<PlayerComponent>(w, a, e, c, "Player");
+    read<TriggerSwitchSceneComponent>(w, a, e, c, "TriggerSwitchSceneComponent");
 }
 
 void Game::Build(const World &world, std::map<std::string, bool> &c, Entity id)
 {
     build<PlayerComponent>(world, c, id, "Player");
+    build<TriggerSwitchSceneComponent>(world, c, id, "TriggerSwitchSceneComponent");
 }
