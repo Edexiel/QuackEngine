@@ -73,7 +73,23 @@ void Game::Init(Engine &engine)
         dungeon.SetSave(&Save);
         dungeon.SetBuild(&Build);
         /*****************************************/
-//        engine.LoadWorld(dungeon);
+        //engine.LoadWorld(dungeon);
+    }
+    //Village
+    {
+        World &main = engine.CreateWorld("Village");
+        main.SetRegister(&Register);
+        main.SetInitGame(&InitGame);
+        main.SetInitSystems(&InitSystems);
+        main.SetInitSettings(&InitSettings);
+
+        /*** Serialization of external components**/
+        main.SetLoad(&Load);
+        main.SetSave(&Save);
+        main.SetBuild(&Build);
+        /*****************************************/
+
+
     }
     {
         World &main = engine.CreateWorld("CampfireScene");
@@ -81,7 +97,6 @@ void Game::Init(Engine &engine)
         main.SetInitGame(&InitGame);
         main.SetInitSystems(&InitSystems);
         main.SetInitSettings(&InitSettings);
-
         /*** Serialization of external components**/
         main.SetLoad(&Load);
         main.SetSave(&Save);
