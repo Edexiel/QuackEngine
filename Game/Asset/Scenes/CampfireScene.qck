@@ -51,6 +51,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -142,6 +146,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -228,6 +236,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -253,7 +265,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 1,
+                    "type": 0,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -316,6 +328,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -341,7 +357,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 1,
+                    "type": 0,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -417,6 +433,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -442,7 +462,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 1,
+                    "type": 0,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -518,6 +538,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -614,6 +638,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -721,6 +749,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -807,6 +839,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": true
                     }
                 ],
                 "Name": {
@@ -848,15 +884,18 @@
                 "RigidBody": {
                     "mass": 1.0,
                     "bounciness": 0.0,
-                    "gravity": true,
-                    "trigger": false,
-                    "bodyType": 0,
+                    "gravity": false,
+                    "trigger": true,
+                    "bodyType": 1,
                     "shapeType": 2,
                     "shapeParams": {
                         "x": 1.0,
                         "y": 1.0,
                         "z": 1.0
                     }
+                },
+                "TriggerSwitchSceneComponent": {
+                    "world": "CampfireScene"
                 }
             },
             {
@@ -908,6 +947,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -1015,6 +1058,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -1050,7 +1097,7 @@
                         0
                     ],
                     "materials": [
-                        "Player"
+                        "AnimationBard"
                     ]
                 },
                 "Animator": {
@@ -1138,6 +1185,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -1234,6 +1285,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -1328,6 +1383,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -1416,6 +1475,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -1504,6 +1567,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -1592,6 +1659,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {
@@ -1683,6 +1754,10 @@
                     {
                         "key": "Transform",
                         "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
                     }
                 ],
                 "Name": {

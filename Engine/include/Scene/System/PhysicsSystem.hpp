@@ -37,6 +37,10 @@ namespace Component
 
 class PhysicsSystem : public System
 {
+private:
+    bool _isSwitchingScene{false};
+    std::string _worldName;
+    void SwitchingScene();
 public:
 
     void Init();
@@ -69,6 +73,8 @@ public:
     static void ResizeCapsuleCollider(Entity id, float radius, float height);
 
     static void SetIsGravityEnable(Entity id, bool isGravityEnable);
+    void SetIsSwitchingScene(bool isSwitching);
+    void SetWorldName(std::string name);
 
     //todo: create function to change world settings.
 };
