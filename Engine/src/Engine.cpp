@@ -114,6 +114,8 @@ Engine::Engine(const EngineSettings &settings) noexcept
         case INPUT_MODE::GLFW:
             break;
     }
+    glfwSwapInterval(0);
+
     _platformInput = std::make_unique<Input::PlatformInputGLFW>(_window);
     _inputManager.Init(_platformInput.get());
     _timeManager.Init(new Time::TimePlatformGLFW(_window));
