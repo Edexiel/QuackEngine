@@ -15,10 +15,19 @@ void EnemySpawnSystem::Update()
     for (Entity entity : _entities)
     {
         auto& spawner = world.GetComponent<EnemySpawnPointComponent>(entity);
+
         if (time - spawner.lastTime > spawner.spawnInterval)
         {
             auto& trs = world.GetComponent<Component::Transform>(entity);
             GenerateEnemies(1, Random::Range(1, 3), trs.position, spawner.innerRadius, spawner.outerRadius);
+            spawner.lastTime = time;
+            spawner.nbEnemy--;
+        }
+
+        if (spawner.nbEnemy <= 0)
+        {
+            world.DestroyEntity(entity);
+            return;
         }
     }
 }
@@ -38,7 +47,7 @@ EnemySpawnSystem::GenerateEnemies(unsigned int numberToGenerate, unsigned int nb
             Component::Transform trs;
             Maths::Vector3f direction{Random::Range(0.f, 1.0f), 0, Random::Range(0.0f, 1.0f)};
             direction.Normalize();
-            trs.position = origin * innerRadius;
+            trs.position = origin * Random::Range(innerRadius, outerRadius);
             world.AddComponent(id, trs);
 
             EnemyComponent enemyWeaknessDisplay;

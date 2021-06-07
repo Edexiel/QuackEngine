@@ -14,6 +14,9 @@
 #include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/System/CameraGameplaySystem.hpp"
 
+#include "Enemy/EnemySpawnSystem.hpp"
+#include "Enemy/EnemySystem.hpp"
+
 #include "Player/PlayerSystem.hpp"
 
 #include "game.hpp"
@@ -67,6 +70,9 @@ int main()
             engine.GetCurrentWorld().GetSystem<Renderer::AnimatorSystem>()->Update();
 
             engine.GetCurrentWorld().GetSystem<PlayerSystem>()->Update();
+
+            engine.GetCurrentWorld().GetSystem<EnemySpawnSystem>()->Update();
+            engine.GetCurrentWorld().GetSystem<EnemySystem>()->Update();
 
         }
         engine.SwapBuffers();

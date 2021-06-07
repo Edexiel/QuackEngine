@@ -42,6 +42,7 @@ private:
     void ParticleReader();
     void SimpleShadowReader();
     void SwitchSceneTriggerReader();
+    void EnemySpawnReader();
 
 
     void AddComponent();

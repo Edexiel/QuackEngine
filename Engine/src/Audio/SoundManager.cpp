@@ -78,6 +78,9 @@ SoundManagerData::ReadAndMixPcmFramesF32(const SoundData &soundData, float *pOut
 
         if (framesReadThisIteration < framesToReadThisIteration)
         {
+            if (soundData.soundType == SoundType::S_MUSIC)
+                ma_decoder_seek_to_pcm_frame(soundData.decoder, 0);
+
             break;  /* Reached EOF. */
         }
     }

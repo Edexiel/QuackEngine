@@ -21,7 +21,7 @@ class EnemySystem : public System
     float _time {0.0f};
     float _hitCooldown {0.2f};
 
-    void MoveEnemy(EnemyComponent& enemy, Component::Transform& transform, const Maths::Vector3f& target);
+    bool MoveEnemy(EnemyComponent& enemy, Component::Transform& transform, const Maths::Vector3f& target);
     void HitEnemies(NoteType note);
 
 public:
@@ -35,6 +35,7 @@ public:
 
     EnemySystem();
     void GenerateEnemies(unsigned int numberToGenerate, const Maths::Vector3f& origin, float innerRadius, float outerRadius);
+    void Update();
     void Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &screenMesh, Renderer::Shader& shader);
     float& GetArrowScale();
 
