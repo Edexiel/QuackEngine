@@ -5,13 +5,11 @@
 
 #include "Renderer/RendererPlatform.hpp"
 
-#include "Scene/System/CameraSystem.hpp"
 #include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/System/CharacterControllerSystem.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
 
-#include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/System/CameraGameplaySystem.hpp"
 
 #include "Player/PlayerSystem.hpp"
@@ -28,7 +26,7 @@ int main()
             true,
             "QuackEditor",
             {1280, 720},
-            WINDOW_MODE::WINDOWED,
+            WINDOW_MODE::FULLSCREEN,
             0,
             INPUT_MODE::GLFW
     };

@@ -62,6 +62,9 @@ Engine::Engine(const EngineSettings &settings) noexcept
         case WINDOW_MODE::WINDOWED:
         {
             monitor = nullptr;
+            _window = glfwCreateWindow(settings.windowSize[0],
+                                       settings.windowSize[1],
+                                       settings.windowTitle.c_str(), monitor, nullptr);
             break;
         }
 
@@ -72,11 +75,17 @@ Engine::Engine(const EngineSettings &settings) noexcept
 
             if (settings.monitor < count)
             {
+                _window = glfwCreateWindow(settings.windowSize[0],
+                                           settings.windowSize[1],
+                                           settings.windowTitle.c_str(), nullptr, nullptr);
                 monitor = monitors[settings.monitor];
                 break;
             }
 
             monitor = glfwGetPrimaryMonitor();
+            const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+            _window = glfwCreateWindow(mode->width, mode->height,
+                                       settings.windowTitle.c_str(), monitor, nullptr);
             break;
         }
 
@@ -89,9 +98,7 @@ Engine::Engine(const EngineSettings &settings) noexcept
         }
     }
 
-    _window = glfwCreateWindow(settings.windowSize[0],
-                               settings.windowSize[1],
-                               settings.windowTitle.c_str(), monitor, nullptr);
+
     if (!_window)
     {
         glfwTerminate();
