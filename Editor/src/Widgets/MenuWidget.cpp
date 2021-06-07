@@ -1,6 +1,7 @@
 #include "Widgets/MenuWidget.hpp"
 #include "Scene/Core/World.hpp"
 #include "Engine.hpp"
+#include "Editor.hpp"
 #include <fmt/core.h>
 
 MenuWidget::MenuWidget(Editor &editor) : Widget(editor)
@@ -61,6 +62,7 @@ void MenuWidget::UpdateVisible()
                         _engine.GetCurrentWorld().Clear();
                         _engine.SetCurrentWorld(item);
                         _engine.LoadWorld(_engine.GetCurrentWorld());
+                        _editor.camera.SetInput();
                     }
                 }
 
