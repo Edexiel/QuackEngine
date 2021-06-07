@@ -34,7 +34,7 @@ const std::vector<Maths::Matrix4>& Animator::GetBonesOffsets() const
 
 void Animator::SetShader(Renderer::Shader &shader)
 {
-    for (unsigned int i = 0; i < 100; i++)
+    for (unsigned int i = 0; i < _currentAnimation.GetSkeleton().GetBonesNb() ; i++)
     {
         shader.SetMatrix4((std::string("finalBonesMatrices[") + std::to_string(i) + "]").c_str(),
                           _bonesOffset[i]);

@@ -21,6 +21,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -38,7 +42,7 @@
                     },
                     {
                         "key": "Player",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "RigidBody",
@@ -80,7 +84,7 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 778,
+                    "_width": 848,
                     "_height": 406,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
@@ -92,9 +96,6 @@
                         "y": 8.0,
                         "z": -12.0
                     }
-                },
-                "Player": {
-                    "ok": 0
                 }
             },
             {
@@ -113,6 +114,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -206,6 +211,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -265,7 +274,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
+                    "type": 1,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -295,6 +304,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -357,7 +370,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
+                    "type": 1,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -400,6 +413,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -462,7 +479,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
+                    "type": 1,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -505,6 +522,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -605,6 +626,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -719,6 +744,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -809,6 +838,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -885,7 +918,7 @@
                     "mass": 1.0,
                     "bounciness": 0.0,
                     "gravity": false,
-                    "trigger": true,
+                    "trigger": false,
                     "bodyType": 1,
                     "shapeType": 2,
                     "shapeParams": {
@@ -911,6 +944,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -1025,6 +1062,10 @@
                         "value": true
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -1094,7 +1135,7 @@
                         0
                     ],
                     "materials": [
-                        "AnimationBard"
+                        "Player"
                     ]
                 },
                 "Animator": {
@@ -1105,7 +1146,7 @@
                     "bounciness": 0.0,
                     "gravity": true,
                     "trigger": false,
-                    "bodyType": 1,
+                    "bodyType": 0,
                     "shapeType": 1,
                     "shapeParams": {
                         "x": 1.0,
@@ -1149,6 +1190,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -1252,6 +1297,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -1350,6 +1399,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -1442,6 +1495,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -1531,6 +1588,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -1623,6 +1684,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -1721,6 +1786,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -1758,7 +1827,7 @@
                     }
                 ],
                 "Name": {
-                    "name": "IncisibleWallBack"
+                    "name": "InvisibleWallBack"
                 },
                 "Transform": {
                     "position": {
@@ -1811,6 +1880,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -1848,17 +1921,17 @@
                     }
                 ],
                 "Name": {
-                    "name": "TpTovillage"
+                    "name": "EnterDungeon"
                 },
                 "Transform": {
                     "position": {
-                        "x": -0.49168550968170168,
+                        "x": 3.112725257873535,
                         "y": 0.0,
-                        "z": 6.419007301330566
+                        "z": 39.83113479614258
                     },
                     "scale": {
-                        "x": 14.0,
-                        "y": 1.0,
+                        "x": 3.0,
+                        "y": 5.0,
                         "z": 1.0
                     },
                     "rotation": {
@@ -1876,13 +1949,13 @@
                     "bodyType": 1,
                     "shapeType": 2,
                     "shapeParams": {
-                        "x": 14.0,
-                        "y": 1.0,
+                        "x": 3.0,
+                        "y": 5.0,
                         "z": 1.0
                     }
                 },
                 "TriggerSwitchSceneComponent": {
-                    "world": "Village"
+                    "world": "Dungeon"
                 }
             },
             {
@@ -1904,6 +1977,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -1941,13 +2018,13 @@
                     }
                 ],
                 "Name": {
-                    "name": "TpToDungeon"
+                    "name": "TeleportVillage"
                 },
                 "Transform": {
                     "position": {
-                        "x": 2.54176664352417,
-                        "y": 0.29780927300453188,
-                        "z": 38.27082824707031
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
                     },
                     "scale": {
                         "x": 1.0,
@@ -1969,13 +2046,13 @@
                     "bodyType": 1,
                     "shapeType": 2,
                     "shapeParams": {
-                        "x": 1.0,
-                        "y": 1.0,
+                        "x": 304.0,
+                        "y": 124.0,
                         "z": 1.0
                     }
                 },
                 "TriggerSwitchSceneComponent": {
-                    "world": "Dungeon"
+                    "world": "Village"
                 }
             }
         ]

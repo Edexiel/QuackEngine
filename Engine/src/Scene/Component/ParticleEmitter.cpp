@@ -87,7 +87,7 @@ void ParticleEmitter::Process(const Renderer::Framebuffer &buffer, const Rendere
         if (_listParticle[i].life >= 1.0f)
         {
             if (i == 0)
-                ReSynch(0);
+                ReSynch();
             ResetParticle(_listParticle[i]);
         }
 
@@ -186,7 +186,7 @@ void ParticleEmitter::SetSize(unsigned int size)
     }
 }
 
-void ParticleEmitter::ReSynch(int index)
+void ParticleEmitter::ReSynch()
 {
     for (unsigned int i = 0; i < _listParticle.size(); i++)
     {

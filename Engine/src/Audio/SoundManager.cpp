@@ -89,7 +89,7 @@ SoundManagerData::ReadAndMixPcmFramesF32(const SoundData &soundData, float *pOut
 
 void data_callback(ma_device *pDevice, void *pOutput, const void *pInput, ma_uint32 frameCount)
 {
-    float *pOutputF32 = (float *) pOutput;
+    float *pOutputF32 = (float*)pOutput;
 
     SoundManagerData *soundManagerData = (SoundManagerData *) (pDevice->pUserData);
 

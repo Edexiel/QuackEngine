@@ -5,6 +5,7 @@
 #include "Scene/System/EngineSystems.hpp"
 
 #include "Player/PlayerComponent.hpp"
+#include "Enemy/EnemySpawnPointComponent.hpp"
 #include "TriggerSwitchScene/TriggerSwitchSceneComponent.hpp"
 #include "TriggerSwitchScene/TriggerSwitchSceneSystem.hpp"
 
@@ -64,6 +65,11 @@ void PropertiesWidget::ShowComponents()
         SimpleShadowReader();
     if (world.HasComponent<TriggerSwitchSceneComponent>(entity))
         SwitchSceneTriggerReader();
+    if (world.HasComponent<EnemySpawnPointComponent>(entity))
+        EnemySpawnReader();
+    if (world.HasComponent<PlayerComponent>(entity))
+        ImGui::CollapsingHeader("Player");
+
 
     AddComponent();
     ImGui::SameLine();
@@ -503,11 +509,11 @@ void PropertiesWidget::AddComponent()
             ImGui::EndMenu();
         }
 
-        if (!world.HasComponent<CharacterController>(_editor.selectedEntity) && ImGui::MenuItem("Character controller"))
+        if (!world.HasComponent<CharacterController>(_editor.selectedEntity) && ImGui::MenuItem("Character Controller"))
             world.AddComponent(_editor.selectedEntity, CharacterController());
-        if (!world.HasComponent<PlayerComponent>(_editor.selectedEntity) && ImGui::MenuItem("Player component"))
+        if (!world.HasComponent<PlayerComponent>(_editor.selectedEntity) && ImGui::MenuItem("Player Component"))
             world.AddComponent(_editor.selectedEntity, PlayerComponent());
-        if (!world.HasComponent<CameraGameplay>(_editor.selectedEntity) && ImGui::MenuItem("Camera gameplay"))
+        if (!world.HasComponent<CameraGameplay>(_editor.selectedEntity) && ImGui::MenuItem("Camera Gameplay"))
             world.AddComponent(_editor.selectedEntity, CameraGameplay());
         if(world.HasComponent<Transform>(_editor.selectedEntity))
             AddRigidBody(); // Propose to add a RigidBody only if the entity already have a Transform
@@ -517,8 +523,10 @@ void PropertiesWidget::AddComponent()
             world.AddComponent(_editor.selectedEntity, ParticleEmitter());
         if (!world.HasComponent<SimpleShadow>(_editor.selectedEntity) && ImGui::MenuItem("Simple Shadow"))
             world.AddComponent(_editor.selectedEntity, SimpleShadow());
-        if (!world.HasComponent<TriggerSwitchSceneComponent>(_editor.selectedEntity) && ImGui::MenuItem("Trigger switch scene"))
+        if (!world.HasComponent<TriggerSwitchSceneComponent>(_editor.selectedEntity) && ImGui::MenuItem("Trigger Switch Scene"))
             world.AddComponent(_editor.selectedEntity, TriggerSwitchSceneComponent());
+        if (!world.HasComponent<EnemySpawnPointComponent>(_editor.selectedEntity) && ImGui::MenuItem("Enemy Spawner"))
+            world.AddComponent(_editor.selectedEntity, EnemySpawnPointComponent());
 
         ImGui::EndPopup();
     }
@@ -588,6 +596,8 @@ void PropertiesWidget::DeleteComponent()
             world.RemoveComponent<SimpleShadow>(_editor.selectedEntity);
         if (world.HasComponent<TriggerSwitchSceneComponent>(_editor.selectedEntity) && ImGui::MenuItem("Trigger switch scene"))
             world.RemoveComponent<TriggerSwitchSceneComponent>(_editor.selectedEntity);
+        if (world.HasComponent<EnemySpawnPointComponent>(_editor.selectedEntity) && ImGui::MenuItem("Enemy Spawner"))
+            world.RemoveComponent<EnemySpawnPointComponent>(_editor.selectedEntity);
         ImGui::EndPopup();
     }
 }
@@ -844,4 +854,16 @@ void PropertiesWidget::SwitchSceneTriggerReader()
         }
         ImGui::EndCombo();
     }
+}
+
+void PropertiesWidget::EnemySpawnReader()
+{
+    if (!ImGui::CollapsingHeader("Enemy Spawner"))
+        return;
+
+    auto& spawner = _engine.GetCurrentWorld().GetComponent<EnemySpawnPointComponent>(_editor.selectedEntity);
+    ImGui::DragFloat("Spawn Interval", &spawner.spawnInterval, 0.1f);
+    ImGui::DragFloat("Inner Radius", &spawner.innerRadius, 0.1f);
+    ImGui::DragFloat("Outer Radius", &spawner.outerRadius, 0.1f);
+    ImGui::DragInt("Nb Enemies", (int*)(&spawner.nbEnemy), 1, 0, 100);
 }
