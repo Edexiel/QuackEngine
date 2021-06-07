@@ -26,7 +26,7 @@ int main()
             true,
             "QuackEditor",
             {1280, 720},
-            WINDOW_MODE::FULLSCREEN,
+            WINDOW_MODE::WINDOWED,
             0,
             INPUT_MODE::GLFW
     };

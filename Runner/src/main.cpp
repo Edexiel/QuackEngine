@@ -22,7 +22,7 @@ int main()
             true,
             "The Legend of Quack : the Kazoo of power",
             {1920, 1080},
-            WINDOW_MODE::WINDOWED,
+            WINDOW_MODE::FULLSCREEN,
             0,
             INPUT_MODE::GLFW
     };

@@ -73,19 +73,19 @@ Engine::Engine(const EngineSettings &settings) noexcept
             int count;
             GLFWmonitor **monitors = glfwGetMonitors(&count);
 
-            if (settings.monitor < count)
-            {
-                _window = glfwCreateWindow(settings.windowSize[0],
-                                           settings.windowSize[1],
-                                           settings.windowTitle.c_str(), nullptr, nullptr);
-                monitor = monitors[settings.monitor];
-                break;
-            }
+//            if (settings.monitor < count)
+//            {
+//                _window = glfwCreateWindow(settings.windowSize[0],
+//                                           settings.windowSize[1],
+//                                           settings.windowTitle.c_str(), nullptr, nullptr);
+//                monitor = monitors[settings.monitor];
+//                break;
+//            }
 
             monitor = glfwGetPrimaryMonitor();
-            const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+            const GLFWvidmode *mode = glfwGetVideoMode(monitor);
             _window = glfwCreateWindow(mode->width, mode->height,
-                                       settings.windowTitle.c_str(), monitor, nullptr);
+                                       settings.windowTitle.c_str(), glfwGetPrimaryMonitor(), nullptr);
             break;
         }
 
@@ -405,7 +405,7 @@ void Engine::UpdateTime()
 
     if (_timeAcc >= 1.0f)
     {
-        _fps = std::roundf(1.f / ((float)_timeAcc / (float)_frames));
+        _fps = std::roundf(1.f / ((float) _timeAcc / (float) _frames));
         _frames = 0;
         _timeAcc = 0.;
     }
