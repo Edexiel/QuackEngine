@@ -21,6 +21,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -80,8 +84,8 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 698,
-                    "_height": 406,
+                    "_width": 1282,
+                    "_height": 610,
                     "_far": 100.0,
                     "_near": 0.10000000149011612,
                     "_fov": 0.7853981852531433
@@ -111,6 +115,10 @@
                     {
                         "key": "CharacterController",
                         "value": true
+                    },
+                    {
+                        "key": "EnemySpawner",
+                        "value": false
                     },
                     {
                         "key": "Light",
@@ -182,7 +190,7 @@
                         0
                     ],
                     "materials": [
-                        "AnimationBard"
+                        "Player"
                     ]
                 },
                 "Animator": {
@@ -240,12 +248,16 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
                     {
                         "key": "Model",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "Name",
@@ -277,13 +289,13 @@
                     }
                 ],
                 "Name": {
-                    "name": "TriggerBox"
+                    "name": "TpCampFire"
                 },
                 "Transform": {
                     "position": {
                         "x": 0.0,
                         "y": -0.49000000953674319,
-                        "z": -22.0
+                        "z": -24.012889862060548
                     },
                     "scale": {
                         "x": 5.0,
@@ -296,21 +308,6 @@
                         "y": 0.0,
                         "z": 0.0
                     }
-                },
-                "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
-                    "offset": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "materialsIndex": [
-                        0
-                    ],
-                    "materials": [
-                        "Default material"
-                    ]
                 },
                 "RigidBody": {
                     "mass": 1.0,
@@ -326,7 +323,7 @@
                     }
                 },
                 "TriggerSwitchSceneComponent": {
-                    "world": "Main2"
+                    "world": "CampfireScene"
                 }
             },
             {
@@ -345,6 +342,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -390,7 +391,7 @@
                 "Transform": {
                     "position": {
                         "x": 0.0,
-                        "y": 20.0,
+                        "y": 19.92220687866211,
                         "z": 0.0
                     },
                     "scale": {
@@ -445,6 +446,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -507,7 +512,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
+                    "type": 1,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -537,6 +542,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -583,12 +592,12 @@
                     "position": {
                         "x": 24.0,
                         "y": -0.4668238162994385,
-                        "z": 0.0
+                        "z": 11.361472129821778
                     },
                     "scale": {
                         "x": 1.0,
-                        "y": 5.0,
-                        "z": 23.0
+                        "y": 12.0,
+                        "z": 12.0
                     },
                     "rotation": {
                         "w": 1.0,
@@ -598,8 +607,8 @@
                     }
                 },
                 "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
+                    "path": "./Asset/Model/CubeUV.fbx",
+                    "type": 1,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -642,6 +651,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -688,12 +701,12 @@
                     "position": {
                         "x": -24.0,
                         "y": -0.4668238162994385,
-                        "z": 0.0
+                        "z": 10.595109939575196
                     },
                     "scale": {
                         "x": 1.0,
-                        "y": 5.0,
-                        "z": 23.0
+                        "y": 12.0,
+                        "z": 12.0
                     },
                     "rotation": {
                         "w": 1.0,
@@ -703,8 +716,8 @@
                     }
                 },
                 "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
+                    "path": "./Asset/Model/CubeUV.fbx",
+                    "type": 1,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -747,6 +760,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -791,13 +808,13 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": 15.0,
-                        "y": -0.46700000762939455,
-                        "z": -24.0
+                        "x": 14.032649040222168,
+                        "y": 1.5543794631958008,
+                        "z": -23.999755859375
                     },
                     "scale": {
                         "x": 10.0,
-                        "y": 5.0,
+                        "y": 10.0,
                         "z": 1.0
                     },
                     "rotation": {
@@ -808,213 +825,8 @@
                     }
                 },
                 "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
-                    "offset": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "materialsIndex": [
-                        0
-                    ],
-                    "materials": [
-                        "WallDungeon"
-                    ]
-                },
-                "RigidBody": {
-                    "mass": 1.0,
-                    "bounciness": 0.0,
-                    "gravity": true,
-                    "trigger": false,
-                    "bodyType": 0,
-                    "shapeType": 2,
-                    "shapeParams": {
-                        "x": 15.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    }
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "CameraGameplay",
-                        "value": false
-                    },
-                    {
-                        "key": "CharacterController",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": true
-                    },
-                    {
-                        "key": "Model",
-                        "value": false
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "ParticleEmitter",
-                        "value": false
-                    },
-                    {
-                        "key": "Player",
-                        "value": false
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "SimpleShadow",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
-                    }
-                ],
-                "Name": {
-                    "name": "Light2"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                },
-                "Light": {
+                    "path": "./Asset/Model/CubeUV.fbx",
                     "type": 1,
-                    "ambient": {
-                        "x": 0.19607843458652497,
-                        "y": 0.19607843458652497,
-                        "z": 0.19607843458652497
-                    },
-                    "diffuse": {
-                        "x": 0.699999988079071,
-                        "y": 0.699999988079071,
-                        "z": 0.699999988079071
-                    },
-                    "specular": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "constant": 1.0,
-                    "linear": 0.00139999995008111,
-                    "quadratic": 0.000007000000096013537,
-                    "spotAngle": 8.5,
-                    "outerSpotAngle": 10.5
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "CameraGameplay",
-                        "value": false
-                    },
-                    {
-                        "key": "CharacterController",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": true
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "ParticleEmitter",
-                        "value": false
-                    },
-                    {
-                        "key": "Player",
-                        "value": false
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": true
-                    },
-                    {
-                        "key": "SimpleShadow",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
-                    }
-                ],
-                "Name": {
-                    "name": "FrontWall"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": -0.46700000762939455,
-                        "z": 24.0
-                    },
-                    "scale": {
-                        "x": 25.0,
-                        "y": 5.0,
-                        "z": 1.0
-                    },
-                    "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    }
-                },
-                "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -1035,7 +847,7 @@
                     "bodyType": 0,
                     "shapeType": 2,
                     "shapeParams": {
-                        "x": 25.0,
+                        "x": 10.0,
                         "y": 1.0,
                         "z": 1.0
                     }
@@ -1057,6 +869,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -1102,12 +918,12 @@
                 "Transform": {
                     "position": {
                         "x": -15.0,
-                        "y": -0.46700000762939455,
+                        "y": 1.3615037202835084,
                         "z": -24.0
                     },
                     "scale": {
                         "x": 10.0,
-                        "y": 5.0,
+                        "y": 10.0,
                         "z": 1.0
                     },
                     "rotation": {
@@ -1118,8 +934,8 @@
                     }
                 },
                 "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
+                    "path": "./Asset/Model/CubeUV.fbx",
+                    "type": 1,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -1140,10 +956,794 @@
                     "bodyType": 0,
                     "shapeType": 2,
                     "shapeParams": {
-                        "x": 15.0,
+                        "x": 10.0,
                         "y": 1.0,
                         "z": 1.0
                     }
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
+                    }
+                ],
+                "Name": {
+                    "name": "FrontWall"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 18.011409759521486,
+                        "y": -2.7822093963623049,
+                        "z": 24.0
+                    },
+                    "scale": {
+                        "x": 14.0,
+                        "y": 14.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/CubeUV.fbx",
+                    "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "materialsIndex": [
+                        0
+                    ],
+                    "materials": [
+                        "WallDungeon"
+                    ]
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": true,
+                    "trigger": false,
+                    "bodyType": 0,
+                    "shapeType": 2,
+                    "shapeParams": {
+                        "x": 25.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    }
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
+                    }
+                ],
+                "Name": {
+                    "name": "LeftWall"
+                },
+                "Transform": {
+                    "position": {
+                        "x": -24.0,
+                        "y": -0.4668238162994385,
+                        "z": -12.49660873413086
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 12.0,
+                        "z": 12.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/CubeUV.fbx",
+                    "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "materialsIndex": [
+                        0
+                    ],
+                    "materials": [
+                        "WallDungeon"
+                    ]
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": true,
+                    "trigger": false,
+                    "bodyType": 0,
+                    "shapeType": 2,
+                    "shapeParams": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 23.0
+                    }
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
+                    }
+                ],
+                "Name": {
+                    "name": "RightWall"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 24.0,
+                        "y": -0.4668238162994385,
+                        "z": -12.318581581115723
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 12.0,
+                        "z": 12.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/CubeUV.fbx",
+                    "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "materialsIndex": [
+                        0
+                    ],
+                    "materials": [
+                        "WallDungeon"
+                    ]
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": true,
+                    "trigger": false,
+                    "bodyType": 0,
+                    "shapeType": 2,
+                    "shapeParams": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 23.0
+                    }
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
+                    }
+                ],
+                "Name": {
+                    "name": "FrontWall"
+                },
+                "Transform": {
+                    "position": {
+                        "x": -9.786200523376465,
+                        "y": -2.7822093963623049,
+                        "z": 24.0
+                    },
+                    "scale": {
+                        "x": 14.0,
+                        "y": 14.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/CubeUV.fbx",
+                    "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "materialsIndex": [
+                        0
+                    ],
+                    "materials": [
+                        "WallDungeon"
+                    ]
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": true,
+                    "trigger": false,
+                    "bodyType": 0,
+                    "shapeType": 2,
+                    "shapeParams": {
+                        "x": 25.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    }
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
+                        "value": true
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
+                    }
+                ],
+                "Name": {
+                    "name": "EnemySpawner"
+                },
+                "Transform": {
+                    "position": {
+                        "x": -17.84237289428711,
+                        "y": -0.000244140625,
+                        "z": 18.70652961730957
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "EnemySpawner": {
+                    "innerRadius": 0.0,
+                    "outerRadius": 4.800000190734863,
+                    "spawnInterval": 2.0,
+                    "nbEnemy": 25
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
+                        "value": true
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
+                    }
+                ],
+                "Name": {
+                    "name": "EnemySpawner"
+                },
+                "Transform": {
+                    "position": {
+                        "x": -18.957435607910158,
+                        "y": -0.00048828125,
+                        "z": -16.919628143310548
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "EnemySpawner": {
+                    "innerRadius": 0.0,
+                    "outerRadius": 1.0,
+                    "spawnInterval": 3.5999999046325685,
+                    "nbEnemy": 29
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
+                        "value": true
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
+                    }
+                ],
+                "Name": {
+                    "name": "EnemySpawner"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 16.973846435546876,
+                        "y": 0.0,
+                        "z": 18.47606086730957
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "EnemySpawner": {
+                    "innerRadius": 0.0,
+                    "outerRadius": 1.0,
+                    "spawnInterval": 3.5999999046325685,
+                    "nbEnemy": 26
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
+                        "value": true
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
+                    }
+                ],
+                "Name": {
+                    "name": "EnemySpawner"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 16.139738082885743,
+                        "y": 0.0,
+                        "z": -9.90919303894043
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "EnemySpawner": {
+                    "innerRadius": 0.0,
+                    "outerRadius": 1.0,
+                    "spawnInterval": 5.900000095367432,
+                    "nbEnemy": 18
                 }
             }
         ]

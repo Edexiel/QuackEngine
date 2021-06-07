@@ -35,36 +35,6 @@ using namespace Renderer;
 void Game::Init(Engine &engine)
 {
     {
-
-        World &main = engine.CreateWorld("Main");
-        main.SetRegister(&Register);
-        main.SetInitGame(&InitGame);
-        main.SetInitSystems(&InitSystems);
-        main.SetInitSettings(&InitSettings);
-
-        /*** Serialization of external components**/
-        main.SetLoad(&Load);
-        main.SetSave(&Save);
-        main.SetBuild(&Build);
-        /*****************************************/
-
-//        engine.LoadWorld(main);
-    }
-    {
-        World &main = engine.CreateWorld("Main2");
-        main.SetRegister(&Register);
-        main.SetInitGame(&InitGame);
-        main.SetInitSystems(&InitSystems);
-        main.SetInitSettings(&InitSettings);
-
-        /*** Serialization of external components**/
-        main.SetLoad(&Load);
-        main.SetSave(&Save);
-        main.SetBuild(&Build);
-        /*****************************************/
-
-    }
-    {
         World &dungeon = engine.CreateWorld("Dungeon");
         dungeon.SetRegister(&Register);
         dungeon.SetInitGame(&InitGame);

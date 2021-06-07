@@ -1079,7 +1079,7 @@
                     },
                     {
                         "key": "ParticleEmitter",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "Player",
@@ -1156,27 +1156,6 @@
                 },
                 "CharacterController": {
                     "speed": 20.0
-                },
-                "ParticleEmitter": {
-                    "_colorStart": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0,
-                        "w": 1.0
-                    },
-                    "_colorEnd": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0,
-                        "w": 0.0
-                    },
-                    "_angleStart": 0.0,
-                    "_angleEnd": 6.2829999923706059,
-                    "_lengthStart": 1.0,
-                    "_lengthEnd": 1.5,
-                    "_duration": 5.0,
-                    "Size": 5,
-                    "Texture": ""
                 },
                 "SimpleShadow": {
                     "scale": {
@@ -1976,7 +1955,7 @@
                     }
                 },
                 "TriggerSwitchSceneComponent": {
-                    "world": "CampfireScene"
+                    "world": "Dungeon"
                 }
             },
             {
@@ -1999,7 +1978,7 @@
                     },
                     {
                         "key": "EnemySpawner",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "Light",
@@ -2023,7 +2002,7 @@
                     },
                     {
                         "key": "RigidBody",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "SimpleShadow",
@@ -2035,11 +2014,11 @@
                     },
                     {
                         "key": "TriggerSwitchSceneComponent",
-                        "value": false
+                        "value": true
                     }
                 ],
                 "Name": {
-                    "name": "EnemySpanwer"
+                    "name": "TeleportVillage"
                 },
                 "Transform": {
                     "position": {
@@ -2059,11 +2038,21 @@
                         "z": 0.0
                     }
                 },
-                "EnemySpawner": {
-                    "innerRadius": 0.0,
-                    "outerRadius": 1.0,
-                    "spawnInterval": 0.5,
-                    "nbEnemy": 5
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": false,
+                    "trigger": true,
+                    "bodyType": 1,
+                    "shapeType": 2,
+                    "shapeParams": {
+                        "x": 304.0,
+                        "y": 124.0,
+                        "z": 1.0
+                    }
+                },
+                "TriggerSwitchSceneComponent": {
+                    "world": "Village"
                 }
             }
         ]
