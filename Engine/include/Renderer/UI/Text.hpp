@@ -17,7 +17,7 @@ namespace Renderer
         Text() = default;
         explicit Text(const std::string &name);
         void Process(const Framebuffer &buffer, const Mesh &screenMesh) final;
-        void RenderText(std::string text, Maths::Vector2f position, float scale, Maths::Vector4f color, const Mesh& quad);
+        void RenderText(const std::string& text, Maths::Vector2f position, float scale, Maths::Vector4f color, const Mesh& quad);
     };
 }
 #endif //QUACKENGINE_TEXT_HPP
