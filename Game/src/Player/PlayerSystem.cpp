@@ -10,7 +10,7 @@ PlayerSystem::PlayerSystem():engine{Engine::Instance()}
 {
     Input::InputManager& inputManager = engine.GetInputManager();
 
-    /*inputManager.BindEvent("Up", Input::Key::KEY_UP);
+    inputManager.BindEvent("Up", Input::Key::KEY_UP);
     inputManager.RegisterEvent("Up", Input::Action::PRESS, this, &PlayerSystem::Up);
 
     inputManager.BindEvent("Down", Input::Key::KEY_DOWN);
@@ -20,7 +20,7 @@ PlayerSystem::PlayerSystem():engine{Engine::Instance()}
     inputManager.RegisterEvent("Right", Input::Action::PRESS, this, &PlayerSystem::Right);
 
     inputManager.BindEvent("Left", Input::Key::KEY_LEFT);
-    inputManager.RegisterEvent("Left", Input::Action::PRESS, this, &PlayerSystem::Left);*/
+    inputManager.RegisterEvent("Left", Input::Action::PRESS, this, &PlayerSystem::Left);
 
     inputManager.BindEventAxis("Move up", Input::Key::KEY_W, 1.f);
     inputManager.RegisterEventAxis("Move up", this, &PlayerSystem::MoveForward);
@@ -69,7 +69,7 @@ void PlayerSystem::Down()
 {
     for (Entity entity : _entities)
     {
-        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
+        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayDownSound();
     }
 }
 
@@ -77,7 +77,7 @@ void PlayerSystem::Right()
 {
     for (Entity entity : _entities)
     {
-        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
+        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayRightSound();
     }
 }
 
@@ -85,7 +85,7 @@ void PlayerSystem::Left()
 {
     for (Entity entity : _entities)
     {
-        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
+        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayLeftSound();
     }
 }
 

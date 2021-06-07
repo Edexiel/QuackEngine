@@ -8,6 +8,7 @@
 
 #include "Renderer/RendererPlatform.hpp"
 
+#include "Player/PlayerComponent.hpp"
 #include "Enemy/EnemyComponent.hpp"
 #include "Tools/Random.hpp"
 
@@ -105,6 +106,39 @@ void EnemySystem::LeftHit()
     HitEnemies(NoteType::M_LEFT);
 }
 
+void EnemySystem::Update()
+{
+    Engine &engine = Engine::Instance();
+    World &world = engine.GetCurrentWorld();
+
+    Entity player;
+
+    for(Entity entity : world.GetEntityManager()->GetEntities())
+    {
+        if(world.HasComponent<PlayerComponent>(entity))
+        {
+            player = entity;
+            break;
+        }
+    }
+
+    Component::Transform& playerTransform = world.GetComponent<Component::Transform>(player);
+
+    for (Entity entity: _entities)
+    {
+        auto &transform = world.GetComponent<Component::Transform>(entity);
+        auto &enemy = world.GetComponent<EnemyComponent>(entity);
+
+        if (MoveEnemy(enemy, transform, playerTransform.position))
+        {
+            Engine::Instance().GetCurrentWorld().Clear();
+            Engine::Instance().SetCurrentWorld(Engine::Instance().GetCurrentWorld().GetName());
+            Engine::Instance().LoadWorld(Engine::Instance().GetCurrentWorld());
+            return;
+        }
+    }
+}
+
 void EnemySystem::Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &screenMesh,
                           Renderer::Shader &shader)
 {
@@ -125,27 +159,33 @@ void EnemySystem::Process(const Renderer::Framebuffer &buffer, const Renderer::M
     Renderer::RendererPlatform::SetTransparency(true);
     Renderer::RendererPlatform::EnableDepthBuffer(false);
 
-    Maths::Matrix4 invertView = camera.GetView().GetInvert();
+
     Component::Transform& cameraTransform = world.GetComponent<Component::Transform>(camera.GetEntity());
+
 
     for (Entity entity: _entities)
     {
         auto &transform = world.GetComponent<Component::Transform>(entity);
         auto &enemy = world.GetComponent<EnemyComponent>(entity);
 
-        MoveEnemy(enemy, transform, {0, 0, 0});
+        Maths::Matrix4 lookAtCam = Maths::Matrix4::LookAtMatrixRotation(transform.position, transform.position - cameraTransform.Forward(), {0.f,1.f,0.f});
+
 
         if (!enemy.GetNoteList().empty())
         {
             _listTexture[enemy.GetNoteList()[0]].Bind(1);
             shader.SetMatrix4("model",
             Maths::Matrix4::Translate(transform.position)
-            *
-            Maths::Matrix4::LookAtMatrix(transform.position,  transform.position - cameraTransform.Forward(), {0,1,0})
+            * lookAtCam
             * Maths::Matrix4::Scale(transform.scale * _arrowScale));
 
             screenMesh.Draw();
 
+        }
+        else
+        {
+            Engine::Instance().GetCurrentWorld().DestroyEntity(entity);
+            return;
         }
     }
 
@@ -158,18 +198,22 @@ float &EnemySystem::GetArrowScale()
     return _arrowScale;
 }
 
-void
+bool
 EnemySystem::MoveEnemy(EnemyComponent &enemy, Component::Transform &transform, const Maths::Vector3f &target)
 {
     Maths::Vector3f direction = target - transform.position;
 
-    if (direction.Length() <= hitRaduis)
-        return;
+    if ((transform.position - target).Length() <= hitRaduis)
+    {
+        return true;
+    }
 
     direction.Normalize();
     transform.position =
             transform.position + direction * Engine::Instance().GetTimeManager().GetDeltaTime() * enemy.speed;
     transform.rotation = Maths::Quaternion::LookAt(transform.position, target);
+
+    return false;
 }
 
 NoteDisplayProcess::NoteDisplayProcess() :

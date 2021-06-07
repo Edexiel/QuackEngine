@@ -15,7 +15,7 @@ void PlayerSound::PlayDownSound()
 
 void PlayerSound::PlayRightSound()
 {
-    //_rightSound.Restart();
+    _rightSound.Restart();
     _rightSound.Play();
 }
 
