@@ -11,6 +11,9 @@
 #include "Scene/System/CameraSystem.hpp"
 #include "Renderer/RendererInterface.hpp"
 #include "Renderer/PostProcessManager.hpp"
+#include "Enemy/EnemySpawnSystem.hpp"
+#include "Enemy/EnemySystem.hpp"
+
 
 #include "Scene/Core/World.hpp"
 
@@ -31,6 +34,8 @@ int main()
     Engine::SetInstance(engine);
 
     Game::Init(engine);
+
+    engine.GetCurrentWorld().GetSystem<CameraSystem>()->GetActiveCamera().Resize(1920, 1080);
 
     while (!engine.WindowShouldClose())
     {
@@ -54,8 +59,9 @@ int main()
         engine.GetCurrentWorld().GetSystem<Renderer::AnimatorSystem>()->Update();
         engine.GetCurrentWorld().GetSystem<PlayerSystem>()->Update();
 
+        engine.GetCurrentWorld().GetSystem<EnemySpawnSystem>()->Update();
+        engine.GetCurrentWorld().GetSystem<EnemySystem>()->Update();
 
-        //rendererInterface.cameraSystem->GetActiveCamera().Resize(wsize.x, wsize.y);
         Renderer::Framebuffer f = Renderer::RendererInterface::GetSceneUpdatedFramebuffer();
         engine.GetPostProcessManager().DrawTextureInFramebuffer(0,f.GetTexture());
 
