@@ -21,6 +21,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -113,6 +117,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -172,7 +180,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
+                    "type": 1,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -202,6 +210,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -302,6 +314,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -411,6 +427,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -517,6 +537,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -620,6 +644,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -732,6 +760,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -821,6 +853,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -916,6 +952,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -1005,6 +1045,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -1100,6 +1144,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -1189,6 +1237,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -1284,6 +1336,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -1373,6 +1429,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -1468,6 +1528,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -1557,6 +1621,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -1652,6 +1720,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -1741,6 +1813,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -1836,6 +1912,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -1925,6 +2005,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -2020,6 +2104,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -2109,6 +2197,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -2204,6 +2296,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -2293,6 +2389,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -2388,6 +2488,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -2477,6 +2581,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -2572,6 +2680,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -2661,6 +2773,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -2756,6 +2872,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -2845,6 +2965,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -2940,6 +3064,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -3032,6 +3160,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -3124,6 +3256,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -3216,6 +3352,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -3308,6 +3448,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -3397,6 +3541,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -3492,6 +3640,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -3584,6 +3736,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -3673,6 +3829,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -3768,6 +3928,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -3857,6 +4021,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -3952,6 +4120,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -4041,6 +4213,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -4136,6 +4312,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -4225,6 +4405,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -4320,6 +4504,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -4409,6 +4597,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -4504,6 +4696,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -4593,6 +4789,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -4688,6 +4888,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -4777,6 +4981,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -4872,6 +5080,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -4961,6 +5173,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -5056,6 +5272,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -5145,6 +5365,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -5240,6 +5464,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -5329,6 +5557,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -5424,6 +5656,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -5513,6 +5749,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -5608,6 +5848,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -5697,6 +5941,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -5792,6 +6040,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -5884,6 +6136,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -5973,6 +6229,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -6068,6 +6328,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -6157,6 +6421,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -6252,6 +6520,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -6341,6 +6613,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -6436,6 +6712,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -6525,6 +6805,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -6620,6 +6904,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -6709,6 +6997,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -6804,6 +7096,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -6893,6 +7189,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -6988,6 +7288,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -7077,6 +7381,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -7172,6 +7480,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -7261,6 +7573,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -7356,6 +7672,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -7445,6 +7765,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -7540,6 +7864,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -7629,6 +7957,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -7724,6 +8056,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -7813,6 +8149,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -7908,6 +8248,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -7997,6 +8341,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -8092,6 +8440,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -8181,6 +8533,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -8276,6 +8632,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -8365,6 +8725,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -8460,6 +8824,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -8549,6 +8917,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -8644,6 +9016,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -8733,6 +9109,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -8828,6 +9208,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -8917,6 +9301,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -9012,6 +9400,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -9101,6 +9493,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -9196,6 +9592,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -9285,6 +9685,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -9380,6 +9784,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -9469,6 +9877,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -9564,6 +9976,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -9653,6 +10069,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -9748,6 +10168,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -9837,6 +10261,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -9932,6 +10360,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -10021,6 +10453,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -10116,6 +10552,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -10205,6 +10645,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -10300,6 +10744,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -10389,6 +10837,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -10484,6 +10936,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -10573,6 +11029,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -10668,6 +11128,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -10757,6 +11221,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -10852,6 +11320,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -10941,6 +11413,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -11036,6 +11512,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -11125,6 +11605,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -11220,6 +11704,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -11309,6 +11797,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -11404,6 +11896,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -11493,6 +11989,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -11588,6 +12088,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -11677,6 +12181,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -11772,6 +12280,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -11861,6 +12373,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -11956,6 +12472,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -12048,6 +12568,10 @@
                         "value": true
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -12117,7 +12641,7 @@
                         0
                     ],
                     "materials": [
-                        "AnimationBard"
+                        "Player"
                     ]
                 },
                 "Animator": {
@@ -12172,6 +12696,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -12262,6 +12790,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -12358,6 +12890,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -12451,6 +12987,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -12541,6 +13081,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -12628,6 +13172,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -12723,6 +13271,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -12812,6 +13364,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -12907,6 +13463,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -12996,6 +13556,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -13091,6 +13655,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -13180,6 +13748,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -13275,6 +13847,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -13364,6 +13940,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {
@@ -13459,6 +14039,10 @@
                         "value": false
                     },
                     {
+                        "key": "EnemySpawner",
+                        "value": false
+                    },
+                    {
                         "key": "Light",
                         "value": false
                     },
@@ -13548,6 +14132,10 @@
                     },
                     {
                         "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "EnemySpawner",
                         "value": false
                     },
                     {

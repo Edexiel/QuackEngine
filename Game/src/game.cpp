@@ -24,6 +24,9 @@
 #include "TriggerSwitchScene/TriggerSwitchSceneComponent.hpp"
 #include "TriggerSwitchScene/TriggerSwitchSceneSystem.hpp"
 
+#include "Enemy/EnemySpawnSystem.hpp"
+#include "Enemy/EnemySpawnPointComponent.hpp"
+
 #include <cereal/archives/json.hpp>
 
 using namespace Resources;
@@ -31,36 +34,6 @@ using namespace Renderer;
 
 void Game::Init(Engine &engine)
 {
-    {
-
-        World &main = engine.CreateWorld("Main");
-        main.SetRegister(&Register);
-        main.SetInitGame(&InitGame);
-        main.SetInitSystems(&InitSystems);
-        main.SetInitSettings(&InitSettings);
-
-        /*** Serialization of external components**/
-        main.SetLoad(&Load);
-        main.SetSave(&Save);
-        main.SetBuild(&Build);
-        /*****************************************/
-
-//        engine.LoadWorld(main);
-    }
-    {
-        World &main = engine.CreateWorld("Main2");
-        main.SetRegister(&Register);
-        main.SetInitGame(&InitGame);
-        main.SetInitSystems(&InitSystems);
-        main.SetInitSettings(&InitSettings);
-
-        /*** Serialization of external components**/
-        main.SetLoad(&Load);
-        main.SetSave(&Save);
-        main.SetBuild(&Build);
-        /*****************************************/
-
-    }
     {
         World &dungeon = engine.CreateWorld("Dungeon");
         dungeon.SetRegister(&Register);
@@ -126,6 +99,7 @@ void Game::Register(World &world)
     world.RegisterComponent<Component::ParticleEmitter>();
     //local
     world.RegisterComponent<EnemyComponent>();
+    world.RegisterComponent<EnemySpawnPointComponent>();
     world.RegisterComponent<PlayerComponent>();
     world.RegisterComponent<TriggerSwitchSceneComponent>();
 
@@ -139,6 +113,7 @@ void Game::Register(World &world)
     world.RegisterSystem<AnimatorSystem>();
     world.RegisterSystem<PlayerSystem>();
     world.RegisterSystem<EnemySystem>();
+    world.RegisterSystem<EnemySpawnSystem>();
     world.RegisterSystem<ParticleSystem>();
     world.RegisterSystem<SimpleShadowSystem>();
     world.RegisterSystem<TriggerSwitchSceneSystem>();
@@ -195,12 +170,19 @@ void Game::Register(World &world)
         signatureAnimation.set(world.GetComponentType<Component::Animator>());
         world.SetSystemSignature<AnimatorSystem>(signatureAnimation);
     }
-    //signature enemymanager
+    //signature Enemy
     {
         Signature signatureEnemy;
         signatureEnemy.set(world.GetComponentType<EnemyComponent>());
         signatureEnemy.set(world.GetComponentType<Component::Transform>());
         world.SetSystemSignature<EnemySystem>(signatureEnemy);
+    }
+    //signature Enemy Spawners
+    {
+        Signature signatureEnemySpawn;
+        signatureEnemySpawn.set(world.GetComponentType<EnemySpawnPointComponent>());
+        signatureEnemySpawn.set(world.GetComponentType<Component::Transform>());
+        world.SetSystemSignature<EnemySpawnSystem>(signatureEnemySpawn);
     }
     //signature player
     {
@@ -261,6 +243,7 @@ void Game::InitSystems(World &world)
     engine.GetPostProcessManager().AddProcess(new ParticleProcess());
     engine.GetPostProcessManager().AddProcess(new SimpleShadowProcess());
     engine.GetPostProcessManager().AddProcess(new ParticleProcess());
+    engine.GetPostProcessManager().AddProcess(new NoteDisplayProcess());
 
     //engine.GetPostProcessManager().AddProcess(new ProcessBase("Night", Renderer::Shader::LoadShader("./Asset/Shader/NightEffect.qsh")));
 
@@ -318,17 +301,20 @@ void read(const World &w, cereal::JSONInputArchive &a, Entity e, const std::map<
 void Game::Save(const World &w, cereal::JSONOutputArchive &a, const std::map<std::string, bool> &c, Entity e)
 {
     write<PlayerComponent>(w, a, e, c, "Player");
+    write<EnemySpawnPointComponent>(w, a, e, c, "EnemySpawner");
     write<TriggerSwitchSceneComponent>(w, a, e, c, "TriggerSwitchSceneComponent");
 }
 
 void Game::Load(const World &w, cereal::JSONInputArchive &a, const std::map<std::string, bool> &c, Entity e)
 {
     read<PlayerComponent>(w, a, e, c, "Player");
+    read<EnemySpawnPointComponent>(w, a, e, c, "EnemySpawner");
     read<TriggerSwitchSceneComponent>(w, a, e, c, "TriggerSwitchSceneComponent");
 }
 
 void Game::Build(const World &world, std::map<std::string, bool> &c, Entity id)
 {
     build<PlayerComponent>(world, c, id, "Player");
+    build<EnemySpawnPointComponent>(world, c, id, "EnemySpawner");
     build<TriggerSwitchSceneComponent>(world, c, id, "TriggerSwitchSceneComponent");
 }

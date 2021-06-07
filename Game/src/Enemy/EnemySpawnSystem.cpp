@@ -4,6 +4,7 @@
 #include "Time/TimeManager.hpp"
 #include "Tools/Random.hpp"
 #include "Scene/Component/Transform.hpp"
+#include "Scene/Component/Model.hpp"
 
 #include "Enemy/EnemySpawnPointComponent.hpp"
 #include "Enemy/EnemyComponent.hpp"
@@ -15,10 +16,19 @@ void EnemySpawnSystem::Update()
     for (Entity entity : _entities)
     {
         auto& spawner = world.GetComponent<EnemySpawnPointComponent>(entity);
+
         if (time - spawner.lastTime > spawner.spawnInterval)
         {
             auto& trs = world.GetComponent<Component::Transform>(entity);
             GenerateEnemies(1, Random::Range(1, 3), trs.position, spawner.innerRadius, spawner.outerRadius);
+            spawner.lastTime = time;
+            spawner.nbEnemy--;
+        }
+
+        if (spawner.nbEnemy <= 0)
+        {
+            world.DestroyEntity(entity);
+            return;
         }
     }
 }
@@ -38,7 +48,8 @@ EnemySpawnSystem::GenerateEnemies(unsigned int numberToGenerate, unsigned int nb
             Component::Transform trs;
             Maths::Vector3f direction{Random::Range(0.f, 1.0f), 0, Random::Range(0.0f, 1.0f)};
             direction.Normalize();
-            trs.position = origin * innerRadius;
+            trs.position = origin * Random::Range(innerRadius, outerRadius);
+            trs.scale = {0.2f, 0.2f, 0.2f};
             world.AddComponent(id, trs);
 
             EnemyComponent enemyWeaknessDisplay;
@@ -46,7 +57,11 @@ EnemySpawnSystem::GenerateEnemies(unsigned int numberToGenerate, unsigned int nb
             {
                 enemyWeaknessDisplay.AddNote((NoteType)Random::Range(0,3));
             }
+            Renderer::ModelRenderer md = Engine::Instance().GetResourcesManager().LoadModel("./Asset/Model/Duck.fbx");
+            Component::Model model;
+            model.model = md;
 
+            world.AddComponent(id, model);
             world.AddComponent(id, enemyWeaknessDisplay);
         }
     }

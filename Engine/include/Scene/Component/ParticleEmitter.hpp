@@ -35,7 +35,7 @@ namespace Component
         void ResetParticle(Renderer::Particle& particle);
         void DrawParticle(const Renderer::Particle& particle, const Renderer::Mesh &screenMesh,
                           const Maths::Matrix4& scale, const Maths::Matrix4& emitterRotation);
-        void ReSynch(int index);
+        void ReSynch();
 
         Maths::Color4f& ColorStart();
         Maths::Color4f& ColorEnd();
