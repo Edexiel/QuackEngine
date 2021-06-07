@@ -17,7 +17,7 @@ enum NoteType {M_UP = 0, M_DOWN, M_RIGHT, M_LEFT};
 class EnemySystem : public System
 {
     Renderer::Texture _listTexture[4];
-    float _arrowScale {1};
+    float _arrowScale {2.f};
     float _time {0.0f};
     float _hitCooldown {0.2f};
 

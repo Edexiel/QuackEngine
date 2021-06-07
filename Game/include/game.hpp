@@ -25,6 +25,7 @@ private:
     static void InitGame(World &world);
     static void InitSystems(World &world);
     static void InitSettings(World &world);
+    static void InitSettingsDungeon(World &world);
 
     static void Build(const World &world, std::map<std::string, bool> &c, Entity id);
     static void Save(const World &w, cereal::JSONOutputArchive &a, const std::map<std::string, bool> &c, Entity e);

@@ -67,7 +67,7 @@ void PlayerSystem::Down()
 {
     for (Entity entity : _entities)
     {
-        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
+        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayDownSound();
     }
 }
 
@@ -75,7 +75,7 @@ void PlayerSystem::Right()
 {
     for (Entity entity : _entities)
     {
-        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
+        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayRightSound();
     }
 }
 
@@ -83,7 +83,7 @@ void PlayerSystem::Left()
 {
     for (Entity entity : _entities)
     {
-        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayUpSound();
+        engine.GetCurrentWorld().GetComponent<PlayerComponent>(entity).GetPlayerSound().PlayLeftSound();
     }
 }
 

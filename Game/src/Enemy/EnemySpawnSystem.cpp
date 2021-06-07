@@ -4,6 +4,7 @@
 #include "Time/TimeManager.hpp"
 #include "Tools/Random.hpp"
 #include "Scene/Component/Transform.hpp"
+#include "Scene/Component/Model.hpp"
 
 #include "Enemy/EnemySpawnPointComponent.hpp"
 #include "Enemy/EnemyComponent.hpp"
@@ -48,6 +49,7 @@ EnemySpawnSystem::GenerateEnemies(unsigned int numberToGenerate, unsigned int nb
             Maths::Vector3f direction{Random::Range(0.f, 1.0f), 0, Random::Range(0.0f, 1.0f)};
             direction.Normalize();
             trs.position = origin * Random::Range(innerRadius, outerRadius);
+            trs.scale = {0.2f, 0.2f, 0.2f};
             world.AddComponent(id, trs);
 
             EnemyComponent enemyWeaknessDisplay;
@@ -55,7 +57,11 @@ EnemySpawnSystem::GenerateEnemies(unsigned int numberToGenerate, unsigned int nb
             {
                 enemyWeaknessDisplay.AddNote((NoteType)Random::Range(0,3));
             }
+            Renderer::ModelRenderer md = Engine::Instance().GetResourcesManager().LoadModel("./Asset/Model/Duck.fbx");
+            Component::Model model;
+            model.model = md;
 
+            world.AddComponent(id, model);
             world.AddComponent(id, enemyWeaknessDisplay);
         }
     }
