@@ -62,9 +62,9 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": -15.0
+                        "x": -5.409180641174316,
+                        "y": 12.0,
+                        "z": -15.980740547180176
                     },
                     "scale": {
                         "x": 1.0,
@@ -138,7 +138,7 @@
                     },
                     {
                         "key": "SimpleShadow",
-                        "value": false
+                        "value": true
                     },
                     {
                         "key": "Transform",
@@ -154,9 +154,9 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": 4.0,
+                        "x": 3.5910000801086427,
                         "y": 0.0,
-                        "z": 0.0
+                        "z": -1.9807405471801758
                     },
                     "scale": {
                         "x": 0.009999999776482582,
@@ -186,7 +186,7 @@
                     ]
                 },
                 "Animator": {
-                    "path": ""
+                    "path": "./Asset/Animation/Standard Run.fbx"
                 },
                 "RigidBody": {
                     "mass": 1.0,
@@ -203,6 +203,19 @@
                 },
                 "CharacterController": {
                     "speed": 15.0
+                },
+                "SimpleShadow": {
+                    "scale": {
+                        "x": 100.0,
+                        "y": 100.0
+                    },
+                    "offset": {
+                        "x": 0.0,
+                        "y": -1.5,
+                        "z": 0.0
+                    },
+                    "type": 1,
+                    "yRotation": 0.0
                 },
                 "Player": {
                     "ok": 0
@@ -414,6 +427,98 @@
                     "quadratic": 0.000007000000096013537,
                     "spotAngle": 8.5,
                     "outerSpotAngle": 10.5
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    },
+                    {
+                        "key": "TriggerSwitchSceneComponent",
+                        "value": false
+                    }
+                ],
+                "Name": {
+                    "name": "Floor"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 3.6699836254119875,
+                        "y": -2.4692940711975099,
+                        "z": -1.946150302886963
+                    },
+                    "scale": {
+                        "x": 50.0,
+                        "y": 1.0,
+                        "z": 50.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/Cube.fbx",
+                    "type": 0,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "materialsIndex": [
+                        0
+                    ],
+                    "materials": [
+                        "Default material"
+                    ]
                 }
             }
         ]

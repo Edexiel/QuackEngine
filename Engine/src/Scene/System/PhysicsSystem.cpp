@@ -267,8 +267,9 @@ void PhysicsSystem::SwitchingScene()
 {
     _isSwitchingScene = false;
     auto &engine = Engine::Instance();
-    Engine::Instance().SetCurrentWorld(_worldName);
+    std::string temp = _worldName;
     engine.GetCurrentWorld().Clear();
+    Engine::Instance().SetCurrentWorld(temp);
     Engine::Instance().LoadWorld(engine.GetCurrentWorld());
 }
 
