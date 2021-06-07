@@ -95,6 +95,7 @@ public:
 
     bool WindowShouldClose();
     void TestWindowShouldClose();
+    void CloseWindows();
     void SwapBuffers();
 
     float GetFps() const;

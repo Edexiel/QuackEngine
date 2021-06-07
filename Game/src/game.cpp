@@ -75,6 +75,22 @@ void Game::Init(Engine &engine)
         /*****************************************/
         //engine.LoadWorld(dungeon);
     }
+    //Village
+    {
+        World &main = engine.CreateWorld("Village");
+        main.SetRegister(&Register);
+        main.SetInitGame(&InitGame);
+        main.SetInitSystems(&InitSystems);
+        main.SetInitSettings(&InitSettings);
+
+        /*** Serialization of external components**/
+        main.SetLoad(&Load);
+        main.SetSave(&Save);
+        main.SetBuild(&Build);
+        /*****************************************/
+
+
+    }
     {
         World &main = engine.CreateWorld("CampfireScene");
         main.SetRegister(&Register);
@@ -82,7 +98,7 @@ void Game::Init(Engine &engine)
         main.SetInitSystems(&InitSystems);
         main.SetInitSettings(&InitSettings);
 
-    engine.SetCurrentWorld("Dungeon"); //obligatoire
+//    engine.SetCurrentWorld("Dungeon"); //obligatoire
         /*** Serialization of external components**/
         main.SetLoad(&Load);
         main.SetSave(&Save);
@@ -244,7 +260,6 @@ void Game::InitSystems(World &world)
     std::unique_ptr<ProcessBase> ptr = std::make_unique<NoteDisplayProcess>(NoteDisplayProcess());
     engine.GetPostProcessManager().AddProcess(ptr);
 
-    engine.GetPostProcessManager().AddProcess(new ParticleProcess());
     engine.GetPostProcessManager().AddProcess(new SimpleShadowProcess());
     engine.GetPostProcessManager().AddProcess(new ParticleProcess());
 

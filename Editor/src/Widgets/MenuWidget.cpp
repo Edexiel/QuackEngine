@@ -25,6 +25,12 @@ void MenuWidget::UpdateVisible()
         ImGui::EndMenu();
     }
 
+    if (ImGui::BeginMenu("Quit"))
+    {
+        _engine.CloseWindows();
+        ImGui::EndMenu();
+    }
+
     if (show_scenes)
     {
         ImGui::OpenPopup("Scenes");
