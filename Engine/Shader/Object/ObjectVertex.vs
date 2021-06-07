@@ -59,7 +59,7 @@ void main(void)
 
     #ifdef LIGHT
         #ifdef SKELETON
-            Position =  vec3(model * boneTransform * vec4(vertexPosition, 1));
+            Position =  vec3(model * vec4(vertexPosition, 1));
             Normal = vec3(model * boneTransform * vec4(vertexNormal, 0));
         #else
             Position =  vec3(model * vec4(vertexPosition, 1));
