@@ -5,13 +5,11 @@
 
 #include "Renderer/RendererPlatform.hpp"
 
-#include "Scene/System/CameraSystem.hpp"
 #include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/System/CharacterControllerSystem.hpp"
 #include "Scene/System/PhysicsSystem.hpp"
 #include "Scene/System/LightSystem.hpp"
 
-#include "Scene/System/AnimatorSystem.hpp"
 #include "Scene/System/CameraGameplaySystem.hpp"
 
 #include "Enemy/EnemySpawnSystem.hpp"

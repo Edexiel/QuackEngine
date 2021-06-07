@@ -4,6 +4,7 @@
 #include "Renderer/Framebuffer.hpp"
 #include "Renderer/Shape.hpp"
 #include "Scene/Component/Transform.hpp"
+#include "Scene/Core/World.hpp"
 
 #include "Debug/Log.hpp"
 
@@ -27,11 +28,12 @@ void Text::Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &sc
 
     _shader.Use();
     buffer.BindTexture();
-    RenderText("QuackEngine Demo:", {-0.99f, 0.925f}, 0.25f, {1.0f, 1.0f, 1.0f, 1}, screenMesh);
+    const World& world = Engine::Instance().GetCurrentWorld();
+    RenderText(world.GetName(), {-0.99f, 0.925f}, 0.25f, {1.0f, 1.0f, 1.0f, 1}, screenMesh);
     RendererPlatform::BindFramebuffer(0);
 }
 
-void Text::RenderText(std::string text, Maths::Vector2f position, float scale, Maths::Vector4f color, const Mesh &quad)
+void Text::RenderText(const std::string& text, Maths::Vector2f position, float scale, Maths::Vector4f color, const Mesh &quad)
 {
     _shader.Use();
     float x{0};
