@@ -50,7 +50,7 @@ int main()
 
         /** POLL INPUT **/
         engine.GetInputManager().Update();
-        engine.TestWindowShouldClose();
+//        engine.TestWindowShouldClose();
 
         /** Editor draw **/
         editor.Draw();
@@ -65,7 +65,6 @@ int main()
             engine.GetCurrentWorld().GetSystem<CharacterControllerSystem>()->Update();
             engine.GetCurrentWorld().GetSystem<CameraGameplaySystem>()->Update();
             engine.GetCurrentWorld().GetSystem<Renderer::AnimatorSystem>()->Update();
-
             engine.GetCurrentWorld().GetSystem<PlayerSystem>()->Update();
 
         }

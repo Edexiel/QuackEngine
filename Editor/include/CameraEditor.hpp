@@ -39,7 +39,7 @@ private:
     float _pitch = 0;
 
     float _speedTranslation = 5.0f;
-    float _speedRotation = 0.10f;
+    float _speedRotation = 0.1f;
 
     void SetRightScale(float scale);
     void SetLeftScale(float scale);
