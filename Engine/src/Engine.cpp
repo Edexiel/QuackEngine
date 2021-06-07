@@ -153,6 +153,12 @@ bool Engine::WindowShouldClose()
     return glfwWindowShouldClose(_window);
 }
 
+void Engine::CloseWindows()
+{
+    glfwSetWindowShouldClose(_window, 1);
+
+}
+
 Renderer::RendererInterface &Engine::GetRendererInterface()
 {
     return _rendererInterface;
@@ -206,7 +212,7 @@ World &Engine::CreateWorld(std::string name)
 
 void Engine::SaveWorld(const std::string &worldName)
 {
-    World& oldWorld= GetCurrentWorld();
+    World &oldWorld = GetCurrentWorld();
     SetCurrentWorld(worldName);
 
     fs::path path{"./Asset"};
@@ -266,7 +272,7 @@ void Engine::FillTexture(Renderer::Texture &T)
 
 void Engine::LoadWorld(World &world)
 {
-    World& oldWorld= GetCurrentWorld();
+    World &oldWorld = GetCurrentWorld();
     SetCurrentWorld(world.GetName());
     _worlds.at(_currentWorld).Register();
 
@@ -332,7 +338,7 @@ void Engine::LoadWorld(World &world)
 
 void Engine::RemoveWorld(const std::string &name)
 {
-    Log_Info("Removing world {}",name);
+    Log_Info("Removing world {}", name);
 
     auto it = _worldLut.find(name);
     if (it == _worldLut.end())
@@ -353,7 +359,7 @@ void Engine::RemoveWorld(const std::string &name)
 
     if (std::filesystem::remove(worldPath))
     {
-        Log_Info("World {} removed",name);
+        Log_Info("World {} removed", name);
     }
 
 }
@@ -392,7 +398,7 @@ void Engine::UpdateTime()
 
     if (_timeAcc >= 1.0f)
     {
-        _fps = roundf(1. / (_timeAcc / _frames));
+        _fps = std::roundf(1.f / ((float)_timeAcc / (float)_frames));
         _frames = 0;
         _timeAcc = 0.;
     }
