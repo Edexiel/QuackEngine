@@ -80,7 +80,7 @@
                 },
                 "Camera": {
                     "isActive": true,
-                    "_width": 698,
+                    "_width": 848,
                     "_height": 406,
                     "_far": 1000.0,
                     "_near": 0.009999999776482582,
