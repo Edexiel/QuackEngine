@@ -372,6 +372,7 @@ const Asset *ResourcesManager::GetAsset(const std::string &name)
 
 void ResourcesManager::Clear()
 {
+    _mapMaterial.clear();
     _mapModel.clear();
     _mapTexture.clear();
     _mapShader.clear();
@@ -380,5 +381,4 @@ void ResourcesManager::Clear()
     _mapAnimation.clear();
 
     _globalAssetMap.clear();
-
 }
