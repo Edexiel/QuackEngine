@@ -1,4 +1,4 @@
-#include "Enemy/EnemyManagerSystem.hpp"
+#include "Enemy/EnemySystem.hpp"
 
 #include "Engine.hpp"
 
@@ -11,7 +11,7 @@
 #include "Enemy/EnemyComponent.hpp"
 #include "Tools/Random.hpp"
 
-EnemyManagerSystem::EnemyManagerSystem()
+EnemySystem::EnemySystem()
 {
     Engine &engine = Engine::Instance();
     _listTexture[0] = engine.GetResourcesManager().LoadTexture("./Asset/Texture/Arrow/Up.png");
@@ -22,21 +22,21 @@ EnemyManagerSystem::EnemyManagerSystem()
     Input::InputManager& inputManager = engine.GetInputManager();
 
     inputManager.BindEvent("Up Hit", Input::Key::KEY_UP);
-    inputManager.RegisterEvent("Up Hit", Input::Action::PRESS, this, &EnemyManagerSystem::UpHit);
+    inputManager.RegisterEvent("Up Hit", Input::Action::PRESS, this, &EnemySystem::UpHit);
 
     inputManager.BindEvent("Down Hit", Input::Key::KEY_DOWN);
-    inputManager.RegisterEvent("Down Hit", Input::Action::PRESS, this, &EnemyManagerSystem::DownHit);
+    inputManager.RegisterEvent("Down Hit", Input::Action::PRESS, this, &EnemySystem::DownHit);
 
     inputManager.BindEvent("Right Hit", Input::Key::KEY_RIGHT);
-    inputManager.RegisterEvent("Right Hit", Input::Action::PRESS, this, &EnemyManagerSystem::RightHit);
+    inputManager.RegisterEvent("Right Hit", Input::Action::PRESS, this, &EnemySystem::RightHit);
 
     inputManager.BindEvent("Left Hit", Input::Key::KEY_LEFT);
-    inputManager.RegisterEvent("Left Hit", Input::Action::PRESS, this, &EnemyManagerSystem::LeftHit);
+    inputManager.RegisterEvent("Left Hit", Input::Action::PRESS, this, &EnemySystem::LeftHit);
 }
 
 void
-EnemyManagerSystem::GenerateEnemies(unsigned int numberToGenerate, const Maths::Vector3f &origin, float innerRadius,
-                                    float outerRadius)
+EnemySystem::GenerateEnemies(unsigned int numberToGenerate, const Maths::Vector3f &origin, float innerRadius,
+                             float outerRadius)
 {
     World &world = Engine::Instance().GetCurrentWorld();
 
@@ -61,7 +61,7 @@ EnemyManagerSystem::GenerateEnemies(unsigned int numberToGenerate, const Maths::
     }
 }
 
-void EnemyManagerSystem::HitEnemies(NoteType note)
+void EnemySystem::HitEnemies(NoteType note)
 {
     Engine& engine = Engine::Instance();
 
@@ -85,28 +85,28 @@ void EnemyManagerSystem::HitEnemies(NoteType note)
     }
 }
 
-void EnemyManagerSystem::UpHit()
+void EnemySystem::UpHit()
 {
     HitEnemies(NoteType::M_UP);
 }
 
-void EnemyManagerSystem::DownHit()
+void EnemySystem::DownHit()
 {
     HitEnemies(NoteType::M_DOWN);
 }
 
-void EnemyManagerSystem::RightHit()
+void EnemySystem::RightHit()
 {
     HitEnemies(NoteType::M_RIGHT);
 }
 
-void EnemyManagerSystem::LeftHit()
+void EnemySystem::LeftHit()
 {
     HitEnemies(NoteType::M_LEFT);
 }
 
-void EnemyManagerSystem::Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &screenMesh,
-                                 Renderer::Shader &shader)
+void EnemySystem::Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &screenMesh,
+                          Renderer::Shader &shader)
 {
     Engine &engine = Engine::Instance();
     World &world = engine.GetCurrentWorld();
@@ -153,13 +153,13 @@ void EnemyManagerSystem::Process(const Renderer::Framebuffer &buffer, const Rend
 }
 
 
-float &EnemyManagerSystem::GetArrowScale()
+float &EnemySystem::GetArrowScale()
 {
     return _arrowScale;
 }
 
 void
-EnemyManagerSystem::MoveEnemy(EnemyComponent &enemy, Component::Transform &transform, const Maths::Vector3f &target)
+EnemySystem::MoveEnemy(EnemyComponent &enemy, Component::Transform &transform, const Maths::Vector3f &target)
 {
     Maths::Vector3f direction = target - transform.position;
 
@@ -173,12 +173,12 @@ EnemyManagerSystem::MoveEnemy(EnemyComponent &enemy, Component::Transform &trans
 }
 
 NoteDisplayProcess::NoteDisplayProcess() :
-        Renderer::ProcessBase("EnemyManagerSystem",
+        Renderer::ProcessBase("EnemySystem",
                               Engine::Instance().GetResourcesManager().LoadShader
                                       ("./Asset/Shader/NoteDisplayShader.qsh"))
 {}
 
 void NoteDisplayProcess::Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &screenMesh)
 {
-    Engine::Instance().GetCurrentWorld().GetSystem<EnemyManagerSystem>()->Process(buffer, screenMesh, _shader);
+    Engine::Instance().GetCurrentWorld().GetSystem<EnemySystem>()->Process(buffer, screenMesh, _shader);
 }
