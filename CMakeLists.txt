@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(QUACK_BUILD_TESTS "Build Tests" OFF)
+option(QUACK_BUILD_RUNNER "Build game" OFF)
+
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT supported OUTPUT error)
@@ -155,31 +157,36 @@ add_subdirectory(Game)
 set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install)
 
 #install(CODE "file(REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE})")
+if (QUACK_BUILD_RUNNER)
 
-install(TARGETS Editor RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
-install(TARGETS Engine RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
-
-if (WIN32)
-#    file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Asset LINK)
-#    file(TO_NATIVE_PATH ${PROJECT_SOURCE_DIR}/Game/Asset TARGET)
-##    install(CODE "EXECUTE_PROCESS(COMMAND \"cmd.exe\" \"/K\" \"mklink\" \"/j\" \"${LINK_ASSET}\" \"${TARGET_ASSET}\")")
-#    EXECUTE_PROCESS(COMMAND "cmd.exe" "/K" "mklink" "/j" "${LINK}" "${TARGET}")
-#
-#    file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Shader LINK)
-#    file(TO_NATIVE_PATH ${PROJECT_SOURCE_DIR}/Engine/Shader TARGET)
-#    EXECUTE_PROCESS(COMMAND "cmd.exe" "/K" "mklink" "/j" "${LINK}" "${TARGET}")
-#
-#    install(CODE "EXECUTE_PROCESS(COMMAND \"cmd.exe\" \"/K\" \"mklink\" \"/j\" \"${LINK_SHADER}\" \"${TARGET_SHADER}\")")
+    #install(CODE "file(REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/Game)")
+    install(TARGETS Runner RUNTIME DESTINATION Game )
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/Game/Asset DESTINATION ${CMAKE_INSTALL_PREFIX}/Game)
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/Engine/Shader DESTINATION ${CMAKE_INSTALL_PREFIX}/Game)
 
 else ()
+    install(TARGETS Editor RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
+    install(TARGETS Engine RUNTIME DESTINATION ${CMAKE_BUILD_TYPE})
+    if (WIN32)
+        #    file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Asset LINK)
+        #    file(TO_NATIVE_PATH ${PROJECT_SOURCE_DIR}/Game/Asset TARGET)
+        ##    install(CODE "EXECUTE_PROCESS(COMMAND \"cmd.exe\" \"/K\" \"mklink\" \"/j\" \"${LINK_ASSET}\" \"${TARGET_ASSET}\")")
+        #    EXECUTE_PROCESS(COMMAND "cmd.exe" "/K" "mklink" "/j" "${LINK}" "${TARGET}")
+        #
+        #    file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Shader LINK)
+        #    file(TO_NATIVE_PATH ${PROJECT_SOURCE_DIR}/Engine/Shader TARGET)
+        #    EXECUTE_PROCESS(COMMAND "cmd.exe" "/K" "mklink" "/j" "${LINK}" "${TARGET}")
+        #
+        #    install(CODE "EXECUTE_PROCESS(COMMAND \"cmd.exe\" \"/K\" \"mklink\" \"/j\" \"${LINK_SHADER}\" \"${TARGET_SHADER}\")")
 
-    install(CODE "file(CREATE_LINK ${PROJECT_SOURCE_DIR}/Game/Asset ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Asset SYMBOLIC)")
-    install(CODE "file(CREATE_LINK ${PROJECT_SOURCE_DIR}/Engine/Shader ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Shader SYMBOLIC)")
+    else ()
+
+        install(CODE "file(CREATE_LINK ${PROJECT_SOURCE_DIR}/Game/Asset ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Asset SYMBOLIC)")
+        install(CODE "file(CREATE_LINK ${PROJECT_SOURCE_DIR}/Engine/Shader ${CMAKE_INSTALL_PREFIX}/${CMAKE_BUILD_TYPE}/Shader SYMBOLIC)")
+    endif ()
+
 endif ()
 
-#install(TARGETS Runner
-#        CONFIGURATIONS Release
-#        RUNTIME DESTINATION Release/bin)
 
 #if( supported )
 #    message(STATUS "IPO / LTO enabled")
@@ -189,10 +196,6 @@ endif ()
 #else()
 #    message(STATUS "IPO / LTO not supported: <${error}>")
 #endif()
-
-
-
-
 
 
 #if(NOT MSVC)

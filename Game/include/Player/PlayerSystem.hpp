@@ -2,7 +2,6 @@
 #define QUACKENGINE_PLAYERSYSTEM_HPP
 
 #include "Scene/Core/System.hpp"
-#include "Engine.hpp"
 
 
 class PlayerSystem : public System
@@ -19,7 +18,7 @@ public:
     void Left();
 
 private:
-    Engine& engine;
+    class Engine& engine;
     bool _running {true};
 
     void MoveForward(float verticalAxis);
