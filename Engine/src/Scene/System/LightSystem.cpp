@@ -50,6 +50,12 @@ void LightSystem::Update()
 
 void LightSystem::AddShaderToUpdate(const Renderer::Shader& shader)
 {
+    for (unsigned int i = 0; i < _listShaderToUpdate.size(); i++)
+    {
+        if (shader.GetID() == _listShaderToUpdate[i].GetID())
+            return;
+    }
+
     _listShaderToUpdate.push_back(shader);
 }
 

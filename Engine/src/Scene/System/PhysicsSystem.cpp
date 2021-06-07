@@ -35,7 +35,13 @@ void PhysicsSystem::FixedUpdate(float fixedDeltaTime)
         t.rotation = {transform.getOrientation().w, transform.getOrientation().x, transform.getOrientation().y,
                       transform.getOrientation().z};
     }
+
     world->GetPhysicsWorld()->update(fixedDeltaTime);
+
+    if(_isSwitchingScene)
+    {
+        SwitchingScene();
+    }
 }
 
 void PhysicsSystem::AddBoxCollider(Entity id, const Maths::Vector3f &halfExtend, const Maths::Vector3f &position,
@@ -255,4 +261,23 @@ void PhysicsSystem::SetTransform(Entity id, const Maths::Vector3f &position, con
     rigidBody.rb->setTransform(t);
     transform.position = position;
     transform.rotation = rotation;
+}
+
+void PhysicsSystem::SwitchingScene()
+{
+    _isSwitchingScene = false;
+    auto &engine = Engine::Instance();
+    Engine::Instance().SetCurrentWorld(_worldName);
+    engine.GetCurrentWorld().Clear();
+    Engine::Instance().LoadWorld(engine.GetCurrentWorld());
+}
+
+void PhysicsSystem::SetIsSwitchingScene(bool isSwitching)
+{
+    _isSwitchingScene = isSwitching;
+}
+
+void PhysicsSystem::SetWorldName(std::string name)
+{
+    _worldName = name;
 }
