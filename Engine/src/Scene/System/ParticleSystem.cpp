@@ -10,7 +10,7 @@ using namespace Renderer;
 
 void ParticleSystem::Process(const Framebuffer &buffer, const Mesh &screenMesh)
 {
-    RendererPlatform::EnableDepthBuffer(false);
+    RendererPlatform::EnableDepthBuffer(true);
     RendererPlatform::SetTransparency(true);
 
     World& world = Engine::Instance().GetCurrentWorld();

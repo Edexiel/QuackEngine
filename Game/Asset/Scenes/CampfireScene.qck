@@ -51,10 +51,6 @@
                     {
                         "key": "Transform",
                         "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
                     }
                 ],
                 "Name": {
@@ -62,20 +58,20 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": -10.937999725341797,
-                        "y": 2.1689999103546144,
-                        "z": 21.790000915527345
+                        "x": -6.938000202178955,
+                        "y": 3.1689999103546144,
+                        "z": 7.789999961853027
                     },
                     "scale": {
                         "x": 0.9999567270278931,
-                        "y": 0.9998340606689453,
-                        "z": 0.9999410510063171
+                        "y": 0.9998338222503662,
+                        "z": 0.9999409914016724
                     },
                     "rotation": {
-                        "w": 0.3826834559440613,
-                        "x": -4.924683025819832e-7,
-                        "y": 0.9238795042037964,
-                        "z": -4.924683025819832e-7
+                        "w": 0.9929666519165039,
+                        "x": 0.11313421279191971,
+                        "y": 0.03467525169253349,
+                        "z": -0.003949777223169804
                     }
                 },
                 "Camera": {
@@ -89,8 +85,8 @@
                 "CameraGameplay": {
                     "value0": {
                         "x": 0.0,
-                        "y": 4.0,
-                        "z": -6.0
+                        "y": 8.0,
+                        "z": -12.0
                     }
                 },
                 "Player": {
@@ -146,10 +142,6 @@
                     {
                         "key": "Transform",
                         "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
                     }
                 ],
                 "Name": {
@@ -236,10 +228,6 @@
                     {
                         "key": "Transform",
                         "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
                     }
                 ],
                 "Name": {
@@ -265,7 +253,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
+                    "type": 1,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -328,10 +316,6 @@
                     {
                         "key": "Transform",
                         "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
                     }
                 ],
                 "Name": {
@@ -357,7 +341,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
+                    "type": 1,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -433,10 +417,6 @@
                     {
                         "key": "Transform",
                         "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
                     }
                 ],
                 "Name": {
@@ -462,7 +442,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
+                    "type": 1,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -538,10 +518,6 @@
                     {
                         "key": "Transform",
                         "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
                     }
                 ],
                 "Name": {
@@ -638,10 +614,6 @@
                     {
                         "key": "Transform",
                         "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
                     }
                 ],
                 "Name": {
@@ -749,10 +721,6 @@
                     {
                         "key": "Transform",
                         "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
                     }
                 ],
                 "Name": {
@@ -839,10 +807,6 @@
                     {
                         "key": "Transform",
                         "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
                     }
                 ],
                 "Name": {
@@ -944,10 +908,6 @@
                     {
                         "key": "Transform",
                         "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
                     }
                 ],
                 "Name": {
@@ -1055,10 +1015,6 @@
                     {
                         "key": "Transform",
                         "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
                     }
                 ],
                 "Name": {
@@ -1066,20 +1022,20 @@
                 },
                 "Transform": {
                     "position": {
-                        "x": -2.3259999752044679,
-                        "y": 0.3972446918487549,
-                        "z": 14.424217224121094
+                        "x": -2.8387534618377687,
+                        "y": 0.39696794748306277,
+                        "z": 16.350326538085939
                     },
                     "scale": {
-                        "x": 0.009999999776482582,
+                        "x": 0.00999999325722456,
                         "y": 0.009999999776482582,
-                        "z": 0.009999999776482582
+                        "z": 0.00999999325722456
                     },
                     "rotation": {
-                        "w": 1.0,
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
+                        "w": -0.6946583986282349,
+                        "x": -0.0000012866858014604077,
+                        "y": 0.7193397283554077,
+                        "z": -0.0000012866858014604077
                     }
                 },
                 "Model": {
@@ -1094,11 +1050,11 @@
                         0
                     ],
                     "materials": [
-                        "AnimationBard"
+                        "Player"
                     ]
                 },
                 "Animator": {
-                    "path": ""
+                    "path": "./Asset/Animation/Idle.fbx"
                 },
                 "RigidBody": {
                     "mass": 1.0,
@@ -1182,10 +1138,6 @@
                     {
                         "key": "Transform",
                         "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
                     }
                 ],
                 "Name": {
@@ -1217,9 +1169,9 @@
                         "z": 0.0
                     },
                     "diffuse": {
-                        "x": 0.0637248307466507,
-                        "y": 0.0637250766158104,
-                        "z": 0.06372547149658203
+                        "x": 0.062745101749897,
+                        "y": 0.062745101749897,
+                        "z": 0.09803921729326248
                     },
                     "specular": {
                         "x": 0.0,
@@ -1282,20 +1234,16 @@
                     {
                         "key": "Transform",
                         "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
                     }
                 ],
                 "Name": {
-                    "name": "FireCamp"
+                    "name": "FireParticle"
                 },
                 "Transform": {
                     "position": {
                         "x": -6.099999904632568,
                         "y": 0.0,
-                        "z": 17.0
+                        "z": 16.5
                     },
                     "scale": {
                         "x": 0.10000000149011612,
@@ -1326,9 +1274,450 @@
                     "_angleEnd": 2.268928050994873,
                     "_lengthStart": 1.0,
                     "_lengthEnd": 2.0,
-                    "_duration": 6.0,
-                    "Size": 181,
+                    "_duration": 15.0,
+                    "Size": 15,
                     "Texture": ""
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "Wall"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 19.596712112426759,
+                        "y": 8.689316749572754,
+                        "z": 41.02629089355469
+                    },
+                    "scale": {
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/CubeUV.fbx",
+                    "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "materialsIndex": [
+                        0
+                    ],
+                    "materials": [
+                        "WallDungeon"
+                    ]
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "Wall"
+                },
+                "Transform": {
+                    "position": {
+                        "x": 0.0,
+                        "y": 8.689316749572754,
+                        "z": 41.02629089355469
+                    },
+                    "scale": {
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/CubeUV.fbx",
+                    "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "materialsIndex": [
+                        0
+                    ],
+                    "materials": [
+                        "WallDungeon"
+                    ]
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "Wall"
+                },
+                "Transform": {
+                    "position": {
+                        "x": -19.712100982666017,
+                        "y": 8.689316749572754,
+                        "z": 41.02629089355469
+                    },
+                    "scale": {
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/CubeUV.fbx",
+                    "type": 1,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "materialsIndex": [
+                        0
+                    ],
+                    "materials": [
+                        "WallDungeon"
+                    ]
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": true
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": false
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "Door"
+                },
+                "Transform": {
+                    "position": {
+                        "x": -2.0744528770446779,
+                        "y": -0.7023122906684876,
+                        "z": 40.03984451293945
+                    },
+                    "scale": {
+                        "x": 0.019999999552965165,
+                        "y": 0.019999999552965165,
+                        "z": 0.019999999552965165
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "Model": {
+                    "path": "./Asset/Model/SM_Bld_Castle_Wall_Door_Big_01.fbx",
+                    "type": 0,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "materialsIndex": [
+                        0,
+                        1,
+                        1
+                    ],
+                    "materials": [
+                        "Rock",
+                        "LightBrownTrunk"
+                    ]
+                }
+            },
+            {
+                "components": [
+                    {
+                        "key": "Animator",
+                        "value": false
+                    },
+                    {
+                        "key": "Camera",
+                        "value": false
+                    },
+                    {
+                        "key": "CameraGameplay",
+                        "value": false
+                    },
+                    {
+                        "key": "CharacterController",
+                        "value": false
+                    },
+                    {
+                        "key": "Light",
+                        "value": false
+                    },
+                    {
+                        "key": "Model",
+                        "value": false
+                    },
+                    {
+                        "key": "Name",
+                        "value": true
+                    },
+                    {
+                        "key": "ParticleEmitter",
+                        "value": false
+                    },
+                    {
+                        "key": "Player",
+                        "value": false
+                    },
+                    {
+                        "key": "RigidBody",
+                        "value": true
+                    },
+                    {
+                        "key": "SimpleShadow",
+                        "value": false
+                    },
+                    {
+                        "key": "Transform",
+                        "value": true
+                    }
+                ],
+                "Name": {
+                    "name": "IncisibleWallBack"
+                },
+                "Transform": {
+                    "position": {
+                        "x": -0.20080500841140748,
+                        "y": 0.22040820121765138,
+                        "z": 40.91185760498047
+                    },
+                    "scale": {
+                        "x": 75.0,
+                        "y": 20.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "w": 1.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                },
+                "RigidBody": {
+                    "mass": 1.0,
+                    "bounciness": 0.0,
+                    "gravity": true,
+                    "trigger": false,
+                    "bodyType": 0,
+                    "shapeType": 2,
+                    "shapeParams": {
+                        "x": 75.0,
+                        "y": 20.0,
+                        "z": 1.0
+                    }
                 }
             }
         ]

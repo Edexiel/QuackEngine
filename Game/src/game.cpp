@@ -73,7 +73,7 @@ void Game::Init(Engine &engine)
         dungeon.SetSave(&Save);
         dungeon.SetBuild(&Build);
         /*****************************************/
-        engine.LoadWorld(dungeon);
+        //engine.LoadWorld(dungeon);
     }
     //Village
     {
@@ -104,9 +104,9 @@ void Game::Init(Engine &engine)
         main.SetSave(&Save);
         main.SetBuild(&Build);
         /*****************************************/
-//        engine.LoadWorld(main);
+        engine.LoadWorld(main);
     }
-    engine.SetCurrentWorld("Dungeon"); //obligatoire
+    engine.SetCurrentWorld("CampfireScene"); //obligatoire
 }
 
 void Game::Register(World &world)
@@ -140,7 +140,7 @@ void Game::Register(World &world)
     world.RegisterSystem<CameraGameplaySystem>();
     world.RegisterSystem<AnimatorSystem>();
     world.RegisterSystem<PlayerSystem>();
-    world.RegisterSystem<EnemyManagerSystem>();
+    world.RegisterSystem<EnemySystem>();
     world.RegisterSystem<ParticleSystem>();
     world.RegisterSystem<SimpleShadowSystem>();
     world.RegisterSystem<TriggerSwitchSceneSystem>();
@@ -202,7 +202,7 @@ void Game::Register(World &world)
         Signature signatureEnemy;
         signatureEnemy.set(world.GetComponentType<EnemyComponent>());
         signatureEnemy.set(world.GetComponentType<Component::Transform>());
-        world.SetSystemSignature<EnemyManagerSystem>(signatureEnemy);
+        world.SetSystemSignature<EnemySystem>(signatureEnemy);
     }
     //signature player
     {
@@ -242,7 +242,7 @@ void Game::InitGame(World &world)
 {
     Log_Info("Initializing scene: {}", world.GetName());
     //Engine::Instance().GetTimeManager().SetTime(1);
-    //world.GetSystem<EnemyManagerSystem>()->GenerateEnemies(10, {0, 0, 0}, 50.f, 100.f);
+    //world.GetSystem<EnemySystem>()->GenerateEnemies(10, {0, 0, 0}, 50.f, 100.f);
 }
 
 void Game::InitSystems(World &world)

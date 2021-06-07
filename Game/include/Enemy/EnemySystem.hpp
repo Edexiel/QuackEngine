@@ -14,7 +14,7 @@ class EnemyComponent;
 
 enum NoteType {M_UP = 0, M_DOWN, M_RIGHT, M_LEFT};
 
-class EnemyManagerSystem : public System
+class EnemySystem : public System
 {
     Renderer::Texture _listTexture[4];
     float _arrowScale {1};
@@ -33,7 +33,7 @@ public:
 
     float hitRaduis {0.01f};
 
-    EnemyManagerSystem();
+    EnemySystem();
     void GenerateEnemies(unsigned int numberToGenerate, const Maths::Vector3f& origin, float innerRadius, float outerRadius);
     void Process(const Renderer::Framebuffer &buffer, const Renderer::Mesh &screenMesh, Renderer::Shader& shader);
     float& GetArrowScale();
