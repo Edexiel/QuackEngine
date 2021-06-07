@@ -8,6 +8,7 @@
 
 
 #include "Scene/System/RenderSystem.hpp"
+#include "Scene/System/PhysicsSystem.hpp"
 
 World::World(std::string &name) : _name(name)
 {
