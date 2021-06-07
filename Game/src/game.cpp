@@ -66,14 +66,14 @@ void Game::Init(Engine &engine)
         dungeon.SetRegister(&Register);
         dungeon.SetInitGame(&InitGame);
         dungeon.SetInitSystems(&InitSystems);
-        dungeon.SetInitSettings(&InitSettings);
+        dungeon.SetInitSettings(&InitSettingsDungeon);
 
         /*** Serialization of external components**/
         dungeon.SetLoad(&Load);
         dungeon.SetSave(&Save);
         dungeon.SetBuild(&Build);
         /*****************************************/
-        //engine.LoadWorld(dungeon);
+//        engine.LoadWorld(dungeon);
     }
     {
         World &main = engine.CreateWorld("CampfireScene");
@@ -82,7 +82,6 @@ void Game::Init(Engine &engine)
         main.SetInitSystems(&InitSystems);
         main.SetInitSettings(&InitSettings);
 
-    engine.SetCurrentWorld("Dungeon"); //obligatoire
         /*** Serialization of external components**/
         main.SetLoad(&Load);
         main.SetSave(&Save);
@@ -258,6 +257,11 @@ void Game::InitSystems(World &world)
 void Game::InitSettings(World &world)
 {
     RendererPlatform::ClearColor({0.5f, 0.5f, 0.5f, 0.0f});
+}
+
+void Game::InitSettingsDungeon(World &world)
+{
+    RendererPlatform::ClearColor({0.0f, 0.0f, 0.0f, 0.0f});
 }
 
 template<typename T>
