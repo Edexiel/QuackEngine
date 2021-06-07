@@ -178,6 +178,8 @@ Renderer::Shader ResourcesManager::LoadObjectShader(const Renderer::ShaderConstr
 
     if (it != _mapDynamicShader.end())
     {
+        if (constructData.hasLight)
+            Engine::Instance().GetCurrentWorld().GetSystem<LightSystem>()->AddShaderToUpdate(it->second);
         return Shader(it->second.GetID());
     }
 
