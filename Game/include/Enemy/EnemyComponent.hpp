@@ -3,7 +3,7 @@
 
 #include "Scene/Component/ComponentBase.hpp"
 
-#include "EnemyManagerSystem.hpp"
+#include "EnemySystem.hpp"
 #include <vector>
 
 class EnemyComponent : public Component::ComponentBase

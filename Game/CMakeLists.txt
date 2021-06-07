@@ -7,11 +7,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 add_library(${PROJECT_NAME} STATIC
         src/game.cpp
         src/Enemy/EnemyComponent.cpp
-        src/Enemy/EnemyManagerSystem.cpp
+        src/Enemy/EnemySystem.cpp
         src/Player/PlayerSound.cpp
         src/Player/PlayerSystem.cpp
         src/Player/PlayerComponent.cpp
         src/TriggerSwitchScene/TriggerSwitchSceneSystem.cpp
+        src/Player/PlayerComponent.cpp
+        include/Enemy/EnemySpawnSystem.hpp
+        src/Enemy/EnemySpawnSystem.cpp
         ) #todo change STATIC to SHARED later
 
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
