@@ -265,7 +265,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 1,
+                    "type": 0,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -357,7 +357,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 1,
+                    "type": 0,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -462,7 +462,7 @@
                 },
                 "Model": {
                     "path": "./Asset/Model/Cube.fbx",
-                    "type": 1,
+                    "type": 0,
                     "offset": {
                         "x": 0.0,
                         "y": 0.0,
@@ -1097,7 +1097,7 @@
                         0
                     ],
                     "materials": [
-                        "Player"
+                        "AnimationBard"
                     ]
                 },
                 "Animator": {
