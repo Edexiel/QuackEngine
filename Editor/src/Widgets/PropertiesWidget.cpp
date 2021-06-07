@@ -6,6 +6,7 @@
 
 #include "Player/PlayerComponent.hpp"
 #include "TriggerSwitchScene/TriggerSwitchSceneComponent.hpp"
+#include "TriggerSwitchScene/TriggerSwitchSceneSystem.hpp"
 
 #include "Renderer/ModelRenderer.hpp"
 

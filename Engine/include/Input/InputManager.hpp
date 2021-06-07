@@ -26,12 +26,12 @@ namespace Input
         void OnKeyEvent(Action action, Key key);
         void OnMouseButtonEvent(Action action, MouseButton button);
         void OnUpdateMousePositionEvent(double xPos, double yPos);
-        void InitInput();// todo: Remove this function by serialisation of BindEvent
 
     public:
         InputManager() = default;
 
         void Init(PlatformInput *platformInput);
+        void InitInput();// todo: Remove this function by serialisation of BindEvent
         void BindEvent(const std::string &event, Key key);
         void BindEvent(const std::string &event, MouseButton key);
         void BindEventAxis(const std::string &event, Key key, float scale);
