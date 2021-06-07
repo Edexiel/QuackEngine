@@ -138,7 +138,7 @@
                     },
                     {
                         "key": "SimpleShadow",
-                        "value": true
+                        "value": false
                     },
                     {
                         "key": "Transform",
@@ -155,7 +155,7 @@
                 "Transform": {
                     "position": {
                         "x": 4.0,
-                        "y": 1.107330322265625,
+                        "y": 0.0,
                         "z": 0.0
                     },
                     "scale": {
@@ -203,19 +203,6 @@
                 },
                 "CharacterController": {
                     "speed": 15.0
-                },
-                "SimpleShadow": {
-                    "scale": {
-                        "x": 100.0,
-                        "y": 100.0
-                    },
-                    "offset": {
-                        "x": 0.0,
-                        "y": -1.4900000095367432,
-                        "z": 0.0
-                    },
-                    "type": 1,
-                    "yRotation": 0.0
                 },
                 "Player": {
                     "ok": 0
@@ -282,7 +269,7 @@
                 "Transform": {
                     "position": {
                         "x": -6.0,
-                        "y": 1.1168360710144044,
+                        "y": -1.0,
                         "z": 0.0
                     },
                     "scale": {
@@ -309,7 +296,7 @@
                         0
                     ],
                     "materials": [
-                        "GreenLeef"
+                        "Default material"
                     ]
                 },
                 "RigidBody": {
@@ -326,7 +313,7 @@
                     }
                 },
                 "TriggerSwitchSceneComponent": {
-                    "world": "Main2"
+                    "world": "Main"
                 }
             },
             {
@@ -390,7 +377,7 @@
                 "Transform": {
                     "position": {
                         "x": 0.0,
-                        "y": 120.0,
+                        "y": 10.0,
                         "z": 0.0
                     },
                     "scale": {
@@ -406,7 +393,7 @@
                     }
                 },
                 "Light": {
-                    "type": 0,
+                    "type": 1,
                     "ambient": {
                         "x": 0.10000000149011612,
                         "y": 0.10000000149011612,
@@ -427,98 +414,6 @@
                     "quadratic": 0.000007000000096013537,
                     "spotAngle": 8.5,
                     "outerSpotAngle": 10.5
-                }
-            },
-            {
-                "components": [
-                    {
-                        "key": "Animator",
-                        "value": false
-                    },
-                    {
-                        "key": "Camera",
-                        "value": false
-                    },
-                    {
-                        "key": "CameraGameplay",
-                        "value": false
-                    },
-                    {
-                        "key": "CharacterController",
-                        "value": false
-                    },
-                    {
-                        "key": "Light",
-                        "value": false
-                    },
-                    {
-                        "key": "Model",
-                        "value": true
-                    },
-                    {
-                        "key": "Name",
-                        "value": true
-                    },
-                    {
-                        "key": "ParticleEmitter",
-                        "value": false
-                    },
-                    {
-                        "key": "Player",
-                        "value": false
-                    },
-                    {
-                        "key": "RigidBody",
-                        "value": false
-                    },
-                    {
-                        "key": "SimpleShadow",
-                        "value": false
-                    },
-                    {
-                        "key": "Transform",
-                        "value": true
-                    },
-                    {
-                        "key": "TriggerSwitchSceneComponent",
-                        "value": false
-                    }
-                ],
-                "Name": {
-                    "name": "Floor"
-                },
-                "Transform": {
-                    "position": {
-                        "x": 0.0,
-                        "y": -1.5,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 80.0,
-                        "y": 1.0,
-                        "z": 80.0
-                    },
-                    "rotation": {
-                        "w": 8.280325210219264e-13,
-                        "x": -9.099629210140847e-7,
-                        "y": -1.0,
-                        "z": 9.099629210140847e-7
-                    }
-                },
-                "Model": {
-                    "path": "./Asset/Model/Cube.fbx",
-                    "type": 0,
-                    "offset": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "materialsIndex": [
-                        0
-                    ],
-                    "materials": [
-                        "LightBrownTrunk"
-                    ]
                 }
             }
         ]
